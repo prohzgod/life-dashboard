@@ -1,0 +1,39 @@
+.chip {
+  --chip-bg: var(--sunken-2);
+  --chip-ink: var(--ink-2);
+  --chip-dot: var(--ink-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--chip-bg);
+  color: var(--chip-ink);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background: var(--chip-dot);
+}
+
+.primary { --chip-bg: var(--primary-soft); --chip-ink: var(--primary-ink); --chip-dot: var(--primary); }
+.success { --chip-bg: var(--success-soft); --chip-ink: var(--success); --chip-dot: var(--success); }
+.warning { --chip-bg: var(--warning-soft); --chip-ink: var(--warning-ink); --chip-dot: var(--warning); }
+.danger { --chip-bg: var(--danger-soft); --chip-ink: var(--danger-ink); --chip-dot: var(--danger); }
+.accent { --chip-bg: var(--accent-soft); --chip-ink: var(--accent-ink); --chip-dot: var(--accent); }
+
+.health { --chip-bg: var(--health-soft); --chip-ink: var(--health-ink); --chip-dot: var(--health); }
+.career { --chip-bg: var(--career-soft); --chip-ink: var(--career-ink); --chip-dot: var(--career); }
+.finance { --chip-bg: var(--finance-soft); --chip-ink: var(--finance-ink); --chip-dot: var(--finance); }
+.family { --chip-bg: var(--family-soft); --chip-ink: var(--family-ink); --chip-dot: var(--family); }
+.growth { --chip-bg: var(--growth-soft); --chip-ink: var(--growth-ink); --chip-dot: var(--growth); }
+.home { --chip-bg: var(--home-soft); --chip-ink: var(--home-ink); --chip-dot: var(--home); }
+.fun { --chip-bg: var(--fun-soft); --chip-ink: var(--fun-ink); --chip-dot: var(--fun); }

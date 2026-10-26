@@ -9,7 +9,7 @@ One source of truth, four formats:
 | `tokens.ts` | Typed values for charts, canvas drawing and logic (`colors.light.primary`, `typography.body`, `layout.tabbarHeight`) |
 | `tokens.dtcg.json` | W3C Design Tokens format for Figma plugins / Style Dictionary |
 
-Theme: set `data-theme="light"` or `"dark"` on `<html>`; with neither, the system setting decides.
+Theme: set `data-theme="light"` or `"dark"` on `<html>`; with neither, the system setting decides. The same attribute on any element themes just that subtree (used by `/dev/components` to show both themes side by side).
 
 ## Colors
 
@@ -134,6 +134,7 @@ Also: `--scrim` (sheet backdrop) and `--glass` (caption over images).
 | `--radius-xs` | 6px | Checkboxes, kbd hints |
 | `--radius-sm` | 8px | Chips, segmented pills |
 | `--radius-md` | 10px | Buttons, inputs, nav items |
+| `--radius-well` | 14px | Stat tiles, habit tiles, wells |
 | `--radius-lg` | 18px | Cards and panels |
 | `--radius-tile` | 20px | Bento tiles on mobile Home |
 | `--radius-xl` | 24px | Bottom sheets, large media |

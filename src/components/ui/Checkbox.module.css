@@ -1,0 +1,61 @@
+.row {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 24px;
+  cursor: pointer;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.box {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--control);
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  color: transparent;
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.input:checked + .box {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.input:focus-visible + .box {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.label {
+  color: var(--ink);
+  transition: color var(--dur) var(--ease);
+}
+
+.done {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

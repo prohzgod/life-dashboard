@@ -1034,6 +1034,11 @@
    "$value": "10px",
    "$description": "Buttons, inputs, nav items"
   },
+  "radius-well": {
+   "$type": "dimension",
+   "$value": "14px",
+   "$description": "Stat tiles, habit tiles, wells"
+  },
   "radius-lg": {
    "$type": "dimension",
    "$value": "18px",

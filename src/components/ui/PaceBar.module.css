@@ -1,0 +1,54 @@
+.pace {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.value {
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--track);
+}
+
+.fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--primary);
+  transition: width var(--dur-slow) var(--ease);
+}
+
+.tick {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 16px;
+  margin-left: -1px;
+  background: var(--inverse);
+}
+
+.status {
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  line-height: var(--text-caption-line);
+}
+
+.onPace {
+  color: var(--success);
+}
+
+.behind {
+  color: var(--warning);
+}

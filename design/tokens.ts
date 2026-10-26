@@ -216,6 +216,7 @@ export const radius = {
   xs: 6, // Checkboxes, kbd hints
   sm: 8, // Chips, segmented pills
   md: 10, // Buttons, inputs, nav items
+  well: 14, // Stat tiles, habit tiles, wells
   lg: 18, // Cards and panels
   tile: 20, // Bento tiles on mobile Home
   xl: 24, // Bottom sheets, large media
