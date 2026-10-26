@@ -1,0 +1,7 @@
+/** The only way the UI reaches local data. Never import ./db from a component. */
+export * from './repositories';
+export { countExportRecords, countRecords, exportAllAsJson, ImportError, importReplacingAll, parseExport, type ExportFile } from './backup';
+export { newId, nowIso, toLocalDay } from './ids';
+export { initData } from './init';
+export { getCurrentSpaceId } from './session';
+export type * from './types';

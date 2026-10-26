@@ -2,6 +2,7 @@ import { Navigate, NavLink, useParams } from 'react-router-dom';
 import { EmptyState } from '@/components/shell/EmptyState';
 import { PageHeader } from '@/components/shell/PageHeader';
 import { AppearanceSettings } from './AppearanceSettings';
+import { PrivacySettings } from './PrivacySettings';
 import styles from './SettingsPage.module.css';
 
 const settingsTabs = [
@@ -36,5 +37,6 @@ export function SettingsPage() {
 
 function TabContent({ slug, empty }: { slug: TabSlug; empty: string }) {
   if (slug === 'appearance') return <AppearanceSettings />;
+  if (slug === 'privacy') return <PrivacySettings />;
   return <EmptyState icon="settings" heading="Arrives with your data" body={empty} />;
 }

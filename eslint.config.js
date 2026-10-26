@@ -22,4 +22,18 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
+  {
+    // All data access goes through the repositories in src/data/, so sync and encryption can slot in later.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/data/**', 'src/**/*.test.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [{ name: 'dexie', message: 'Use the repositories from @/data instead of Dexie.' }],
+          patterns: [{ regex: '(^@/data/|/data/)(db|repository|session|seed|init|backup|testing)$', message: 'Import from @/data (the public API) instead.' }],
+        },
+      ],
+    },
+  },
 );

@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { Icon } from '../icons/Icon';
 import styles from './Dialog.module.css';
 
@@ -12,6 +12,7 @@ type DialogProps = {
 /** A modal on the native <dialog>: focus trap, Escape and the backdrop come from the browser. */
 export function Dialog({ open, onClose, title, children }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
 
   useEffect(() => {
     const dialog = ref.current;
@@ -29,7 +30,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
     <dialog
       ref={ref}
       className={styles.dialog}
-      aria-labelledby="dialog-title"
+      aria-labelledby={titleId}
       onClose={onClose}
       onCancel={(event) => {
         event.preventDefault();
@@ -43,7 +44,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
       {open && (
         <div className={styles.body}>
           <header className={styles.header}>
-            <h2 id="dialog-title" className={styles.title}>
+            <h2 id={titleId} className={styles.title}>
               {title}
             </h2>
             <button type="button" className={styles.close} onClick={onClose} aria-label="Close">
