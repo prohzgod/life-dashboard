@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Progress</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Jost:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF0F3;--surface:#FCFCFD;--raised:#FFFFFF;--sunken:#F2F4F7;--sunken-2:#E6E9EF;--subtle:#F6F7F9;--track:#E1E5EC;--line:#DCE1E8;--line-soft:#EAEDF2;--line-strong:#BEC5D2;--control:#858DA0;--ink:#141926;--ink-2:#444B5D;--ink-3:#5F6679;--ink-4:#8E95A7;--inverse:#18203A;--on-inverse:#F6F3EC;--on-inverse-2:#B6BDD0;--inverse-accent:#D4B57C;--primary:#22305A;--primary-hover:#19244A;--on-primary:#F7F4EC;--on-primary-2:#C3CAE0;--primary-soft:#E5E9F4;--primary-softer:#F3F5FA;--primary-ink:#1B2750;--primary-line:#AAB6D6;--link:#2D4585;--accent:#A8844A;--accent-soft:#F3ECDF;--accent-ink:#6B5020;--success:#2B6A52;--success-soft:#E0EEE7;--warning:#92530E;--warning-soft:#F7EBDA;--warning-ink:#613708;--danger:#9E344B;--danger-soft:#F6E2E6;--danger-ink:#72213A;--health:#3E7D63;--health-soft:#E2EFE8;--health-ink:#1E4B3A;--career:#3A5A9A;--career-soft:#E3E9F5;--career-ink:#203766;--finance:#A8742A;--finance-soft:#F6EBDA;--finance-muted:#E4D2B2;--finance-ink:#633F0C;--family:#A04E66;--family-soft:#F6E3E9;--family-ink:#6B243D;--growth:#6A56A8;--growth-soft:#ECE7F7;--growth-ink:#42326C;--home:#2F7C84;--home-soft:#DEEFF1;--home-ink:#1A4A50;--fun:#8F6F10;--fun-soft:#F4EDD3;--fun-ink:#574409;--viz-soft:#AFBEDC;--mood-1:#9A3550;--mood-2:#DDA7AC;--mood-3:#E1E4EB;--mood-4:#9DB1D8;--mood-5:#2C437F;--heat-0:#E4E7EE;--heat-1:#C9D3E8;--heat-2:#93A7D2;--heat-3:#5470AE;--heat-4:#22305A;--nav-bg:#131A2E;--nav-surface:#1D2542;--nav-line:#29314F;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#8189A3;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03);--shadow-md:0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05);--shadow-primary:0 8px 20px -6px rgba(34,48,90,0.45);--scrim:rgba(10,14,28,0.55);--glass:rgba(252,252,253,0.92)}
+[data-theme="dark"]{--bg:#0D111D;--surface:#171C2B;--raised:#313A56;--sunken:#1C2234;--sunken-2:#252C42;--subtle:#131827;--track:#2A3249;--line:#2B334B;--line-soft:#212839;--line-strong:#46506F;--control:#737D9C;--ink:#ECEEF4;--ink-2:#B8BECD;--ink-3:#959CAF;--ink-4:#6A7290;--inverse:#EAE6DC;--on-inverse:#161B2A;--on-inverse-2:#4F566A;--inverse-accent:#7A5B22;--primary:#D4B57C;--primary-hover:#E3C994;--on-primary:#161B2A;--on-primary-2:#4E4128;--primary-soft:#2C2B2C;--primary-softer:#1B2030;--primary-ink:#E8D1A3;--primary-line:#76623D;--link:#D9BC86;--accent:#D4B57C;--accent-soft:#2E2A24;--accent-ink:#E8D1A3;--success:#79C4A2;--success-soft:#18302A;--warning:#E6AB69;--warning-soft:#35291B;--warning-ink:#F2CA94;--danger:#EE91A4;--danger-soft:#3A2029;--danger-ink:#F6BDC8;--health:#76C3A1;--health-soft:#192E27;--health-ink:#AADDC6;--career:#8FA9E2;--career-soft:#1C2644;--career-ink:#C4D3F4;--finance:#E1B173;--finance-soft:#33291C;--finance-muted:#56472F;--finance-ink:#F1CF9D;--family:#E69BB0;--family-soft:#3A2231;--family-ink:#F5C4D2;--growth:#B4A4E9;--growth-soft:#29243F;--growth-ink:#D9D0F7;--home:#7DC7CD;--home-soft:#16303A;--home-ink:#B1E1E4;--fun:#DDBB5B;--fun-soft:#312A17;--fun-ink:#EED88F;--viz-soft:#3F4F7A;--mood-1:#D9728D;--mood-2:#7A4A5A;--mood-3:#2E3650;--mood-4:#4F6DB2;--mood-5:#AFC4F4;--heat-0:#1F2638;--heat-1:#2B3A60;--heat-2:#3F5A98;--heat-3:#7090D2;--heat-4:#BACCF5;--nav-bg:#090C16;--nav-surface:#161C30;--nav-line:#1E2539;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#7E86A0;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(0,0,0,0.45);--shadow-md:0 14px 34px -14px rgba(0,0,0,0.7);--shadow-primary:0 8px 20px -6px rgba(0,0,0,0.6);--scrim:rgba(0,0,0,0.62);--glass:rgba(23,28,43,0.9);color-scheme:dark}
+body{margin:0;background:var(--bg)}
+*{box-sizing:border-box}
+button,input{font:inherit;color:inherit}
+a{color:var(--link)}a:hover{color:var(--primary-ink)}
+</style>
+</helmet>
+<div data-theme="{{theme}}" style="width: 1440px; height: 960px; display: flex; overflow: hidden; background: var(--bg); font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; color: var(--ink)">
+<dc-import name="Sidebar" active="progress" hint-size="248px,960px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; padding: 28px 32px; display: flex; flex-direction: column; gap: 18px">
+<header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 38px; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: lining-nums">Progress</h1>
+<div style="font-size: 13px; color: var(--ink-3)">2026 so far · 272 days logged · computed on this device</div>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<div style="display: flex; padding: 3px; border-radius: 10px; background: var(--sunken-2)">
+<sc-for list="{{periods}}" as="p" hint-placeholder-count="4">
+<sc-if value="{{p.selected}}" hint-placeholder-val="{{false}}">
+<button type="button" onClick="{{p.pick}}" aria-pressed="true" style="height: 30px; padding: 0 14px; border: 0; border-radius: 8px; background: var(--raised); font-size: 13px; font-weight: 600; cursor: pointer">{{p.label}}</button>
+</sc-if>
+<sc-if value="{{p.unselected}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{p.pick}}" aria-pressed="false" style="height: 30px; padding: 0 14px; border: 0; border-radius: 8px; background: transparent; font-size: 13px; color: var(--ink-2); cursor: pointer">{{p.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 4px">
+<button type="button" aria-label="Previous period" style="width: 34px; height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="stroke: var(--ink-2)"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<span style="min-width: 64px; text-align: center; font-size: 14px; font-weight: 600">{{periodLabel}}</span>
+<button type="button" aria-label="Next period" style="width: 34px; height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="stroke: var(--ink-2)"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">Export report</button>
+</div>
+</header>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+<div style="padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; color: var(--ink-3)">Tasks completed</span>
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 34px; font-variant-numeric: lining-nums tabular-nums; font-weight: 500">1,184</span>
+<span style="font-size: 12px; color: var(--ink-2)">about 4.4 per day</span>
+</div>
+<div style="padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; color: var(--ink-3)">Habit consistency</span>
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 34px; font-variant-numeric: lining-nums tabular-nums; font-weight: 500">78%</span>
+<span style="font-size: 12px; color: var(--ink-2)">best: meditate, 86%</span>
+</div>
+<div style="padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; color: var(--ink-3)">Average mood</span>
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 34px; font-variant-numeric: lining-nums tabular-nums; font-weight: 500">3.8<span style="font-size: 16px; color: var(--ink-3)"> / 5</span></span>
+<span style="font-size: 12px; color: var(--ink-2)">best month: May</span>
+</div>
+<div style="padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; color: var(--ink-3)">Average sleep</span>
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 34px; font-variant-numeric: lining-nums tabular-nums; font-weight: 500">7h 02m</span>
+<span style="font-size: 12px; color: var(--ink-2)">target 7h · met 61% of nights</span>
+</div>
+<div style="padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; color: var(--ink-3)">Weekly reviews</span>
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 34px; font-variant-numeric: lining-nums tabular-nums; font-weight: 500">36<span style="font-size: 16px; color: var(--ink-3)"> / 39</span></span>
+<span style="font-size: 12px; color: var(--ink-2)">never missed two in a row</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px">
+<section style="padding: 18px 20px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Year in pixels · mood</h2>
+<span style="font-size: 12px; color: var(--ink-3)">One square per day. Click a day to open its journal page.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 3px">
+<sc-for list="{{months}}" as="m" hint-placeholder-count="12">
+<div style="display: flex; align-items: center; gap: 3px">
+<span style="width: 32px; flex-shrink: 0; font-size: 11px; color: var(--ink-3)">{{m.label}}</span>
+<sc-for list="{{m.days}}" as="c" hint-placeholder-count="31">
+<svg width="16" height="16" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="15" rx="3.5" style="fill: {{c.fill}}; stroke: {{c.stroke}}" stroke-width="1"></rect></svg>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--ink-2)">
+<span style="display: flex; align-items: center; gap: 5px"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" rx="3" style="fill: var(--mood-1)"></rect></svg>Awful</span>
+<span style="display: flex; align-items: center; gap: 5px"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" rx="3" style="fill: var(--mood-2)"></rect></svg>Low</span>
+<span style="display: flex; align-items: center; gap: 5px"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" rx="3" style="fill: var(--mood-3)"></rect></svg>Okay</span>
+<span style="display: flex; align-items: center; gap: 5px"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" rx="3" style="fill: var(--mood-4)"></rect></svg>Good</span>
+<span style="display: flex; align-items: center; gap: 5px"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" rx="3" style="fill: var(--mood-5)"></rect></svg>Great</span>
+<span style="flex-grow: 1"></span>
+<span>Colour by:</span>
+<button type="button" style="height: 26px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); font-size: 12px; cursor: pointer">Mood ▾</button>
+</div>
+</section>
+<section style="padding: 18px 20px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Wheel of life</h2>
+<span style="font-size: 12px; color: var(--ink-3)">rated 1 Sep</span>
+</div>
+<svg width="320" height="252" viewBox="-10 0 320 260" role="img" aria-label="Wheel of life: area ratings now compared with Q2">
+<polygon points="{{ring1}}" fill="none" stroke-width="1" style="stroke: var(--line-soft)"></polygon>
+<polygon points="{{ring2}}" fill="none" stroke-width="1" style="stroke: var(--line-soft)"></polygon>
+<polygon points="{{ring3}}" fill="none" stroke-width="1" style="stroke: var(--line-soft)"></polygon>
+<polygon points="{{ring4}}" fill="none" stroke-width="1" style="stroke: var(--line)"></polygon>
+<path d="{{spokes}}" fill="none" stroke-width="1" style="stroke: var(--line-soft)"></path>
+<polygon points="{{prev}}" fill="none" stroke-width="1.5" stroke-dasharray="4 3" style="stroke: var(--ink-4)"></polygon>
+<polygon points="{{now}}" fill-opacity="0.18" stroke-width="2" stroke-linejoin="round" style="fill: var(--primary); stroke: var(--primary)"></polygon>
+<text x="150" y="16" text-anchor="middle" font-family="Jost, Avenir Next, system-ui, sans-serif" font-size="12" style="fill: var(--ink-2)">Health 7</text>
+<text x="229" y="50" text-anchor="start" font-family="Jost, Avenir Next, system-ui, sans-serif" font-size="12" style="fill: var(--ink-2)">Career 6</text>
+<text x="262" y="134" text-anchor="start" font-family="Jost, Avenir Next, system-ui, sans-serif" font-size="12" style="fill: var(--ink-2)">Money 5</text>
+<text x="229" y="220" text-anchor="start" font-family="Jost, Avenir Next, system-ui, sans-serif" font-size="12" style="fill: var(--ink-2)">Family 8</text>
+<text x="150" y="254" text-anchor="middle" font-family="Jost, Avenir Next, system-ui, sans-serif" font-size="12" style="fill: var(--ink-2)">Friends 6</text>
+<text x="71" y="220" text-anchor="end" font-family="Jost, Avenir Next, system-ui, sans-serif" font-size="12" style="fill: var(--ink-2)">Growth 7</text>
+<text x="38" y="134" text-anchor="end" font-family="Jost, Avenir Next, system-ui, sans-serif" font-size="12" style="fill: var(--ink-2)">Fun 5</text>
+<text x="71" y="50" text-anchor="end" font-family="Jost, Avenir Next, system-ui, sans-serif" font-size="12" style="fill: var(--ink-2)">Home 6</text>
+</svg>
+<div style="display: flex; gap: 14px; font-size: 12px; color: var(--ink-2)">
+<span style="display: flex; align-items: center; gap: 6px"><svg width="16" height="4" aria-hidden="true"><rect width="16" height="3" style="fill: var(--primary)"></rect></svg>Now</span>
+<span style="display: flex; align-items: center; gap: 6px"><svg width="16" height="4" aria-hidden="true"><path d="M0 2h5M8 2h5" stroke-width="2" style="stroke: var(--ink-4)"></path></svg>End of Q2</span>
+</div>
+</section>
+</div>
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px">
+<section style="padding: 18px 20px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Habits · all 6 combined</h2>
+<button type="button" style="height: 26px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); font-size: 12px; cursor: pointer">All habits ▾</button>
+</div>
+<div style="position: relative; height: 14px; font-size: 11px; color: var(--ink-3)">
+<span style="position: absolute; left: 24px">Jan</span><span style="position: absolute; left: 84px">Feb</span><span style="position: absolute; left: 132px">Mar</span><span style="position: absolute; left: 180px">Apr</span><span style="position: absolute; left: 228px">May</span><span style="position: absolute; left: 288px">Jun</span><span style="position: absolute; left: 336px">Jul</span><span style="position: absolute; left: 384px">Aug</span><span style="position: absolute; left: 444px">Sep</span><span style="position: absolute; left: 492px">Oct</span><span style="position: absolute; left: 540px">Nov</span><span style="position: absolute; left: 600px">Dec</span>
+</div>
+<div style="display: flex; gap: 2px">
+<div style="width: 22px; display: flex; flex-direction: column; gap: 2px; font-size: 10px; color: var(--ink-3)">
+<span style="height: 10px; line-height: 10px">M</span><span style="height: 10px"></span><span style="height: 10px; line-height: 10px">W</span><span style="height: 10px"></span><span style="height: 10px; line-height: 10px">F</span><span style="height: 10px"></span><span style="height: 10px; line-height: 10px">S</span>
+</div>
+<sc-for list="{{weeks}}" as="w" hint-placeholder-count="53">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{w.days}}" as="c" hint-placeholder-count="7">
+<svg width="10" height="10" aria-hidden="true"><rect x="0.5" y="0.5" width="9" height="9" rx="2" style="fill: {{c.fill}}; stroke: {{c.stroke}}" stroke-width="1"></rect></svg>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2)">
+<span>Fewer</span>
+<svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--heat-0)"></rect></svg>
+<svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--heat-1)"></rect></svg>
+<svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--heat-2)"></rect></svg>
+<svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--heat-3)"></rect></svg>
+<svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--heat-4)"></rect></svg>
+<span>All done</span>
+<span style="flex-grow: 1"></span>
+<span>Longest streak: meditate, 48 days (Apr–May)</span>
+</div>
+</section>
+<section style="padding: 18px 20px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Patterns</h2>
+<span style="font-size: 12px; color: var(--ink-3)">found on this device</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<div style="font-size: 14px; line-height: 1.4">Days after <strong>7h+ sleep</strong> are rated 0.9 higher on mood.</div>
+<a href="Health.dc.html" style="font-size: 12px; font-weight: 600; text-decoration: none">See sleep data</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<div style="font-size: 14px; line-height: 1.4">Habits hold at 82% in weeks with a review, 61% without.</div>
+<a href="Review.dc.html" style="font-size: 12px; font-weight: 600; text-decoration: none">Open weekly review</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 14px; line-height: 1.4">Tuesday is your most productive day, about 6 tasks done.</div>
+<a href="Tasks.dc.html" style="font-size: 12px; font-weight: 600; text-decoration: none">Plan deep work on Tuesdays</a>
+</div>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const period = s.period || 'Year';
+    const periods = ['Day', 'Week', 'Month', 'Year'].map((label) => ({
+      label, selected: period === label, unselected: period !== label,
+      pick: () => this.setState({ period: label })
+    }));
+    const periodLabel = { Day: 'Tue 29 Sep', Week: 'Week 40', Month: 'September', Year: '2026' }[period];
+    let seed = 20260929;
+    const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+    const TODAY = 272;
+    const MOOD = ['var(--mood-1)', 'var(--mood-2)', 'var(--mood-3)', 'var(--mood-4)', 'var(--mood-5)'];
+    const dim = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let doy = 0;
+    const months = dim.map((n, m) => {
+      const days = [];
+      for (let d = 1; d <= 31; d++) {
+        if (d > n) { days.push({ fill: 'transparent', stroke: 'transparent' }); continue; }
+        doy += 1;
+        if (doy > TODAY) { days.push({ fill: 'var(--surface)', stroke: 'var(--line)' }); continue; }
+        const r = rnd() + (m === 4 ? 0.12 : 0);
+        const v = r < 0.04 ? 0 : r < 0.16 ? 1 : r < 0.46 ? 2 : r < 0.82 ? 3 : 4;
+        days.push({ fill: MOOD[v], stroke: MOOD[v] });
+      }
+      return { label: names[m], days };
+    });
+    const HEAT = ['var(--heat-0)', 'var(--heat-1)', 'var(--heat-2)', 'var(--heat-3)', 'var(--heat-4)'];
+    const weeks = [];
+    for (let w = 0; w < 53; w++) {
+      const days = [];
+      for (let dow = 0; dow < 7; dow++) {
+        const dy = w * 7 + dow - 2;
+        if (dy < 1 || dy > 365) { days.push({ fill: 'transparent', stroke: 'transparent' }); continue; }
+        if (dy > TODAY) { days.push({ fill: 'var(--surface)', stroke: 'var(--line)' }); continue; }
+        const r = rnd();
+        const v = r < 0.06 ? 0 : r < 0.18 ? 1 : r < 0.42 ? 2 : r < 0.72 ? 3 : 4;
+        days.push({ fill: HEAT[v], stroke: HEAT[v] });
+      }
+      weeks.push({ days });
+    }
+    const cx = 150, cy = 130, R = 100;
+    const pt = (i, v) => {
+      const a = (-90 + 45 * i) * Math.PI / 180;
+      return (cx + Math.cos(a) * R * v / 10).toFixed(1) + ',' + (cy + Math.sin(a) * R * v / 10).toFixed(1);
+    };
+    const poly = (vals) => vals.map((v, i) => pt(i, v)).join(' ');
+    const ring = (v) => poly([v, v, v, v, v, v, v, v]);
+    let spokes = '';
+    for (let i = 0; i < 8; i++) { spokes += 'M' + cx + ' ' + cy + ' L' + pt(i, 10).replace(',', ' ') + ' '; }
+    return {
+      theme: this.props.theme ?? 'light', periods, periodLabel, months, weeks,
+      ring1: ring(2.5), ring2: ring(5), ring3: ring(7.5), ring4: ring(10), spokes,
+      now: poly([7, 6, 5, 8, 6, 7, 5, 6]), prev: poly([5, 6, 4, 8, 5, 6, 6, 6])
+    };
+  }
+}
+</script>
+</body>
+</html>

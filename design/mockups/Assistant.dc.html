@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assistant</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Jost:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF0F3;--surface:#FCFCFD;--raised:#FFFFFF;--sunken:#F2F4F7;--sunken-2:#E6E9EF;--subtle:#F6F7F9;--track:#E1E5EC;--line:#DCE1E8;--line-soft:#EAEDF2;--line-strong:#BEC5D2;--control:#858DA0;--ink:#141926;--ink-2:#444B5D;--ink-3:#5F6679;--ink-4:#8E95A7;--inverse:#18203A;--on-inverse:#F6F3EC;--on-inverse-2:#B6BDD0;--inverse-accent:#D4B57C;--primary:#22305A;--primary-hover:#19244A;--on-primary:#F7F4EC;--on-primary-2:#C3CAE0;--primary-soft:#E5E9F4;--primary-softer:#F3F5FA;--primary-ink:#1B2750;--primary-line:#AAB6D6;--link:#2D4585;--accent:#A8844A;--accent-soft:#F3ECDF;--accent-ink:#6B5020;--success:#2B6A52;--success-soft:#E0EEE7;--warning:#92530E;--warning-soft:#F7EBDA;--warning-ink:#613708;--danger:#9E344B;--danger-soft:#F6E2E6;--danger-ink:#72213A;--health:#3E7D63;--health-soft:#E2EFE8;--health-ink:#1E4B3A;--career:#3A5A9A;--career-soft:#E3E9F5;--career-ink:#203766;--finance:#A8742A;--finance-soft:#F6EBDA;--finance-muted:#E4D2B2;--finance-ink:#633F0C;--family:#A04E66;--family-soft:#F6E3E9;--family-ink:#6B243D;--growth:#6A56A8;--growth-soft:#ECE7F7;--growth-ink:#42326C;--home:#2F7C84;--home-soft:#DEEFF1;--home-ink:#1A4A50;--fun:#8F6F10;--fun-soft:#F4EDD3;--fun-ink:#574409;--viz-soft:#AFBEDC;--mood-1:#9A3550;--mood-2:#DDA7AC;--mood-3:#E1E4EB;--mood-4:#9DB1D8;--mood-5:#2C437F;--heat-0:#E4E7EE;--heat-1:#C9D3E8;--heat-2:#93A7D2;--heat-3:#5470AE;--heat-4:#22305A;--nav-bg:#131A2E;--nav-surface:#1D2542;--nav-line:#29314F;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#8189A3;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03);--shadow-md:0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05);--shadow-primary:0 8px 20px -6px rgba(34,48,90,0.45);--scrim:rgba(10,14,28,0.55);--glass:rgba(252,252,253,0.92)}
+[data-theme="dark"]{--bg:#0D111D;--surface:#171C2B;--raised:#313A56;--sunken:#1C2234;--sunken-2:#252C42;--subtle:#131827;--track:#2A3249;--line:#2B334B;--line-soft:#212839;--line-strong:#46506F;--control:#737D9C;--ink:#ECEEF4;--ink-2:#B8BECD;--ink-3:#959CAF;--ink-4:#6A7290;--inverse:#EAE6DC;--on-inverse:#161B2A;--on-inverse-2:#4F566A;--inverse-accent:#7A5B22;--primary:#D4B57C;--primary-hover:#E3C994;--on-primary:#161B2A;--on-primary-2:#4E4128;--primary-soft:#2C2B2C;--primary-softer:#1B2030;--primary-ink:#E8D1A3;--primary-line:#76623D;--link:#D9BC86;--accent:#D4B57C;--accent-soft:#2E2A24;--accent-ink:#E8D1A3;--success:#79C4A2;--success-soft:#18302A;--warning:#E6AB69;--warning-soft:#35291B;--warning-ink:#F2CA94;--danger:#EE91A4;--danger-soft:#3A2029;--danger-ink:#F6BDC8;--health:#76C3A1;--health-soft:#192E27;--health-ink:#AADDC6;--career:#8FA9E2;--career-soft:#1C2644;--career-ink:#C4D3F4;--finance:#E1B173;--finance-soft:#33291C;--finance-muted:#56472F;--finance-ink:#F1CF9D;--family:#E69BB0;--family-soft:#3A2231;--family-ink:#F5C4D2;--growth:#B4A4E9;--growth-soft:#29243F;--growth-ink:#D9D0F7;--home:#7DC7CD;--home-soft:#16303A;--home-ink:#B1E1E4;--fun:#DDBB5B;--fun-soft:#312A17;--fun-ink:#EED88F;--viz-soft:#3F4F7A;--mood-1:#D9728D;--mood-2:#7A4A5A;--mood-3:#2E3650;--mood-4:#4F6DB2;--mood-5:#AFC4F4;--heat-0:#1F2638;--heat-1:#2B3A60;--heat-2:#3F5A98;--heat-3:#7090D2;--heat-4:#BACCF5;--nav-bg:#090C16;--nav-surface:#161C30;--nav-line:#1E2539;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#7E86A0;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(0,0,0,0.45);--shadow-md:0 14px 34px -14px rgba(0,0,0,0.7);--shadow-primary:0 8px 20px -6px rgba(0,0,0,0.6);--scrim:rgba(0,0,0,0.62);--glass:rgba(23,28,43,0.9);color-scheme:dark}
+body{margin:0;background:var(--bg)}
+*{box-sizing:border-box}
+button,input,textarea{font:inherit;color:inherit}
+a{color:var(--link)}a:hover{color:var(--primary-ink)}
+</style>
+</helmet>
+<div data-theme="{{theme}}" style="width: 1440px; height: 960px; display: flex; overflow: hidden; background: var(--bg); font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; color: var(--ink)">
+<dc-import name="Sidebar" active="assistant" hint-size="248px,960px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column">
+<header style="height: 72px; flex-shrink: 0; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px">
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 34px; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: lining-nums">Assistant</h1>
+<span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--sunken-2); color: var(--ink-2)">Optional module</span>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<div style="display: flex; padding: 3px; border-radius: 10px; background: var(--sunken-2)">
+<button type="button" aria-pressed="true" style="height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: var(--raised); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H4zM2 19h20"></path></svg>On this device</button>
+<button type="button" aria-pressed="false" style="height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; font-size: 13px; color: var(--ink-2); cursor: pointer">Cloud · your API key</button>
+</div>
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">New chat</button>
+</div>
+</header>
+<div style="flex-grow: 1; min-height: 0; padding: 24px 40px; display: flex; flex-direction: column; gap: 18px">
+<div style="align-self: flex-end; max-width: 520px; padding: 12px 16px; border-radius: 16px 16px 4px 16px; background: var(--inverse); color: var(--on-inverse); font-size: 15px">How did September go? Be honest.</div>
+<div style="display: flex; gap: 12px; max-width: 760px">
+<div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 10px; background: var(--primary-soft); color: var(--primary-ink); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"></path></svg></div>
+<div style="display: flex; flex-direction: column; gap: 12px; min-width: 0">
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: var(--ink)">A good month, with one weak spot. You ran 11 times and wrote 2 essays, both on pace. Habits slipped to 78% (from 82% in August), mostly in the week of the 14th when you skipped your review. The side project has had no progress for two weeks.</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+<a href="Progress.dc.html" style="padding: 12px; border-radius: 12px; background: var(--on-inverse); border: 1px solid var(--line); text-decoration: none; color: var(--inverse); display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: var(--ink-3)">Habits</span><span style="font-size: 16px; font-weight: 700">78% <span style="font-size: 12px; color: var(--warning)">−4</span></span></a>
+<a href="Goals.dc.html" style="padding: 12px; border-radius: 12px; background: var(--on-inverse); border: 1px solid var(--line); text-decoration: none; color: var(--inverse); display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: var(--ink-3)">Half-marathon</span><span style="font-size: 16px; font-weight: 700">62% <span style="font-size: 12px; color: var(--warning)">2 wks behind</span></span></a>
+<a href="Progress.dc.html" style="padding: 12px; border-radius: 12px; background: var(--on-inverse); border: 1px solid var(--line); text-decoration: none; color: var(--inverse); display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: var(--ink-3)">Mood</span><span style="font-size: 16px; font-weight: 700">3.9 <span style="font-size: 12px; color: var(--success)">+0.2</span></span></a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 13px; font-weight: 700">Want me to…</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid var(--primary-line); border-radius: 9px; background: var(--primary-soft); color: var(--primary-ink); font-size: 13px; font-weight: 600; cursor: pointer">Add an 18 km long run on 10 Oct</button>
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid var(--primary-line); border-radius: 9px; background: var(--primary-soft); color: var(--primary-ink); font-size: 13px; font-weight: 600; cursor: pointer">Block 2h for the side project</button>
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid var(--primary-line); border-radius: 9px; background: var(--primary-soft); color: var(--primary-ink); font-size: 13px; font-weight: 600; cursor: pointer">Draft October focus</button>
+</div>
+<div style="font-size: 12px; color: var(--ink-3)">Nothing changes until you tap. Every change can be undone.</div>
+</div>
+<div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6v18h12V7zM14 3v4h4"></path></svg>Read: 30 journal pages, 142 tasks, habit logs, 6 goals · Not read: Health, Finance</div>
+</div>
+</div>
+<div style="align-self: flex-end; max-width: 520px; padding: 12px 16px; border-radius: 16px 16px 4px 16px; background: var(--inverse); color: var(--on-inverse); font-size: 15px">Turn today’s lunch notes into tasks.</div>
+<div style="display: flex; gap: 12px; max-width: 760px">
+<div style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 10px; background: var(--primary-soft); color: var(--primary-ink); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"></path></svg></div>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line)">
+<div style="font-size: 14px; color: var(--ink)">Found 3 in “Lunch with Linh”. They’ll go to your Inbox:</div>
+<label style="display: flex; align-items: center; gap: 10px; font-size: 14px"><input type="checkbox" checked style="width: 16px; height: 16px; accent-color: var(--primary); margin: 0">Send Linh the trail map <span style="color: var(--ink-3); font-size: 12px">· Fun · today</span></label>
+<label style="display: flex; align-items: center; gap: 10px; font-size: 14px"><input type="checkbox" checked style="width: 16px; height: 16px; accent-color: var(--primary); margin: 0">Look up the pottery class <span style="color: var(--ink-3); font-size: 12px">· Growth · someday</span></label>
+<label style="display: flex; align-items: center; gap: 10px; font-size: 14px"><input type="checkbox" checked style="width: 16px; height: 16px; accent-color: var(--primary); margin: 0">Buy a gift for her birthday <span style="color: var(--ink-3); font-size: 12px">· before Sat 3 Oct</span></label>
+<div style="display: flex; gap: 8px"><button type="button" style="height: 34px; padding: 0 14px; border: 0; border-radius: 9px; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 600; cursor: pointer">Add 3 tasks</button><button type="button" style="height: 34px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">Edit first</button></div>
+</div>
+</div>
+</div>
+<div style="padding: 0 40px 24px">
+<div style="max-width: 820px; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line-strong); display: flex; flex-direction: column; gap: 10px">
+<textarea rows="2" aria-label="Message the assistant" placeholder="Ask about your goals, notes or week…" style="border: 0; outline: none; resize: none; background: transparent; font-size: 15px; line-height: 1.5"></textarea>
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="padding: 4px 10px; border-radius: 999px; background: var(--sunken); font-size: 12px; color: var(--ink-2)">Can read: Journal, Tasks, Goals, Notes</span>
+<span style="flex-grow: 1"></span>
+<button type="button" aria-label="Dictate" style="width: 36px; height: 36px; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="stroke: var(--ink-2)"><path d="M9 5a3 3 0 0 1 6 0v6a3 3 0 0 1-6 0zM5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></button>
+<button type="button" aria-label="Send" style="width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px; background: var(--primary); color: var(--on-primary); cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg></button>
+</div>
+</div>
+</div>
+</main>
+<aside aria-label="Assistant privacy" style="width: 340px; flex-shrink: 0; border-left: 1px solid var(--line); background: var(--surface); padding: 24px 22px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700">What it can read</h2>
+<div style="font-size: 12px; color: var(--ink-3)">Per area. Pages marked Private are always excluded.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px"><span>Journal</span><button type="button" role="switch" aria-checked="true" aria-label="Journal" style="width: 40px; height: 24px; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px"><span>Tasks &amp; goals</span><button type="button" role="switch" aria-checked="true" aria-label="Tasks and goals" style="width: 40px; height: 24px; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px"><span>Notes</span><button type="button" role="switch" aria-checked="true" aria-label="Notes" style="width: 40px; height: 24px; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px"><span>Photos <span style="font-size: 12px; color: var(--ink-3)">(captions only)</span></span><button type="button" role="switch" aria-checked="true" aria-label="Photos" style="width: 40px; height: 24px; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px"><span>Health</span><button type="button" role="switch" aria-checked="false" aria-label="Health" style="width: 40px; height: 24px; padding: 0; border: 0; border-radius: 12px; background: var(--control); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px"><span>Finance</span><button type="button" role="switch" aria-checked="false" aria-label="Finance" style="width: 40px; height: 24px; padding: 0; border: 0; border-radius: 12px; background: var(--control); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding-top: 18px; border-top: 1px solid var(--line-soft)">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700">Helpers</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px"><span style="display: flex; flex-direction: column"><span>Weekly review draft</span><span style="font-size: 12px; color: var(--ink-3)">Sunday, before your review</span></span><button type="button" role="switch" aria-checked="true" aria-label="Weekly review draft" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px"><span style="display: flex; flex-direction: column"><span>Understand quick captures</span><span style="font-size: 12px; color: var(--ink-3)">Dates, areas, recurrence</span></span><button type="button" role="switch" aria-checked="true" aria-label="Understand quick captures" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px"><span style="display: flex; flex-direction: column"><span>Auto-tag new photos</span><span style="font-size: 12px; color: var(--ink-3)">People, places, things</span></span><button type="button" role="switch" aria-checked="true" aria-label="Auto-tag new photos" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px"><span style="display: flex; flex-direction: column"><span>Suggest rescheduling</span><span style="font-size: 12px; color: var(--ink-3)">When the day is overloaded</span></span><button type="button" role="switch" aria-checked="false" aria-label="Suggest rescheduling" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--control); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+</div>
+<div style="flex-grow: 1"></div>
+<div style="padding: 14px; border-radius: 12px; background: var(--sunken); display: flex; flex-direction: column; gap: 6px; font-size: 12px; line-height: 1.5; color: var(--ink-2)">
+<div style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3"></path></svg>Runs on this device</div>
+<div>Nothing is sent anywhere. Chats are stored encrypted and deleted after 30 days.</div>
+<a href="Settings.dc.html" style="font-weight: 600; text-decoration: none">Privacy settings</a>
+</div>
+</aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

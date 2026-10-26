@@ -1,0 +1,1168 @@
+{
+ "$description": "Life Dashboard · Midnight & Brass (W3C Design Tokens format). Colors have light and dark sets.",
+ "color": {
+  "light": {
+   "bg": {
+    "$type": "color",
+    "$value": "#EEF0F3",
+    "$description": "Page background behind cards (the porcelain ground)."
+   },
+   "surface": {
+    "$type": "color",
+    "$value": "#FCFCFD",
+    "$description": "Cards, panels and inputs on `bg`."
+   },
+   "raised": {
+    "$type": "color",
+    "$value": "#FFFFFF",
+    "$description": "The selected pill in a segmented control, the active row in a list. Sits on `sunken-2` or `subtle`."
+   },
+   "sunken": {
+    "$type": "color",
+    "$value": "#F2F4F7",
+    "$description": "Tiles and wells inside a card (habit tiles, stat tiles, info notes)."
+   },
+   "sunken-2": {
+    "$type": "color",
+    "$value": "#E6E9EF",
+    "$description": "Chips, segmented-control tracks, progress tracks on `surface`."
+   },
+   "subtle": {
+    "$type": "color",
+    "$value": "#F6F7F9",
+    "$description": "Secondary panes (tree, filters) and quiet input fields."
+   },
+   "track": {
+    "$type": "color",
+    "$value": "#E1E5EC",
+    "$description": "Empty part of progress bars and missed-day squares."
+   },
+   "line": {
+    "$type": "color",
+    "$value": "#DCE1E8",
+    "$description": "Card borders and input borders."
+   },
+   "line-soft": {
+    "$type": "color",
+    "$value": "#EAEDF2",
+    "$description": "Dividers between rows inside a card."
+   },
+   "line-strong": {
+    "$type": "color",
+    "$value": "#BEC5D2",
+    "$description": "Secondary-button borders, empty checkboxes, dashed drop zones, switch track when off."
+   },
+   "control": {
+    "$type": "color",
+    "$value": "#858DA0",
+    "$description": "Borders of empty checkboxes and radio buttons, switch track when off (3:1 on `surface`)."
+   },
+   "ink": {
+    "$type": "color",
+    "$value": "#141926",
+    "$description": "Headlines and body text on `surface`, `bg`, `sunken`."
+   },
+   "ink-2": {
+    "$type": "color",
+    "$value": "#444B5D",
+    "$description": "Secondary text and icons on `surface`, `bg`, `sunken`, `sunken-2`."
+   },
+   "ink-3": {
+    "$type": "color",
+    "$value": "#5F6679",
+    "$description": "Captions, metadata and timestamps on `surface`, `bg`, `sunken`, `sunken-2`."
+   },
+   "ink-4": {
+    "$type": "color",
+    "$value": "#8E95A7",
+    "$description": "Decorative strokes only: chart guides, arrows, drag handles. Never for text."
+   },
+   "inverse": {
+    "$type": "color",
+    "$value": "#18203A",
+    "$description": "High-emphasis dark block: chat bubbles, the current step, quote cards, pace ticks."
+   },
+   "on-inverse": {
+    "$type": "color",
+    "$value": "#F6F3EC",
+    "$description": "Text on `inverse`."
+   },
+   "on-inverse-2": {
+    "$type": "color",
+    "$value": "#B6BDD0",
+    "$description": "Secondary text on `inverse`."
+   },
+   "inverse-accent": {
+    "$type": "color",
+    "$value": "#D4B57C",
+    "$description": "Eyebrow labels on `inverse`."
+   },
+   "primary": {
+    "$type": "color",
+    "$value": "#22305A",
+    "$description": "Primary buttons, checked boxes, the active habit, focus ring. Midnight in light, brass in dark."
+   },
+   "primary-hover": {
+    "$type": "color",
+    "$value": "#19244A",
+    "$description": "Hover state of `primary` fills."
+   },
+   "on-primary": {
+    "$type": "color",
+    "$value": "#F7F4EC",
+    "$description": "Text and icons on `primary`."
+   },
+   "on-primary-2": {
+    "$type": "color",
+    "$value": "#C3CAE0",
+    "$description": "Secondary text on `primary`."
+   },
+   "primary-soft": {
+    "$type": "color",
+    "$value": "#E5E9F4",
+    "$description": "Selected states, time blocks, suggestion chips."
+   },
+   "primary-softer": {
+    "$type": "color",
+    "$value": "#F3F5FA",
+    "$description": "Today's column, quiet highlights."
+   },
+   "primary-ink": {
+    "$type": "color",
+    "$value": "#1B2750",
+    "$description": "Text on `primary-soft` and `primary-softer`."
+   },
+   "primary-line": {
+    "$type": "color",
+    "$value": "#AAB6D6",
+    "$description": "Borders of selected items and dashed time blocks."
+   },
+   "link": {
+    "$type": "color",
+    "$value": "#2D4585",
+    "$description": "Links and text buttons on `surface` and `bg`."
+   },
+   "accent": {
+    "$type": "color",
+    "$value": "#A8844A",
+    "$description": "Brass: sparing highlights such as the word of the year, today's marker and the logo. Fills and marks, not body text."
+   },
+   "accent-soft": {
+    "$type": "color",
+    "$value": "#F3ECDF",
+    "$description": "Brass-tinted fill behind `accent-ink` text."
+   },
+   "accent-ink": {
+    "$type": "color",
+    "$value": "#6B5020",
+    "$description": "Text on `accent-soft`."
+   },
+   "success": {
+    "$type": "color",
+    "$value": "#2B6A52",
+    "$description": "On-pace text and saved/synced status on `surface`. Always paired with a word."
+   },
+   "success-soft": {
+    "$type": "color",
+    "$value": "#E0EEE7",
+    "$description": "Fill behind success chips."
+   },
+   "warning": {
+    "$type": "color",
+    "$value": "#92530E",
+    "$description": "Behind-pace and overdue text on `surface`. Always paired with a word."
+   },
+   "warning-soft": {
+    "$type": "color",
+    "$value": "#F7EBDA",
+    "$description": "Offline banner, behind-pace chips, recovery-kit warning."
+   },
+   "warning-ink": {
+    "$type": "color",
+    "$value": "#613708",
+    "$description": "Text on `warning-soft`."
+   },
+   "danger": {
+    "$type": "color",
+    "$value": "#9E344B",
+    "$description": "Over-budget bars, destructive actions."
+   },
+   "danger-soft": {
+    "$type": "color",
+    "$value": "#F6E2E6",
+    "$description": "Fill behind danger and high-priority chips."
+   },
+   "danger-ink": {
+    "$type": "color",
+    "$value": "#72213A",
+    "$description": "Text on `danger-soft`."
+   },
+   "health": {
+    "$type": "color",
+    "$value": "#3E7D63",
+    "$description": "Health area: dots, bars and charts."
+   },
+   "health-soft": {
+    "$type": "color",
+    "$value": "#E2EFE8",
+    "$description": "Health area tint (chips, image placeholders)."
+   },
+   "health-ink": {
+    "$type": "color",
+    "$value": "#1E4B3A",
+    "$description": "Text on `health-soft`."
+   },
+   "career": {
+    "$type": "color",
+    "$value": "#3A5A9A",
+    "$description": "Career area; also work calendar events and sleep bars."
+   },
+   "career-soft": {
+    "$type": "color",
+    "$value": "#E3E9F5",
+    "$description": "Career tint; work events."
+   },
+   "career-ink": {
+    "$type": "color",
+    "$value": "#203766",
+    "$description": "Text on `career-soft`."
+   },
+   "finance": {
+    "$type": "color",
+    "$value": "#A8742A",
+    "$description": "Finance area: budgets, savings bars."
+   },
+   "finance-soft": {
+    "$type": "color",
+    "$value": "#F6EBDA",
+    "$description": "Finance tint."
+   },
+   "finance-muted": {
+    "$type": "color",
+    "$value": "#E4D2B2",
+    "$description": "Past months in finance charts."
+   },
+   "finance-ink": {
+    "$type": "color",
+    "$value": "#633F0C",
+    "$description": "Text on `finance-soft`."
+   },
+   "family": {
+    "$type": "color",
+    "$value": "#A04E66",
+    "$description": "Family area and shared-space markers; the 'now' line in calendars."
+   },
+   "family-soft": {
+    "$type": "color",
+    "$value": "#F6E3E9",
+    "$description": "Family tint; family events."
+   },
+   "family-ink": {
+    "$type": "color",
+    "$value": "#6B243D",
+    "$description": "Text on `family-soft`."
+   },
+   "growth": {
+    "$type": "color",
+    "$value": "#6A56A8",
+    "$description": "Growth area: learning, writing."
+   },
+   "growth-soft": {
+    "$type": "color",
+    "$value": "#ECE7F7",
+    "$description": "Growth tint; personal events."
+   },
+   "growth-ink": {
+    "$type": "color",
+    "$value": "#42326C",
+    "$description": "Text on `growth-soft`."
+   },
+   "home": {
+    "$type": "color",
+    "$value": "#2F7C84",
+    "$description": "Home area."
+   },
+   "home-soft": {
+    "$type": "color",
+    "$value": "#DEEFF1",
+    "$description": "Home tint."
+   },
+   "home-ink": {
+    "$type": "color",
+    "$value": "#1A4A50",
+    "$description": "Text on `home-soft`."
+   },
+   "fun": {
+    "$type": "color",
+    "$value": "#8F6F10",
+    "$description": "Fun and travel area."
+   },
+   "fun-soft": {
+    "$type": "color",
+    "$value": "#F4EDD3",
+    "$description": "Fun tint."
+   },
+   "fun-ink": {
+    "$type": "color",
+    "$value": "#574409",
+    "$description": "Text on `fun-soft`."
+   },
+   "viz-soft": {
+    "$type": "color",
+    "$value": "#AFBEDC",
+    "$description": "Second series in charts (below target, earlier period)."
+   },
+   "mood-1": {
+    "$type": "color",
+    "$value": "#9A3550",
+    "$description": "Mood scale 1 (awful), year in pixels."
+   },
+   "mood-2": {
+    "$type": "color",
+    "$value": "#DDA7AC",
+    "$description": "Mood scale 2 (low)."
+   },
+   "mood-3": {
+    "$type": "color",
+    "$value": "#E1E4EB",
+    "$description": "Mood scale 3 (okay)."
+   },
+   "mood-4": {
+    "$type": "color",
+    "$value": "#9DB1D8",
+    "$description": "Mood scale 4 (good)."
+   },
+   "mood-5": {
+    "$type": "color",
+    "$value": "#2C437F",
+    "$description": "Mood scale 5 (great)."
+   },
+   "heat-0": {
+    "$type": "color",
+    "$value": "#E4E7EE",
+    "$description": "Habit heatmap: none done."
+   },
+   "heat-1": {
+    "$type": "color",
+    "$value": "#C9D3E8",
+    "$description": "Habit heatmap: a few."
+   },
+   "heat-2": {
+    "$type": "color",
+    "$value": "#93A7D2",
+    "$description": "Habit heatmap: half."
+   },
+   "heat-3": {
+    "$type": "color",
+    "$value": "#5470AE",
+    "$description": "Habit heatmap: most."
+   },
+   "heat-4": {
+    "$type": "color",
+    "$value": "#22305A",
+    "$description": "Habit heatmap: all done."
+   },
+   "nav-bg": {
+    "$type": "color",
+    "$value": "#131A2E",
+    "$description": "Sidebar background (midnight in both themes)."
+   },
+   "nav-surface": {
+    "$type": "color",
+    "$value": "#1D2542",
+    "$description": "Active item and search field in the sidebar."
+   },
+   "nav-line": {
+    "$type": "color",
+    "$value": "#29314F",
+    "$description": "Borders inside the sidebar."
+   },
+   "nav-ink": {
+    "$type": "color",
+    "$value": "#EEF0F6",
+    "$description": "Active item and titles on `nav-bg`."
+   },
+   "nav-ink-2": {
+    "$type": "color",
+    "$value": "#AFB6CA",
+    "$description": "Inactive items on `nav-bg`."
+   },
+   "nav-ink-3": {
+    "$type": "color",
+    "$value": "#8189A3",
+    "$description": "Group labels and hints on `nav-bg`."
+   },
+   "nav-success": {
+    "$type": "color",
+    "$value": "#79C4A2",
+    "$description": "Saved and synced status dot on `nav-bg`."
+   },
+   "nav-accent": {
+    "$type": "color",
+    "$value": "#D4B57C",
+    "$description": "Brass in the sidebar: active icon, Quick capture button."
+   },
+   "on-nav-accent": {
+    "$type": "color",
+    "$value": "#131A2E",
+    "$description": "Text on `nav-accent`."
+   }
+  },
+  "dark": {
+   "bg": {
+    "$type": "color",
+    "$value": "#0D111D",
+    "$description": "Page background behind cards (the porcelain ground)."
+   },
+   "surface": {
+    "$type": "color",
+    "$value": "#171C2B",
+    "$description": "Cards, panels and inputs on `bg`."
+   },
+   "raised": {
+    "$type": "color",
+    "$value": "#313A56",
+    "$description": "The selected pill in a segmented control, the active row in a list. Sits on `sunken-2` or `subtle`."
+   },
+   "sunken": {
+    "$type": "color",
+    "$value": "#1C2234",
+    "$description": "Tiles and wells inside a card (habit tiles, stat tiles, info notes)."
+   },
+   "sunken-2": {
+    "$type": "color",
+    "$value": "#252C42",
+    "$description": "Chips, segmented-control tracks, progress tracks on `surface`."
+   },
+   "subtle": {
+    "$type": "color",
+    "$value": "#131827",
+    "$description": "Secondary panes (tree, filters) and quiet input fields."
+   },
+   "track": {
+    "$type": "color",
+    "$value": "#2A3249",
+    "$description": "Empty part of progress bars and missed-day squares."
+   },
+   "line": {
+    "$type": "color",
+    "$value": "#2B334B",
+    "$description": "Card borders and input borders."
+   },
+   "line-soft": {
+    "$type": "color",
+    "$value": "#212839",
+    "$description": "Dividers between rows inside a card."
+   },
+   "line-strong": {
+    "$type": "color",
+    "$value": "#46506F",
+    "$description": "Secondary-button borders, empty checkboxes, dashed drop zones, switch track when off."
+   },
+   "control": {
+    "$type": "color",
+    "$value": "#737D9C",
+    "$description": "Borders of empty checkboxes and radio buttons, switch track when off (3:1 on `surface`)."
+   },
+   "ink": {
+    "$type": "color",
+    "$value": "#ECEEF4",
+    "$description": "Headlines and body text on `surface`, `bg`, `sunken`."
+   },
+   "ink-2": {
+    "$type": "color",
+    "$value": "#B8BECD",
+    "$description": "Secondary text and icons on `surface`, `bg`, `sunken`, `sunken-2`."
+   },
+   "ink-3": {
+    "$type": "color",
+    "$value": "#959CAF",
+    "$description": "Captions, metadata and timestamps on `surface`, `bg`, `sunken`, `sunken-2`."
+   },
+   "ink-4": {
+    "$type": "color",
+    "$value": "#6A7290",
+    "$description": "Decorative strokes only: chart guides, arrows, drag handles. Never for text."
+   },
+   "inverse": {
+    "$type": "color",
+    "$value": "#EAE6DC",
+    "$description": "High-emphasis dark block: chat bubbles, the current step, quote cards, pace ticks."
+   },
+   "on-inverse": {
+    "$type": "color",
+    "$value": "#161B2A",
+    "$description": "Text on `inverse`."
+   },
+   "on-inverse-2": {
+    "$type": "color",
+    "$value": "#4F566A",
+    "$description": "Secondary text on `inverse`."
+   },
+   "inverse-accent": {
+    "$type": "color",
+    "$value": "#7A5B22",
+    "$description": "Eyebrow labels on `inverse`."
+   },
+   "primary": {
+    "$type": "color",
+    "$value": "#D4B57C",
+    "$description": "Primary buttons, checked boxes, the active habit, focus ring. Midnight in light, brass in dark."
+   },
+   "primary-hover": {
+    "$type": "color",
+    "$value": "#E3C994",
+    "$description": "Hover state of `primary` fills."
+   },
+   "on-primary": {
+    "$type": "color",
+    "$value": "#161B2A",
+    "$description": "Text and icons on `primary`."
+   },
+   "on-primary-2": {
+    "$type": "color",
+    "$value": "#4E4128",
+    "$description": "Secondary text on `primary`."
+   },
+   "primary-soft": {
+    "$type": "color",
+    "$value": "#2C2B2C",
+    "$description": "Selected states, time blocks, suggestion chips."
+   },
+   "primary-softer": {
+    "$type": "color",
+    "$value": "#1B2030",
+    "$description": "Today's column, quiet highlights."
+   },
+   "primary-ink": {
+    "$type": "color",
+    "$value": "#E8D1A3",
+    "$description": "Text on `primary-soft` and `primary-softer`."
+   },
+   "primary-line": {
+    "$type": "color",
+    "$value": "#76623D",
+    "$description": "Borders of selected items and dashed time blocks."
+   },
+   "link": {
+    "$type": "color",
+    "$value": "#D9BC86",
+    "$description": "Links and text buttons on `surface` and `bg`."
+   },
+   "accent": {
+    "$type": "color",
+    "$value": "#D4B57C",
+    "$description": "Brass: sparing highlights such as the word of the year, today's marker and the logo. Fills and marks, not body text."
+   },
+   "accent-soft": {
+    "$type": "color",
+    "$value": "#2E2A24",
+    "$description": "Brass-tinted fill behind `accent-ink` text."
+   },
+   "accent-ink": {
+    "$type": "color",
+    "$value": "#E8D1A3",
+    "$description": "Text on `accent-soft`."
+   },
+   "success": {
+    "$type": "color",
+    "$value": "#79C4A2",
+    "$description": "On-pace text and saved/synced status on `surface`. Always paired with a word."
+   },
+   "success-soft": {
+    "$type": "color",
+    "$value": "#18302A",
+    "$description": "Fill behind success chips."
+   },
+   "warning": {
+    "$type": "color",
+    "$value": "#E6AB69",
+    "$description": "Behind-pace and overdue text on `surface`. Always paired with a word."
+   },
+   "warning-soft": {
+    "$type": "color",
+    "$value": "#35291B",
+    "$description": "Offline banner, behind-pace chips, recovery-kit warning."
+   },
+   "warning-ink": {
+    "$type": "color",
+    "$value": "#F2CA94",
+    "$description": "Text on `warning-soft`."
+   },
+   "danger": {
+    "$type": "color",
+    "$value": "#EE91A4",
+    "$description": "Over-budget bars, destructive actions."
+   },
+   "danger-soft": {
+    "$type": "color",
+    "$value": "#3A2029",
+    "$description": "Fill behind danger and high-priority chips."
+   },
+   "danger-ink": {
+    "$type": "color",
+    "$value": "#F6BDC8",
+    "$description": "Text on `danger-soft`."
+   },
+   "health": {
+    "$type": "color",
+    "$value": "#76C3A1",
+    "$description": "Health area: dots, bars and charts."
+   },
+   "health-soft": {
+    "$type": "color",
+    "$value": "#192E27",
+    "$description": "Health area tint (chips, image placeholders)."
+   },
+   "health-ink": {
+    "$type": "color",
+    "$value": "#AADDC6",
+    "$description": "Text on `health-soft`."
+   },
+   "career": {
+    "$type": "color",
+    "$value": "#8FA9E2",
+    "$description": "Career area; also work calendar events and sleep bars."
+   },
+   "career-soft": {
+    "$type": "color",
+    "$value": "#1C2644",
+    "$description": "Career tint; work events."
+   },
+   "career-ink": {
+    "$type": "color",
+    "$value": "#C4D3F4",
+    "$description": "Text on `career-soft`."
+   },
+   "finance": {
+    "$type": "color",
+    "$value": "#E1B173",
+    "$description": "Finance area: budgets, savings bars."
+   },
+   "finance-soft": {
+    "$type": "color",
+    "$value": "#33291C",
+    "$description": "Finance tint."
+   },
+   "finance-muted": {
+    "$type": "color",
+    "$value": "#56472F",
+    "$description": "Past months in finance charts."
+   },
+   "finance-ink": {
+    "$type": "color",
+    "$value": "#F1CF9D",
+    "$description": "Text on `finance-soft`."
+   },
+   "family": {
+    "$type": "color",
+    "$value": "#E69BB0",
+    "$description": "Family area and shared-space markers; the 'now' line in calendars."
+   },
+   "family-soft": {
+    "$type": "color",
+    "$value": "#3A2231",
+    "$description": "Family tint; family events."
+   },
+   "family-ink": {
+    "$type": "color",
+    "$value": "#F5C4D2",
+    "$description": "Text on `family-soft`."
+   },
+   "growth": {
+    "$type": "color",
+    "$value": "#B4A4E9",
+    "$description": "Growth area: learning, writing."
+   },
+   "growth-soft": {
+    "$type": "color",
+    "$value": "#29243F",
+    "$description": "Growth tint; personal events."
+   },
+   "growth-ink": {
+    "$type": "color",
+    "$value": "#D9D0F7",
+    "$description": "Text on `growth-soft`."
+   },
+   "home": {
+    "$type": "color",
+    "$value": "#7DC7CD",
+    "$description": "Home area."
+   },
+   "home-soft": {
+    "$type": "color",
+    "$value": "#16303A",
+    "$description": "Home tint."
+   },
+   "home-ink": {
+    "$type": "color",
+    "$value": "#B1E1E4",
+    "$description": "Text on `home-soft`."
+   },
+   "fun": {
+    "$type": "color",
+    "$value": "#DDBB5B",
+    "$description": "Fun and travel area."
+   },
+   "fun-soft": {
+    "$type": "color",
+    "$value": "#312A17",
+    "$description": "Fun tint."
+   },
+   "fun-ink": {
+    "$type": "color",
+    "$value": "#EED88F",
+    "$description": "Text on `fun-soft`."
+   },
+   "viz-soft": {
+    "$type": "color",
+    "$value": "#3F4F7A",
+    "$description": "Second series in charts (below target, earlier period)."
+   },
+   "mood-1": {
+    "$type": "color",
+    "$value": "#D9728D",
+    "$description": "Mood scale 1 (awful), year in pixels."
+   },
+   "mood-2": {
+    "$type": "color",
+    "$value": "#7A4A5A",
+    "$description": "Mood scale 2 (low)."
+   },
+   "mood-3": {
+    "$type": "color",
+    "$value": "#2E3650",
+    "$description": "Mood scale 3 (okay)."
+   },
+   "mood-4": {
+    "$type": "color",
+    "$value": "#4F6DB2",
+    "$description": "Mood scale 4 (good)."
+   },
+   "mood-5": {
+    "$type": "color",
+    "$value": "#AFC4F4",
+    "$description": "Mood scale 5 (great)."
+   },
+   "heat-0": {
+    "$type": "color",
+    "$value": "#1F2638",
+    "$description": "Habit heatmap: none done."
+   },
+   "heat-1": {
+    "$type": "color",
+    "$value": "#2B3A60",
+    "$description": "Habit heatmap: a few."
+   },
+   "heat-2": {
+    "$type": "color",
+    "$value": "#3F5A98",
+    "$description": "Habit heatmap: half."
+   },
+   "heat-3": {
+    "$type": "color",
+    "$value": "#7090D2",
+    "$description": "Habit heatmap: most."
+   },
+   "heat-4": {
+    "$type": "color",
+    "$value": "#BACCF5",
+    "$description": "Habit heatmap: all done."
+   },
+   "nav-bg": {
+    "$type": "color",
+    "$value": "#090C16",
+    "$description": "Sidebar background (midnight in both themes)."
+   },
+   "nav-surface": {
+    "$type": "color",
+    "$value": "#161C30",
+    "$description": "Active item and search field in the sidebar."
+   },
+   "nav-line": {
+    "$type": "color",
+    "$value": "#1E2539",
+    "$description": "Borders inside the sidebar."
+   },
+   "nav-ink": {
+    "$type": "color",
+    "$value": "#EEF0F6",
+    "$description": "Active item and titles on `nav-bg`."
+   },
+   "nav-ink-2": {
+    "$type": "color",
+    "$value": "#AFB6CA",
+    "$description": "Inactive items on `nav-bg`."
+   },
+   "nav-ink-3": {
+    "$type": "color",
+    "$value": "#7E86A0",
+    "$description": "Group labels and hints on `nav-bg`."
+   },
+   "nav-success": {
+    "$type": "color",
+    "$value": "#79C4A2",
+    "$description": "Saved and synced status dot on `nav-bg`."
+   },
+   "nav-accent": {
+    "$type": "color",
+    "$value": "#D4B57C",
+    "$description": "Brass in the sidebar: active icon, Quick capture button."
+   },
+   "on-nav-accent": {
+    "$type": "color",
+    "$value": "#131A2E",
+    "$description": "Text on `nav-accent`."
+   }
+  }
+ },
+ "font": {
+  "family": {
+   "display": {
+    "$type": "fontFamily",
+    "$value": "'Cormorant Garamond', 'Iowan Old Style', Georgia, serif"
+   },
+   "sans": {
+    "$type": "fontFamily",
+    "$value": "'Jost', 'Avenir Next', system-ui, sans-serif"
+   }
+  }
+ },
+ "typography": {
+  "display-xl": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.display}",
+    "fontSize": "64px",
+    "lineHeight": "64px",
+    "fontWeight": 500,
+    "letterSpacing": "-0.01em"
+   },
+   "$description": "Covers, empty states, year in review"
+  },
+  "display-l": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.display}",
+    "fontSize": "46px",
+    "lineHeight": "50px",
+    "fontWeight": 500,
+    "letterSpacing": "-0.01em"
+   },
+   "$description": "Library page title (desktop)"
+  },
+  "display-m": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.display}",
+    "fontSize": "38px",
+    "lineHeight": "42px",
+    "fontWeight": 500,
+    "letterSpacing": "-0.01em"
+   },
+   "$description": "Desktop screen titles"
+  },
+  "mobile-title": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.display}",
+    "fontSize": "41px",
+    "lineHeight": "44px",
+    "fontWeight": 500,
+    "letterSpacing": "-0.01em"
+   },
+   "$description": "Mobile tab-root titles (Today, Tasks, Library); Home greeting uses 38/42"
+  },
+  "mobile-page-title": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.display}",
+    "fontSize": "36px",
+    "lineHeight": "40px",
+    "fontWeight": 500,
+    "letterSpacing": "0"
+   },
+   "$description": "Mobile detail titles (goal, page, task, review step)"
+  },
+  "title": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.display}",
+    "fontSize": "28px",
+    "lineHeight": "32px",
+    "fontWeight": 600,
+    "letterSpacing": "0"
+   },
+   "$description": "Detail-panel titles, quote cards, sheet titles (26 on mobile)"
+  },
+  "numeral": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.display}",
+    "fontSize": "36px",
+    "lineHeight": "40px",
+    "fontWeight": 500,
+    "letterSpacing": "0"
+   },
+   "$description": "Big stat numbers; lining + tabular figures"
+  },
+  "heading": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.sans}",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": 600,
+    "letterSpacing": "0"
+   },
+   "$description": "Card and section headings"
+  },
+  "body-l": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.sans}",
+    "fontSize": "16px",
+    "lineHeight": "25px",
+    "fontWeight": 400,
+    "letterSpacing": "0"
+   },
+   "$description": "Mobile editor text, form inputs (16px avoids iOS zoom)"
+  },
+  "body": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.sans}",
+    "fontSize": "15px",
+    "lineHeight": "24px",
+    "fontWeight": 400,
+    "letterSpacing": "0"
+   },
+   "$description": "Running text, task titles, list rows"
+  },
+  "body-s": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.sans}",
+    "fontSize": "13px",
+    "lineHeight": "20px",
+    "fontWeight": 400,
+    "letterSpacing": "0"
+   },
+   "$description": "Secondary lines, table cells, buttons"
+  },
+  "caption": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.sans}",
+    "fontSize": "12px",
+    "lineHeight": "16px",
+    "fontWeight": 500,
+    "letterSpacing": "0"
+   },
+   "$description": "Metadata, chart labels, status lines"
+  },
+  "label": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.sans}",
+    "fontSize": "11px",
+    "lineHeight": "16px",
+    "fontWeight": 600,
+    "letterSpacing": "0.12em"
+   },
+   "$description": "Uppercase eyebrows and group labels"
+  },
+  "tab-label": {
+   "$type": "typography",
+   "$value": {
+    "fontFamily": "{font.family.sans}",
+    "fontSize": "11px",
+    "lineHeight": "14px",
+    "fontWeight": 500,
+    "letterSpacing": "0"
+   },
+   "$description": "Mobile tab bar labels (700 when active)"
+  }
+ },
+ "space": {
+  "space-1": {
+   "$type": "dimension",
+   "$value": "4px"
+  },
+  "space-2": {
+   "$type": "dimension",
+   "$value": "8px"
+  },
+  "space-3": {
+   "$type": "dimension",
+   "$value": "12px"
+  },
+  "space-4": {
+   "$type": "dimension",
+   "$value": "16px"
+  },
+  "space-5": {
+   "$type": "dimension",
+   "$value": "20px"
+  },
+  "space-6": {
+   "$type": "dimension",
+   "$value": "24px"
+  },
+  "space-8": {
+   "$type": "dimension",
+   "$value": "32px"
+  },
+  "space-12": {
+   "$type": "dimension",
+   "$value": "48px"
+  }
+ },
+ "radius": {
+  "radius-xs": {
+   "$type": "dimension",
+   "$value": "6px",
+   "$description": "Checkboxes, kbd hints"
+  },
+  "radius-sm": {
+   "$type": "dimension",
+   "$value": "8px",
+   "$description": "Chips, segmented pills"
+  },
+  "radius-md": {
+   "$type": "dimension",
+   "$value": "10px",
+   "$description": "Buttons, inputs, nav items"
+  },
+  "radius-lg": {
+   "$type": "dimension",
+   "$value": "18px",
+   "$description": "Cards and panels"
+  },
+  "radius-tile": {
+   "$type": "dimension",
+   "$value": "20px",
+   "$description": "Bento tiles on mobile Home"
+  },
+  "radius-xl": {
+   "$type": "dimension",
+   "$value": "24px",
+   "$description": "Bottom sheets, large media"
+  },
+  "radius-pill": {
+   "$type": "dimension",
+   "$value": "999px",
+   "$description": "Status pills, avatars, FAB"
+  }
+ },
+ "layout": {
+  "sidebar-width": {
+   "$type": "dimension",
+   "$value": "248px",
+   "$description": "Desktop sidebar"
+  },
+  "desktop-padding": {
+   "$type": "dimension",
+   "$value": "32px",
+   "$description": "Desktop content padding"
+  },
+  "desktop-gap": {
+   "$type": "dimension",
+   "$value": "24px",
+   "$description": "Gap between desktop cards"
+  },
+  "mobile-gutter": {
+   "$type": "dimension",
+   "$value": "18px",
+   "$description": "Mobile side padding"
+  },
+  "mobile-topbar-height": {
+   "$type": "dimension",
+   "$value": "56px",
+   "$description": "Mobile pushed-screen top bar"
+  },
+  "tabbar-height": {
+   "$type": "dimension",
+   "$value": "84px",
+   "$description": "Mobile tab bar incl. 20px home-indicator space"
+  },
+  "fab-size": {
+   "$type": "dimension",
+   "$value": "56px",
+   "$description": "Centre capture button"
+  },
+  "touch-min": {
+   "$type": "dimension",
+   "$value": "44px",
+   "$description": "Minimum touch target"
+  },
+  "bento-columns": {
+   "$type": "number",
+   "$value": 4,
+   "$description": "Mobile Home grid columns"
+  },
+  "bento-gap": {
+   "$type": "dimension",
+   "$value": "9px",
+   "$description": "Mobile Home grid gap"
+  },
+  "bento-row": {
+   "$type": "dimension",
+   "$value": "70px",
+   "$description": "Mobile Home row height (Edit mode 64)"
+  },
+  "breakpoint-mobile": {
+   "$type": "dimension",
+   "$value": "768px",
+   "$description": "Below this width use the mobile layouts"
+  }
+ },
+ "shadow": {
+  "light": {
+   "shadow-sm": {
+    "$type": "shadow",
+    "$value": "0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03)"
+   },
+   "shadow-md": {
+    "$type": "shadow",
+    "$value": "0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05)"
+   },
+   "shadow-primary": {
+    "$type": "shadow",
+    "$value": "0 8px 20px -6px rgba(34,48,90,0.45)"
+   }
+  },
+  "dark": {
+   "shadow-sm": {
+    "$type": "shadow",
+    "$value": "0 1px 2px rgba(0,0,0,0.45)"
+   },
+   "shadow-md": {
+    "$type": "shadow",
+    "$value": "0 14px 34px -14px rgba(0,0,0,0.7)"
+   },
+   "shadow-primary": {
+    "$type": "shadow",
+    "$value": "0 8px 20px -6px rgba(0,0,0,0.6)"
+   }
+  }
+ },
+ "motion": {
+  "dur-fast": {
+   "$type": "duration",
+   "$value": "120ms"
+  },
+  "dur": {
+   "$type": "duration",
+   "$value": "200ms"
+  },
+  "dur-slow": {
+   "$type": "duration",
+   "$value": "320ms"
+  },
+  "ease": {
+   "$type": "cubicBezier",
+   "$value": "cubic-bezier(0.2, 0.8, 0.2, 1)"
+  }
+ }
+}

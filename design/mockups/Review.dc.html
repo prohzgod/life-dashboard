@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Weekly review</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Jost:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF0F3;--surface:#FCFCFD;--raised:#FFFFFF;--sunken:#F2F4F7;--sunken-2:#E6E9EF;--subtle:#F6F7F9;--track:#E1E5EC;--line:#DCE1E8;--line-soft:#EAEDF2;--line-strong:#BEC5D2;--control:#858DA0;--ink:#141926;--ink-2:#444B5D;--ink-3:#5F6679;--ink-4:#8E95A7;--inverse:#18203A;--on-inverse:#F6F3EC;--on-inverse-2:#B6BDD0;--inverse-accent:#D4B57C;--primary:#22305A;--primary-hover:#19244A;--on-primary:#F7F4EC;--on-primary-2:#C3CAE0;--primary-soft:#E5E9F4;--primary-softer:#F3F5FA;--primary-ink:#1B2750;--primary-line:#AAB6D6;--link:#2D4585;--accent:#A8844A;--accent-soft:#F3ECDF;--accent-ink:#6B5020;--success:#2B6A52;--success-soft:#E0EEE7;--warning:#92530E;--warning-soft:#F7EBDA;--warning-ink:#613708;--danger:#9E344B;--danger-soft:#F6E2E6;--danger-ink:#72213A;--health:#3E7D63;--health-soft:#E2EFE8;--health-ink:#1E4B3A;--career:#3A5A9A;--career-soft:#E3E9F5;--career-ink:#203766;--finance:#A8742A;--finance-soft:#F6EBDA;--finance-muted:#E4D2B2;--finance-ink:#633F0C;--family:#A04E66;--family-soft:#F6E3E9;--family-ink:#6B243D;--growth:#6A56A8;--growth-soft:#ECE7F7;--growth-ink:#42326C;--home:#2F7C84;--home-soft:#DEEFF1;--home-ink:#1A4A50;--fun:#8F6F10;--fun-soft:#F4EDD3;--fun-ink:#574409;--viz-soft:#AFBEDC;--mood-1:#9A3550;--mood-2:#DDA7AC;--mood-3:#E1E4EB;--mood-4:#9DB1D8;--mood-5:#2C437F;--heat-0:#E4E7EE;--heat-1:#C9D3E8;--heat-2:#93A7D2;--heat-3:#5470AE;--heat-4:#22305A;--nav-bg:#131A2E;--nav-surface:#1D2542;--nav-line:#29314F;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#8189A3;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03);--shadow-md:0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05);--shadow-primary:0 8px 20px -6px rgba(34,48,90,0.45);--scrim:rgba(10,14,28,0.55);--glass:rgba(252,252,253,0.92)}
+[data-theme="dark"]{--bg:#0D111D;--surface:#171C2B;--raised:#313A56;--sunken:#1C2234;--sunken-2:#252C42;--subtle:#131827;--track:#2A3249;--line:#2B334B;--line-soft:#212839;--line-strong:#46506F;--control:#737D9C;--ink:#ECEEF4;--ink-2:#B8BECD;--ink-3:#959CAF;--ink-4:#6A7290;--inverse:#EAE6DC;--on-inverse:#161B2A;--on-inverse-2:#4F566A;--inverse-accent:#7A5B22;--primary:#D4B57C;--primary-hover:#E3C994;--on-primary:#161B2A;--on-primary-2:#4E4128;--primary-soft:#2C2B2C;--primary-softer:#1B2030;--primary-ink:#E8D1A3;--primary-line:#76623D;--link:#D9BC86;--accent:#D4B57C;--accent-soft:#2E2A24;--accent-ink:#E8D1A3;--success:#79C4A2;--success-soft:#18302A;--warning:#E6AB69;--warning-soft:#35291B;--warning-ink:#F2CA94;--danger:#EE91A4;--danger-soft:#3A2029;--danger-ink:#F6BDC8;--health:#76C3A1;--health-soft:#192E27;--health-ink:#AADDC6;--career:#8FA9E2;--career-soft:#1C2644;--career-ink:#C4D3F4;--finance:#E1B173;--finance-soft:#33291C;--finance-muted:#56472F;--finance-ink:#F1CF9D;--family:#E69BB0;--family-soft:#3A2231;--family-ink:#F5C4D2;--growth:#B4A4E9;--growth-soft:#29243F;--growth-ink:#D9D0F7;--home:#7DC7CD;--home-soft:#16303A;--home-ink:#B1E1E4;--fun:#DDBB5B;--fun-soft:#312A17;--fun-ink:#EED88F;--viz-soft:#3F4F7A;--mood-1:#D9728D;--mood-2:#7A4A5A;--mood-3:#2E3650;--mood-4:#4F6DB2;--mood-5:#AFC4F4;--heat-0:#1F2638;--heat-1:#2B3A60;--heat-2:#3F5A98;--heat-3:#7090D2;--heat-4:#BACCF5;--nav-bg:#090C16;--nav-surface:#161C30;--nav-line:#1E2539;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#7E86A0;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(0,0,0,0.45);--shadow-md:0 14px 34px -14px rgba(0,0,0,0.7);--shadow-primary:0 8px 20px -6px rgba(0,0,0,0.6);--scrim:rgba(0,0,0,0.62);--glass:rgba(23,28,43,0.9);color-scheme:dark}
+body{margin:0;background:var(--bg)}
+*{box-sizing:border-box}
+button,input,textarea{font:inherit;color:inherit}
+a{color:var(--link)}a:hover{color:var(--primary-ink)}
+</style>
+</helmet>
+<div data-theme="{{theme}}" style="width: 1440px; height: 960px; display: flex; overflow: hidden; background: var(--bg); font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; color: var(--ink)">
+<dc-import name="Sidebar" active="review" hint-size="248px,960px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; padding: 26px 32px 24px; display: flex; flex-direction: column; gap: 16px">
+<header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3)">Week 39 · 21 – 27 September</div>
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 38px; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: lining-nums">Weekly review</h1>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="font-size: 13px; color: var(--ink-2)">About 12 min left</span>
+<button type="button" style="height: 36px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">Save and finish later</button>
+</div>
+</header>
+<ol aria-label="Review steps" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px">
+<li style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line)">
+<span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 13px; background: var(--primary); color: var(--on-primary); display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+<span style="display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">Get clear</span><span style="font-size: 12px; color: var(--ink-3)">Inbox to zero</span></span>
+</li>
+<li style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line)">
+<span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 13px; background: var(--primary); color: var(--on-primary); display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+<span style="display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">Get current</span><span style="font-size: 12px; color: var(--ink-3)">Calendar, goals, habits</span></span>
+</li>
+<li aria-current="step" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--inverse); color: var(--on-inverse)">
+<span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 13px; background: var(--on-inverse); color: var(--inverse); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">3</span>
+<span style="display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">Reflect</span><span style="font-size: 12px; color: var(--on-inverse-2)">Wins, drains, lessons</span></span>
+</li>
+<li style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--line-strong)">
+<span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 13px; border: 1.5px solid var(--control); color: var(--ink-2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">4</span>
+<span style="display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600; color: var(--ink-2)">Plan week 40</span><span style="font-size: 12px; color: var(--ink-3)">Pick 1–3 focus items</span></span>
+</li>
+<li style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--line-strong)">
+<span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 13px; border: 1.5px solid var(--control); color: var(--ink-2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">5</span>
+<span style="display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600; color: var(--ink-2)">Done</span><span style="font-size: 12px; color: var(--ink-3)">Saved to your journal</span></span>
+</li>
+</ol>
+<div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 392px; gap: 18px">
+<section style="padding: 20px 22px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Your week at a glance</h2>
+<span style="font-size: 12px; color: var(--ink-3)">filled in automatically</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px">
+<div style="padding: 10px 12px; border-radius: 10px; background: var(--sunken)"><div style="font-size: 12px; color: var(--ink-3)">Tasks done</div><div style="font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums">23 <span style="font-size: 12px; font-weight: 600; color: var(--success)">+4</span></div></div>
+<div style="padding: 10px 12px; border-radius: 10px; background: var(--sunken)"><div style="font-size: 12px; color: var(--ink-3)">Habits</div><div style="font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums">81%</div></div>
+<div style="padding: 10px 12px; border-radius: 10px; background: var(--sunken)"><div style="font-size: 12px; color: var(--ink-3)">Mood</div><div style="font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums">3.9</div></div>
+<div style="padding: 10px 12px; border-radius: 10px; background: var(--sunken)"><div style="font-size: 12px; color: var(--ink-3)">Sleep</div><div style="font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums">7h 05m</div></div>
+<div style="padding: 10px 12px; border-radius: 10px; background: var(--sunken)"><div style="font-size: 12px; color: var(--ink-3)">Journal</div><div style="font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums">6 / 7</div></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; gap: 14px; font-size: 12px; color: var(--ink-2)"><span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--primary)"></rect></svg>Mood</span><span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--finance)"></rect></svg>Energy</span></div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; align-items: end; height: 96px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px; align-items: flex-end; height: 72px"><div style="width: 14px; height: 43px; border-radius: 4px 4px 0 0; background: var(--primary)"></div><div style="width: 14px; height: 36px; border-radius: 4px 4px 0 0; background: var(--finance)"></div></div><span style="font-size: 12px; color: var(--ink-2)">Mon</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px; align-items: flex-end; height: 72px"><div style="width: 14px; height: 58px; border-radius: 4px 4px 0 0; background: var(--primary)"></div><div style="width: 14px; height: 50px; border-radius: 4px 4px 0 0; background: var(--finance)"></div></div><span style="font-size: 12px; color: var(--ink-2)">Tue</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px; align-items: flex-end; height: 72px"><div style="width: 14px; height: 29px; border-radius: 4px 4px 0 0; background: var(--primary)"></div><div style="width: 14px; height: 22px; border-radius: 4px 4px 0 0; background: var(--finance)"></div></div><span style="font-size: 12px; color: var(--ink-2)">Wed</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px; align-items: flex-end; height: 72px"><div style="width: 14px; height: 43px; border-radius: 4px 4px 0 0; background: var(--primary)"></div><div style="width: 14px; height: 43px; border-radius: 4px 4px 0 0; background: var(--finance)"></div></div><span style="font-size: 12px; color: var(--ink-2)">Thu</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px; align-items: flex-end; height: 72px"><div style="width: 14px; height: 58px; border-radius: 4px 4px 0 0; background: var(--primary)"></div><div style="width: 14px; height: 43px; border-radius: 4px 4px 0 0; background: var(--finance)"></div></div><span style="font-size: 12px; color: var(--ink-2)">Fri</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px; align-items: flex-end; height: 72px"><div style="width: 14px; height: 72px; border-radius: 4px 4px 0 0; background: var(--primary)"></div><div style="width: 14px; height: 65px; border-radius: 4px 4px 0 0; background: var(--finance)"></div></div><span style="font-size: 12px; color: var(--ink); font-weight: 700">Sat</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="display: flex; gap: 4px; align-items: flex-end; height: 72px"><div style="width: 14px; height: 50px; border-radius: 4px 4px 0 0; background: var(--primary)"></div><div style="width: 14px; height: 36px; border-radius: 4px 4px 0 0; background: var(--finance)"></div></div><span style="font-size: 12px; color: var(--ink-2)">Sun</span></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 14px; font-weight: 600">What went well?</div>
+<div style="padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--subtle); font-size: 14px; line-height: 1.5; color: var(--ink)">Hit every run, including the 12 km on Saturday. Essay #8 went out on time. Two phone-free evenings with the family felt really good.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 14px; font-weight: 600">What drained you?</div>
+<div style="padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--subtle); font-size: 14px; line-height: 1.5; color: var(--ink)">Wednesday: back-to-back meetings, slept 5h 40m, skipped meditation.</div>
+</div>
+<label style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 14px; font-weight: 600">What will you do differently next week?</span>
+<textarea rows="2" placeholder="One small change is enough…" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--primary); background: var(--surface); font-size: 14px; line-height: 1.5; resize: none; outline: none"></textarea>
+</label>
+</section>
+<div style="display: flex; flex-direction: column; gap: 14px; min-width: 0">
+<section style="padding: 16px 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; gap: 14px; align-items: center">
+<div style="width: 96px; height: 96px; flex-shrink: 0; border-radius: 12px; background: var(--health-soft); color: var(--primary-ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6"></path></svg><span style="font-size: 10px; font-weight: 600">Photo</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3)">Best day</div>
+<div style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 22px; line-height: 1.3; font-weight: 600; font-variant-numeric: lining-nums">Saturday: long run, then a hike with Linh.</div>
+<div style="font-size: 12px; color: var(--ink-2)">Mood 5 · energy 5 · 8h sleep</div>
+</div>
+</section>
+<section style="padding: 16px 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">Goals that moved</h2>
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span>Run a half-marathon</span><span style="font-weight: 700; color: var(--success); font-variant-numeric: tabular-nums">+4% → 62%</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span>6-month emergency fund</span><span style="font-weight: 700; color: var(--success); font-variant-numeric: tabular-nums">+$150 → $7,400</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span>Publish 12 essays</span><span style="font-weight: 700; color: var(--success); font-variant-numeric: tabular-nums">+1 → 9</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span>Ship side project v1</span><span style="font-weight: 700; color: var(--warning)">no progress, 2 weeks</span></div>
+</section>
+<section style="flex-grow: 1; padding: 16px 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="stroke: var(--primary)"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"></path></svg>Draft summary</h2>
+<span style="font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--sunken-2); color: var(--ink-2)">Optional</span>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink)">A strong, steady week. Running is back on track and writing kept its rhythm. The one dip, Wednesday, followed your shortest night. The side project has stalled for two weeks: worth one protected block, or a conscious pause.</p>
+<div style="display: flex; gap: 8px">
+<button type="button" style="height: 34px; padding: 0 12px; border: 0; border-radius: 9px; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 600; cursor: pointer">Insert into review</button>
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">Rewrite</button>
+</div>
+<div style="font-size: 12px; color: var(--ink-3); line-height: 1.45">Generated on this device. Health and Finance details were not used.</div>
+</section>
+</div>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<button type="button" style="height: 42px; padding: 0 16px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface); font-size: 14px; font-weight: 600; cursor: pointer">Back</button>
+<span style="font-size: 13px; color: var(--ink-3)">Step 3 of 5 · you can skip any step</span>
+<button type="button" style="height: 42px; padding: 0 18px; border: 0; border-radius: 10px; background: var(--primary); color: var(--on-primary); font-size: 14px; font-weight: 600; cursor: pointer">Next: plan week 40</button>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings: privacy and data</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Jost:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF0F3;--surface:#FCFCFD;--raised:#FFFFFF;--sunken:#F2F4F7;--sunken-2:#E6E9EF;--subtle:#F6F7F9;--track:#E1E5EC;--line:#DCE1E8;--line-soft:#EAEDF2;--line-strong:#BEC5D2;--control:#858DA0;--ink:#141926;--ink-2:#444B5D;--ink-3:#5F6679;--ink-4:#8E95A7;--inverse:#18203A;--on-inverse:#F6F3EC;--on-inverse-2:#B6BDD0;--inverse-accent:#D4B57C;--primary:#22305A;--primary-hover:#19244A;--on-primary:#F7F4EC;--on-primary-2:#C3CAE0;--primary-soft:#E5E9F4;--primary-softer:#F3F5FA;--primary-ink:#1B2750;--primary-line:#AAB6D6;--link:#2D4585;--accent:#A8844A;--accent-soft:#F3ECDF;--accent-ink:#6B5020;--success:#2B6A52;--success-soft:#E0EEE7;--warning:#92530E;--warning-soft:#F7EBDA;--warning-ink:#613708;--danger:#9E344B;--danger-soft:#F6E2E6;--danger-ink:#72213A;--health:#3E7D63;--health-soft:#E2EFE8;--health-ink:#1E4B3A;--career:#3A5A9A;--career-soft:#E3E9F5;--career-ink:#203766;--finance:#A8742A;--finance-soft:#F6EBDA;--finance-muted:#E4D2B2;--finance-ink:#633F0C;--family:#A04E66;--family-soft:#F6E3E9;--family-ink:#6B243D;--growth:#6A56A8;--growth-soft:#ECE7F7;--growth-ink:#42326C;--home:#2F7C84;--home-soft:#DEEFF1;--home-ink:#1A4A50;--fun:#8F6F10;--fun-soft:#F4EDD3;--fun-ink:#574409;--viz-soft:#AFBEDC;--mood-1:#9A3550;--mood-2:#DDA7AC;--mood-3:#E1E4EB;--mood-4:#9DB1D8;--mood-5:#2C437F;--heat-0:#E4E7EE;--heat-1:#C9D3E8;--heat-2:#93A7D2;--heat-3:#5470AE;--heat-4:#22305A;--nav-bg:#131A2E;--nav-surface:#1D2542;--nav-line:#29314F;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#8189A3;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03);--shadow-md:0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05);--shadow-primary:0 8px 20px -6px rgba(34,48,90,0.45);--scrim:rgba(10,14,28,0.55);--glass:rgba(252,252,253,0.92)}
+[data-theme="dark"]{--bg:#0D111D;--surface:#171C2B;--raised:#313A56;--sunken:#1C2234;--sunken-2:#252C42;--subtle:#131827;--track:#2A3249;--line:#2B334B;--line-soft:#212839;--line-strong:#46506F;--control:#737D9C;--ink:#ECEEF4;--ink-2:#B8BECD;--ink-3:#959CAF;--ink-4:#6A7290;--inverse:#EAE6DC;--on-inverse:#161B2A;--on-inverse-2:#4F566A;--inverse-accent:#7A5B22;--primary:#D4B57C;--primary-hover:#E3C994;--on-primary:#161B2A;--on-primary-2:#4E4128;--primary-soft:#2C2B2C;--primary-softer:#1B2030;--primary-ink:#E8D1A3;--primary-line:#76623D;--link:#D9BC86;--accent:#D4B57C;--accent-soft:#2E2A24;--accent-ink:#E8D1A3;--success:#79C4A2;--success-soft:#18302A;--warning:#E6AB69;--warning-soft:#35291B;--warning-ink:#F2CA94;--danger:#EE91A4;--danger-soft:#3A2029;--danger-ink:#F6BDC8;--health:#76C3A1;--health-soft:#192E27;--health-ink:#AADDC6;--career:#8FA9E2;--career-soft:#1C2644;--career-ink:#C4D3F4;--finance:#E1B173;--finance-soft:#33291C;--finance-muted:#56472F;--finance-ink:#F1CF9D;--family:#E69BB0;--family-soft:#3A2231;--family-ink:#F5C4D2;--growth:#B4A4E9;--growth-soft:#29243F;--growth-ink:#D9D0F7;--home:#7DC7CD;--home-soft:#16303A;--home-ink:#B1E1E4;--fun:#DDBB5B;--fun-soft:#312A17;--fun-ink:#EED88F;--viz-soft:#3F4F7A;--mood-1:#D9728D;--mood-2:#7A4A5A;--mood-3:#2E3650;--mood-4:#4F6DB2;--mood-5:#AFC4F4;--heat-0:#1F2638;--heat-1:#2B3A60;--heat-2:#3F5A98;--heat-3:#7090D2;--heat-4:#BACCF5;--nav-bg:#090C16;--nav-surface:#161C30;--nav-line:#1E2539;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#7E86A0;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(0,0,0,0.45);--shadow-md:0 14px 34px -14px rgba(0,0,0,0.7);--shadow-primary:0 8px 20px -6px rgba(0,0,0,0.6);--scrim:rgba(0,0,0,0.62);--glass:rgba(23,28,43,0.9);color-scheme:dark}
+body{margin:0;background:var(--bg)}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+a{color:var(--link)}a:hover{color:var(--primary-ink)}
+</style>
+</helmet>
+<div data-theme="{{theme}}" style="width: 1440px; height: 960px; display: flex; overflow: hidden; background: var(--bg); font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; color: var(--ink)">
+<dc-import name="Sidebar" active="settings" hint-size="248px,960px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; padding: 26px 32px; display: flex; flex-direction: column; gap: 16px">
+<header style="display: flex; flex-direction: column; gap: 12px">
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 38px; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: lining-nums">Settings</h1>
+<nav aria-label="Settings sections" style="display: flex; gap: 4px; border-bottom: 1px solid var(--line)">
+<a href="Settings.dc.html" style="padding: 8px 12px; font-size: 14px; color: var(--ink-2); text-decoration: none">General</a>
+<a href="Settings.dc.html" style="padding: 8px 12px; font-size: 14px; color: var(--ink-2); text-decoration: none">Spaces &amp; sharing</a>
+<a href="Settings.dc.html" aria-current="page" style="padding: 8px 12px; font-size: 14px; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--primary); margin-bottom: -1px">Privacy &amp; data</a>
+<a href="Settings.dc.html" style="padding: 8px 12px; font-size: 14px; color: var(--ink-2); text-decoration: none">Modules</a>
+<a href="Settings.dc.html" style="padding: 8px 12px; font-size: 14px; color: var(--ink-2); text-decoration: none">Appearance</a>
+</nav>
+</header>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<section style="padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">Storage on this device</h2>
+<div style="font-size: 13px; color: var(--ink-2); line-height: 1.45">Everything lives here first, so the app works fully offline.</div>
+<div style="display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--sunken-2)"><div style="width: 15%; background: var(--primary)"></div><div style="width: 62%; background: var(--viz-soft)"></div><div style="width: 7%; background: var(--finance)"></div></div>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--ink-2)">
+<span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--primary)"></rect></svg>Database · 212 MB</span>
+<span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--viz-soft)"></rect></svg>Images · 1.1 GB (2,318)</span>
+<span style="display: flex; align-items: center; gap: 6px"><svg width="10" height="10" aria-hidden="true"><rect width="10" height="10" rx="2" style="fill: var(--finance)"></rect></svg>Attachments · 96 MB</span>
+</div>
+<label style="display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px">Keep full-size photos for<select style="height: 30px; padding: 0 8px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); font-size: 13px"><option>Last 12 months</option><option>Forever</option></select></label>
+</section>
+<section style="padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">Sync between devices</h2>
+<label style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px"><input type="radio" name="sync" style="margin: 2px 0 0; accent-color: var(--primary)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">This device only</span><span style="color: var(--ink-3)">No sync at all</span></span></label>
+<label style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 10px; border: 1.5px solid var(--primary); background: var(--primary-soft); font-size: 13px"><input type="radio" name="sync" checked style="margin: 2px 0 0; accent-color: var(--primary)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">My devices, end-to-end encrypted</span><span style="color: var(--ink-2)">The relay only sees scrambled data</span></span></label>
+<label style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px"><input type="radio" name="sync" style="margin: 2px 0 0; accent-color: var(--primary)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">My own server</span><span style="color: var(--ink-3)">Self-hosted, you enter the address</span></span></label>
+<div style="display: flex; flex-direction: column; gap: 6px; padding-top: 4px; font-size: 13px">
+<div style="display: flex; justify-content: space-between"><span style="font-weight: 600">MacBook Air <span style="font-weight: 400; color: var(--ink-3)">· this device</span></span><span style="color: var(--primary-ink)">now</span></div>
+<div style="display: flex; justify-content: space-between"><span style="font-weight: 600">iPhone</span><span style="color: var(--ink-2)">2 min ago</span></div>
+<div style="display: flex; justify-content: space-between"><span style="font-weight: 600">iPad <span style="font-weight: 400; color: var(--warning)">· offline, 3 changes waiting</span></span><span style="color: var(--ink-2)">3 days ago</span></div>
+</div>
+<label style="display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px">If edits clash<select style="height: 30px; padding: 0 8px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); font-size: 13px"><option>Keep both, ask me</option><option>Newest wins</option></select></label>
+</section>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<section style="padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">Encryption</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">End-to-end encryption</span><span style="color: var(--ink-3)">Your passphrase never leaves your devices</span></span><button type="button" role="switch" aria-checked="true" aria-label="End-to-end encryption" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="padding: 10px 12px; border-radius: 10px; background: var(--warning-soft); font-size: 12px; line-height: 1.45; color: var(--warning-ink)">If you lose both your passphrase and your recovery kit, nobody can recover your data. Not even us.</div>
+<button type="button" style="height: 36px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">Download recovery kit (PDF)</button>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">Private journal</span><span style="color: var(--ink-3)">Extra passphrase, hidden from the Assistant</span></span><button type="button" role="switch" aria-checked="false" aria-label="Private journal" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--control); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+</section>
+<section style="padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">App lock &amp; screen privacy</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px"><span style="font-weight: 600">Unlock with Touch ID / Face ID</span><button type="button" role="switch" aria-checked="true" aria-label="Biometric unlock" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<label style="display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 600">Lock after<select style="height: 30px; padding: 0 8px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); font-size: 13px; font-weight: 400"><option>5 minutes away</option><option>Immediately</option><option>1 hour</option></select></label>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px"><span style="font-weight: 600">Hide money amounts by default</span><button type="button" role="switch" aria-checked="true" aria-label="Hide money amounts" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px"><span style="font-weight: 600">Blur app in the app switcher</span><button type="button" role="switch" aria-checked="true" aria-label="Blur in app switcher" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+</section>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<section style="padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">Backups</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px"><span style="font-weight: 600">Automatic encrypted backups</span><button type="button" role="switch" aria-checked="true" aria-label="Automatic backups" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div>
+<div style="display: grid; grid-template-columns: 84px minmax(0, 1fr); row-gap: 8px; column-gap: 10px; font-size: 13px">
+<span style="color: var(--ink-3)">When</span><span>Daily at 03:00</span>
+<span style="color: var(--ink-3)">Where</span><span>iCloud Drive / Life Dashboard <a href="Settings.dc.html" style="font-weight: 600; text-decoration: none">Change</a></span>
+<span style="color: var(--ink-3)">Keep</span><span>Last 30 backups</span>
+<span style="color: var(--ink-3)">Last</span><span style="color: var(--primary-ink); font-weight: 600">Today 03:02 · 1.4 GB · verified</span>
+</div>
+<div style="display: flex; gap: 8px">
+<button type="button" style="flex-grow: 1; height: 36px; border: 0; border-radius: 9px; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 600; cursor: pointer">Back up now</button>
+<button type="button" style="flex-grow: 1; height: 36px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">Restore…</button>
+</div>
+</section>
+<section style="padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">Export &amp; import</h2>
+<div style="font-size: 13px; color: var(--ink-2); line-height: 1.45">Your data is yours. Take all of it, any time, in open formats.</div>
+<button type="button" style="height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: space-between"><span style="font-weight: 600">Markdown + images</span><span style="color: var(--ink-3)">.zip</span></button>
+<button type="button" style="height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: space-between"><span style="font-weight: 600">Everything, structured</span><span style="color: var(--ink-3)">.json</span></button>
+<button type="button" style="height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: space-between"><span style="font-weight: 600">Habits, metrics, money</span><span style="color: var(--ink-3)">.csv</span></button>
+<div style="font-size: 12px; color: var(--ink-3)">Import from Notion, Obsidian, Day One or CSV.</div>
+</section>
+</div>
+</div>
+<section style="padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">Modules</h2>
+<span style="font-size: 12px; color: var(--ink-3)">Turn off what you don’t use. Nothing is deleted, it’s just hidden.</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px">
+<div style="padding: 12px; border-radius: 10px; background: var(--sunken); display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">Calendar</span><button type="button" role="switch" aria-checked="true" aria-label="Calendar module" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div><span style="font-size: 12px; color: var(--ink-2)">Time blocks, Google / iCloud</span></div>
+<div style="padding: 12px; border-radius: 10px; background: var(--sunken); display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">Finance</span><button type="button" role="switch" aria-checked="true" aria-label="Finance module" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div><span style="font-size: 12px; color: var(--ink-2)">Budgets, savings, CSV</span></div>
+<div style="padding: 12px; border-radius: 10px; background: var(--sunken); display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">Health</span><button type="button" role="switch" aria-checked="true" aria-label="Health module" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div><span style="font-size: 12px; color: var(--ink-2)">Sleep, steps, workouts</span></div>
+<div style="padding: 12px; border-radius: 10px; background: var(--sunken); display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">Assistant</span><button type="button" role="switch" aria-checked="true" aria-label="Assistant module" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div><span style="font-size: 12px; color: var(--ink-2)">On-device AI helpers</span></div>
+<div style="padding: 12px; border-radius: 10px; background: var(--sunken); display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">Vision board</span><button type="button" role="switch" aria-checked="true" aria-label="Vision board module" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 19px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div><span style="font-size: 12px; color: var(--ink-2)">Images and words</span></div>
+<div style="padding: 12px; border-radius: 10px; background: var(--sunken); display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; justify-content: space-between"><span style="font-size: 14px; font-weight: 600">Rewards</span><button type="button" role="switch" aria-checked="false" aria-label="Rewards module" style="width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: 0; border-radius: 12px; background: var(--control); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button></div><span style="font-size: 12px; color: var(--ink-2)">Gentle badges, off by default</span></div>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

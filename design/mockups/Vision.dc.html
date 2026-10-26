@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vision board</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Jost:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF0F3;--surface:#FCFCFD;--raised:#FFFFFF;--sunken:#F2F4F7;--sunken-2:#E6E9EF;--subtle:#F6F7F9;--track:#E1E5EC;--line:#DCE1E8;--line-soft:#EAEDF2;--line-strong:#BEC5D2;--control:#858DA0;--ink:#141926;--ink-2:#444B5D;--ink-3:#5F6679;--ink-4:#8E95A7;--inverse:#18203A;--on-inverse:#F6F3EC;--on-inverse-2:#B6BDD0;--inverse-accent:#D4B57C;--primary:#22305A;--primary-hover:#19244A;--on-primary:#F7F4EC;--on-primary-2:#C3CAE0;--primary-soft:#E5E9F4;--primary-softer:#F3F5FA;--primary-ink:#1B2750;--primary-line:#AAB6D6;--link:#2D4585;--accent:#A8844A;--accent-soft:#F3ECDF;--accent-ink:#6B5020;--success:#2B6A52;--success-soft:#E0EEE7;--warning:#92530E;--warning-soft:#F7EBDA;--warning-ink:#613708;--danger:#9E344B;--danger-soft:#F6E2E6;--danger-ink:#72213A;--health:#3E7D63;--health-soft:#E2EFE8;--health-ink:#1E4B3A;--career:#3A5A9A;--career-soft:#E3E9F5;--career-ink:#203766;--finance:#A8742A;--finance-soft:#F6EBDA;--finance-muted:#E4D2B2;--finance-ink:#633F0C;--family:#A04E66;--family-soft:#F6E3E9;--family-ink:#6B243D;--growth:#6A56A8;--growth-soft:#ECE7F7;--growth-ink:#42326C;--home:#2F7C84;--home-soft:#DEEFF1;--home-ink:#1A4A50;--fun:#8F6F10;--fun-soft:#F4EDD3;--fun-ink:#574409;--viz-soft:#AFBEDC;--mood-1:#9A3550;--mood-2:#DDA7AC;--mood-3:#E1E4EB;--mood-4:#9DB1D8;--mood-5:#2C437F;--heat-0:#E4E7EE;--heat-1:#C9D3E8;--heat-2:#93A7D2;--heat-3:#5470AE;--heat-4:#22305A;--nav-bg:#131A2E;--nav-surface:#1D2542;--nav-line:#29314F;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#8189A3;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03);--shadow-md:0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05);--shadow-primary:0 8px 20px -6px rgba(34,48,90,0.45);--scrim:rgba(10,14,28,0.55);--glass:rgba(252,252,253,0.92)}
+[data-theme="dark"]{--bg:#0D111D;--surface:#171C2B;--raised:#313A56;--sunken:#1C2234;--sunken-2:#252C42;--subtle:#131827;--track:#2A3249;--line:#2B334B;--line-soft:#212839;--line-strong:#46506F;--control:#737D9C;--ink:#ECEEF4;--ink-2:#B8BECD;--ink-3:#959CAF;--ink-4:#6A7290;--inverse:#EAE6DC;--on-inverse:#161B2A;--on-inverse-2:#4F566A;--inverse-accent:#7A5B22;--primary:#D4B57C;--primary-hover:#E3C994;--on-primary:#161B2A;--on-primary-2:#4E4128;--primary-soft:#2C2B2C;--primary-softer:#1B2030;--primary-ink:#E8D1A3;--primary-line:#76623D;--link:#D9BC86;--accent:#D4B57C;--accent-soft:#2E2A24;--accent-ink:#E8D1A3;--success:#79C4A2;--success-soft:#18302A;--warning:#E6AB69;--warning-soft:#35291B;--warning-ink:#F2CA94;--danger:#EE91A4;--danger-soft:#3A2029;--danger-ink:#F6BDC8;--health:#76C3A1;--health-soft:#192E27;--health-ink:#AADDC6;--career:#8FA9E2;--career-soft:#1C2644;--career-ink:#C4D3F4;--finance:#E1B173;--finance-soft:#33291C;--finance-muted:#56472F;--finance-ink:#F1CF9D;--family:#E69BB0;--family-soft:#3A2231;--family-ink:#F5C4D2;--growth:#B4A4E9;--growth-soft:#29243F;--growth-ink:#D9D0F7;--home:#7DC7CD;--home-soft:#16303A;--home-ink:#B1E1E4;--fun:#DDBB5B;--fun-soft:#312A17;--fun-ink:#EED88F;--viz-soft:#3F4F7A;--mood-1:#D9728D;--mood-2:#7A4A5A;--mood-3:#2E3650;--mood-4:#4F6DB2;--mood-5:#AFC4F4;--heat-0:#1F2638;--heat-1:#2B3A60;--heat-2:#3F5A98;--heat-3:#7090D2;--heat-4:#BACCF5;--nav-bg:#090C16;--nav-surface:#161C30;--nav-line:#1E2539;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#7E86A0;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(0,0,0,0.45);--shadow-md:0 14px 34px -14px rgba(0,0,0,0.7);--shadow-primary:0 8px 20px -6px rgba(0,0,0,0.6);--scrim:rgba(0,0,0,0.62);--glass:rgba(23,28,43,0.9);color-scheme:dark}
+body{margin:0;background:var(--bg)}
+*{box-sizing:border-box}
+button,input{font:inherit;color:inherit}
+a{color:var(--link)}a:hover{color:var(--primary-ink)}
+</style>
+</helmet>
+<div data-theme="{{theme}}" style="width: 1440px; height: 960px; display: flex; overflow: hidden; background: var(--bg); font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; color: var(--ink)">
+<dc-import name="Sidebar" active="vision" hint-size="248px,960px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; padding: 28px 32px; display: flex; flex-direction: column; gap: 18px">
+<header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; align-items: flex-end; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3)">2026</div>
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 38px; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: lining-nums">Vision board</h1>
+</div>
+<span style="margin-bottom: 4px; padding: 4px 12px; border-radius: 999px; background: var(--primary-soft); color: var(--primary-ink); font-size: 13px">Word of the year: <strong style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 18px; font-weight: 600; font-variant-numeric: lining-nums">Present</strong></span>
+</div>
+<div style="display: flex; align-items: center; gap: 8px">
+<div style="display: flex; padding: 3px; border-radius: 10px; background: var(--sunken-2)">
+<button type="button" aria-pressed="true" style="height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: var(--raised); font-size: 13px; font-weight: 600; cursor: pointer">Grid</button>
+<button type="button" aria-pressed="false" style="height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; font-size: 13px; color: var(--ink-2); cursor: pointer">Free canvas</button>
+</div>
+<button type="button" style="height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">All areas ▾</button>
+<button type="button" style="height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">Add words</button>
+<button type="button" style="height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer">Pin a goal</button>
+<button type="button" style="height: 36px; padding: 0 14px; border: 0; border-radius: 9px; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 600; cursor: pointer">Add images</button>
+</div>
+</header>
+<div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(6, minmax(0, 1fr)); gap: 14px">
+<div style="grid-column: 1 / 3; grid-row: 1 / 3; padding: 22px; border-radius: 16px; background: var(--inverse); color: var(--on-inverse); display: flex; flex-direction: column; justify-content: space-between">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--inverse-accent)">Health</span>
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 41px; line-height: 1.15; letter-spacing: -0.01em; font-weight: 500; font-variant-numeric: lining-nums">Strong body,<br>quiet mind.</span>
+</div>
+<figure style="grid-column: 3 / 5; grid-row: 1 / 4; margin: 0; position: relative; border-radius: 16px; background: var(--health-soft); color: var(--primary-ink); display: flex; align-items: center; justify-content: center">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6"></path></svg>
+<a href="Goals.dc.html" style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 999px; background: var(--on-inverse); color: var(--inverse); font-size: 12px; font-weight: 600; text-decoration: none">Run a half-marathon · 62%</a>
+<figcaption style="position: absolute; left: 14px; bottom: 14px; padding: 4px 10px; border-radius: 8px; background: var(--glass); font-size: 13px; color: var(--ink)">[Image] Crossing the finish line</figcaption>
+</figure>
+<figure style="grid-column: 5 / 7; grid-row: 1 / 3; margin: 0; position: relative; border-radius: 16px; background: var(--family-soft); color: var(--danger-ink); display: flex; align-items: center; justify-content: center">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6"></path></svg>
+<a href="Library.dc.html" style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 999px; background: var(--on-inverse); color: var(--inverse); font-size: 12px; font-weight: 600; text-decoration: none">Visit Japan with family · 30%</a>
+<figcaption style="position: absolute; left: 14px; bottom: 14px; padding: 4px 10px; border-radius: 8px; background: var(--glass); font-size: 13px; color: var(--ink)">[Image] Kyoto in spring</figcaption>
+</figure>
+<div style="grid-column: 1 / 3; grid-row: 3 / 5; padding: 22px; border-radius: 16px; background: var(--family-soft); color: var(--family-ink); display: flex; flex-direction: column; justify-content: space-between">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--danger-ink)">Family</span>
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 34px; line-height: 1.2; font-weight: 500; font-variant-numeric: lining-nums">Sunday dinners, phones away.</span>
+</div>
+<figure style="grid-column: 5 / 7; grid-row: 3 / 6; margin: 0; position: relative; border-radius: 16px; background: var(--growth-soft); color: var(--growth-ink); display: flex; align-items: center; justify-content: center">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6"></path></svg>
+<a href="Goals.dc.html" style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 999px; background: var(--on-inverse); color: var(--inverse); font-size: 12px; font-weight: 600; text-decoration: none">Publish 12 essays · 75%</a>
+<figcaption style="position: absolute; left: 14px; bottom: 14px; padding: 4px 10px; border-radius: 8px; background: var(--glass); font-size: 13px; color: var(--ink)">[Image] Writing desk by the window</figcaption>
+</figure>
+<figure style="grid-column: 3 / 5; grid-row: 4 / 6; margin: 0; position: relative; border-radius: 16px; background: var(--home-soft); color: var(--home-ink); display: flex; align-items: center; justify-content: center">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6"></path></svg>
+<figcaption style="position: absolute; left: 14px; bottom: 14px; padding: 4px 10px; border-radius: 8px; background: var(--glass); font-size: 13px; color: var(--ink)">[Image] A small balcony garden</figcaption>
+</figure>
+<div style="grid-column: 1 / 3; grid-row: 5 / 7; padding: 22px; border-radius: 16px; background: var(--warning-soft); color: var(--warning-ink); display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--warning-ink)">Finance</span><a href="Finance.dc.html" style="padding: 4px 9px; border-radius: 999px; background: var(--on-inverse); color: var(--inverse); font-size: 12px; font-weight: 600; text-decoration: none">Emergency fund · 62%</a></div>
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 31px; line-height: 1.2; font-weight: 500; font-variant-numeric: lining-nums">Six months saved. Calm about money.</span>
+</div>
+<button type="button" style="grid-column: 3 / 7; grid-row: 6 / 7; border-radius: 16px; border: 1.5px dashed var(--line-strong); background: var(--subtle); color: var(--ink-2); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+Drop images, paste a link, or pick photos from your Library
+</button>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

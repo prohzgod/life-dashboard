@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Design system: Midnight and Brass</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Jost:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF0F3;--surface:#FCFCFD;--raised:#FFFFFF;--sunken:#F2F4F7;--sunken-2:#E6E9EF;--subtle:#F6F7F9;--track:#E1E5EC;--line:#DCE1E8;--line-soft:#EAEDF2;--line-strong:#BEC5D2;--control:#858DA0;--ink:#141926;--ink-2:#444B5D;--ink-3:#5F6679;--ink-4:#8E95A7;--inverse:#18203A;--on-inverse:#F6F3EC;--on-inverse-2:#B6BDD0;--inverse-accent:#D4B57C;--primary:#22305A;--primary-hover:#19244A;--on-primary:#F7F4EC;--on-primary-2:#C3CAE0;--primary-soft:#E5E9F4;--primary-softer:#F3F5FA;--primary-ink:#1B2750;--primary-line:#AAB6D6;--link:#2D4585;--accent:#A8844A;--accent-soft:#F3ECDF;--accent-ink:#6B5020;--success:#2B6A52;--success-soft:#E0EEE7;--warning:#92530E;--warning-soft:#F7EBDA;--warning-ink:#613708;--danger:#9E344B;--danger-soft:#F6E2E6;--danger-ink:#72213A;--health:#3E7D63;--health-soft:#E2EFE8;--health-ink:#1E4B3A;--career:#3A5A9A;--career-soft:#E3E9F5;--career-ink:#203766;--finance:#A8742A;--finance-soft:#F6EBDA;--finance-muted:#E4D2B2;--finance-ink:#633F0C;--family:#A04E66;--family-soft:#F6E3E9;--family-ink:#6B243D;--growth:#6A56A8;--growth-soft:#ECE7F7;--growth-ink:#42326C;--home:#2F7C84;--home-soft:#DEEFF1;--home-ink:#1A4A50;--fun:#8F6F10;--fun-soft:#F4EDD3;--fun-ink:#574409;--viz-soft:#AFBEDC;--mood-1:#9A3550;--mood-2:#DDA7AC;--mood-3:#E1E4EB;--mood-4:#9DB1D8;--mood-5:#2C437F;--heat-0:#E4E7EE;--heat-1:#C9D3E8;--heat-2:#93A7D2;--heat-3:#5470AE;--heat-4:#22305A;--nav-bg:#131A2E;--nav-surface:#1D2542;--nav-line:#29314F;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#8189A3;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03);--shadow-md:0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05);--shadow-primary:0 8px 20px -6px rgba(34,48,90,0.45);--scrim:rgba(10,14,28,0.55);--glass:rgba(252,252,253,0.92)}
+[data-theme="dark"]{--bg:#0D111D;--surface:#171C2B;--raised:#313A56;--sunken:#1C2234;--sunken-2:#252C42;--subtle:#131827;--track:#2A3249;--line:#2B334B;--line-soft:#212839;--line-strong:#46506F;--control:#737D9C;--ink:#ECEEF4;--ink-2:#B8BECD;--ink-3:#959CAF;--ink-4:#6A7290;--inverse:#EAE6DC;--on-inverse:#161B2A;--on-inverse-2:#4F566A;--inverse-accent:#7A5B22;--primary:#D4B57C;--primary-hover:#E3C994;--on-primary:#161B2A;--on-primary-2:#4E4128;--primary-soft:#2C2B2C;--primary-softer:#1B2030;--primary-ink:#E8D1A3;--primary-line:#76623D;--link:#D9BC86;--accent:#D4B57C;--accent-soft:#2E2A24;--accent-ink:#E8D1A3;--success:#79C4A2;--success-soft:#18302A;--warning:#E6AB69;--warning-soft:#35291B;--warning-ink:#F2CA94;--danger:#EE91A4;--danger-soft:#3A2029;--danger-ink:#F6BDC8;--health:#76C3A1;--health-soft:#192E27;--health-ink:#AADDC6;--career:#8FA9E2;--career-soft:#1C2644;--career-ink:#C4D3F4;--finance:#E1B173;--finance-soft:#33291C;--finance-muted:#56472F;--finance-ink:#F1CF9D;--family:#E69BB0;--family-soft:#3A2231;--family-ink:#F5C4D2;--growth:#B4A4E9;--growth-soft:#29243F;--growth-ink:#D9D0F7;--home:#7DC7CD;--home-soft:#16303A;--home-ink:#B1E1E4;--fun:#DDBB5B;--fun-soft:#312A17;--fun-ink:#EED88F;--viz-soft:#3F4F7A;--mood-1:#D9728D;--mood-2:#7A4A5A;--mood-3:#2E3650;--mood-4:#4F6DB2;--mood-5:#AFC4F4;--heat-0:#1F2638;--heat-1:#2B3A60;--heat-2:#3F5A98;--heat-3:#7090D2;--heat-4:#BACCF5;--nav-bg:#090C16;--nav-surface:#161C30;--nav-line:#1E2539;--nav-ink:#EEF0F6;--nav-ink-2:#AFB6CA;--nav-ink-3:#7E86A0;--nav-success:#79C4A2;--nav-accent:#D4B57C;--on-nav-accent:#131A2E;--shadow-sm:0 1px 2px rgba(0,0,0,0.45);--shadow-md:0 14px 34px -14px rgba(0,0,0,0.7);--shadow-primary:0 8px 20px -6px rgba(0,0,0,0.6);--scrim:rgba(0,0,0,0.62);--glass:rgba(23,28,43,0.9);color-scheme:dark}
+body{margin:0;background:var(--bg)}
+*{box-sizing:border-box}
+button,input{font:inherit;color:inherit}
+a{color:var(--link)}a:hover{color:var(--primary-ink)}
+</style>
+</helmet>
+<div data-theme="{{theme}}" style="width: 1440px; height: 1100px; overflow: hidden; background: var(--bg); font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; color: var(--ink); padding: 44px 56px; display: flex; flex-direction: column; gap: 26px">
+<header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px">
+<div style="display: flex; flex-direction: column; gap: 8px; max-width: 760px">
+<span style="margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3)">Life Dashboard · design system v1</span>
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 68px; line-height: 68px; font-weight: 500; letter-spacing: -0.01em">Midnight <span style="font-style: italic; color: var(--accent)">&amp;</span> Brass</h1>
+<p style="margin: 0; font-size: 15px; line-height: 24px; color: var(--ink-2)">Porcelain pages, midnight ink and one line of brass. Every color here is a token with a light and a dark value. Switch this board’s theme in Tweaks to see the whole app change.</p>
+</div>
+<div style="display: flex; gap: 12px">
+<div style="width: 190px; padding: 16px 18px; border-radius: 18px; background: var(--inverse); color: var(--on-inverse); display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 52px; line-height: 52px; font-weight: 500">Aa</span>
+<span style="font-size: 13px; font-weight: 600">Cormorant Garamond</span>
+<span style="font-size: 12px; color: var(--on-inverse-2)">Display · 500, 600, italic</span>
+</div>
+<div style="width: 190px; padding: 16px 18px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 44px; line-height: 52px; font-weight: 500">Aa</span>
+<span style="font-size: 13px; font-weight: 600">Jost</span>
+<span style="font-size: 12px; color: var(--ink-3)">Interface · 400–700</span>
+</div>
+</div>
+</header>
+<div style="display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, 1fr); gap: 22px; min-height: 0">
+<section style="background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow-sm); padding: 22px 24px; display: flex; flex-direction: column; gap: 9px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3)">Core colors</h2><span style="font-size: 11px; color: var(--ink-3)">light / dark</span></div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #EEF0F3"></span><span style="flex-grow: 1; background: #0D111D"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">bg</span><span style="font-size: 12px; color: var(--ink-3)">Page ground</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#EEF0F3<br>#0D111D</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #FCFCFD"></span><span style="flex-grow: 1; background: #171C2B"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">surface</span><span style="font-size: 12px; color: var(--ink-3)">Cards and panels</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#FCFCFD<br>#171C2B</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #E6E9EF"></span><span style="flex-grow: 1; background: #252C42"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">sunken-2</span><span style="font-size: 12px; color: var(--ink-3)">Chips, tracks, segmented</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#E6E9EF<br>#252C42</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #141926"></span><span style="flex-grow: 1; background: #ECEEF4"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">ink</span><span style="font-size: 12px; color: var(--ink-3)">Titles and body</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#141926<br>#ECEEF4</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #444B5D"></span><span style="flex-grow: 1; background: #B8BECD"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">ink-2</span><span style="font-size: 12px; color: var(--ink-3)">Secondary text</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#444B5D<br>#B8BECD</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #5F6679"></span><span style="flex-grow: 1; background: #959CAF"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">ink-3</span><span style="font-size: 12px; color: var(--ink-3)">Captions</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#5F6679<br>#959CAF</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #22305A"></span><span style="flex-grow: 1; background: #D4B57C"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">primary</span><span style="font-size: 12px; color: var(--ink-3)">Primary action, checked</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#22305A<br>#D4B57C</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #A8844A"></span><span style="flex-grow: 1; background: #D4B57C"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">accent</span><span style="font-size: 12px; color: var(--ink-3)">Brass highlight</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#A8844A<br>#D4B57C</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #18203A"></span><span style="flex-grow: 1; background: #EAE6DC"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">inverse</span><span style="font-size: 12px; color: var(--ink-3)">Bubbles, pace tick</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#18203A<br>#EAE6DC</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #2B6A52"></span><span style="flex-grow: 1; background: #79C4A2"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">success</span><span style="font-size: 12px; color: var(--ink-3)">On pace, saved</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#2B6A52<br>#79C4A2</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #92530E"></span><span style="flex-grow: 1; background: #E6AB69"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">warning</span><span style="font-size: 12px; color: var(--ink-3)">Behind, offline</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#92530E<br>#E6AB69</span>
+</div>
+<div style="display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 60px; height: 28px; flex-shrink: 0; display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--line)"><span style="flex-grow: 1; background: #9E344B"></span><span style="flex-grow: 1; background: #EE91A4"></span></span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 600">danger</span><span style="font-size: 12px; color: var(--ink-3)">Over budget</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0.02em">#9E344B<br>#EE91A4</span>
+</div>
+</section>
+<div style="display: flex; flex-direction: column; gap: 22px; min-width: 0">
+<section style="background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow-sm); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3)">Life areas</h2>
+<div style="display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: var(--health)"></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="height: 26px; padding: 0 10px; border-radius: 8px; background: var(--health-soft); color: var(--health-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: var(--health)"></span>Health</span><span style="font-size: 12px; color: var(--ink-3)">health · health-soft · health-ink</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">#3E7D63</span>
+</div>
+<div style="display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: var(--career)"></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="height: 26px; padding: 0 10px; border-radius: 8px; background: var(--career-soft); color: var(--career-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: var(--career)"></span>Career</span><span style="font-size: 12px; color: var(--ink-3)">career · career-soft · career-ink</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">#3A5A9A</span>
+</div>
+<div style="display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: var(--finance)"></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="height: 26px; padding: 0 10px; border-radius: 8px; background: var(--finance-soft); color: var(--finance-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: var(--finance)"></span>Finance</span><span style="font-size: 12px; color: var(--ink-3)">finance · finance-soft · finance-ink</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">#A8742A</span>
+</div>
+<div style="display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: var(--family)"></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="height: 26px; padding: 0 10px; border-radius: 8px; background: var(--family-soft); color: var(--family-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: var(--family)"></span>Family</span><span style="font-size: 12px; color: var(--ink-3)">family · family-soft · family-ink</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">#A04E66</span>
+</div>
+<div style="display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: var(--growth)"></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="height: 26px; padding: 0 10px; border-radius: 8px; background: var(--growth-soft); color: var(--growth-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: var(--growth)"></span>Growth</span><span style="font-size: 12px; color: var(--ink-3)">growth · growth-soft · growth-ink</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">#6A56A8</span>
+</div>
+<div style="display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: var(--home)"></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="height: 26px; padding: 0 10px; border-radius: 8px; background: var(--home-soft); color: var(--home-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: var(--home)"></span>Home</span><span style="font-size: 12px; color: var(--ink-3)">home · home-soft · home-ink</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">#2F7C84</span>
+</div>
+<div style="display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center">
+<span style="width: 28px; height: 28px; border-radius: 14px; background: var(--fun)"></span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="height: 26px; padding: 0 10px; border-radius: 8px; background: var(--fun-soft); color: var(--fun-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px"><span style="width: 7px; height: 7px; border-radius: 4px; background: var(--fun)"></span>Fun</span><span style="font-size: 12px; color: var(--ink-3)">fun · fun-soft · fun-ink</span></span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">#8F6F10</span>
+</div>
+</section>
+<section style="background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow-sm); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3)">Data &amp; sidebar</h2>
+<div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; border-radius: 8px; overflow: hidden"><span style="flex-grow: 1; height: 26px; background: var(--mood-1)"></span><span style="flex-grow: 1; height: 26px; background: var(--mood-2)"></span><span style="flex-grow: 1; height: 26px; background: var(--mood-3)"></span><span style="flex-grow: 1; height: 26px; background: var(--mood-4)"></span><span style="flex-grow: 1; height: 26px; background: var(--mood-5)"></span></div><div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-3)"><span>mood-1 awful</span><span>mood-5 great</span></div></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; border-radius: 8px; overflow: hidden"><span style="flex-grow: 1; height: 26px; background: var(--heat-0)"></span><span style="flex-grow: 1; height: 26px; background: var(--heat-1)"></span><span style="flex-grow: 1; height: 26px; background: var(--heat-2)"></span><span style="flex-grow: 1; height: 26px; background: var(--heat-3)"></span><span style="flex-grow: 1; height: 26px; background: var(--heat-4)"></span></div><div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-3)"><span>heat-0 none</span><span>heat-4 all habits</span></div></div>
+<div style="display: flex; border-radius: 8px; overflow: hidden"><span style="flex-grow: 1; height: 34px; background: var(--nav-bg); color: var(--nav-ink-2); font-size: 11px; display: flex; align-items: flex-end; padding: 4px 6px">nav-bg</span><span style="flex-grow: 1; height: 34px; background: var(--nav-surface); color: var(--nav-ink-2); font-size: 11px; display: flex; align-items: flex-end; padding: 4px 6px">nav-surface</span><span style="flex-grow: 1; height: 34px; background: var(--nav-accent); color: var(--on-nav-accent); font-size: 11px; display: flex; align-items: flex-end; padding: 4px 6px">nav-accent</span></div>
+</section>
+</div>
+<section style="background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow-sm); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3)">Type scale</h2>
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 64px; line-height: 64px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); font-variant-numeric: lining-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Sunday, slowly.</span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">display-xl · 64/64 · 500 · Cormorant Garamond</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 38px; line-height: 42px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); font-variant-numeric: lining-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Weekly review</span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">display-m · 38/42 · 500 · Cormorant Garamond</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 28px; line-height: 32px; font-weight: 600; letter-spacing: 0; color: var(--ink); font-variant-numeric: lining-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Run a half-marathon</span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">title · 28/32 · 600 · Cormorant Garamond</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<span style="font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif; font-size: 36px; line-height: 40px; font-weight: 500; letter-spacing: 0; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">1,184 · 62%</span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">numeral · 36/40 · 500 · Cormorant Garamond</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<span style="font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; font-size: 16px; line-height: 24px; font-weight: 600; letter-spacing: 0; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Today’s plan</span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">heading · 16/24 · 600 · Jost</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<span style="font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; font-size: 15px; line-height: 24px; font-weight: 400; letter-spacing: 0; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Two weeks in April. Kyoto first, then Tokyo.</span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">body · 15/24 · 400 · Jost</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<span style="font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis">From phone · offline capture · 2 days ago</span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">caption · 12/16 · 500 · Jost</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft)">
+<span style="font-family: 'Jost', 'Avenir Next', system-ui, sans-serif; font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: 0.12em; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis">THIS WEEK’S FOCUS</span>
+<span style="font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums">label · 11/16 · 600 · Jost</span>
+</div>
+</section>
+</div>
+<section style="background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow-sm); padding: 22px 24px; display: flex; flex-direction: column; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 18px 28px">
+<h2 style="margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); width: 100%">Components &amp; shape</h2>
+<div style="display: flex; gap: 8px; align-items: center">
+<button type="button" style="height: 40px; padding: 0 16px; border: 1px solid var(--primary); border-radius: 10px; background: var(--primary); color: var(--on-primary); font-size: 14px; font-weight: 600; cursor: pointer">Add to plan</button>
+<button type="button" style="height: 40px; padding: 0 16px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 600; cursor: pointer">Save for later</button>
+<button type="button" style="height: 40px; padding: 0 10px; border: 0; border-radius: 10px; background: transparent; color: var(--link); font-size: 14px; font-weight: 600; cursor: pointer">Edit budgets</button>
+</div>
+<div style="display: flex; gap: 6px; align-items: center">
+<span style="height: 24px; padding: 0 8px; border-radius: 8px; background: var(--health-soft); color: var(--health-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px"><span style="width: 7px; height: 7px; border-radius: 4px; background: var(--health)"></span>Health</span>
+<span style="height: 24px; padding: 0 8px; border-radius: 8px; background: var(--success-soft); color: var(--success); font-size: 12px; font-weight: 600; display: flex; align-items: center">On pace</span>
+<span style="height: 24px; padding: 0 8px; border-radius: 8px; background: var(--warning-soft); color: var(--warning-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center">Behind ~2 weeks</span>
+<span style="height: 24px; padding: 0 8px; border-radius: 8px; background: var(--primary-soft); color: var(--primary-ink); font-size: 12px; font-weight: 600; display: flex; align-items: center">Repeats monthly</span>
+</div>
+<div style="display: flex; gap: 14px; align-items: center">
+<span style="width: 22px; height: 22px; border-radius: 6px; background: var(--primary); color: var(--on-primary); display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+<span style="width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--control); background: var(--surface)"></span>
+<button type="button" role="switch" aria-checked="true" aria-label="Switch on" style="width: 42px; height: 24px; padding: 0; border: 0; border-radius: 12px; background: var(--primary); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 21px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button>
+<button type="button" role="switch" aria-checked="false" aria-label="Switch off" style="width: 42px; height: 24px; padding: 0; border: 0; border-radius: 12px; background: var(--control); position: relative; cursor: pointer"><span style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface)"></span></button>
+</div>
+<div style="display: flex; padding: 3px; border-radius: 10px; background: var(--sunken-2)">
+<button type="button" aria-pressed="false" style="height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-2); font-size: 13px; cursor: pointer">Week</button>
+<button type="button" aria-pressed="false" style="height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-2); font-size: 13px; cursor: pointer">Month</button>
+<button type="button" aria-pressed="true" style="height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: var(--raised); box-shadow: var(--shadow-sm); color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer">Year</button>
+</div>
+<div style="width: 250px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600"><span>Half-marathon</span><span style="font-variant-numeric: tabular-nums">62%</span></div>
+<div style="position: relative; height: 8px; border-radius: 4px; background: var(--track)"><div style="width: 62%; height: 8px; border-radius: 4px; background: var(--health)"></div><div style="position: absolute; left: 75%; top: -4px; width: 2px; height: 16px; background: var(--inverse)"></div></div>
+<span style="font-size: 12px; font-weight: 600; color: var(--warning)">Behind by about 2 weeks</span>
+</div>
+<div style="display: flex; gap: 10px; align-items: flex-end">
+<span style="width: 34px; height: 34px; border-radius: 6px; background: var(--sunken-2)"></span>
+<span style="width: 34px; height: 34px; border-radius: 10px; background: var(--sunken-2)"></span>
+<span style="width: 34px; height: 34px; border-radius: 18px; background: var(--sunken-2)"></span>
+<span style="width: 52px; height: 34px; border-radius: 17px; background: var(--sunken-2)"></span>
+<span style="font-size: 11px; color: var(--ink-3); line-height: 1.5">radius<br>6 · 10 · 18 · pill</span>
+</div>
+<div style="display: flex; gap: 12px; align-items: center">
+<span style="width: 56px; height: 40px; border-radius: 12px; background: var(--surface); box-shadow: var(--shadow-sm); border: 1px solid var(--line)"></span>
+<span style="width: 56px; height: 40px; border-radius: 12px; background: var(--surface); box-shadow: var(--shadow-md)"></span>
+<span style="font-size: 11px; color: var(--ink-3); line-height: 1.5">shadow<br>sm · md</span>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>
