@@ -4,6 +4,8 @@ export * from './taskActions';
 export * from './habitActions';
 export * from './checkIns';
 export * from './goalQueries';
+export * from './library';
+export * from './tags';
 export { countExportRecords, countRecords, exportAllAsJson, ImportError, importReplacingAll, parseExport, type ExportFile } from './backup';
 export { newId, nowIso, toLocalDay } from './ids';
 export { initData } from './init';

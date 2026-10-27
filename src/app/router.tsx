@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom';
 import { AppShell } from '@/components/shell/AppShell';
 import { DevComponentsPage } from '@/screens/dev/DevComponentsPage';
+import { LazyLibraryPage } from '@/screens/library/LazyLibraryPage';
 import { NotFoundPage } from '@/screens/NotFoundPage';
 import { ScreenPage } from '@/screens/ScreenPage';
 import { SettingsPage } from '@/screens/settings/SettingsPage';
@@ -21,8 +22,11 @@ export const routes: RouteObject[] = [
       { path: 'goals/:id', element: <ScreenPage screen="goals" /> },
       { path: 'progress', element: <ScreenPage screen="progress" /> },
       { path: 'review', element: <ScreenPage screen="review" /> },
-      { path: 'library', element: <ScreenPage screen="library" /> },
-      { path: 'library/:nodeId', element: <ScreenPage screen="library" /> },
+      { path: 'library', element: <LazyLibraryPage mode="home" /> },
+      { path: 'library/trash', element: <LazyLibraryPage mode="trash" /> },
+      { path: 'library/photos', element: <LazyLibraryPage mode="photos" /> },
+      { path: 'library/day/:day', element: <LazyLibraryPage mode="day" /> },
+      { path: 'library/:nodeId', element: <LazyLibraryPage mode="node" /> },
       { path: 'vision', element: <ScreenPage screen="vision" /> },
       { path: 'finance', element: <ScreenPage screen="finance" /> },
       { path: 'health', element: <ScreenPage screen="health" /> },

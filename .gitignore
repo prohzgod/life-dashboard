@@ -23,3 +23,6 @@ playwright/.cache/
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# local debug scripts and screenshots
+.scratch/

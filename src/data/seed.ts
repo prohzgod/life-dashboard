@@ -98,6 +98,10 @@ export async function seedIfNeeded(today: Date = new Date()): Promise<string> {
       sortKey: folderKeys[i]!,
       icon: null,
       isSystem: true,
+      systemKey: title.toLowerCase(),
+      favoritedAt: null,
+      areaId: null,
+      goalId: null,
     }));
 
     const weeklyReview: Task = {

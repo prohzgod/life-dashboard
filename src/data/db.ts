@@ -87,6 +87,15 @@ export class LifeDb extends Dexie {
           .toCollection()
           .modify((task: Task) => normalizeTask(task)),
       );
+    // v3: library nodes gain systemKey (indexed), favourites and page properties.
+    this.version(3)
+      .stores({ nodes: 'id, spaceId, parentId, kind, systemKey, updatedAt' })
+      .upgrade((tx) =>
+        tx
+          .table('nodes')
+          .toCollection()
+          .modify((node: LibraryNode) => normalizeNode(node)),
+      );
   }
 }
 
@@ -97,6 +106,17 @@ export function normalizeTask(task: Task): Task {
   task.time ??= null;
   task.repeatOfId ??= null;
   return task;
+}
+
+const SEEDED_FOLDERS: Record<string, string> = { Journal: 'journal', Areas: 'areas', Projects: 'projects' };
+
+/** Fills in node fields added after a node was first saved. Also used when importing older exports. */
+export function normalizeNode(node: LibraryNode): LibraryNode {
+  node.systemKey ??= node.isSystem && node.parentId === null ? (SEEDED_FOLDERS[node.title] ?? null) : null;
+  node.favoritedAt ??= null;
+  node.areaId ??= null;
+  node.goalId ??= null;
+  return node;
 }
 
 /** Every table that holds user data, in a stable order (used by export and import). */

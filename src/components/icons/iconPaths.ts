@@ -38,6 +38,15 @@ export const iconPaths = {
   chevronLeft: 'M15 6l-6 6 6 6',
   image: 'M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6M15.5 9.5h.01',
   flag: 'M5 21V4M5 4h11l-2 4 2 4H5',
+  page: 'M6 3h9l4 4v14H6zM14 3v5h5',
+  newPage: 'M6 3h9l4 4v14H6zM14 3v5h5M12 11v6M9 14h6',
+  newFolder: 'M3 6h6l2 2h10v11H3zM12 11v5M9.5 13.5h5',
+  folder: 'M3 6h6l2 2h10v11H3z',
+  star: 'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.9z',
+  chevronDown: 'M6 9l6 6 6-6',
+  link: 'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1',
+  paperclip: 'M20 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.5 17.2a1.7 1.7 0 0 1-2.4-2.4L15 7',
+  restore: 'M3 12a9 9 0 1 0 3-6.7M3 4v5h5',
 } as const;
 
 export type IconName = keyof typeof iconPaths;

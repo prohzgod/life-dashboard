@@ -179,6 +179,13 @@ export interface LibraryNode extends BaseRecord {
   icon: string | null;
   /** Built-in folders (Journal, Areas, Projects) can't be deleted or renamed. */
   isSystem: boolean;
+  /** Stable name for built-in and journal nodes: "journal", "areas", "projects", "journal:2026", "journal:2026-10", "journal:2026-10-27". */
+  systemKey: string | null;
+  /** Set when the page is a favourite. */
+  favoritedAt: string | null;
+  /** Page properties. */
+  areaId: string | null;
+  goalId: string | null;
 }
 
 export interface Attachment extends BaseRecord {

@@ -30,7 +30,7 @@ export function OnThisDayCard({ today }: { today: Day }) {
         {memory ? (
           <>
             <p className={styles.memoryQuote}>{memory.entry.line ? `“${memory.entry.line}”` : 'A photo from this day.'}</p>
-            <Link to="/library" className={styles.cardLink}>
+            <Link to={`/library/day/${memory.entry.day}`} className={styles.cardLink}>
               Open journal entry
             </Link>
           </>

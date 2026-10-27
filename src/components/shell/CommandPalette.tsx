@@ -1,11 +1,13 @@
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo, useState, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { screens } from '@/app/screens';
+import { searchLibrary } from '@/data';
 import { Icon, type IconName } from '../icons/Icon';
 import { Dialog } from '../ui/Dialog';
 import styles from './CommandPalette.module.css';
 
-type Destination = { label: string; path: string; icon: IconName };
+type Destination = { label: string; path: string; icon: IconName; detail?: string };
 
 const destinations: Destination[] = [
   ...Object.values(screens).map((s) => ({ label: s.navLabel, path: s.path, icon: s.icon })),
@@ -15,7 +17,7 @@ const destinations: Destination[] = [
 
 type CommandPaletteProps = { open: boolean; onClose: () => void };
 
-/** ⌘K: jump to any screen. Searching your own notes and tasks joins it once they exist. */
+/** ⌘K: jump to any screen, or to a Library page by words in its title or text. */
 export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   return (
     <Dialog open={open} onClose={onClose} title="Search or jump to">
@@ -29,10 +31,13 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
 
+  const pages = useLiveQuery(() => (query.trim().length >= 2 ? searchLibrary(query) : Promise.resolve([])), [query]);
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? destinations.filter((d) => d.label.toLowerCase().includes(q)) : destinations;
-  }, [query]);
+    const screensFound = q ? destinations.filter((d) => d.label.toLowerCase().includes(q)) : destinations;
+    const pagesFound: Destination[] = (pages ?? []).slice(0, 8).map((hit) => ({ label: hit.title, path: `/library/${hit.id}`, icon: 'page', detail: hit.snippet }));
+    return [...screensFound, ...pagesFound];
+  }, [query, pages]);
 
   function go(destination: Destination | undefined) {
     if (!destination) return;
@@ -61,7 +66,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
         autoFocus
         data-autofocus
         className={styles.input}
-        placeholder="Type a screen name…"
+        placeholder="Type a screen or page…"
         value={query}
         onChange={(event) => {
           setQuery(event.target.value);
@@ -72,7 +77,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
         aria-expanded="true"
         aria-controls="palette-results"
         aria-activedescendant={activeId}
-        aria-label="Search screens"
+        aria-label="Search screens and pages"
       />
       {results.length ? (
         <ul id="palette-results" role="listbox" aria-label="Screens" className={styles.list}>
@@ -87,12 +92,15 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
               onClick={() => go(d)}
             >
               <Icon name={d.icon} />
-              {d.label}
+              <span className={styles.optionText}>
+                <span>{d.label}</span>
+                {d.detail && <span className={styles.detail}>{d.detail}</span>}
+              </span>
             </li>
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>No screen called “{query}”. Searching your notes and tasks comes later.</p>
+        <p className={styles.empty}>Nothing matches “{query}”.</p>
       )}
     </div>
   );

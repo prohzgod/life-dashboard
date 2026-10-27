@@ -8,7 +8,6 @@ const screens = [
   ['/goals', 'Goals'],
   ['/progress', 'Progress'],
   ['/review', 'Weekly review'],
-  ['/library', 'Library & journal'],
   ['/vision', 'Vision board'],
   ['/finance', 'Finance'],
   ['/health', 'Health'],
@@ -33,8 +32,8 @@ test('sidebar navigation and the ⌘K palette', async ({ page }) => {
   await expect(nav.getByRole('link', { name: 'Goals' })).toHaveAttribute('aria-current', 'page');
 
   await page.getByRole('button', { name: /Search or jump to/ }).click();
-  await expect(page.getByRole('combobox', { name: 'Search screens' })).toBeFocused();
-  await page.getByRole('combobox', { name: 'Search screens' }).fill('vision');
+  await expect(page.getByRole('combobox', { name: 'Search screens and pages' })).toBeFocused();
+  await page.getByRole('combobox', { name: 'Search screens and pages' }).fill('vision');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/vision$/);
   await expect(page.getByRole('dialog')).toBeHidden();
@@ -78,7 +77,7 @@ test('installable and works with no network', async ({ page, context }) => {
   await expect(page.getByText('Offline · everything still works')).toBeVisible();
 
   // A deep link that was never visited still loads from the cache.
-  await page.goto('/library');
-  await expect(h1(page)).toHaveText('Library & journal');
+  await page.goto('/vision');
+  await expect(h1(page)).toHaveText('Vision board');
   await context.setOffline(false);
 });

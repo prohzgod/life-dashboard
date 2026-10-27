@@ -6,6 +6,7 @@ import { looksLikeSomeday, suggestArea } from '@/domain/suggest';
 import { db } from './db';
 import { nowIso } from './ids';
 import { areasRepo, taggingsRepo, tagsRepo, tasksRepo } from './repositories';
+import { setTags, tagsFor } from './tags';
 import type { NewRecord } from './repository';
 import type { LifeArea, Task } from './types';
 
@@ -163,24 +164,11 @@ export async function acceptInboxTask(task: Task, suggestion: InboxSuggestion): 
 
 /** Replaces a task's tags with these names, creating tags that don't exist yet. */
 export async function setTaskTags(taskId: string, names: readonly string[]): Promise<void> {
-  const wanted = [...new Set(names.map((n) => n.replace(/^#/, '').trim().toLowerCase()).filter(Boolean))];
-  const allTags = await tagsRepo.list();
-  const current = await taggingsRepo.list((t) => t.targetType === 'task' && t.targetId === taskId);
-  const tagIds: string[] = [];
-  for (const name of wanted) {
-    const tag = allTags.find((t) => t.name === name) ?? (await tagsRepo.create({ name }));
-    tagIds.push(tag.id);
-  }
-  for (const tagging of current) if (!tagIds.includes(tagging.tagId)) await taggingsRepo.remove(tagging.id);
-  for (const tagId of tagIds) {
-    if (!current.some((t) => t.tagId === tagId)) await taggingsRepo.create({ tagId, targetType: 'task', targetId: taskId });
-  }
+  await setTags('task', taskId, names);
 }
 
 export async function tagsForTask(taskId: string) {
-  const taggings = await taggingsRepo.list((t) => t.targetType === 'task' && t.targetId === taskId);
-  const tags = await tagsRepo.list();
-  return taggings.map((t) => tags.find((tag) => tag.id === t.tagId)).filter((t) => !!t);
+  return tagsFor('task', taskId);
 }
 
 /** Tag names per task id, for showing tags in lists. */

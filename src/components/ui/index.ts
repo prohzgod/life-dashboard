@@ -3,6 +3,7 @@ export { Card } from './Card';
 export { CheckButton } from './CheckButton';
 export { Checkbox } from './Checkbox';
 export { Chip, type ChipTone } from './Chip';
+export { Menu, type MenuItem } from './Menu';
 export { PaceBar } from './PaceBar';
 export { Segmented, type SegmentedOption } from './Segmented';
 export { StatTile } from './StatTile';

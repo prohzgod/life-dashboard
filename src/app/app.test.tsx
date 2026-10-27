@@ -19,7 +19,7 @@ beforeEach(async () => {
 });
 
 /** Screens still waiting for their build show a designed empty state. */
-const placeholderScreens = Object.values(screens).filter((s) => !['today', 'inbox', 'tasks'].includes(s.key));
+const placeholderScreens = Object.values(screens).filter((s) => !['today', 'inbox', 'tasks', 'library'].includes(s.key));
 
 describe('app shell', () => {
   it.each(placeholderScreens.map((s) => [s.path, s.title, s.empty.heading]))(
@@ -51,9 +51,9 @@ describe('app shell', () => {
 
   it('navigates from the sidebar', async () => {
     const router = renderAt('/');
-    await userEvent.click(screen.getByRole('link', { name: 'Library & journal' }));
-    expect(router.state.location.pathname).toBe('/library');
-    expect(screen.getByRole('heading', { level: 1, name: 'Library & journal' })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('link', { name: 'Vision board' }));
+    expect(router.state.location.pathname).toBe('/vision');
+    expect(screen.getByRole('heading', { level: 1, name: 'Vision board' })).toBeInTheDocument();
   });
 
   it('shows a kind not-found page', () => {
@@ -88,7 +88,7 @@ describe('keyboard shortcuts', () => {
   it('⌘K opens the palette and Enter jumps to a screen', async () => {
     const router = renderAt('/');
     await userEvent.keyboard('{Meta>}k{/Meta}');
-    const input = await screen.findByRole('combobox', { name: 'Search screens' });
+    const input = await screen.findByRole('combobox', { name: 'Search screens and pages' });
     await userEvent.type(input, 'prog{Enter}');
     expect(router.state.location.pathname).toBe('/progress');
   });

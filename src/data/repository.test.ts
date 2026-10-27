@@ -44,6 +44,14 @@ describe('createRepository', () => {
     expect(await tasksRepo.get(created.id)).toEqual(created);
   });
 
+  it('stamps strictly increasing times, even within one millisecond', async () => {
+    const many = await tasksRepo.bulkCreate([task('a')]);
+    const stamps = [];
+    for (let i = 0; i < 5; i++) stamps.push((await tasksRepo.update(many[0]!.id, { title: `v${i}` })).updatedAt);
+    expect(new Set(stamps).size).toBe(5);
+    expect([...stamps].sort()).toEqual(stamps);
+  });
+
   it('creates ids that sort in creation order', async () => {
     const [a, b, c] = await tasksRepo.bulkCreate([task('a'), task('b'), task('c')]);
     expect([c!.id, a!.id, b!.id].sort()).toEqual([a!.id, b!.id, c!.id]);

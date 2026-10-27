@@ -32,7 +32,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  height: 40px;
+  min-height: 40px;
+  padding-block: 6px;
   padding: 0 var(--space-3);
   border-radius: var(--radius-md);
   color: var(--ink-2);
@@ -48,4 +49,19 @@
 .empty {
   color: var(--ink-3);
   font-size: var(--text-body-s-size);
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.detail {
+  overflow: hidden;
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

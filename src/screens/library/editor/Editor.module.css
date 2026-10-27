@@ -1,0 +1,275 @@
+/* BlockNote, dressed in Midnight & Brass. Its variables point at our tokens, so both themes follow. */
+.editor {
+  --bn-font-family: var(--font-sans);
+  --bn-border-radius: var(--radius-sm);
+  --bn-border-radius-small: var(--radius-xs);
+  --bn-border-radius-medium: var(--radius-md);
+  --bn-border-radius-large: var(--radius-lg);
+  --bn-colors-editor-text: var(--ink);
+  --bn-colors-editor-background: var(--surface);
+  --bn-colors-menu-text: var(--ink);
+  --bn-colors-menu-background: var(--surface);
+  --bn-colors-tooltip-text: var(--on-inverse);
+  --bn-colors-tooltip-background: var(--inverse);
+  --bn-colors-hovered-text: var(--ink);
+  --bn-colors-hovered-background: var(--sunken);
+  --bn-colors-selected-text: var(--on-primary);
+  --bn-colors-selected-background: var(--primary);
+  --bn-colors-disabled-text: var(--ink-3);
+  --bn-colors-disabled-background: var(--sunken-2);
+  --bn-colors-shadow: transparent;
+  --bn-colors-border: var(--line);
+  --bn-colors-side-menu: var(--ink-4);
+  --bn-shadow-medium: var(--shadow-md);
+  --bn-shadow-light: var(--shadow-sm);
+  margin: 0 -54px;
+}
+
+.editor :global(.bn-editor) {
+  padding-inline: 54px;
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--text-body-l-size);
+  line-height: 1.65;
+}
+
+.editor :global(.bn-container) {
+  background: transparent;
+}
+
+/* Headings on the design's scale: a display title, then quiet sans section heads. */
+.editor :global([data-content-type='heading'] h1) {
+  font-family: var(--font-display);
+  font-size: var(--text-title-size);
+  font-weight: var(--text-title-weight);
+  line-height: var(--text-title-line);
+}
+
+.editor :global([data-content-type='heading'] h2) {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.editor :global([data-content-type='heading'] h3) {
+  font-size: var(--text-heading-size);
+  font-weight: 600;
+  line-height: var(--text-heading-line);
+}
+
+.editor :global(.bn-block-content[data-content-type='heading']) {
+  padding-top: var(--space-2);
+}
+
+/* Checklists like the design: 18px boxes, checked fills primary, done text struck through. */
+.editor :global([data-content-type='checkListItem'] input[type='checkbox']) {
+  display: grid;
+  place-content: center;
+  width: 18px;
+  height: 18px;
+  margin: 0 4px 0 0;
+  border: 1.5px solid var(--control);
+  border-radius: 5px;
+  background: var(--surface);
+  appearance: none;
+  cursor: pointer;
+}
+
+.editor :global([data-content-type='checkListItem'] input[type='checkbox']:checked) {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.editor :global([data-content-type='checkListItem'] input[type='checkbox']:checked)::after {
+  width: 9px;
+  height: 5px;
+  margin-top: -2px;
+  border-bottom: 2px solid var(--on-primary);
+  border-left: 2px solid var(--on-primary);
+  content: '';
+  transform: rotate(-45deg);
+}
+
+.editor :global([data-content-type='checkListItem'][data-checked='true'] .bn-inline-content) {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+.editor :global(.bn-inline-content a) {
+  color: var(--link);
+}
+
+.editor :global([data-content-type='image'] img) {
+  border-radius: var(--radius-md);
+}
+
+/* Placeholder copy in the design's quiet ink. */
+.editor :global(.bn-inline-content:has(> .ProseMirror-trailingBreak:only-child)::before) {
+  color: var(--ink-4);
+}
+
+/* [[Page]] links and @mentions */
+.pageLink,
+.goalMention {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pageLink:hover,
+.goalMention:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.missing {
+  background: var(--sunken-2);
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+.goalMention {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+/* [[ and @ menus */
+.suggest {
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  max-width: 360px;
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+.suggestItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  text-align: left;
+}
+
+.suggestActive,
+.suggestItem:hover {
+  background: var(--sunken);
+}
+
+.suggestTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.suggestHint {
+  flex-shrink: 0;
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+}
+
+/* Gallery block */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin: var(--space-2) 0;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+
+.tileImage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 118px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--sunken);
+  color: var(--ink-3);
+}
+
+.tileImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tileRemove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--scrim);
+  color: var(--on-inverse);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.tile:hover .tileRemove,
+.tileRemove:focus-visible {
+  opacity: 1;
+}
+
+.tileCaption {
+  field-sizing: content;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  line-height: var(--text-caption-line);
+  resize: none;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  outline: none;
+}
+
+.tileCaption::placeholder {
+  color: var(--ink-4);
+}
+
+.dropZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 118px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--subtle);
+  color: var(--ink-2);
+  font-size: var(--text-body-s-size);
+}
+
+.dropZone:hover {
+  border-color: var(--primary-line);
+  color: var(--ink);
+}
