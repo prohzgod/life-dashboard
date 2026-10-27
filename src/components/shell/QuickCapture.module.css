@@ -1,0 +1,9 @@
+.status {
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+}
+
+.status a {
+  color: var(--link);
+  font-weight: 600;
+}

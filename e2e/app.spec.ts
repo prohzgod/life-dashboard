@@ -1,9 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const screens = [
-  ['/', 'Today'],
+  ['/', /^Good (morning|afternoon|evening)\./],
   ['/inbox', 'Inbox'],
-  ['/tasks', 'Tasks'],
+  ['/tasks', 'Today'],
   ['/calendar', 'Calendar'],
   ['/goals', 'Goals'],
   ['/progress', 'Progress'],
@@ -27,11 +27,13 @@ test('every screen loads with the sidebar and its empty state', async ({ page })
 
 test('sidebar navigation and the ⌘K palette', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: 'Goals' }).click();
+  const nav = page.getByRole('navigation', { name: 'Main navigation' });
+  await nav.getByRole('link', { name: 'Goals' }).click();
   await expect(page).toHaveURL(/\/goals$/);
-  await expect(page.getByRole('link', { name: 'Goals' })).toHaveAttribute('aria-current', 'page');
+  await expect(nav.getByRole('link', { name: 'Goals' })).toHaveAttribute('aria-current', 'page');
 
   await page.getByRole('button', { name: /Search or jump to/ }).click();
+  await expect(page.getByRole('combobox', { name: 'Search screens' })).toBeFocused();
   await page.getByRole('combobox', { name: 'Search screens' }).fill('vision');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/vision$/);
@@ -72,7 +74,7 @@ test('installable and works with no network', async ({ page, context }) => {
 
   await context.setOffline(true);
   await page.reload();
-  await expect(h1(page)).toHaveText('Today');
+  await expect(h1(page)).toHaveText(/^Good (morning|afternoon|evening)\./);
   await expect(page.getByText('Offline · everything still works')).toBeVisible();
 
   // A deep link that was never visited still loads from the cache.

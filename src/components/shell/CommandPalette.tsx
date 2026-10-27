@@ -59,6 +59,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
     <div className={styles.palette}>
       <input
         autoFocus
+        data-autofocus
         className={styles.input}
         placeholder="Type a screen name…"
         value={query}

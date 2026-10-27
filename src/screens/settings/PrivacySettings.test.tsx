@@ -34,8 +34,8 @@ describe('Settings › Privacy & data', () => {
     const json = await exportAllAsJson();
     await tasksRepo.create({
       areaId: null, goalId: null, keyResultId: null, parentTaskId: null, title: 'Made after the export', notes: '',
-      status: 'inbox', priority: null, doOn: null, dueAt: null, estimateMin: null, rrule: null, reminderAt: null,
-      completedAt: null, sortKey: 'a1',
+      status: 'inbox', priority: null, doOn: null, time: null, dueAt: null, estimateMin: null, rrule: null, reminderAt: null,
+      completedAt: null, sortKey: 'a1', repeatOfId: null,
     });
 
     render(<PrivacySettings />);

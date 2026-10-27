@@ -1,0 +1,422 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-mobile-title-size);
+  font-weight: var(--text-mobile-title-weight);
+  line-height: var(--text-mobile-title-line);
+  letter-spacing: var(--text-mobile-title-tracking);
+  font-variant-numeric: lining-nums;
+}
+
+.headerSide {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.year {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 220px;
+}
+
+.yearText {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.yearTrack {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--track);
+}
+
+.yearFill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 392px;
+  align-items: start;
+  gap: var(--space-5);
+}
+
+@media (max-width: 1180px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+.card {
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+}
+
+.cardLink {
+  color: var(--link);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cardLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.agendaEmpty,
+.quietEmpty,
+.focusHint,
+.memoryEmpty {
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+  line-height: var(--text-body-s-line);
+}
+
+.agendaEmpty {
+  padding: 14px var(--space-3);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.taskList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rolledNotice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 6px 6px 6px var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--warning-soft);
+  color: var(--warning-ink);
+  font-size: var(--text-body-s-size);
+}
+
+/* Habits */
+.habits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.habit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-well);
+  background: var(--sunken);
+}
+
+.habitTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.habitName {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.days {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.dayCell {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--track);
+}
+
+.day-done {
+  background: var(--primary);
+}
+
+.day-pending {
+  border: 1.5px solid var(--control);
+  background: var(--surface);
+}
+
+.day-skipped {
+  background: repeating-linear-gradient(135deg, var(--track) 0 3px, var(--sunken-2) 3px 6px);
+}
+
+.day-off,
+.day-before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-soft);
+}
+
+.habitMeta {
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+}
+
+/* Check-in */
+.checkIn {
+  gap: 14px;
+}
+
+.scale {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scaleLabel {
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+}
+
+.scaleOptions {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.scaleOption {
+  height: 38px;
+  padding: 0 2px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease);
+}
+
+.scaleOption:hover:not(.scaleSelected) {
+  border-color: var(--line-strong);
+}
+
+.scaleSelected {
+  border: 1.5px solid var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-weight: 700;
+}
+
+.sleep {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--sunken);
+  font-size: var(--text-body-s-size);
+}
+
+.sleepLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sleepValue {
+  font-variant-numeric: tabular-nums;
+}
+
+.sleepNone {
+  color: var(--ink-3);
+}
+
+.sleepEdit,
+.sleepSave {
+  padding: 4px 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--link);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+}
+
+.sleepInputs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink-3);
+}
+
+.sleepInputs input {
+  width: 48px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.lineRow {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.lineInput {
+  flex-grow: 1;
+  min-width: 0;
+  height: 42px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-size: 14px;
+}
+
+.lineInput::placeholder {
+  color: var(--ink-3);
+}
+
+.photoButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-min);
+  height: 42px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+.photoThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.focusHint {
+  font-size: var(--text-caption-size);
+}
+
+/* On this day */
+.memory {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.memoryPhoto {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 84px;
+  height: 84px;
+  overflow: hidden;
+  border-radius: var(--radius-well);
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+}
+
+.memoryImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.memoryPhotoLabel {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.memoryText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.memoryEyebrow {
+  color: var(--ink-3);
+  font-size: var(--text-label-size);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.memoryQuote {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.35;
+  font-variant-numeric: lining-nums;
+}

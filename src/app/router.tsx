@@ -4,15 +4,18 @@ import { DevComponentsPage } from '@/screens/dev/DevComponentsPage';
 import { NotFoundPage } from '@/screens/NotFoundPage';
 import { ScreenPage } from '@/screens/ScreenPage';
 import { SettingsPage } from '@/screens/settings/SettingsPage';
+import { TasksPage } from '@/screens/tasks/TasksPage';
+import { TodayPage } from '@/screens/today/TodayPage';
+import { TaskRedirect } from '@/screens/tasks/TaskRedirect';
 
 export const routes: RouteObject[] = [
   {
     element: <AppShell />,
     children: [
-      { index: true, element: <ScreenPage screen="today" /> },
-      { path: 'inbox', element: <ScreenPage screen="inbox" /> },
-      { path: 'tasks', element: <ScreenPage screen="tasks" /> },
-      { path: 'tasks/:id', element: <ScreenPage screen="tasks" /> },
+      { index: true, element: <TodayPage /> },
+      { path: 'inbox', element: <TasksPage /> },
+      { path: 'tasks', element: <TasksPage /> },
+      { path: 'tasks/:id', element: <TaskRedirect /> },
       { path: 'calendar', element: <ScreenPage screen="calendar" /> },
       { path: 'goals', element: <ScreenPage screen="goals" /> },
       { path: 'goals/:id', element: <ScreenPage screen="goals" /> },

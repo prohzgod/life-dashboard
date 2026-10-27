@@ -1,5 +1,6 @@
-export { Button } from './Button';
+export { Button, ButtonLink } from './Button';
 export { Card } from './Card';
+export { CheckButton } from './CheckButton';
 export { Checkbox } from './Checkbox';
 export { Chip, type ChipTone } from './Chip';
 export { PaceBar } from './PaceBar';

@@ -1,5 +1,9 @@
 /** The only way the UI reaches local data. Never import ./db from a component. */
 export * from './repositories';
+export * from './taskActions';
+export * from './habitActions';
+export * from './checkIns';
+export * from './goalQueries';
 export { countExportRecords, countRecords, exportAllAsJson, ImportError, importReplacingAll, parseExport, type ExportFile } from './backup';
 export { newId, nowIso, toLocalDay } from './ids';
 export { initData } from './init';

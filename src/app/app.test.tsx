@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { freshDatabase } from '@/data/testing';
 import { THEME_STORAGE_KEY } from '@/theme/theme';
 import { routes } from './router';
 import { screens } from './screens';
@@ -11,18 +12,33 @@ function renderAt(path: string) {
   return router;
 }
 
-beforeEach(() => {
+beforeEach(async () => {
   localStorage.clear();
   document.documentElement.removeAttribute('data-theme');
+  await freshDatabase();
 });
 
+/** Screens still waiting for their build show a designed empty state. */
+const placeholderScreens = Object.values(screens).filter((s) => !['today', 'inbox', 'tasks'].includes(s.key));
+
 describe('app shell', () => {
-  it.each(Object.values(screens).map((s) => [s.path, s.title, s.empty.heading]))(
+  it.each(placeholderScreens.map((s) => [s.path, s.title, s.empty.heading]))(
     '%s shows its title and empty state',
     (path, title, emptyHeading) => {
       renderAt(path);
       expect(screen.getByRole('heading', { level: 1, name: title })).toBeInTheDocument();
       expect(screen.getByRole('heading', { name: emptyHeading })).toBeInTheDocument();
+    },
+  );
+
+  it.each([
+    ['/', /^Good (morning|afternoon|evening)\./],
+    ['/inbox', 'Inbox'],
+    ['/tasks', 'Today'],
+    ['/tasks?view=upcoming', 'Upcoming'],
+  ])('%s shows its screen', async (path, title) => {
+      renderAt(path);
+      expect(await screen.findByRole('heading', { level: 1, name: title })).toBeInTheDocument();
     },
   );
 
@@ -80,6 +96,7 @@ describe('keyboard shortcuts', () => {
   it('Ctrl+N opens quick capture', async () => {
     renderAt('/');
     await userEvent.keyboard('{Control>}n{/Control}');
-    expect(await screen.findByRole('heading', { name: 'Capture is almost here' })).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: 'Quick capture' })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Capture anything' })).toBeInTheDocument();
   });
 });

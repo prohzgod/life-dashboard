@@ -1,0 +1,125 @@
+.plan {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 46px;
+  padding: 5px 2px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 3px;
+  min-width: 0;
+}
+
+.planTitle {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.doneTitle {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+.titleButton {
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: inherit;
+}
+
+.titleButton:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px var(--space-3);
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+}
+
+.rolled {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.high {
+  color: var(--danger-ink);
+  font-weight: 600;
+}
+
+.when {
+  flex-shrink: 0;
+  color: var(--ink-2);
+  font-size: var(--text-body-s-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.compact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 40px;
+  margin: 0 calc(-1 * var(--space-2));
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.compactTitle {
+  flex-grow: 1;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.details {
+  flex-shrink: 0;
+  max-width: 55%;
+  overflow: hidden;
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selected {
+  background: var(--primary-soft);
+}
+
+.selected .compactTitle {
+  font-weight: 600;
+}
+
+.selected .details {
+  color: var(--ink-2);
+}
+
+.done .compactTitle {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}

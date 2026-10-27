@@ -17,12 +17,14 @@ const task = (title: string, extra: Partial<NewRecord<Task>> = {}): NewRecord<Ta
   status: 'open',
   priority: null,
   doOn: null,
+  time: null,
   dueAt: null,
   estimateMin: null,
   rrule: null,
   reminderAt: null,
   completedAt: null,
   sortKey: 'a0',
+  repeatOfId: null,
   ...extra,
 });
 

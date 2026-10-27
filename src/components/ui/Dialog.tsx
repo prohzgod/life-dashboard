@@ -9,7 +9,10 @@ type DialogProps = {
   children: ReactNode;
 };
 
-/** A modal on the native <dialog>: focus trap, Escape and the backdrop come from the browser. */
+/**
+ * A modal on the native <dialog>: focus trap, Escape and the backdrop come from the browser.
+ * Mark the element that should take focus on open with `data-autofocus`.
+ */
 export function Dialog({ open, onClose, title, children }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -20,6 +23,8 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
     if (open && !dialog.open) {
       if (typeof dialog.showModal === 'function') dialog.showModal();
       else dialog.setAttribute('open', '');
+      // showModal focuses the first focusable element (the close button); move to the field meant to have it.
+      dialog.querySelector<HTMLElement>('[data-autofocus]')?.focus();
     } else if (!open && dialog.open) {
       if (typeof dialog.close === 'function') dialog.close();
       else dialog.removeAttribute('open');

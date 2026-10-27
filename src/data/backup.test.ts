@@ -13,7 +13,7 @@ describe('export', () => {
     await tasksRepo.remove(review!.id);
 
     const file = await exportAll();
-    expect(file).toMatchObject({ format: 'life-dashboard-export', version: 1, schemaVersion: 1 });
+    expect(file).toMatchObject({ format: 'life-dashboard-export', version: 1, schemaVersion: 2 });
     expect(file.tables.areas).toHaveLength(8);
     expect(file.tables.tasks).toEqual([expect.objectContaining({ id: review!.id, deletedAt: expect.any(String) })]);
     expect(Object.keys(file.tables)).toContain('events');
@@ -85,6 +85,16 @@ describe('parseExport', () => {
     expect(() => parseExport(JSON.stringify({ ...file, tables: { ...tables, secrets: [] } }))).toThrow('unknown table');
     expect(() => parseExport(JSON.stringify({ ...file, tables: { ...tables, tasks: [{ title: 'no id' }] } }))).toThrow('damaged');
     expect(() => parseExport(JSON.stringify({ ...file, tables: { ...tables, spaces: [] } }))).toThrow('no Personal space');
+  });
+
+  it('fills in task fields added since an older export', async () => {
+    const file = parseExport(await exportAllAsJson());
+    const legacy = { ...(file.tables.tasks![0] as Record<string, unknown>) };
+    delete legacy.time;
+    delete legacy.repeatOfId;
+    file.tables.tasks = [legacy];
+    await importReplacingAll(file);
+    expect(await db.tasks.get(legacy.id as string)).toMatchObject({ time: null, repeatOfId: null });
   });
 
   it('leaves existing data untouched when an import fails part-way', async () => {

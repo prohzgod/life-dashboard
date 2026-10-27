@@ -1,4 +1,9 @@
+import { useLiveQuery } from 'dexie-react-hooks';
 import { NavLink } from 'react-router-dom';
+import { countViews } from '@/domain/tasks';
+import { tasksRepo } from '@/data';
+import { useToday } from '@/lib/useToday';
+import { withCompletedOn } from '@/lib/taskView';
 import { navGroups } from '@/app/screens';
 import { Icon } from '../icons/Icon';
 import styles from './Sidebar.module.css';
@@ -11,6 +16,8 @@ type SidebarProps = {
 
 export function Sidebar({ onSearch, onCapture }: SidebarProps) {
   const online = useOnlineStatus();
+  const today = useToday();
+  const counts = useLiveQuery(async () => countViews(withCompletedOn(await tasksRepo.list()), today), [today]);
 
   return (
     // The rail paints the midnight column for the full page height; the nav inside stays in view.
@@ -54,6 +61,11 @@ export function Sidebar({ onSearch, onCapture }: SidebarProps) {
                       <Icon name={screen.icon} className={styles.itemIcon} />
                       <span className={styles.grow}>{screen.navLabel}</span>
                       {screen.badge && <span className={styles.badge}>{screen.badge}</span>}
+                    {screen.countKey && !!counts?.[screen.countKey] && (
+                      <span className={styles.badge} aria-label={`${counts[screen.countKey]} open`}>
+                        {counts[screen.countKey]}
+                      </span>
+                    )}
                     </NavLink>
                   </li>
                 ))}

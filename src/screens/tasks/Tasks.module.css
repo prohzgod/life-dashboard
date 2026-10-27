@@ -1,0 +1,278 @@
+/* The Tasks screen spans the full height beside the sidebar, so it undoes the shell's padding. */
+.page {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: -28px calc(-1 * var(--desktop-padding)) calc(-1 * var(--desktop-padding));
+}
+
+.nav {
+  display: flex;
+  position: sticky;
+  top: 0;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: var(--space-5);
+  width: 224px;
+  height: 100vh;
+  height: 100dvh;
+  padding: 28px var(--space-3);
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  background: var(--subtle);
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navLabel {
+  padding: 0 10px 6px;
+  color: var(--ink-3);
+  font-size: var(--text-label-size);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: var(--text-label-line);
+  text-transform: uppercase;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: var(--radius-md);
+  color: var(--ink-2);
+  font-size: 14px;
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.navItem:hover {
+  color: var(--ink);
+}
+
+.navArea {
+  height: 32px;
+}
+
+.navActive {
+  background: var(--raised);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.navCount {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.navCountInbox {
+  padding: 1px 7px;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+}
+
+.areaDot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+}
+
+.tagCloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 10px;
+}
+
+.tag {
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--sunken-2);
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  text-decoration: none;
+}
+
+.tagActive {
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-weight: 600;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 18px;
+  min-width: 0;
+  padding: 28px;
+}
+
+.listCard {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  list-style: none;
+}
+
+.plainList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dayGroup + .dayGroup {
+  border-top: 1px solid var(--line-soft);
+}
+
+.dayHeading {
+  padding: var(--space-2) 0 var(--space-1);
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  font-weight: 700;
+}
+
+.empty {
+  padding: var(--space-6);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+  text-align: center;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionTitle {
+  color: var(--ink-2);
+  font-size: var(--text-body-s-size);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Inbox */
+.inbox {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 4px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  list-style: none;
+}
+
+.inboxItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+
+.inboxItem + .inboxItem {
+  border-top: 1px solid var(--line-soft);
+}
+
+.inboxIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--sunken);
+  color: var(--ink-2);
+}
+
+.inboxBody {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 5px;
+  min-width: 0;
+}
+
+.inboxTitle {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.inboxTitle:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.inboxMeta {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+}
+
+.suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+}
+
+.suggestionChip {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-xs);
+  background: var(--sunken-2);
+  font-weight: 600;
+}
+
+.inboxActions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.moreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+.moreButton:hover {
+  background: var(--sunken);
+}

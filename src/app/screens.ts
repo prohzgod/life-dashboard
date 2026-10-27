@@ -24,6 +24,8 @@ export type Screen = {
   icon: IconName;
   /** Optional badge in the sidebar, e.g. the weekly review day. */
   badge?: string;
+  /** Show a live count of open work next to it. */
+  countKey?: 'today' | 'inbox';
   empty: { heading: string; body: string };
 };
 
@@ -38,6 +40,7 @@ export const screens = {
     title: 'Today',
     path: '/',
     icon: 'today',
+    countKey: 'today',
     empty: {
       heading: 'Your day will gather here',
       body: 'Tasks for today, your habits, a short check-in and this week’s focus, all on one page.',
@@ -49,6 +52,7 @@ export const screens = {
     title: 'Inbox',
     path: '/inbox',
     icon: 'inbox',
+    countKey: 'inbox',
     empty: {
       heading: 'Nothing waiting',
       body: 'Anything you capture lands here first. Sort it when you have a minute.',

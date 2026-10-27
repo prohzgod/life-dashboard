@@ -96,6 +96,8 @@ export interface Task extends BaseRecord {
   priority: 1 | 2 | 3 | null;
   /** The day you plan to do it. */
   doOn: LocalDay | null;
+  /** Local "HH:MM" the task is set for on its day, e.g. from "Call Mom at 18:00". */
+  time: string | null;
   /** Hard deadline, UTC ISO. */
   dueAt: string | null;
   estimateMin: number | null;
@@ -104,6 +106,8 @@ export interface Task extends BaseRecord {
   reminderAt: string | null;
   completedAt: string | null;
   sortKey: string;
+  /** For a repeating task: the occurrence this one was created from when that one was done. */
+  repeatOfId: string | null;
 }
 
 export type HabitSchedule =

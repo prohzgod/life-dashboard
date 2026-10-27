@@ -1,4 +1,4 @@
-import { expectedPercent, paceStatus } from './pace';
+import { behindByDays, expectedPercent, paceStatus } from './pace';
 
 const day = (iso: string) => new Date(`${iso}T00:00:00Z`);
 
@@ -27,5 +27,12 @@ describe('paceStatus', () => {
   it('allows 3 points of slack', () => {
     expect(paceStatus(72, 75)).toBe('on-pace');
     expect(paceStatus(71.9, 75)).toBe('behind');
+  });
+});
+
+describe('behindByDays', () => {
+  it('turns the gap into days of the goal’s span', () => {
+    expect(behindByDays(62, 75, 365)).toBe(47);
+    expect(behindByDays(80, 75, 365)).toBe(0);
   });
 });

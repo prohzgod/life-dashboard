@@ -18,3 +18,8 @@ export function paceStatus(progress: number, expected: number): PaceStatus {
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
+
+/** How many days of the goal's span the progress trails the expected line by (0 when not behind). */
+export function behindByDays(progress: number, expected: number, totalDays: number): number {
+  return Math.max(0, Math.round(((expected - progress) / 100) * totalDays));
+}

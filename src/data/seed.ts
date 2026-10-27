@@ -111,12 +111,14 @@ export async function seedIfNeeded(today: Date = new Date()): Promise<string> {
       status: 'open',
       priority: null,
       doOn: toLocalDay(nextSunday(today)),
+      time: null,
       dueAt: null,
       estimateMin: 30,
       rrule: 'FREQ=WEEKLY;BYDAY=SU',
       reminderAt: null,
       completedAt: null,
       sortKey: generateNKeysBetween(null, null, 1)[0]!,
+      repeatOfId: null,
     };
 
     await db.spaces.add(space);

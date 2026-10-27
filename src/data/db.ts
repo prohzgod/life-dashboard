@@ -78,10 +78,26 @@ export class LifeDb extends Dexie {
       events: 'id, spaceId, start, updatedAt',
       meta: 'key',
     });
+    // v2: tasks gain `time` and `repeatOfId` (not indexed).
+    this.version(2)
+      .stores({})
+      .upgrade((tx) =>
+        tx
+          .table('tasks')
+          .toCollection()
+          .modify((task: Task) => normalizeTask(task)),
+      );
   }
 }
 
 export const db = new LifeDb();
+
+/** Fills in fields added after a task was first saved. Also used when importing older exports. */
+export function normalizeTask(task: Task): Task {
+  task.time ??= null;
+  task.repeatOfId ??= null;
+  return task;
+}
 
 /** Every table that holds user data, in a stable order (used by export and import). */
 export const dataTableNames = [

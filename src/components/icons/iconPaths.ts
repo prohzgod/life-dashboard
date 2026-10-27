@@ -27,6 +27,17 @@ export const iconPaths = {
   moon: 'M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z',
   monitor: 'M3 5h18v11H3zM8 20h8M12 16v4',
   offline: 'M3 3l18 18M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 4-2.4M19 13a10 10 0 0 0-2.4-1.7M2 9.5a15 15 0 0 1 4.3-2.7M22 9.5A15 15 0 0 0 11 5.1M12 20h.01',
+  repeat: 'M17 2l3 3-3 3M4 11V9a4 4 0 0 1 4-4h12M7 22l-3-3 3-3M20 13v2a4 4 0 0 1-4 4H4',
+  camera: 'M4 8h3l2-3h6l2 3h3v11H4zM12 11a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
+  more: 'M5 12h.01M12 12h.01M19 12h.01',
+  clock: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2',
+  trash: 'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13',
+  note: 'M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6',
+  someday: 'M3 5h18v4H3zM5 9v10h14V9M10 13h4',
+  chevronRight: 'M9 6l6 6-6 6',
+  chevronLeft: 'M15 6l-6 6 6 6',
+  image: 'M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6M15.5 9.5h.01',
+  flag: 'M5 21V4M5 4h11l-2 4 2 4H5',
 } as const;
 
 export type IconName = keyof typeof iconPaths;
