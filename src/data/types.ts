@@ -272,13 +272,35 @@ export interface Review extends BaseRecord {
   completedAt: string | null;
 }
 
+export interface Calendar extends BaseRecord {
+  name: string;
+  /** One of the area color tokens, for its events. */
+  color: Area;
+  /** `local`: made here, editable. `ics`: imported from a file or a link, read-only. */
+  source: 'local' | 'ics';
+  /** The link it was subscribed from, so it can be refreshed; null for files and local calendars. */
+  url: string | null;
+  readOnly: boolean;
+  /** Shown on the calendar (unticked calendars keep their events). */
+  visible: boolean;
+  lastSyncedAt: string | null;
+}
+
 export interface CalendarEvent extends BaseRecord {
-  source: string;
+  /** Null for events saved before calendars existed: they belong to Personal. */
+  calendarId: string | null;
+  source: 'local' | 'ics';
+  /** iCalendar UID and RECURRENCE-ID, so a re-import updates instead of duplicating. */
+  uid: string | null;
+  recurrenceId: string | null;
   title: string;
+  /** Timed: UTC ISO. All-day: local days, `end` exclusive (the day after the last). */
   start: string;
   end: string;
   allDay: boolean;
   readOnly: boolean;
+  location: string;
+  notes: string;
 }
 
 /** Device bookkeeping (seed version, current space). Not user data, not exported. */

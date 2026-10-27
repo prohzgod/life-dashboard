@@ -1,0 +1,61 @@
+import { useLiveQuery } from 'dexie-react-hooks';
+import { useEffect, useState } from 'react';
+import { startsIn } from '@/domain/calendar';
+import { addDays, dayToDate, type Day } from '@/domain/days';
+import { areasRepo, loadCalendarRange } from '@/data';
+import { itemsForDay, readLayers } from '@/screens/calendar/items';
+
+/** Minutes since 1970, ticking each minute, so "in 40 min" stays true. */
+function useMinute(): number {
+  const [minute, setMinute] = useState(() => Math.floor(Date.now() / 60_000));
+  useEffect(() => {
+    const timer = window.setInterval(() => setMinute(Math.floor(Date.now() / 60_000)), 30_000);
+    return () => window.clearInterval(timer);
+  }, []);
+  return minute;
+}
+
+export type AgendaEntry = {
+  key: string;
+  title: string;
+  time: string;
+  /** "Work", "Time block · Growth", "All day · Family" */
+  source: string;
+  tone: string;
+  block: boolean;
+  allDay: boolean;
+  done: boolean;
+  soon: string | null;
+};
+
+/** Today's events and time blocks in order, for the agenda strip and the Home widget. */
+export function useAgenda(today: Day): { entries: AgendaEntry[]; calendars: string[] } | undefined {
+  const minute = useMinute();
+  return useLiveQuery(async () => {
+    const [range, areas] = await Promise.all([loadCalendarRange(today, addDays(today, 1), today), areasRepo.listOrdered()]);
+    const { timed, allDay } = itemsForDay(range, today, { ...readLayers(), blocks: true }, areas);
+    const midnight = dayToDate(today).getTime();
+    const at = (min: number) => midnight + min * 60_000;
+    const entries: AgendaEntry[] = [
+      ...allDay.map((a) => ({ key: a.key, title: a.title, time: 'All day', source: a.calendarName, tone: a.tone, block: false, allDay: true, done: false, soon: null })),
+      ...[...timed]
+        .sort((a, b) => a.startMin - b.startMin)
+        .map((t) => {
+          const over = at(t.endMin) <= minute * 60_000;
+          return {
+            key: t.key,
+            title: t.title,
+            time: t.time,
+            source: t.kind === 'block' ? (t.detail === 'Time block' ? 'Time block' : `Time block · ${t.detail}`) : t.calendarName,
+            tone: t.tone,
+            block: t.kind === 'block',
+            allDay: false,
+            done: t.done || over,
+            soon: t.done ? null : startsIn(at(t.startMin), at(t.endMin), minute * 60_000),
+          };
+        }),
+    ];
+    return { entries, calendars: range.calendars.filter((c) => c.visible).map((c) => (c.readOnly ? `${c.name} (read-only)` : c.name)) };
+  }, [today, minute]);
+}
+

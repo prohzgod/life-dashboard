@@ -69,7 +69,8 @@ All tables: `id` (ULID), `spaceId`, `createdAt`, `updatedAt`, `deletedAt`.
 - `homeWidgets` (kind: today | goals | calendar | review | progress | sleep | finance | vision | assistant | steps | pinned, size: S | M | L, sortKey, hidden, refType, refId for pinned items)
 - `profile` (single row: displayName, quote, gender, birthday, pronouns, occupation, city, email, phone, photoAttachmentId, customFields[], visibility: { field: shown | blurred })
 - `reviews` (period: day | week | month | quarter | year, periodStart, answers, autoSummary, completedAt)
-- `events` (calendar events: source, title, start, end, allDay, readOnly)
+- `calendars` (name, color, source: local | ics, url for subscribed links, readOnly, visible, lastSyncedAt); every space has a local Personal calendar
+- `events` (calendarId, source, uid + recurrenceId from iCalendar so re-imports update in place, title, start, end, allDay, readOnly, location, notes); timed events in UTC ISO, all-day events as local days with an exclusive end. Time blocks are tasks with `doOn` + `time`, lasting `estimateMin` (30 min if unset)
 - Modules later: `transactions`, `budgets`, `workouts`, `visionCards`, `assistantChats`
 
 ## Pace rules (src/domain)

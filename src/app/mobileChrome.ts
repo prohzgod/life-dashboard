@@ -30,6 +30,8 @@ export function mobileChrome(pathname: string, search = ''): MobileChrome {
   if (p === '/profile') return { tab: 'home', back: null, hideTabBar: false };
   if (p === '/profile/edit') return { tab: 'home', back: null, hideTabBar: true };
   if (p.startsWith('/settings')) return { tab: 'home', back: { label: 'Profile', to: '/profile' }, hideTabBar: false };
+  // The calendar draws its own header; Home is one tap away in the tab bar.
+  if (p === '/calendar') return { tab: 'home', back: null, hideTabBar: false };
   if (p === '/review') return { tab: 'home', back: null, hideTabBar: true };
   if (/^\/goals\/[^/]+$/.test(p)) return { tab: 'home', back: { label: 'Goals', to: '/goals' }, hideTabBar: false };
   return { tab: 'home', back: home, hideTabBar: false };

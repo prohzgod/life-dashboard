@@ -78,7 +78,7 @@ function DesktopToday() {
 
       <div className={styles.grid}>
         <div className={styles.column}>
-          <AgendaCard />
+          <AgendaCard today={today} />
           <PlanCard today={today} />
           <HabitsCard today={today} />
         </div>

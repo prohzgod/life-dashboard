@@ -147,3 +147,24 @@ test('Edit Home reorders by touch: press, hold, drag', async ({ page, context })
   await touch('touchEnd');
   await expect.poll(async () => (await titles()).indexOf('Vision board')).toBeLessThan(3);
 });
+
+test('Calendar on a phone: the day view, the week strip and a new event', async ({ page }) => {
+  await page.goto('/calendar');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByRole('radio', { name: 'Day' })).toHaveAttribute('aria-checked', 'true');
+  await expect(page.getByRole('group', { name: 'Days this week' }).getByRole('button')).toHaveCount(7);
+  await expect(tabs(page)).toBeVisible();
+
+  await page.getByRole('button', { name: 'New event' }).click();
+  const dialog = page.getByRole('dialog', { name: 'New event' });
+  await dialog.getByLabel('Event').fill('Call Mom');
+  await dialog.getByLabel('Starts').fill('18:00');
+  await dialog.getByLabel('Ends').fill('18:30');
+  await dialog.getByRole('button', { name: 'Add event' }).click();
+  await expect(page.getByRole('region', { name: 'Day' }).getByRole('button', { name: /^Call Mom, 18:00 – 18:30, Personal$/ })).toBeVisible();
+
+  await page.getByRole('radio', { name: 'Week' }).click();
+  await expect(page.getByRole('button', { name: /Call Mom/ })).toBeVisible();
+  await page.getByRole('radio', { name: 'Month' }).click();
+  await expect(page.getByRole('region', { name: /, month$/ })).toBeVisible();
+});

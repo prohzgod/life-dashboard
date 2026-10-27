@@ -14,6 +14,7 @@ import { EditHomePage } from '@/screens/home/EditHomePage';
 import { ProfilePage } from '@/screens/profile/ProfilePage';
 import { EditProfilePage } from '@/screens/profile/EditProfilePage';
 import { TaskRedirect } from '@/screens/tasks/TaskRedirect';
+import { CalendarPage } from '@/screens/calendar/CalendarPage';
 
 export const routes: RouteObject[] = [
   {
@@ -27,7 +28,7 @@ export const routes: RouteObject[] = [
       { path: 'inbox', element: <TasksPage /> },
       { path: 'tasks', element: <TasksPage /> },
       { path: 'tasks/:id', element: <TaskRedirect /> },
-      { path: 'calendar', element: <ScreenPage screen="calendar" /> },
+      { path: 'calendar', element: <CalendarPage /> },
       { path: 'goals', element: <LazyGoalsPage /> },
       { path: 'goals/:id', element: <LazyGoalsPage /> },
       { path: 'progress', element: <LazyProgressPage /> },

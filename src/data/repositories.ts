@@ -3,6 +3,7 @@ import { createRepository } from './repository';
 import type {
   AreaRating,
   Attachment,
+  Calendar,
   CalendarEvent,
   DailyEntry,
   Goal,
@@ -91,4 +92,5 @@ export const tagsRepo = createRepository<Tag>(db.tags);
 export const taggingsRepo = createRepository<Tagging>(db.taggings);
 export const homeWidgetsRepo = createRepository<HomeWidget>(db.homeWidgets);
 export const reviewsRepo = createRepository<Review>(db.reviews);
+export const calendarsRepo = createRepository<Calendar>(db.calendars);
 export const eventsRepo = createRepository<CalendarEvent>(db.events);

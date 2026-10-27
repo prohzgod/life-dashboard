@@ -4,7 +4,7 @@ const screens = [
   ['/', /^Good (morning|afternoon|evening)\./],
   ['/inbox', 'Inbox'],
   ['/tasks', 'Today'],
-  ['/calendar', 'Calendar'],
+  ['/calendar', /^Week \d+$/],
   ['/vision', 'Vision board'],
   ['/finance', 'Finance'],
   ['/health', 'Health'],

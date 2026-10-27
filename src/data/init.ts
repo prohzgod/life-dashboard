@@ -1,3 +1,4 @@
+import { ensureCalendars } from './calendar';
 import { db } from './db';
 import { ensureHomeWidgets } from './homeWidgets';
 import { ensureProfile } from './profile';
@@ -14,6 +15,7 @@ export function initData(): Promise<void> {
     // Rows added after the first seed: created on the first start that needs them.
     await ensureHomeWidgets();
     await ensureProfile();
+    await ensureCalendars();
   })().catch((error: unknown) => {
     ready = null;
     throw error;

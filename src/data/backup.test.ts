@@ -13,7 +13,7 @@ describe('export', () => {
     await tasksRepo.remove(review!.id);
 
     const file = await exportAll();
-    expect(file).toMatchObject({ format: 'life-dashboard-export', version: 1, schemaVersion: 4 });
+    expect(file).toMatchObject({ format: 'life-dashboard-export', version: 1, schemaVersion: 5 });
     expect(file.tables.areas).toHaveLength(8);
     expect(file.tables.tasks).toEqual([expect.objectContaining({ id: review!.id, deletedAt: expect.any(String) })]);
     expect(Object.keys(file.tables)).toContain('events');

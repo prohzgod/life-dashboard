@@ -2,6 +2,7 @@ import Dexie, { type Table } from 'dexie';
 import type {
   AreaRating,
   Attachment,
+  Calendar,
   CalendarEvent,
   DailyEntry,
   Goal,
@@ -49,6 +50,7 @@ export class LifeDb extends Dexie {
   homeWidgets!: Table<HomeWidget, string>;
   profile!: Table<Profile, string>;
   reviews!: Table<Review, string>;
+  calendars!: Table<Calendar, string>;
   events!: Table<CalendarEvent, string>;
   meta!: Table<MetaEntry, string>;
 
@@ -105,6 +107,15 @@ export class LifeDb extends Dexie {
           .toCollection()
           .modify((goal: Goal) => normalizeGoal(goal)),
       );
+    // v5: calendars, and events gain a calendar, iCalendar ids, location and notes.
+    this.version(5)
+      .stores({ calendars: 'id, spaceId, updatedAt', events: 'id, spaceId, calendarId, start, updatedAt' })
+      .upgrade((tx) =>
+        tx
+          .table('events')
+          .toCollection()
+          .modify((event: CalendarEvent) => normalizeEvent(event)),
+      );
   }
 }
 
@@ -122,6 +133,17 @@ export function normalizeGoal(goal: Goal): Goal {
   goal.progressLog ??= [];
   goal.wordOfYear ??= null;
   return goal;
+}
+
+/** Fills in event fields added after an event was first saved. Also used when importing older exports. */
+export function normalizeEvent(event: CalendarEvent): CalendarEvent {
+  event.calendarId ??= null;
+  event.uid ??= null;
+  event.recurrenceId ??= null;
+  event.location ??= '';
+  event.notes ??= '';
+  if (event.source !== 'ics') event.source = 'local';
+  return event;
 }
 
 const SEEDED_FOLDERS: Record<string, string> = { Journal: 'journal', Areas: 'areas', Projects: 'projects' };
@@ -157,6 +179,7 @@ export const dataTableNames = [
   'homeWidgets',
   'profile',
   'reviews',
+  'calendars',
   'events',
 ] as const satisfies ReadonlyArray<keyof LifeDb>;
 

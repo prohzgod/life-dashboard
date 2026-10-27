@@ -1,4 +1,6 @@
 import { checklistProgress } from '@/domain/blocks';
+import { clockLabel, minutesOfDay, parseClock, spanOnDay } from '@/domain/calendar';
+import { loadCalendarRange } from './calendar';
 import { addDays, isoWeek, startOfWeek, toDay, type Day } from '@/domain/days';
 import { summarizeHabit } from '@/domain/habits';
 import { habitHeatmap } from '@/domain/stats';
@@ -32,7 +34,7 @@ export type HomeData = {
 
 /** Everything the Home widgets show, in one read. */
 export async function loadHomeData(today: Day): Promise<HomeData> {
-  const [widgets, tasks, board, habits, entries, reviewed, areas] = await Promise.all([
+  const [widgets, tasks, board, habits, entries, reviewed, areas, day] = await Promise.all([
     listHomeWidgets(),
     tasksRepo.list(),
     loadGoalBoard(today),
@@ -40,11 +42,25 @@ export async function loadHomeData(today: Day): Promise<HomeData> {
     dailyEntriesRepo.list(),
     listReviewedWeeks(),
     areasRepo.list(),
+    loadCalendarRange(today, addDays(today, 1), today),
   ]);
   const withDay = tasks.map((t) => ({ ...t, completedOn: t.completedAt ? toDay(new Date(t.completedAt)) : null }));
   const todays = withDay.filter((t) => inView(t, 'today', today)).sort(compareForDay);
   const open = todays.filter((t) => t.status === 'open');
-  const nextTimed = open.find((t) => t.time);
+
+  // What's still ahead today: timed events and open tasks with a time, in order.
+  const nowMin = minutesOfDay(new Date());
+  const ahead = [
+    ...day.events.flatMap((e) => {
+      const span = e.allDay ? null : spanOnDay(e.start, e.end, today);
+      return span && span.endMin > nowMin ? [{ startMin: span.startMin, title: e.title }] : [];
+    }),
+    ...open.flatMap((t) => {
+      const startMin = t.time ? parseClock(t.time) : null;
+      return startMin !== null && t.doOn === today ? [{ startMin, title: t.title }] : [];
+    }),
+  ].sort((a, b) => a.startMin - b.startMin);
+  const nextTimed = ahead[0];
   const color = (areaId: string | null) => areas.find((a) => a.id === areaId)?.color ?? null;
 
   const active = board.views.filter((v) => v.goal.status === 'active' && v.goal.horizon !== 'week' && v.progress.percent !== null);
@@ -84,14 +100,14 @@ export async function loadHomeData(today: Day): Promise<HomeData> {
     today: {
       done: todays.filter((t) => t.status === 'done').length,
       total: todays.length,
-      next: nextTimed ? `${nextTimed.title} at ${nextTimed.time}` : (open[0]?.title ?? null),
+      next: nextTimed ? `${nextTimed.title} at ${clockLabel(nextTimed.startMin)}` : (open[0]?.title ?? null),
     },
     goals: {
       top: top ? { title: top.goal.title, percent: top.progress.percent!, color: color(top.goal.areaId) } : null,
       onPace: active.filter((v) => v.pace.state === 'on-pace').length,
       behind: active.filter((v) => v.pace.state === 'behind').length,
     },
-    calendar: { left: open.length, timed: open.filter((t) => t.time).slice(0, 2).map((t) => ({ time: t.time!, title: t.title })) },
+    calendar: { left: open.filter((t) => !t.time).length + ahead.length, timed: ahead.slice(0, 2).map((t) => ({ time: clockLabel(t.startMin), title: t.title })) },
     review: { week: isoWeek(today), done: reviewed.includes(weekStart), isSunday: new Date(`${today}T12:00:00`).getDay() === 0 },
     progress: { weeks: heat, consistency: totals.counted ? totals.done / totals.counted : null },
     sleep: { last: nights[6] ?? nights[5] ?? null, week: nights },
