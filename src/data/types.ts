@@ -64,6 +64,10 @@ export interface Goal extends BaseRecord {
   endDate: LocalDay;
   status: GoalStatus;
   commitment: 'committed' | 'aspirational';
+  /** Every update to currentValue, oldest first, for the progress-vs-pace chart. */
+  progressLog: Array<{ at: string; value: number }>;
+  /** Vision goals only: the year's one word. */
+  wordOfYear: string | null;
 }
 
 export interface KeyResult extends BaseRecord {

@@ -19,7 +19,7 @@ beforeEach(async () => {
 });
 
 /** Screens still waiting for their build show a designed empty state. */
-const placeholderScreens = Object.values(screens).filter((s) => !['today', 'inbox', 'tasks', 'library'].includes(s.key));
+const placeholderScreens = Object.values(screens).filter((s) => !['today', 'inbox', 'tasks', 'library', 'goals', 'progress', 'review'].includes(s.key));
 
 describe('app shell', () => {
   it.each(placeholderScreens.map((s) => [s.path, s.title, s.empty.heading]))(

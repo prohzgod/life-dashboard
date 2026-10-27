@@ -1,5 +1,6 @@
 import type { Day } from '@/domain/days';
 import { isLogDone, summarizeHabit, type HabitSummary } from '@/domain/habits';
+import type { HabitData } from '@/domain/review';
 import { toDay } from '@/domain/days';
 import { db } from './db';
 import { habitLogsRepo, habitsRepo } from './repositories';
@@ -7,7 +8,7 @@ import type { Habit, HabitLog } from './types';
 
 export type HabitWithSummary = { habit: Habit; summary: HabitSummary };
 
-function habitInput(habit: Habit) {
+export function habitInput(habit: Habit) {
   return { kind: habit.kind, target: habit.target, schedule: habit.schedule, startDay: toDay(new Date(habit.createdAt)) };
 }
 
@@ -51,4 +52,10 @@ export async function skipHabitDay(habit: Habit, day: Day): Promise<void> {
   const log = await logFor(habit.id, day);
   if (log) await habitLogsRepo.update(log.id, { status: 'skipped', value: 0 });
   else await habitLogsRepo.create({ habitId: habit.id, day, value: 0, status: 'skipped' });
+}
+
+/** Habits with their logs, in the shape the stats in src/domain expect. */
+export async function listHabitData(): Promise<HabitData[]> {
+  const [habits, logs] = await Promise.all([habitsRepo.list((h) => h.archivedAt === null), habitLogsRepo.list()]);
+  return habits.map((h) => ({ id: h.id, title: h.title, input: habitInput(h), logs: logs.filter((l) => l.habitId === h.id) }));
 }

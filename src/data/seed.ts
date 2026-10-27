@@ -56,6 +56,8 @@ export async function seedIfNeeded(today: Date = new Date()): Promise<string> {
       endDate: toLocalDay(new Date(year, 11, 31)),
       status: 'active',
       commitment: 'committed',
+      progressLog: [],
+      wordOfYear: null,
     };
     const quarterGoal: Goal = {
       ...yearGoal,

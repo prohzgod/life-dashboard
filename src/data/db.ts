@@ -96,6 +96,15 @@ export class LifeDb extends Dexie {
           .toCollection()
           .modify((node: LibraryNode) => normalizeNode(node)),
       );
+    // v4: goals gain a progress log and the word of the year (not indexed).
+    this.version(4)
+      .stores({})
+      .upgrade((tx) =>
+        tx
+          .table('goals')
+          .toCollection()
+          .modify((goal: Goal) => normalizeGoal(goal)),
+      );
   }
 }
 
@@ -106,6 +115,13 @@ export function normalizeTask(task: Task): Task {
   task.time ??= null;
   task.repeatOfId ??= null;
   return task;
+}
+
+/** Fills in goal fields added after a goal was first saved. Also used when importing older exports. */
+export function normalizeGoal(goal: Goal): Goal {
+  goal.progressLog ??= [];
+  goal.wordOfYear ??= null;
+  return goal;
 }
 
 const SEEDED_FOLDERS: Record<string, string> = { Journal: 'journal', Areas: 'areas', Projects: 'projects' };

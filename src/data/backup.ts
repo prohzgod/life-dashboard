@@ -1,7 +1,7 @@
-import { dataTableNames, db, normalizeNode, normalizeTask, type DataTableName } from './db';
+import { dataTableNames, db, normalizeGoal, normalizeNode, normalizeTask, type DataTableName } from './db';
 import { nowIso } from './ids';
 import { setCurrentSpaceId } from './session';
-import type { BaseRecord, LibraryNode, Space, Task } from './types';
+import type { BaseRecord, Goal, LibraryNode, Space, Task } from './types';
 
 export const EXPORT_FORMAT = 'life-dashboard-export';
 export const EXPORT_VERSION = 1;
@@ -81,6 +81,7 @@ export async function importReplacingAll(file: ExportFile): Promise<{ records: n
   }
   decoded.tasks = (decoded.tasks as Task[]).map(normalizeTask);
   decoded.nodes = (decoded.nodes as LibraryNode[]).map(normalizeNode);
+  decoded.goals = (decoded.goals as Goal[]).map(normalizeGoal);
   const personal = (decoded.spaces as Space[]).find((s) => s.type === 'personal' && s.deletedAt === null)!;
 
   await db.transaction('rw', [...dataTableNames.map((name) => db[name]), db.meta], async () => {
