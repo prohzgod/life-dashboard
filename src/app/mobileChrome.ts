@@ -29,7 +29,8 @@ export function mobileChrome(pathname: string, search = ''): MobileChrome {
   if (p === '/home/edit') return { tab: 'home', back: null, hideTabBar: true };
   if (p === '/profile') return { tab: 'home', back: null, hideTabBar: false };
   if (p === '/profile/edit') return { tab: 'home', back: null, hideTabBar: true };
-  if (p.startsWith('/settings')) return { tab: 'home', back: { label: 'Profile', to: '/profile' }, hideTabBar: false };
+  // Each settings section is a pushed screen with its own "‹ Profile" header.
+  if (p.startsWith('/settings')) return { tab: 'home', back: null, hideTabBar: false };
   // The calendar draws its own header; Home is one tap away in the tab bar.
   if (p === '/calendar') return { tab: 'home', back: null, hideTabBar: false };
   // The board draws its own "‹ Home" header with the + button beside it.

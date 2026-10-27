@@ -13,7 +13,7 @@ describe('mobileChrome', () => {
     expect(mobileChrome('/goals')).toEqual({ tab: 'home', back: { label: 'Home', to: '/' }, hideTabBar: false });
     expect(mobileChrome('/goals/abc').back).toEqual({ label: 'Goals', to: '/goals' });
     expect(mobileChrome('/progress').back?.label).toBe('Home');
-    expect(mobileChrome('/settings/privacy').back).toEqual({ label: 'Profile', to: '/profile' });
+    expect(mobileChrome('/settings/privacy').back).toBeNull(); // draws its own "‹ Profile" header
   });
 
   it('hides the tab bar for full-screen flows and the page editor', () => {

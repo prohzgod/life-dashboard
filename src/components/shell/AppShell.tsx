@@ -5,6 +5,7 @@ import { useIsMobile } from '@/lib/useMediaQuery';
 import { Icon } from '../icons/Icon';
 import styles from './AppShell.module.css';
 import { CommandPalette } from './CommandPalette';
+import { LockGate } from './LockGate';
 import { MobileCapture } from './MobileCapture';
 import { QuickCapture } from './QuickCapture';
 import { Sidebar } from './Sidebar';
@@ -13,6 +14,14 @@ import { TabBar } from './TabBar';
 type Overlay = 'search' | 'capture' | null;
 
 export function AppShell() {
+  return (
+    <LockGate>
+      <Shell />
+    </LockGate>
+  );
+}
+
+function Shell() {
   const [overlay, setOverlay] = useState<Overlay>(null);
   const { pathname, search } = useLocation();
   const isMobile = useIsMobile();

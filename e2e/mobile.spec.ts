@@ -182,3 +182,25 @@ test('Vision board on a phone: two columns, the + sheet and words', async ({ pag
   await page.getByRole('link', { name: 'Back to Home' }).click();
   await expect(page).toHaveURL(/\/$/);
 });
+
+test('Privacy on a phone: the grouped list, and Lock app now from Profile', async ({ page }) => {
+  await page.goto('/settings/privacy');
+  await expect(page.getByRole('heading', { name: 'Security' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Backup & export' })).toBeVisible();
+  await page.getByRole('switch', { name: 'Passcode lock' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Set a passcode' });
+  await dialog.getByLabel('Passcode', { exact: true }).fill('2468');
+  await dialog.getByLabel('Type it again').fill('2468');
+  await dialog.getByRole('button', { name: 'Turn on lock' }).click();
+  await expect(page.getByText('Lock after 5 minutes')).toBeVisible();
+
+  // Opening the app fresh starts locked.
+  await page.goto('/profile');
+  await page.getByLabel('Passcode').fill('2468');
+  await page.getByRole('button', { name: 'Unlock' }).click();
+  await page.getByRole('button', { name: 'Lock app now' }).click();
+  await expect(page.getByRole('heading', { name: 'Life Dashboard is locked' })).toBeVisible();
+  await page.getByLabel('Passcode').fill('2468');
+  await page.getByRole('button', { name: 'Unlock' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Profile', exact: true })).toBeVisible();
+});

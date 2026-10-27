@@ -108,3 +108,379 @@
   justify-content: flex-end;
   gap: var(--space-2);
 }
+
+/* ---- Layout: three columns of cards, like the design ---- */
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--space-4);
+}
+
+@media (max-width: 1180px) {
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* ---- Storage ---- */
+
+.storage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.bar {
+  display: flex;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--track);
+}
+
+.partDatabase {
+  background: var(--primary);
+}
+
+.partImages {
+  background: var(--viz-soft);
+}
+
+.partFiles {
+  background: var(--finance);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  list-style: none;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* ---- Rows of settings ---- */
+
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 36px;
+}
+
+.settingText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.settingTitle {
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.settingSub {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+}
+
+.select,
+.inlineSelect {
+  height: 32px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  color-scheme: inherit;
+  font-size: var(--text-body-s-size);
+}
+
+.inlineSelect {
+  height: 28px;
+}
+
+.onTag {
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+}
+
+.warning {
+  padding: 10px var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--warning-soft);
+  color: var(--warning-ink);
+  font-size: var(--text-caption-size);
+  line-height: 1.45;
+}
+
+.notice {
+  padding: 10px var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--sunken);
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+}
+
+.buttonRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.inlineButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--link);
+  font: inherit;
+  font-weight: 600;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-body-s-size);
+}
+
+.facts > div {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.facts dt {
+  color: var(--ink-3);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.strong {
+  font-weight: 600;
+}
+
+/* ---- Sync options ---- */
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-s-size);
+}
+
+.option > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.option > span > span {
+  color: var(--ink-3);
+}
+
+.optionOn {
+  border-color: var(--primary);
+  background: var(--primary-softer);
+}
+
+.optionOff {
+  color: var(--ink-3);
+}
+
+/* ---- Dialogs ---- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.field input {
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color-scheme: inherit;
+  font-size: var(--text-body-l-size);
+  font-weight: 400;
+}
+
+.field input[type='file'] {
+  height: auto;
+  padding: var(--space-2) 10px;
+  font-size: var(--text-body-s-size);
+}
+
+.formError {
+  color: var(--danger);
+  font-size: var(--text-body-s-size);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-body-s-size);
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.recoveryKey {
+  padding: var(--space-3);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--sunken);
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* ---- Phone ---- */
+
+.phone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.group {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.groupLabel {
+  margin-top: var(--space-2);
+  padding: 0 var(--space-1);
+  color: var(--ink-3);
+  font-size: var(--text-label-size);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.phoneStorage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+}
+
+.phoneStorageHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+}
+
+.phoneRow,
+.phoneRowButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.group > * + * {
+  border-top: 1px solid var(--line-soft);
+}
+
+.group > .setting {
+  min-height: 56px;
+  padding: var(--space-2) var(--space-4);
+}
+
+.phoneRowTitle {
+  font-size: 15px;
+}
+
+.phoneRowButton svg {
+  flex-shrink: 0;
+  color: var(--ink-3);
+}
+
+.rowValue {
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+}
+
+.rowLink {
+  min-height: var(--touch-min);
+  padding: 0 var(--space-2);
+  border: 0;
+  background: transparent;
+  color: var(--link);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}

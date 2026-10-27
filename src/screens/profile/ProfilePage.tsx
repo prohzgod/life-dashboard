@@ -2,7 +2,8 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ageOn, visibilityOf } from '@/domain/profile';
-import { getProfile, listHomeWidgets, setAllVisibility, setFieldVisibility } from '@/data';
+import { getPrivacyState, getProfile, listHomeWidgets, setAllVisibility, setFieldVisibility } from '@/data';
+import { lockNow } from '@/components/shell/lock';
 import { Icon, type IconName } from '@/components/icons/Icon';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
 import { cx } from '@/components/ui/cx';
@@ -16,7 +17,7 @@ import styles from './Profile.module.css';
 export function ProfilePage() {
   const today = useToday();
   const [theme] = useThemePreference();
-  const data = useLiveQuery(async () => ({ profile: await getProfile(), widgets: (await listHomeWidgets()).filter((w) => !w.hidden).length }));
+  const data = useLiveQuery(async () => ({ profile: await getProfile(), widgets: (await listHomeWidgets()).filter((w) => !w.hidden).length, locked: Boolean((await getPrivacyState()).lock.passcode) }));
   if (!data) return null;
   const { profile } = data;
   const vis = (field: string) => visibilityOf(profile.visibility, field);
@@ -112,9 +113,21 @@ export function ProfilePage() {
           <SettingRow icon="widgets" label="Home & modules" detail={`${data.widgets} widgets`} to="/home/edit" />
           <SettingRow icon="bell" label="Notifications" detail="Review on Sun" to="/settings/general" />
           <SettingRow icon="users" label="Spaces" detail="Personal" to="/settings/spaces" />
-          <SettingRow icon="download" label="Backup & export" detail="JSON export" to="/settings/privacy" />
+          <SettingRow icon="download" label="Backup & export" detail="Encrypted backups" to="/settings/privacy" />
         </ul>
       </nav>
+
+      {data.locked ? (
+        <button type="button" className={styles.lockButton} onClick={lockNow}>
+          <Icon name="lock" size={17} />
+          Lock app now
+        </button>
+      ) : (
+        <Link to="/settings/privacy" className={styles.lockButton}>
+          <Icon name="lock" size={17} />
+          Set up an app lock
+        </Link>
+      )}
 
       <p className={styles.footnote}>Your profile lives on this phone. Blurred details stay blurred until you tap them.</p>
     </div>

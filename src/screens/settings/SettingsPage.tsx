@@ -1,4 +1,6 @@
-import { Navigate, NavLink, useParams } from 'react-router-dom';
+import { Link, Navigate, NavLink, useParams } from 'react-router-dom';
+import { Icon } from '@/components/icons/Icon';
+import { useIsMobile } from '@/lib/useMediaQuery';
 import { EmptyState } from '@/components/shell/EmptyState';
 import { PageHeader } from '@/components/shell/PageHeader';
 import { AppearanceSettings } from './AppearanceSettings';
@@ -18,7 +20,24 @@ type TabSlug = (typeof settingsTabs)[number]['slug'];
 export function SettingsPage() {
   const { tab } = useParams();
   const current = settingsTabs.find((t) => t.slug === tab);
+  const phone = useIsMobile();
   if (!current) return <Navigate to="/settings/privacy" replace />;
+
+  // Phones reach each section from Profile, so it reads as its own screen.
+  if (phone) {
+    return (
+      <>
+        <header className={styles.phoneHeader}>
+          <Link to="/profile" className={styles.phoneBack} aria-label="Back to Profile">
+            <Icon name="chevronLeft" size={18} />
+            Profile
+          </Link>
+          <h1 className={styles.phoneTitle}>{current.label}</h1>
+        </header>
+        <TabContent slug={current.slug} empty={current.empty} />
+      </>
+    );
+  }
 
   return (
     <>
