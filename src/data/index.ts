@@ -13,6 +13,7 @@ export * from './profile';
 export * from './homeWidgets';
 export * from './homeData';
 export * from './calendar';
+export * from './vision';
 export { countExportRecords, countRecords, exportAllAsJson, ImportError, importReplacingAll, parseExport, type ExportFile } from './backup';
 export { newId, nowIso, toLocalDay } from './ids';
 export { initData } from './init';

@@ -168,3 +168,17 @@ test('Calendar on a phone: the day view, the week strip and a new event', async 
   await page.getByRole('radio', { name: 'Month' }).click();
   await expect(page.getByRole('region', { name: /, month$/ })).toBeVisible();
 });
+
+test('Vision board on a phone: two columns, the + sheet and words', async ({ page }) => {
+  await page.goto('/vision');
+  await expect(page.getByRole('heading', { level: 1, name: 'Vision board' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to Home' })).toBeVisible();
+  await page.getByRole('button', { name: 'Add to board' }).click();
+  await page.getByRole('dialog', { name: 'Add to board' }).getByRole('button', { name: 'Add words' }).click();
+  const words = page.getByRole('dialog', { name: 'Add words' });
+  await words.getByLabel('Words').fill('Sunday dinners, phones away.');
+  await words.getByRole('button', { name: 'Add to board' }).click();
+  await expect(page.getByRole('article', { name: 'Sunday dinners, phones away.' })).toBeVisible();
+  await page.getByRole('link', { name: 'Back to Home' }).click();
+  await expect(page).toHaveURL(/\/$/);
+});

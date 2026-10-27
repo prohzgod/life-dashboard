@@ -15,6 +15,7 @@ import { ProfilePage } from '@/screens/profile/ProfilePage';
 import { EditProfilePage } from '@/screens/profile/EditProfilePage';
 import { TaskRedirect } from '@/screens/tasks/TaskRedirect';
 import { CalendarPage } from '@/screens/calendar/CalendarPage';
+import { VisionPage } from '@/screens/vision/VisionPage';
 
 export const routes: RouteObject[] = [
   {
@@ -38,7 +39,7 @@ export const routes: RouteObject[] = [
       { path: 'library/photos', element: <LazyLibraryPage mode="photos" /> },
       { path: 'library/day/:day', element: <LazyLibraryPage mode="day" /> },
       { path: 'library/:nodeId', element: <LazyLibraryPage mode="node" /> },
-      { path: 'vision', element: <ScreenPage screen="vision" /> },
+      { path: 'vision', element: <VisionPage /> },
       { path: 'finance', element: <ScreenPage screen="finance" /> },
       { path: 'health', element: <ScreenPage screen="health" /> },
       { path: 'assistant', element: <ScreenPage screen="assistant" /> },

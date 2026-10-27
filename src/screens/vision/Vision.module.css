@@ -1,0 +1,653 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: calc(100dvh - 28px - var(--desktop-padding));
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.heading {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.eyebrow {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-display-m-size);
+  font-variant-numeric: lining-nums;
+  font-weight: var(--text-display-m-weight);
+  letter-spacing: var(--text-display-m-tracking);
+  line-height: var(--text-display-m-line);
+}
+
+.wordChip {
+  margin-bottom: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-size: var(--text-body-s-size);
+  text-decoration: none;
+}
+
+.wordChip strong {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-variant-numeric: lining-nums;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.filter > button {
+  width: auto;
+  height: 36px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.filterLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.quiet {
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+  line-height: var(--text-body-s-line);
+}
+
+/* ---- Grid ---- */
+
+.grid {
+  --row: max(110px, calc((100dvh - 236px) / 6));
+
+  display: grid;
+  flex-grow: 1;
+  grid-auto-flow: row dense;
+  grid-auto-rows: var(--row);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.gridDrop {
+  grid-column: span 2;
+}
+
+/* ---- Cards ---- */
+
+.card {
+  --card-bg: var(--sunken-2);
+  --card-ink: var(--ink);
+
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--card-bg);
+  color: var(--card-ink);
+}
+
+.wordsCard {
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 22px;
+}
+
+.bold {
+  --card-bg: var(--inverse);
+  --card-ink: var(--on-inverse);
+}
+
+.cardTop {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-width: 0;
+  padding-right: 32px;
+}
+
+.imageCard .cardTop {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+}
+
+.areaLabel {
+  overflow: hidden;
+  color: var(--card-ink);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bold .areaLabel {
+  color: var(--inverse-accent);
+}
+
+.words {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-variant-numeric: lining-nums;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.17;
+  overflow-wrap: break-word;
+}
+
+.goalChip {
+  flex-shrink: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--on-inverse);
+  color: var(--inverse);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.goalChip:hover {
+  text-decoration: underline;
+}
+
+.picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.picturePlaceholder {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  color: var(--card-ink);
+}
+
+.caption {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  max-width: calc(100% - 28px);
+  overflow: hidden;
+  padding: var(--space-1) 10px;
+  border-radius: var(--radius-md);
+  background: var(--glass);
+  color: var(--ink);
+  font-size: var(--text-body-s-size);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editButton {
+  display: flex;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.card:hover .editButton,
+.editButton:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .editButton {
+    opacity: 1;
+  }
+}
+
+/* ---- Drop zone and empty board ---- */
+
+.drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 96px;
+  padding: var(--space-4);
+  border: 1.5px dashed var(--line-strong);
+  border-radius: 16px;
+  background: var(--subtle);
+  color: var(--ink-2);
+  font-size: 14px;
+  text-align: center;
+}
+
+.dropOver {
+  border-color: var(--primary);
+  background: var(--primary-softer);
+}
+
+.inlineButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--link);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.emptyTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-title-size);
+  font-weight: var(--text-title-weight);
+  line-height: var(--text-title-line);
+}
+
+.emptyActions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* ---- Free canvas ---- */
+
+.canvasWrap {
+  position: relative;
+  width: 100%;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 16px;
+  background: var(--subtle);
+  background-image: radial-gradient(var(--line) 1px, transparent 1px);
+  background-size: 24px 24px;
+  transform-origin: top left;
+}
+
+.placed {
+  position: absolute;
+}
+
+.placedCard {
+  width: 100%;
+  height: 100%;
+  box-shadow: var(--shadow-sm);
+}
+
+.moveHandle,
+.resizeHandle {
+  position: absolute;
+  z-index: 3;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease);
+  touch-action: none;
+}
+
+.moveHandle {
+  display: flex;
+  top: 10px;
+  left: 50%;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  color: var(--ink);
+  transform: translateX(-50%);
+  cursor: grab;
+}
+
+.resizeHandle {
+  right: 4px;
+  bottom: 4px;
+  width: 18px;
+  height: 18px;
+  border-right: 3px solid var(--ink-3);
+  border-bottom: 3px solid var(--ink-3);
+  border-radius: 0 0 6px;
+  background: transparent;
+  cursor: nwse-resize;
+}
+
+.placed:hover .moveHandle,
+.placed:hover .resizeHandle,
+.moveHandle:focus-visible,
+.resizeHandle:focus-visible {
+  opacity: 1;
+}
+
+/* ---- Dialogs ---- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.fieldLabel {
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color-scheme: inherit;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.field textarea {
+  height: auto;
+  padding: var(--space-2) 10px;
+  resize: vertical;
+}
+
+.fieldRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 36px;
+  font-size: var(--text-body-s-size);
+}
+
+.formError {
+  color: var(--danger);
+  font-size: var(--text-body-s-size);
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.dangerButton {
+  color: var(--danger);
+}
+
+.textLink {
+  color: var(--link);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  max-height: 360px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.photoChoice {
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--sunken);
+}
+
+.photoChoice img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoPicked {
+  border-color: var(--primary);
+}
+
+/* ---- Phone ---- */
+
+.phone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.phoneHeader {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--touch-min);
+}
+
+.phoneBack {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--touch-min);
+  padding-right: 10px;
+  color: var(--link);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.phoneTitle {
+  position: absolute;
+  right: 0;
+  left: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
+}
+
+.roundButton {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink-2);
+}
+
+.phoneWord {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+}
+
+.wordPill {
+  padding: 3px var(--space-3);
+  border-radius: 14px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 10px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardPhone {
+  height: 150px;
+}
+
+.cardPhone.wordsCard.tall {
+  height: 200px;
+}
+
+.cardPhone.imageCard {
+  height: 170px;
+}
+
+.cardPhone.imageCard.tall {
+  height: 230px;
+}
+
+.cardPhone.wordsCard .cardTop {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.cardPhone.wordsCard {
+  padding: 14px;
+}
+
+.cardPhone .areaLabel {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.cardPhone .goalChip {
+  padding: 4px 9px;
+  font-size: 11px;
+}
+
+.cardPhone .caption {
+  right: 10px;
+  bottom: 10px;
+  left: 10px;
+  padding: 3px var(--space-2);
+  font-size: 11px;
+}
+
+.cardPhone .cardTop {
+  padding-right: 34px;
+}
+
+.cardPhone.imageCard .cardTop {
+  top: 10px;
+  left: 10px;
+}
+
+.cardPhone .editButton {
+  top: 6px;
+  right: 6px;
+}
+
+.sheetActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sheetActions > button {
+  justify-content: center;
+  min-height: var(--touch-min);
+}

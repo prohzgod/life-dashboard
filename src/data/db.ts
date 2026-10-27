@@ -23,6 +23,7 @@ import type {
   Tag,
   Tagging,
   Task,
+  VisionCard,
 } from './types';
 
 /**
@@ -52,6 +53,7 @@ export class LifeDb extends Dexie {
   reviews!: Table<Review, string>;
   calendars!: Table<Calendar, string>;
   events!: Table<CalendarEvent, string>;
+  visionCards!: Table<VisionCard, string>;
   meta!: Table<MetaEntry, string>;
 
   constructor(name = 'life-dashboard') {
@@ -116,6 +118,8 @@ export class LifeDb extends Dexie {
           .toCollection()
           .modify((event: CalendarEvent) => normalizeEvent(event)),
       );
+    // v6: vision board cards.
+    this.version(6).stores({ visionCards: 'id, spaceId, sortKey, updatedAt' });
   }
 }
 
@@ -181,6 +185,7 @@ export const dataTableNames = [
   'reviews',
   'calendars',
   'events',
+  'visionCards',
 ] as const satisfies ReadonlyArray<keyof LifeDb>;
 
 export type DataTableName = (typeof dataTableNames)[number];

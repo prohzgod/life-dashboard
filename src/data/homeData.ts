@@ -1,6 +1,7 @@
 import { checklistProgress } from '@/domain/blocks';
 import { clockLabel, minutesOfDay, parseClock, spanOnDay } from '@/domain/calendar';
 import { loadCalendarRange } from './calendar';
+import { listVisionCards } from './vision';
 import { addDays, isoWeek, startOfWeek, toDay, type Day } from '@/domain/days';
 import { summarizeHabit } from '@/domain/habits';
 import { habitHeatmap } from '@/domain/stats';
@@ -28,13 +29,14 @@ export type HomeData = {
   review: { week: number; done: boolean; isSunday: boolean };
   progress: { weeks: Array<Array<number | null>>; consistency: number | null };
   sleep: { last: number | null; week: Array<number | null> };
-  vision: { word: string | null };
+  /** The first cards' colors, for the swatches; empty until the board has cards. */
+  vision: { word: string | null; swatches: string[] };
   pins: Map<string, PinnedView>;
 };
 
 /** Everything the Home widgets show, in one read. */
 export async function loadHomeData(today: Day): Promise<HomeData> {
-  const [widgets, tasks, board, habits, entries, reviewed, areas, day] = await Promise.all([
+  const [widgets, tasks, board, habits, entries, reviewed, areas, day, visionCards] = await Promise.all([
     listHomeWidgets(),
     tasksRepo.list(),
     loadGoalBoard(today),
@@ -43,6 +45,7 @@ export async function loadHomeData(today: Day): Promise<HomeData> {
     listReviewedWeeks(),
     areasRepo.list(),
     loadCalendarRange(today, addDays(today, 1), today),
+    listVisionCards(),
   ]);
   const withDay = tasks.map((t) => ({ ...t, completedOn: t.completedAt ? toDay(new Date(t.completedAt)) : null }));
   const todays = withDay.filter((t) => inView(t, 'today', today)).sort(compareForDay);
@@ -111,7 +114,10 @@ export async function loadHomeData(today: Day): Promise<HomeData> {
     review: { week: isoWeek(today), done: reviewed.includes(weekStart), isSunday: new Date(`${today}T12:00:00`).getDay() === 0 },
     progress: { weeks: heat, consistency: totals.counted ? totals.done / totals.counted : null },
     sleep: { last: nights[6] ?? nights[5] ?? null, week: nights },
-    vision: { word: vision?.wordOfYear ?? null },
+    vision: {
+      word: vision?.wordOfYear ?? null,
+      swatches: visionCards.slice(0, 3).map((c) => (c.bold ? 'var(--inverse)' : `var(--${color(c.areaId) ?? 'sunken-2'}${color(c.areaId) ? '-soft' : ''})`)),
+    },
     pins,
   };
 }

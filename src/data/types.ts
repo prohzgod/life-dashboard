@@ -303,6 +303,25 @@ export interface CalendarEvent extends BaseRecord {
   notes: string;
 }
 
+export interface VisionCard extends BaseRecord {
+  /** `words`: a quote or intention set large. `image`: a picture with an optional caption. */
+  kind: 'words' | 'image';
+  areaId: string | null;
+  /** The words, or the image's caption. */
+  text: string;
+  /** For image cards: the picture, stored in `attachments`. */
+  attachmentId: string | null;
+  /** A goal pinned to the card, shown with its progress. */
+  goalId: string | null;
+  /** S spans two rows of the grid, L three. */
+  size: 'S' | 'L';
+  /** Words in reverse (midnight card, light type) instead of the area's soft color. */
+  bold: boolean;
+  /** Where it sits on the free canvas, in board pixels; null until moved there. */
+  canvas: { x: number; y: number; w: number; h: number } | null;
+  sortKey: string;
+}
+
 /** Device bookkeeping (seed version, current space). Not user data, not exported. */
 export interface MetaEntry {
   key: string;

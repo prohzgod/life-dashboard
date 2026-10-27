@@ -153,9 +153,9 @@ export function Widget({ widget, data, today }: Props) {
       return (
         <Link to="/vision" className={cx(styles.tile, styles.row)}>
           <span className={styles.swatches} aria-hidden="true">
-            <span style={{ background: 'var(--inverse)' }} />
-            <span style={{ background: 'var(--family-soft)' }} />
-            <span style={{ background: 'var(--health-soft)' }} />
+            {(data.vision.swatches.length ? data.vision.swatches : ['var(--inverse)', 'var(--family-soft)', 'var(--health-soft)']).map((bg, i) => (
+              <span key={i} style={{ background: bg }} />
+            ))}
           </span>
           <span className={styles.rowText}>
             <span className={styles.smallLabel}>Vision</span>

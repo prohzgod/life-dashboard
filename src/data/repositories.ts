@@ -24,6 +24,7 @@ import type {
   Tag,
   Tagging,
   Task,
+  VisionCard,
 } from './types';
 
 const bySortKey = <T extends { sortKey: string }>(a: T, b: T) => (a.sortKey < b.sortKey ? -1 : a.sortKey > b.sortKey ? 1 : 0);
@@ -94,3 +95,5 @@ export const homeWidgetsRepo = createRepository<HomeWidget>(db.homeWidgets);
 export const reviewsRepo = createRepository<Review>(db.reviews);
 export const calendarsRepo = createRepository<Calendar>(db.calendars);
 export const eventsRepo = createRepository<CalendarEvent>(db.events);
+
+export const visionCardsRepo = createRepository<VisionCard>(db.visionCards);
