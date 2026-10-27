@@ -39,6 +39,7 @@ PROMPTS.md describes a cloud branch-and-PR flow. **This repo doesn't use it.**
    - Take screenshots at the design size: desktop 1440×960, phone 390×844 (profile 390×1290), light and dark.
    - Lay each one beside its design PNG and fix the differences.
 7. **Verify.** Run `npm run lint`, `npm run typecheck`, `npm test` and `npm run test:e2e`. Run e2e more than once when a test drags or depends on timing.
+   - Before e2e, check nothing is listening on port 4173 (`lsof -nP -iTCP:4173 -sTCP:LISTEN`). Playwright reuses a server that's already there, and a leftover `vite preview` serves an old build.
 8. **Report and stop.** Tell the user:
    - what was built;
    - what differs from the design, and why;
@@ -55,4 +56,5 @@ PROMPTS.md describes a cloud branch-and-PR flow. **This repo doesn't use it.**
 | New field shows as `undefined` on old rows or imports | Fix it with a normalizer in both the upgrade and `backup.ts`. |
 | A screen crashes because a reader called from `useLiveQuery` writes (live queries are read-only) | Move the write into an `ensureX()` that runs from `initData`. |
 | A phone test silently never runs | It's outside `mobile.spec.ts`; move it there. |
+| New e2e tests see the old screen (a placeholder page where your new one should be) | A stale `vite preview` is on port 4173. Stop it, then rerun so Playwright builds fresh. |
 | Two links share the same accessible name ("Home") | Name back links "Back to …". |
