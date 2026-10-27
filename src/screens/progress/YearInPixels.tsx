@@ -18,7 +18,9 @@ export function YearInPixels({ year, entries, today }: { year: number; entries: 
         {grid.map((row, m) => (
           <div key={m} role="row" className={styles.pixelRow}>
             <span role="rowheader" className={styles.pixelMonth}>
-              {MONTHS[m]}
+              <span className="visually-hidden">{MONTHS[m]}</span>
+              <span aria-hidden="true" className={styles.monthFull}>{MONTHS[m]}</span>
+              <span aria-hidden="true" className={styles.monthShort}>{MONTHS[m]![0]}</span>
             </span>
             {row.map((cell, d) => {
               if (!cell) return <span key={d} className={styles.pixelGap} aria-hidden="true" />;

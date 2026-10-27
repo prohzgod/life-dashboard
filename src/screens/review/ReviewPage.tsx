@@ -8,6 +8,7 @@ import { Icon } from '@/components/icons/Icon';
 import { Button } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
 import { useToday } from '@/lib/useToday';
+import { useIsMobile } from '@/lib/useMediaQuery';
 import { formatDayShort } from '@/lib/format';
 import { StepClear } from './StepClear';
 import { StepCurrent } from './StepCurrent';
@@ -54,6 +55,55 @@ function ReviewFlow({ review, today }: { review: Review; today: Day }) {
   ];
   const go = (n: number) => void saveReviewAnswers(review.id, { step: Math.min(5, Math.max(1, n)) });
   const nextLabel = ['Next: get current', 'Next: reflect', `Next: plan week ${nextWeek}`, 'Next: wrap up'][step - 1];
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <div className={styles.page}>
+        <header className={styles.mobileTop}>
+          <Link to="/" className={styles.close} aria-label="Close and finish later">
+            <Icon name="close" size={18} />
+          </Link>
+          <span className={styles.left}>{review.completedAt ? 'Saved to your journal' : `About ${minutesLeft(step)} min left`}</span>
+          <Link to="/" className={styles.headerLink}>
+            {review.completedAt ? 'Done' : 'Save'}
+          </Link>
+        </header>
+        <ol className={styles.dashes} aria-label="Review steps">
+          {steps.map((s, i) => (
+            <li key={s.title} aria-current={i + 1 === step ? 'step' : undefined}>
+              <button type="button" className={cx(styles.dash, (review.completedAt || i + 1 <= step) && styles.dashOn)} disabled={!!review.completedAt} onClick={() => go(i + 1)} aria-label={`Step ${i + 1}: ${s.title}`} />
+            </li>
+          ))}
+        </ol>
+        <div className={styles.mobileHeading}>
+          <span className={styles.eyebrow}>
+            Step {step} of 5 · week {isoWeek(review.periodStart)}
+          </span>
+          <h1 className={styles.mobileTitle}>{steps[step - 1]!.title}</h1>
+        </div>
+        <div className={styles.body}>
+          {step === 1 && <StepClear today={today} />}
+          {step === 2 && <StepCurrent today={today} />}
+          {step === 3 && <StepReflect review={review} today={today} />}
+          {step === 4 && <StepPlan review={review} today={today} nextWeek={nextWeek} />}
+          {step === 5 && <StepDone review={review} today={today} />}
+        </div>
+        {!review.completedAt && (
+          <footer className={styles.mobileFooter}>
+            <Button disabled={step === 1} onClick={() => go(step - 1)}>
+              Back
+            </Button>
+            {step < 5 && (
+              <Button variant="primary" className={styles.next} onClick={() => go(step + 1)}>
+                {nextLabel}
+              </Button>
+            )}
+          </footer>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className={styles.page}>

@@ -1,4 +1,4 @@
-import { blocksToAttachmentIds, blocksToLinks, blocksToText } from './blocks';
+import { blocksToAttachmentIds, blocksToLinks, blocksToText, checklistProgress } from './blocks';
 
 const doc = [
   { type: 'heading', props: { level: 2 }, content: [{ type: 'text', text: 'Before we go', styles: {} }], children: [] },
@@ -56,5 +56,21 @@ describe('blocksToLinks', () => {
 describe('blocksToAttachmentIds', () => {
   it('finds attachments in images and galleries', () => {
     expect(blocksToAttachmentIds(doc)).toEqual(['01HZY8M4X1N3ABCDEF0123456A', '01HZY8M4X1N3ABCDEF0123456B']);
+  });
+});
+
+describe('checklistProgress', () => {
+  it('counts the first checklist under its heading', () => {
+    const blocks = [
+      { type: 'paragraph', content: [{ type: 'text', text: 'Intro' }] },
+      { type: 'heading', content: [{ type: 'text', text: 'Before we go' }] },
+      { type: 'checkListItem', props: { checked: true }, content: [] },
+      { type: 'checkListItem', props: { checked: false }, content: [] },
+      { type: 'checkListItem', props: { checked: false }, content: [] },
+      { type: 'paragraph', content: [] },
+      { type: 'checkListItem', props: { checked: true }, content: [] },
+    ];
+    expect(checklistProgress(blocks)).toEqual({ label: 'Before we go', done: 1, total: 3 });
+    expect(checklistProgress([{ type: 'paragraph' }])).toBeNull();
   });
 });

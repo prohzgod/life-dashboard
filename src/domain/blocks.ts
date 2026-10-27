@@ -69,3 +69,23 @@ export function blocksToAttachmentIds(blocks: unknown): string[] {
   walk(blocks, (block) => Object.values(block.props ?? {}).forEach(scan));
   return [...ids];
 }
+
+/** The first checklist in a document, labelled by the heading above it: "Before we go · 1 of 3". */
+export function checklistProgress(blocks: unknown): { label: string | null; done: number; total: number } | null {
+  if (!Array.isArray(blocks)) return null;
+  let heading: string | null = null;
+  let found: { label: string | null; done: number; total: number } | null = null;
+  for (const block of blocks as BlockLike[]) {
+    if (block.type === 'heading') {
+      if (found) break;
+      heading = inlineItems(block.content).map(inlineText).join('').trim() || null;
+    } else if (block.type === 'checkListItem') {
+      found ??= { label: heading, done: 0, total: 0 };
+      found.total++;
+      if (block.props?.checked) found.done++;
+    } else if (found) {
+      break;
+    }
+  }
+  return found;
+}

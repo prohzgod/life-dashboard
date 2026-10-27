@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { areasRepo, captureTask } from '@/data';
 import { useToday } from '@/lib/useToday';
@@ -12,7 +12,8 @@ type QuickCaptureProps = { open: boolean; onClose: () => void };
 /** ⌘N: one line into the Inbox, from anywhere. Sort it later. */
 export function QuickCapture({ open, onClose }: QuickCaptureProps) {
   const today = useToday();
-  const areas = useLiveQuery(() => areasRepo.listOrdered()) ?? [];
+  const loaded = useLiveQuery(() => areasRepo.listOrdered());
+  const areas = useMemo(() => loaded ?? [], [loaded]);
   const [saved, setSaved] = useState<string | null>(null);
 
   return (

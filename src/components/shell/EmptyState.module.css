@@ -44,3 +44,9 @@
   font-size: var(--text-body-size);
   line-height: var(--text-body-line);
 }
+
+@media (max-width: 767px) {
+  .card {
+    padding: var(--space-8) var(--space-5);
+  }
+}

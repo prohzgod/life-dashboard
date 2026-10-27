@@ -18,7 +18,7 @@ import { Button, CheckButton } from '@/components/ui';
 import { formatDayShort, formatMinutes, timeAgo, weekdayName } from '@/lib/format';
 import styles from './TaskDetail.module.css';
 
-type Props = { taskId: string; today: Day; context: string; onClose: () => void };
+type Props = { taskId: string; today: Day; context: string; onClose: () => void; /** Phones: a full screen with a back link instead of a drawer. */ mobile?: boolean };
 
 const ESTIMATES = [5, 10, 15, 30, 45, 60, 90, 120, 180];
 
@@ -50,7 +50,7 @@ function repeatOptions(task: Task, today: Day): Array<{ value: string; label: st
   return options;
 }
 
-export function TaskDetail({ taskId, today, context, onClose }: Props) {
+export function TaskDetail({ taskId, today, context, onClose, mobile }: Props) {
   const data = useLiveQuery(async () => {
     const task = await tasksRepo.get(taskId);
     if (!task) return { task: null };
@@ -67,7 +67,7 @@ export function TaskDetail({ taskId, today, context, onClose }: Props) {
   if (!data.task) {
     return (
       <aside className={styles.drawer} aria-label="Task details">
-        <DrawerTop context={context} onClose={onClose} />
+        <DrawerTop context={context} onClose={onClose} mobile={mobile} />
         <p className={styles.gone}>This task was deleted or moved to another space.</p>
       </aside>
     );
@@ -80,8 +80,8 @@ export function TaskDetail({ taskId, today, context, onClose }: Props) {
   const doneSubtasks = subtasks.filter((s) => s.status === 'done').length;
 
   return (
-    <aside className={styles.drawer} aria-label="Task details">
-      <DrawerTop context={task.doOn ? `${context} › ${formatDayShort(task.doOn)}` : context} onClose={onClose} />
+    <aside className={mobile ? `${styles.drawer} ${styles.mobile}` : styles.drawer} aria-label="Task details">
+      <DrawerTop context={mobile ? context : task.doOn ? `${context} › ${formatDayShort(task.doOn)}` : context} onClose={onClose} mobile={mobile} />
 
       <div className={styles.titleRow}>
         <CheckButton
@@ -246,7 +246,17 @@ export function TaskDetail({ taskId, today, context, onClose }: Props) {
   );
 }
 
-function DrawerTop({ context, onClose }: { context: string; onClose: () => void }) {
+function DrawerTop({ context, onClose, mobile }: { context: string; onClose: () => void; mobile?: boolean }) {
+  if (mobile) {
+    return (
+      <div className={styles.top}>
+        <button type="button" className={styles.mobileBack} onClick={onClose} aria-label={`Back to ${context}`}>
+          <Icon name="chevronLeft" size={20} strokeWidth={2.2} />
+          {context}
+        </button>
+      </div>
+    );
+  }
   return (
     <div className={styles.top}>
       <span className={styles.breadcrumb}>{context}</span>

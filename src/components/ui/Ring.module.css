@@ -1,0 +1,17 @@
+.ring {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring svg {
+  position: absolute;
+  inset: 0;
+}
+
+.center {
+  position: relative;
+  font-variant-numeric: lining-nums tabular-nums;
+}

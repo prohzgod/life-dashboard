@@ -1,0 +1,94 @@
+.body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--sunken-2);
+  color: var(--ink-2);
+}
+
+.kinds {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.kinds button {
+  justify-content: center;
+  height: 38px;
+}
+
+.text {
+  min-height: 104px;
+  padding: var(--space-3) 14px;
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  font-size: 16px;
+  line-height: 1.5;
+  resize: none;
+}
+
+.text:focus {
+  outline: none;
+}
+
+.understood {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+}
+
+.chips,
+.chips > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.save {
+  height: 48px;
+  font-size: 15px;
+}
+
+.status {
+  min-height: 1em;
+  color: var(--success);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.status:empty {
+  display: none;
+}
+
+.offline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-well);
+  background: var(--warning-soft);
+  color: var(--warning-ink);
+  font-size: var(--text-body-s-size);
+  line-height: 1.45;
+}

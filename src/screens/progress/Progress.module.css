@@ -289,3 +289,50 @@ a.pixel:hover {
 .pattern + .pattern {
   border-top: 1px solid var(--line-soft);
 }
+
+/* Phones */
+@media (max-width: 767px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .tiles > :last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+
+  .pixelRow {
+    grid-template-columns: 14px repeat(31, minmax(0, 1fr));
+    gap: 2px;
+  }
+
+  .pixel,
+  .pixelGap {
+    width: auto;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: 2px;
+  }
+
+  .pixelMonth {
+    font-size: 9px;
+  }
+
+  .stepper {
+    display: none;
+  }
+}
+
+.monthShort {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .monthFull {
+    display: none;
+  }
+
+  .monthShort {
+    display: inline;
+  }
+}

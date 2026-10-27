@@ -33,3 +33,39 @@
 .skip:focus {
   transform: none;
 }
+
+/* Phones */
+.mobile {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.mobileMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: 20px var(--mobile-gutter) var(--space-6);
+}
+
+.mobileMain:focus {
+  outline: none;
+}
+
+.withTabBar .mobileMain {
+  padding-bottom: calc(var(--tabbar-height) + var(--space-6) + env(safe-area-inset-bottom, 0px));
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 2px;
+  min-height: var(--touch-min);
+  margin: -14px 0 -10px -6px;
+  padding-right: var(--space-2);
+  color: var(--link);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}

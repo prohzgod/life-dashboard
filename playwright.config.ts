@@ -13,7 +13,11 @@ export default defineConfig({
     viewport: { width: 1440, height: 960 },
     trace: 'on-first-retry',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 960 } } }],
+  projects: [
+    { name: 'chromium', testIgnore: /mobile\.spec\.ts$/, use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 960 } } },
+    // Phones: the design's 390×844, with touch.
+    { name: 'phone', testMatch: /mobile\.spec\.ts$/, use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true } },
+  ],
   // The service worker only exists in a production build, so e2e runs against `vite preview`.
   webServer: {
     command: `npm run build && npm run preview -- --port ${port} --strictPort`,

@@ -1,5 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
+import { Segmented } from '@/components/ui';
+import { useIsMobile } from '@/lib/useMediaQuery';
 import { inView, rolledOverDays, sortForView, groupByDay, countViews, type TaskView } from '@/domain/tasks';
 import { addDays, type Day } from '@/domain/days';
 import { captureTask, listTaskTags, tasksRepo, type Task } from '@/data';
@@ -31,6 +34,8 @@ export function TasksPage() {
   const { pathname } = useLocation();
   const [params, setParams] = useSearchParams();
   const lookups = useTaskLookups();
+  const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const areaId = params.get('area');
   const tagId = params.get('tag');
   const requested = params.get('view') as TaskView | null;
@@ -69,14 +74,17 @@ export function TasksPage() {
     const upcoming = tasks.filter((t) => inView(t, 'upcoming', today) && t.doOn! <= addDays(today, 7));
     body = (
       <>
-        <QuickAddField
-          variant="box"
-          label="Capture anything"
-          placeholder="Capture anything. Natural language works."
-          today={today}
-          areas={lookups.areas}
-          onSubmit={(text) => captureTask(text, { today, status: 'inbox' })}
-        />
+        {/* Phones capture with the + button instead. */}
+        {!isMobile && (
+          <QuickAddField
+            variant="box"
+            label="Capture anything"
+            placeholder="Capture anything. Natural language works."
+            today={today}
+            areas={lookups.areas}
+            onSubmit={(text) => captureTask(text, { today, status: 'inbox' })}
+          />
+        )}
         <InboxList tasks={sortForView(tasks.filter((t) => inView(t, 'inbox', today)), 'inbox')} today={today} lookups={lookups} onOpen={openTask} />
         {upcoming.length > 0 && (
           <section className={styles.section} aria-labelledby="upcoming-heading">
@@ -121,6 +129,33 @@ export function TasksPage() {
         (area ? t.areaId === area.id : !!tag && (lookups.tagsByTask.get(t.id) ?? []).includes(tag.name)),
     );
     body = <TaskList tasks={sortForView(list, 'upcoming')} today={today} lookups={lookups} selectedId={selectedId} onOpen={openTask} empty="Nothing open here." showDay />;
+  }
+
+  if (isMobile) {
+    if (selectedId) return <TaskDetail key={selectedId} taskId={selectedId} today={today} context={title} onClose={closeTask} mobile />;
+    const tab = view === 'inbox' || view === 'today' || view === 'upcoming' || view === 'someday' ? view : 'today';
+    return (
+      <div className={styles.mobilePage}>
+        <header className={styles.mobileHeader}>
+          <h1 className={styles.mobileTitle}>Tasks</h1>
+          <ProfileAvatar />
+        </header>
+        <Segmented
+          label="Task lists"
+          className={styles.mobileTabs}
+          options={[
+            { value: 'inbox', label: counts.inbox ? `Inbox ${counts.inbox}` : 'Inbox' },
+            { value: 'today', label: 'Today' },
+            { value: 'upcoming', label: 'Upcoming' },
+            { value: 'someday', label: 'Someday' },
+          ]}
+          value={tab}
+          onChange={(v) => navigate(v === 'inbox' ? '/inbox' : `/tasks?view=${v}`)}
+        />
+        <p className={styles.mobileSub}>{view === 'inbox' && counts.inbox ? `${counts.inbox} to sort. Accept, or open one for more.` : subtitle}</p>
+        {data && body}
+      </div>
+    );
   }
 
   return (

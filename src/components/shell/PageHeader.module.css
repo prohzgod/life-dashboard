@@ -41,3 +41,23 @@
   align-items: center;
   gap: 10px;
 }
+
+@media (max-width: 767px) {
+  .header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .title {
+    font-size: var(--text-mobile-title-size);
+    line-height: var(--text-mobile-title-line);
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .actions > * {
+    flex-grow: 1;
+  }
+}

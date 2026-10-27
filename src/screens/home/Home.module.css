@@ -1,0 +1,424 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-display-m-size);
+  font-weight: 500;
+  line-height: var(--text-display-m-line);
+  letter-spacing: -0.01em;
+}
+
+.headerSide {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.saved {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.offline {
+  background: var(--warning-soft);
+  color: var(--warning-ink);
+}
+
+.savedDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+}
+
+/* The bento grid */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(var(--bento-columns), minmax(0, 1fr));
+  grid-auto-rows: var(--bento-row);
+  grid-auto-flow: row dense;
+  gap: var(--bento-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bento > li {
+  display: flex;
+  min-width: 0;
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  padding: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.tinted {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 0 var(--space-4);
+}
+
+.inverse {
+  border-color: transparent;
+  background: var(--inverse);
+  color: var(--on-inverse);
+  padding: 0 var(--space-3) 0 18px;
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rowTitle {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.rowSub {
+  overflow: hidden;
+  color: var(--ink-2);
+  font-size: var(--text-body-s-size);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--ink-3);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-3);
+  font-size: var(--text-label-size);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tinted .label,
+.tinted .meta {
+  color: inherit;
+}
+
+.smallLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ink-3);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tinted .smallLabel {
+  color: inherit;
+}
+
+.meta {
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  line-height: 1.35;
+}
+
+.good {
+  color: var(--success);
+}
+
+.ringText {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ringDisplay {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.goalBody {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.goalTitle {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+  line-height: 17px;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.calTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.calDate {
+  display: flex;
+  flex-direction: column;
+}
+
+.calDay {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.calNumber {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 38px;
+  font-variant-numeric: lining-nums;
+}
+
+.pill {
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.calList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: auto;
+  font-size: var(--text-caption-size);
+}
+
+.calList span {
+  display: flex;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calList strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.reviewTitle {
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.reviewSub {
+  color: var(--on-inverse-2);
+  font-size: var(--text-caption-size);
+}
+
+.start {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--inverse-accent);
+  color: var(--inverse);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.heat {
+  display: flex;
+  gap: 2px;
+}
+
+.heatCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heatCell {
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.bigLine {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.big {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 26px;
+  font-variant-numeric: lining-nums;
+}
+
+.value {
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.bars {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-end;
+  gap: 3px;
+  height: 32px;
+}
+
+.bar {
+  width: 7px;
+  border-radius: 2px;
+}
+
+.swatches {
+  display: flex;
+  gap: 3px;
+}
+
+.swatches span {
+  width: 16px;
+  height: 40px;
+  border-radius: 7px;
+}
+
+.word {
+  overflow: hidden;
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pinTitle {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 25px;
+}
+
+.pinSmall {
+  justify-content: center;
+}
+
+.pinTitleSmall {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pinProgress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.track {
+  display: block;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.tile:not(.tinted) .track {
+  background: var(--track);
+}
+
+.track span {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.editTile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-tile);
+  color: var(--ink-2);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+  text-decoration: none;
+}

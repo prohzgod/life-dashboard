@@ -6,5 +6,6 @@ export { Chip, type ChipTone } from './Chip';
 export { Menu, type MenuItem } from './Menu';
 export { PaceBar } from './PaceBar';
 export { Segmented, type SegmentedOption } from './Segmented';
+export { Sheet } from './Sheet';
 export { StatTile } from './StatTile';
 export { Switch } from './Switch';

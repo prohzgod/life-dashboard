@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ancestors } from '@/domain/library';
-import { journalDayOf, LibraryError, renameNode, savePageContent, toggleFavorite, trashNode, type LibraryNode } from '@/data';
+import { journalDayOf, LibraryError, pinnedWidget, pinToHome, renameNode, savePageContent, toggleFavorite, trashNode, unpinFromHome, type LibraryNode } from '@/data';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { Toast } from '@/components/ui/Toast';
+import { useIsMobile } from '@/lib/useMediaQuery';
+import { PageOptionsSheet } from './PageOptionsSheet';
 import { Icon } from '@/components/icons/Icon';
 import { Menu } from '@/components/ui';
 import { dayToDate } from '@/domain/days';
@@ -19,11 +23,37 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
   const [error, setError] = useState('');
   const day = journalDayOf(node);
   const trail = ancestors(all, node.id);
+  const isMobile = useIsMobile();
+  const [sheet, setSheet] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const clearToast = useCallback(() => setToast(null), []);
+  const pinned = useLiveQuery(async () => !!(await pinnedWidget('node', node.id)), [node.id]);
+
+  async function setPinned(pin: boolean) {
+    if (pin) await pinToHome('node', node.id);
+    else await unpinFromHome('node', node.id);
+    setToast(pin ? 'Pinned to Home' : 'Removed from Home');
+  }
+
+  async function trash() {
+    try {
+      await trashNode(node.id);
+      navigate(node.parentId ? `/library/${node.parentId}` : '/library');
+    } catch (e) {
+      setError(e instanceof LibraryError ? e.message : 'That didn’t work.');
+    }
+  }
 
   return (
     <>
       <main className={styles.main}>
         <div className={styles.topBar}>
+          {isMobile ? (
+            <Link to={trail.at(-1) ? `/library/${trail.at(-1)!.id}` : '/library'} className={styles.mobileBack} aria-label={`Back to ${trail.at(-1)?.title ?? 'Library'}`}>
+              <Icon name="chevronLeft" size={20} strokeWidth={2.2} />
+              {trail.at(-1)?.title ?? 'Library'}
+            </Link>
+          ) : (
           <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
             {trail.map((a) => (
               <span key={a.id}>
@@ -35,31 +65,27 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
               {node.title}
             </span>
           </nav>
+          )}
           <div className={styles.topActions}>
             <span className={styles.saved} role="status">
               <span className={saving ? styles.savingDot : styles.savedDot} aria-hidden="true" />
               {saving ? 'Saving…' : 'Saved on this device'}
             </span>
-            <Menu
-              label="Page options"
-              trigger={<Icon name="more" size={18} strokeWidth={3} />}
-              items={[
-                { label: node.favoritedAt ? 'Remove from favourites' : 'Add to favourites', onSelect: () => void toggleFavorite(node.id) },
-                {
-                  label: 'Move to Trash',
-                  danger: true,
-                  disabled: node.isSystem,
-                  onSelect: async () => {
-                    try {
-                      await trashNode(node.id);
-                      navigate(node.parentId ? `/library/${node.parentId}` : '/library');
-                    } catch (e) {
-                      setError(e instanceof LibraryError ? e.message : 'That didn’t work.');
-                    }
-                  },
-                },
-              ]}
-            />
+            {isMobile ? (
+              <button type="button" className={styles.optionsButton} aria-label="Page options" onClick={() => setSheet(true)}>
+                <Icon name="more" size={18} strokeWidth={3} />
+              </button>
+            ) : (
+              <Menu
+                label="Page options"
+                trigger={<Icon name="more" size={18} strokeWidth={3} />}
+                items={[
+                  { label: pinned ? 'Unpin from Home' : 'Pin to Home', onSelect: () => void setPinned(!pinned) },
+                  { label: node.favoritedAt ? 'Remove from favourites' : 'Add to favourites', onSelect: () => void toggleFavorite(node.id) },
+                  { label: 'Move to Trash', danger: true, disabled: node.isSystem, onSelect: () => void trash() },
+                ]}
+              />
+            )}
           </div>
         </div>
         <article className={styles.article}>
@@ -78,7 +104,30 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
           <PageEditor key={node.id} node={node} onSave={(doc) => void savePageContent(node.id, doc)} onSaving={setSaving} />
         </article>
       </main>
-      <PageRail node={node} />
+      {!isMobile && <PageRail node={node} />}
+      <PageOptionsSheet
+        open={sheet}
+        onClose={() => setSheet(false)}
+        node={node}
+        parentTitle={trail.at(-1)?.title ?? null}
+        onPin={(pin) => void setPinned(pin)}
+        onTrash={() => {
+          setSheet(false);
+          void trash();
+        }}
+      />
+      {toast && (
+        <Toast onDone={clearToast}>
+          <Icon name="pin" size={15} />
+          {toast}
+          {toast === 'Pinned to Home' && (
+            <>
+              {' · '}
+              <Link to="/">View</Link>
+            </>
+          )}
+        </Toast>
+      )}
     </>
   );
 }

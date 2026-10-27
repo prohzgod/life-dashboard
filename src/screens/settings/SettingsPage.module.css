@@ -26,3 +26,17 @@
   color: var(--ink);
   font-weight: 600;
 }
+
+@media (max-width: 767px) {
+  .tabs {
+    margin: 0 calc(-1 * var(--mobile-gutter));
+    padding: 0 var(--mobile-gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tab {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}

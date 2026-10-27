@@ -12,6 +12,8 @@ import { GoalDetail } from './GoalDetail';
 import { GoalForm } from './GoalForm';
 import { GoalTree } from './GoalTree';
 import { VisionCard } from './VisionCard';
+import { useIsMobile } from '@/lib/useMediaQuery';
+import { MobileGoals } from './MobileGoals';
 import styles from './Goals.module.css';
 
 export function GoalsPage() {
@@ -26,6 +28,21 @@ export function GoalsPage() {
   const selectedId = id ?? live.find((v) => !v.goal.parentGoalId)?.goal.id ?? null;
   const selected = board?.views.find((v) => v.goal.id === selectedId) ?? null;
   const thisYear = board?.views.filter((v) => year(v.goal.endDate) === year(today)) ?? [];
+  const isMobile = useIsMobile();
+  const form = (
+    <GoalForm open={creating} onClose={() => setCreating(false)} today={today} goals={board?.views.map((v) => v.goal) ?? []} areas={board?.areas ?? []} onCreated={(goalId) => navigate(`/goals/${goalId}`)} />
+  );
+
+  if (isMobile) {
+    if (!board) return null;
+    const chosen = id ? board.views.find((v) => v.goal.id === id) : null;
+    return (
+      <>
+        {chosen ? <GoalDetail key={chosen.goal.id} view={chosen} board={board} today={today} /> : <MobileGoals board={board} today={today} onCreate={() => setCreating(true)} />}
+        {form}
+      </>
+    );
+  }
 
   return (
     <div className={styles.page}>
@@ -63,7 +80,7 @@ export function GoalsPage() {
         )}
       </div>
       {board && (selected ? <GoalDetail key={selected.goal.id} view={selected} board={board} today={today} /> : <EmptyDetail onCreate={() => setCreating(true)} />)}
-      <GoalForm open={creating} onClose={() => setCreating(false)} today={today} goals={board?.views.map((v) => v.goal) ?? []} areas={board?.areas ?? []} onCreated={(goalId) => navigate(`/goals/${goalId}`)} />
+      {form}
     </div>
   );
 }

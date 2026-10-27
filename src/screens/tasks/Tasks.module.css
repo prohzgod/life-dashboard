@@ -276,3 +276,83 @@
 .moreButton:hover {
   background: var(--sunken);
 }
+
+/* Phones */
+.mobilePage {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mobileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobileTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-mobile-title-size);
+  font-weight: 500;
+  line-height: var(--text-mobile-title-line);
+}
+
+.mobileTabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.mobileTabs button {
+  justify-content: center;
+  height: 38px;
+  padding: 0 4px;
+  white-space: nowrap;
+}
+
+.mobileSub {
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+}
+
+@media (max-width: 767px) {
+  .inbox {
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .inboxItem {
+    flex-wrap: wrap;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .inboxItem + .inboxItem {
+    border-top: 1px solid var(--line);
+  }
+
+  .inboxBody {
+    flex-basis: calc(100% - 42px);
+  }
+
+  .inboxActions {
+    flex-direction: row-reverse;
+    width: 100%;
+    justify-content: flex-start;
+    padding-left: 42px;
+  }
+
+  .inboxActions button {
+    height: var(--touch-min);
+    min-width: var(--touch-min);
+  }
+
+  .listCard {
+    padding: 4px 14px;
+  }
+}

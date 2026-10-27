@@ -648,3 +648,23 @@ a.tile:hover {
   justify-content: flex-end;
   gap: var(--space-2);
 }
+
+/* Phones: the detail is its own screen */
+@media (max-width: 767px) {
+  .detail {
+    position: static;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .detailTitle {
+    font-size: var(--text-mobile-page-title-size);
+    line-height: var(--text-mobile-page-title-line);
+  }
+
+  .fieldRow {
+    flex-wrap: wrap;
+  }
+}

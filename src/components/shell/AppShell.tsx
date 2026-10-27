@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { mobileChrome } from '@/app/mobileChrome';
+import { useIsMobile } from '@/lib/useMediaQuery';
+import { Icon } from '../icons/Icon';
 import styles from './AppShell.module.css';
 import { CommandPalette } from './CommandPalette';
+import { MobileCapture } from './MobileCapture';
 import { QuickCapture } from './QuickCapture';
 import { Sidebar } from './Sidebar';
+import { TabBar } from './TabBar';
 
 type Overlay = 'search' | 'capture' | null;
 
 export function AppShell() {
   const [overlay, setOverlay] = useState<Overlay>(null);
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -33,6 +39,29 @@ export function AppShell() {
   }, [pathname]);
 
   const close = () => setOverlay(null);
+
+  if (isMobile) {
+    const chrome = mobileChrome(pathname, search);
+    return (
+      <div className={chrome.hideTabBar ? styles.mobile : `${styles.mobile} ${styles.withTabBar}`}>
+        <a href="#main" className={styles.skip}>
+          Skip to content
+        </a>
+        <main id="main" className={styles.mobileMain} tabIndex={-1}>
+          {chrome.back && (
+            <Link to={chrome.back.to} className={styles.back} aria-label={`Back to ${chrome.back.label}`}>
+              <Icon name="chevronLeft" size={20} strokeWidth={2.2} />
+              {chrome.back.label}
+            </Link>
+          )}
+          <Outlet />
+        </main>
+        {!chrome.hideTabBar && <TabBar active={chrome.tab} onCapture={() => setOverlay('capture')} />}
+        <CommandPalette open={overlay === 'search'} onClose={close} />
+        <MobileCapture open={overlay === 'capture'} onClose={close} />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.shell}>

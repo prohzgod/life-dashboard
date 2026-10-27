@@ -12,6 +12,8 @@ import { FocusCard } from './FocusCard';
 import { HabitsCard } from './HabitsCard';
 import { OnThisDayCard } from './OnThisDayCard';
 import { PlanCard } from './PlanCard';
+import { useIsMobile } from '@/lib/useMediaQuery';
+import { MobileToday } from './MobileToday';
 import styles from './Today.module.css';
 
 function greeting(hour: number) {
@@ -29,6 +31,10 @@ function headline(open: number | undefined) {
 }
 
 export function TodayPage() {
+  return useIsMobile() ? <MobileToday /> : <DesktopToday />;
+}
+
+function DesktopToday() {
   const today = useToday();
   const open = useLiveQuery(async () => (await tasksRepo.list((t) => isDueToday(t, today))).length, [today]);
   const day = dayOfYear(today);

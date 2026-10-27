@@ -231,3 +231,51 @@
   font-size: var(--text-caption-size);
   line-height: 1.5;
 }
+
+/* Phones: a full screen of its own */
+.mobile {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.mobile .props {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.mobile .prop {
+  min-height: 44px;
+}
+
+.mobile .section {
+  padding: 14px var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.mobile .title {
+  font-size: 34px;
+}
+
+.mobileBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--touch-min);
+  margin: -10px 0 -6px -6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font-size: 15px;
+  font-weight: 600;
+}

@@ -9,13 +9,21 @@ import { ScreenPage } from '@/screens/ScreenPage';
 import { SettingsPage } from '@/screens/settings/SettingsPage';
 import { TasksPage } from '@/screens/tasks/TasksPage';
 import { TodayPage } from '@/screens/today/TodayPage';
+import { HomeRoute } from '@/screens/home/HomeRoute';
+import { EditHomePage } from '@/screens/home/EditHomePage';
+import { ProfilePage } from '@/screens/profile/ProfilePage';
+import { EditProfilePage } from '@/screens/profile/EditProfilePage';
 import { TaskRedirect } from '@/screens/tasks/TaskRedirect';
 
 export const routes: RouteObject[] = [
   {
     element: <AppShell />,
     children: [
-      { index: true, element: <TodayPage /> },
+      { index: true, element: <HomeRoute /> },
+      { path: 'today', element: <TodayPage /> },
+      { path: 'home/edit', element: <EditHomePage /> },
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'profile/edit', element: <EditProfilePage /> },
       { path: 'inbox', element: <TasksPage /> },
       { path: 'tasks', element: <TasksPage /> },
       { path: 'tasks/:id', element: <TaskRedirect /> },

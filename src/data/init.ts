@@ -1,4 +1,6 @@
 import { db } from './db';
+import { ensureHomeWidgets } from './homeWidgets';
+import { ensureProfile } from './profile';
 import { seedIfNeeded } from './seed';
 import { setCurrentSpaceId } from './session';
 
@@ -9,6 +11,9 @@ export function initData(): Promise<void> {
   ready ??= (async () => {
     await db.open();
     setCurrentSpaceId(await seedIfNeeded());
+    // Rows added after the first seed: created on the first start that needs them.
+    await ensureHomeWidgets();
+    await ensureProfile();
   })().catch((error: unknown) => {
     ready = null;
     throw error;

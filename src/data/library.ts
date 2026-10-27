@@ -268,3 +268,24 @@ export function journalDayOf(node: Pick<LibraryNode, 'systemKey'>): Day | null {
   const m = /^journal:(\d{4}-\d{2}-\d{2})$/.exec(node.systemKey ?? '');
   return m ? m[1]! : null;
 }
+
+const textBlock = (text: string) => ({ type: 'paragraph', props: {}, content: [{ type: 'text', text, styles: {} }], children: [] });
+
+/** A quick note: the first line becomes the page title, the rest its body. Filed at the top level. */
+export async function createNoteFromText(text: string): Promise<LibraryNode> {
+  const [first = '', ...rest] = text.trim().split('\n');
+  const title = first.trim().slice(0, 120) || 'Quick note';
+  const node = await createNode({ parentId: null, kind: 'page', title });
+  const body = rest.map((l) => l.trim()).filter(Boolean);
+  if (body.length) await savePageContent(node.id, body.map(textBlock));
+  return node;
+}
+
+/** Adds a paragraph to the end of a day's Journal page. */
+export async function appendToJournal(day: Day, text: string): Promise<LibraryNode> {
+  const page = await ensureJournalPage(day);
+  const existing = Array.isArray(page.contentJson) ? page.contentJson : [];
+  const lines = text.trim().split('\n').map((l) => l.trim()).filter(Boolean);
+  await savePageContent(page.id, [...existing, ...lines.map(textBlock)]);
+  return page;
+}

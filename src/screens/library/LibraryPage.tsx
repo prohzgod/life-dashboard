@@ -5,6 +5,7 @@ import { ensureJournalPage, getNode, listLibraryNodes } from '@/data';
 import { isDay } from '@/domain/days';
 import { EmptyState } from '@/components/shell/EmptyState';
 import { useToday } from '@/lib/useToday';
+import { useIsMobile } from '@/lib/useMediaQuery';
 import { FolderView } from './FolderView';
 import { LibraryTree } from './LibraryTree';
 import { PageView } from './PageView';
@@ -17,9 +18,18 @@ type Mode = 'home' | 'day' | 'node' | 'trash' | 'photos';
 export function LibraryPage({ mode }: { mode: Mode }) {
   const params = useParams();
   const currentId = mode === 'node' ? (params.nodeId ?? null) : null;
+  const isMobile = useIsMobile();
+  // Phones: the Library tab is the tree itself; pages, Trash and photos open full-screen over it.
+  if (isMobile && mode === 'home') {
+    return (
+      <div className={styles.page}>
+        <LibraryTree currentId={null} section={null} mobile />
+      </div>
+    );
+  }
   return (
     <div className={styles.page}>
-      <LibraryTree currentId={currentId} section={mode === 'trash' || mode === 'photos' ? mode : null} />
+      {!isMobile && <LibraryTree currentId={currentId} section={mode === 'trash' || mode === 'photos' ? mode : null} />}
       {mode === 'home' && <JournalRedirect />}
       {mode === 'day' && <JournalRedirect day={params.day} />}
       {mode === 'trash' && <TrashView />}

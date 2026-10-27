@@ -7,7 +7,9 @@ import { createNode, journalDayOf, LibraryError, listLibraryNodes, listPhotos, m
 import { Icon } from '@/components/icons/Icon';
 import { cx } from '@/components/ui/cx';
 import { useToday } from '@/lib/useToday';
-import { plural } from '@/lib/format';
+import { plural, timeAgo } from '@/lib/format';
+import { Segmented } from '@/components/ui';
+import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
 import styles from './Library.module.css';
 
 type Row = { id: string; name: string; node: LibraryNode; children: Row[] };
@@ -31,13 +33,14 @@ function useElementSize<T extends HTMLElement>() {
   return [ref, size] as const;
 }
 
-type Props = { currentId: string | null; section: 'trash' | 'photos' | null };
+type Props = { currentId: string | null; section: 'trash' | 'photos' | null; /** The Library tab on phones: full width, with Tree / Recent / Photos. */ mobile?: boolean };
 
-export function LibraryTree({ currentId, section }: Props) {
+export function LibraryTree({ currentId, section, mobile }: Props) {
   const navigate = useNavigate();
   const today = useToday();
   const [query, setQuery] = useState('');
   const [message, setMessage] = useState('');
+  const [panel, setPanel] = useState<'tree' | 'recent'>('tree');
   const [boxRef, size] = useElementSize<HTMLDivElement>();
   const treeRef = useRef<TreeApi<Row> | undefined>(undefined);
 
@@ -83,7 +86,7 @@ export function LibraryTree({ currentId, section }: Props) {
   }
 
   return (
-    <aside className={styles.tree} aria-label="Library tree">
+    <aside className={mobile ? `${styles.tree} ${styles.treeMobile}` : styles.tree} aria-label="Library tree">
       <div className={styles.treeHeader}>
         <h1 className={styles.treeTitle}>Library</h1>
         <div className={styles.treeActions}>
@@ -93,6 +96,7 @@ export function LibraryTree({ currentId, section }: Props) {
           <button type="button" className={styles.iconButton} aria-label="New folder" title="New folder" onClick={() => void create('folder')}>
             <Icon name="newFolder" size={18} />
           </button>
+          {mobile && <ProfileAvatar />}
         </div>
       </div>
 
@@ -101,7 +105,36 @@ export function LibraryTree({ currentId, section }: Props) {
         <input type="search" aria-label="Search pages" placeholder="Search pages and notes" value={query} onChange={(e) => setQuery(e.target.value)} />
       </label>
 
-      {results ? (
+      {mobile && !results && (
+        <Segmented
+          label="Show"
+          options={[
+            { value: 'tree', label: 'Tree' },
+            { value: 'recent', label: 'Recent' },
+            { value: 'photos', label: 'Photos' },
+          ]}
+          value={panel}
+          onChange={(v) => (v === 'photos' ? navigate('/library/photos') : setPanel(v))}
+          className={styles.panels}
+        />
+      )}
+
+      {mobile && panel === 'recent' && !results ? (
+        <ul className={`${styles.plainList} ${styles.recent}`} aria-label="Recently edited">
+          {[...(nodes ?? [])]
+            .filter((n) => n.kind === 'page')
+            .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+            .slice(0, 20)
+            .map((n) => (
+              <li key={n.id}>
+                <Link to={`/library/${n.id}`} className={styles.result}>
+                  <span className={styles.resultTitle}>{n.title}</span>
+                  <span className={styles.resultSnippet}>Edited {timeAgo(n.updatedAt)}</span>
+                </Link>
+              </li>
+            ))}
+        </ul>
+      ) : results ? (
         <div className={styles.results} role="region" aria-label="Search results">
           {results.length === 0 && <p className={styles.treeNote}>No pages match “{query.trim()}”.</p>}
           <ul className={styles.plainList}>
@@ -138,7 +171,7 @@ export function LibraryTree({ currentId, section }: Props) {
                 data={rows}
                 width={size.width}
                 height={size.height}
-                rowHeight={30}
+                rowHeight={mobile ? 44 : 30}
                 indent={18}
                 padding={0}
                 openByDefault={false}
@@ -182,7 +215,7 @@ export function LibraryTree({ currentId, section }: Props) {
       )}
 
       <p className={styles.treeNote} role="status">
-        {message || `Drag to move or nest. On this device: ${plural((nodes ?? []).filter((n) => n.kind === 'page').length, 'page')}${photoCount ? `, ${plural(photoCount, 'image')}` : ''}.`}
+        {message || `${mobile ? 'All pages are available offline' : 'Drag to move or nest'}. On this device: ${plural((nodes ?? []).filter((n) => n.kind === 'page').length, 'page')}${photoCount ? `, ${plural(photoCount, 'image')}` : ''}.`}
       </p>
     </aside>
   );
