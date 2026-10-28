@@ -132,9 +132,9 @@
   gap: 8px;
   height: 40px;
   padding: 0 16px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
-  background: var(--surface);
+  background: var(--sunken);
   font-size: var(--text-body-s-size);
   font-weight: 600;
 }
@@ -310,7 +310,8 @@
   width: 100%;
   min-height: 48px;
   padding: 0 16px;
-  border: 1px solid var(--line);
+  border: 0;
+  border-bottom: 1px solid var(--control);
   border-radius: var(--radius-well);
   background: var(--surface);
   font-size: 16px;
@@ -341,9 +342,9 @@
   gap: 8px;
   height: 34px;
   padding: 0 var(--space-3);
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink-2);
   font-size: var(--text-caption-size);
   font-weight: 600;
@@ -364,9 +365,9 @@
 .choice {
   height: 40px;
   padding: 0 var(--space-4);
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
-  background: var(--surface);
+  background: var(--sunken);
   font-size: 14px;
 }
 
@@ -416,9 +417,9 @@
   justify-content: center;
   gap: var(--space-2);
   height: 50px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid transparent;
   border-radius: 0;
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink);
   font-size: 15px;
   font-weight: 600;

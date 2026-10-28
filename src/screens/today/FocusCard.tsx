@@ -41,7 +41,7 @@ export function FocusCard({ today }: { today: Day }) {
             expected={pace.expected}
             area={area?.color}
             valueText={value}
-            statusText={parent ? `${parent.title} · ${pace.sentence.toLowerCase()}` : pace.sentence}
+            statusText={parent ? `${parent.title}, ${pace.sentence.toLowerCase()}` : pace.sentence}
           />
         );
       })}

@@ -119,12 +119,12 @@ export function summarizeMonth(txs: readonly TxLike[], categories: readonly Cate
   };
 }
 
-/** "1 day left · $660 under budget", in plain words. */
+/** "1 day left, $660 under budget", in plain words. */
 export function budgetSentence(s: MonthSummary, money: (cents: number) => string): string {
   const left = s.daysLeft === 0 ? 'Month closed' : s.daysLeft === 1 ? '1 day left' : `${s.daysLeft} days left`;
-  if (!s.budget) return `${left} · no budget set`;
+  if (!s.budget) return `${left}, no budget set`;
   const diff = s.budget - s.spent;
-  return `${left} · ${diff >= 0 ? `${money(diff)} under budget` : `${money(-diff)} over budget`}`;
+  return `${left}, ${diff >= 0 ? `${money(diff)} under budget` : `${money(-diff)} over budget`}`;
 }
 
 export type TrendMonth = { month: Month; spent: number; budget: number; over: boolean };

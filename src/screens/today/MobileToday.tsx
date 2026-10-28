@@ -32,13 +32,13 @@ export function MobileToday() {
     <div className={styles.page}>
       <header className={styles.top}>
         <span className={styles.date}>
-          {formatDayShort(today)} · week {isoWeek(today)}
+          {formatDayShort(today)}, week {isoWeek(today)}
         </span>
         <span className={styles.side}>
           {!online && (
             <span className={styles.offline}>
               <Icon name="offline" size={14} />
-              Offline · saved here
+              Offline, saved here
             </span>
           )}
           <ProfileAvatar />

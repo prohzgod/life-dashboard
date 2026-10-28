@@ -41,7 +41,7 @@ describe('phone shell', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Quick capture' }));
     const sheet = await screen.findByRole('dialog', { name: 'Quick capture' });
     await userEvent.type(within(sheet).getByRole('textbox', { name: 'New task' }), 'Pay rent every 1st #finance');
-    expect(within(sheet).getByText('Repeats monthly · day 1')).toBeInTheDocument();
+    expect(within(sheet).getByText('Repeats monthly, day 1')).toBeInTheDocument();
     await userEvent.click(within(sheet).getByRole('button', { name: 'Save' }));
     expect(await within(sheet).findByText('“Pay rent” is in your Inbox.')).toBeInTheDocument();
     expect((await tasksRepo.list((t) => t.title === 'Pay rent'))[0]).toMatchObject({ status: 'inbox', rrule: 'FREQ=MONTHLY;BYMONTHDAY=1' });

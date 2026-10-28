@@ -15,7 +15,7 @@ export function AgendaCard({ today }: { today: Day }) {
   return (
     <Card
       title="Agenda"
-      meta={agenda?.calendars.join(' · ')}
+      meta={agenda?.calendars.join(', ')}
       className={styles.card}
       action={
         <Link to="/calendar" className={styles.cardLink}>
@@ -34,14 +34,14 @@ export function AgendaCard({ today }: { today: Day }) {
             >
               <span className={styles.agendaTime}>
                 {e.time}
-                {e.done && !e.allDay ? ' · done' : ''}
+                {e.done && !e.allDay ? ', done' : ''}
               </span>
               <span className={styles.agendaTitle}>{e.title}</span>
               <span className={styles.agendaSource}>
                 {e.source}
                 {e === next && e.soon && (
                   <>
-                    {' · '}
+                    {', '}
                     <strong className={styles.agendaSoon}>{e.soon}</strong>
                   </>
                 )}

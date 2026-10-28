@@ -3,7 +3,7 @@ import { singular, formatDayLong, formatDayRelative, formatDayShort, formatMinut
 describe('format', () => {
   it('formats days', () => {
     expect(formatDayShort('2026-10-01')).toBe('Thu 1 Oct');
-    expect(formatDayLong('2026-09-29')).toBe('Tuesday · 29 September 2026');
+    expect(formatDayLong('2026-09-29')).toBe('Tuesday, 29 September 2026');
     expect(formatDayRelative('2026-10-27', '2026-10-26')).toBe('Tomorrow');
     expect(formatDayRelative('2026-10-25', '2026-10-26')).toBe('Yesterday');
     expect(formatDayRelative('2026-10-30', '2026-10-26')).toBe('Fri 30 Oct');

@@ -68,7 +68,7 @@ export function TaskItem({ task, today, lookups, variant = 'compact', selected, 
       <li className={cx(styles.compact, selected && styles.selected, done && styles.done)}>
         {check}
         <span className={styles.compactTitle}>{title}</span>
-        {details.length > 0 && <span className={styles.details}>{details.join(' · ')}</span>}
+        {details.length > 0 && <span className={styles.details}>{details.join(', ')}</span>}
       </li>
     );
   }

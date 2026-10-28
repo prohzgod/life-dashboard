@@ -24,7 +24,7 @@ export function CaptureChips({ parsed, today, areas }: CaptureChipsProps) {
   const area = areas.find((a) => a.name === parsed.areaName);
   const chips: Array<{ key: string; label: string; tone: ChipTone; dot?: boolean }> = [];
 
-  if (parsed.doOn) chips.push({ key: 'day', label: formatDayRelative(parsed.doOn, today) + (parsed.time ? ` · ${parsed.time}` : ''), tone: 'neutral' });
+  if (parsed.doOn) chips.push({ key: 'day', label: formatDayRelative(parsed.doOn, today) + (parsed.time ? `, ${parsed.time}` : ''), tone: 'neutral' });
   if (rule) chips.push({ key: 'repeat', label: describeRRuleShort(rule), tone: 'primary' });
   if (parsed.dueOn) {
     const day = formatDayRelative(parsed.dueOn, today);

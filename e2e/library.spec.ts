@@ -24,7 +24,7 @@ async function waitForSave(page: Page) {
 test('the Library opens on today’s Journal page, filed by year and month', async ({ page }) => {
   await page.goto('/library');
   await expect(page.getByRole('heading', { level: 1, name: /^\w+day, \d+ \w+ \d{4}$/ })).toBeVisible();
-  await expect(tree(page).getByText(/ · today$/)).toBeVisible();
+  await expect(tree(page).getByText(/, today$/)).toBeVisible();
   await expect(page.getByRole('region', { name: 'Check-in' })).toContainText('No check-in yet today.');
 });
 

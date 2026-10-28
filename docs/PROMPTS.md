@@ -1,6 +1,6 @@
 # Prompts for cloud sessions
 
-Every prompt builds against the approved designs in `design/screens/` and `design/mockups/` (see `design/README.md`). After building a screen, Claude should run the app, take a Playwright screenshot of it at the design's size in both themes, and compare it with the design screenshot before finishing.
+Prompts 1–6 were built against the Midnight & Brass mockups. In October 2026 the app moved to the Grid theme and the mockups were removed: new work follows `docs/DESIGN.md`, and in this repo the `run-build-prompt` skill in `.claude/skills/` describes how a prompt is run.
 
 Start each one as a new task on claude.ai/code with this repository selected. Use **Plan** mode for the first one so you can approve the approach, then **Accept edits** for the rest. Review the diff, then **Create PR** and merge before starting the next.
 

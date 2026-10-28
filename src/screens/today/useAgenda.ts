@@ -19,7 +19,7 @@ export type AgendaEntry = {
   key: string;
   title: string;
   time: string;
-  /** "Work", "Time block · Growth", "All day · Family" */
+  /** "Work", "Time block, Growth", "All day, Family" */
   source: string;
   tone: string;
   block: boolean;
@@ -46,7 +46,7 @@ export function useAgenda(today: Day): { entries: AgendaEntry[]; calendars: stri
             key: t.key,
             title: t.title,
             time: t.time,
-            source: t.kind === 'block' ? (t.detail === 'Time block' ? 'Time block' : `Time block · ${t.detail}`) : t.calendarName,
+            source: t.kind === 'block' ? (t.detail === 'Time block' ? 'Time block' : `Time block, ${t.detail}`) : t.calendarName,
             tone: t.tone,
             block: t.kind === 'block',
             allDay: false,

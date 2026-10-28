@@ -249,7 +249,7 @@ function TreeRow({ node, style, dragHandle, today }: NodeRendererProps<Row> & { 
         <span className={styles.chevronSpacer} />
       )}
       {(top || !day) && <Icon name={data.kind === 'folder' ? 'folder' : 'page'} size={15} className={styles.rowIcon} />}
-      <span className={styles.rowLabel}>{day === today ? `${data.title.split(' ').slice(0, 2).join(' ')} · today` : data.title}</span>
+      <span className={styles.rowLabel}>{day === today ? `${data.title.split(' ').slice(0, 2).join(' ')}, today` : data.title}</span>
       {day === today && <span className={styles.todayDot} aria-hidden="true" />}
     </div>
   );

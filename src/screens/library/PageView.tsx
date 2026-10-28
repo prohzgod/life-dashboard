@@ -122,7 +122,7 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
           {toast}
           {toast === 'Pinned to Home' && (
             <>
-              {' · '}
+              {', '}
               <Link to="/">View</Link>
             </>
           )}

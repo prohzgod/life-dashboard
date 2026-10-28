@@ -7,7 +7,7 @@ const dateFormat = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'num
 /** A screen that isn't built yet: its real title and a designed empty state. */
 export function ScreenPage({ screen: key }: { screen: ScreenKey }) {
   const screen = screens[key];
-  const eyebrow = key === 'today' ? dateFormat.format(new Date()).replace(/,? (\d)/, ' · $1') : undefined;
+  const eyebrow = key === 'today' ? dateFormat.format(new Date()).replace(/,? (\d)/, ', $1') : undefined;
 
   return (
     <>

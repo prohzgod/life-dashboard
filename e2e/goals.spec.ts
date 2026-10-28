@@ -32,7 +32,7 @@ test('goals: pace, logging progress, milestones, a new goal and the vision', asy
   await form.getByLabel('Unit', { exact: true }).fill('$');
   await form.getByRole('button', { name: 'Create goal' }).click();
   await expect(detail.getByRole('heading', { name: '6-month emergency fund' })).toBeVisible();
-  await expect(tree.getByText(/Year · target \$12,000/)).toBeVisible();
+  await expect(tree.getByText(/Year, target \$12,000/)).toBeVisible();
   await detail.getByLabel('Now', { exact: true }).fill('7400');
   await detail.getByRole('button', { name: 'Update' }).click();
   await expect(tree.getByText(/\$7,400 saved/)).toBeVisible();
@@ -77,7 +77,7 @@ test('progress: periods, rating the wheel of life, year in pixels', async ({ pag
   await expect(page.getByRole('grid', { name: /Mood for each day of \d{4}/ }).getByRole('gridcell', { name: /: Good$/ })).toHaveCount(1);
 
   await page.getByRole('radio', { name: 'Month' }).click();
-  await expect(page.getByText(/^[A-Z][a-z]+ \d{4} so far · 1 day logged/)).toBeVisible();
+  await expect(page.getByText(/^[A-Z][a-z]+ \d{4} so far, 1 day logged/)).toBeVisible();
 
   await page.getByRole('button', { name: 'Rate your areas' }).click();
   const dialog = page.getByRole('dialog', { name: 'How does each area feel right now?' });

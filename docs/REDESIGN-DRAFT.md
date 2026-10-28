@@ -1,6 +1,6 @@
-# Redesign draft: Ink (not started)
+# Redesign plan (done, with Grid instead of Ink)
 
-Status: **draft, parked on 2026-10-27.** Nothing below is built. Until this is approved and done, the approved designs in `design/` (Midnight & Brass) remain the rule CLAUDE.md describes.
+Status: **done on 2026-10-28.** The plan below was drafted with Ink; when it resumed, three new themes were dealt and **Grid** was chosen, data colours became one ultramarine ramp ("Ink only"), and the old mockups were deleted. The rules now live in `docs/DESIGN.md`; this file is kept as the record of the plan.
 
 Planned with the Hallmark skill (`/hallmark redesign`), full depth, whole app, theme replaced. The "before" record lives in `.hallmark/` (before.txt, before.json, screenshots).
 

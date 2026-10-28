@@ -25,18 +25,18 @@ const METHOD_SHORT: Record<Goal['progressMethod'], string> = {
   childRollup: 'roll-up',
 };
 
-/** "Year · target", "Quarter · milestones", "Q3 OKR · stretch". */
+/** "Year, target", "Quarter, milestones", "Q3 OKR, stretch". */
 export function goalTypeChip(goal: Goal): string {
   const parts = [HORIZONS[goal.horizon], METHOD_SHORT[goal.progressMethod]];
   if (goal.progressMethod === 'metric' && goal.targetValue !== null && goal.unit && !/^[a-z]/i.test(goal.unit)) parts[1] = `target ${formatAmount(goal.targetValue, goal.unit)}`;
   if (goal.commitment === 'aspirational') parts.push('stretch');
-  return parts.join(' · ');
+  return parts.join(', ');
 }
 
 /** The line under a goal's title: pace, or what it's counting. */
 export function goalStatusLine(goal: Goal, progress: GoalProgress, pace: GoalPace): { text: string; tone: 'success' | 'warning' | 'quiet' } {
   if (goal.progressMethod === 'keyResultAverage' && progress.score !== undefined) {
-    return { text: `${progress.total} key results · score ${progress.score.toFixed(2)}${goal.commitment === 'aspirational' ? ' (0.6–0.7 is a win)' : ''}`, tone: 'quiet' };
+    return { text: `${progress.total} key results, score ${progress.score.toFixed(2)}${goal.commitment === 'aspirational' ? ' (0.6–0.7 is a win)' : ''}`, tone: 'quiet' };
   }
   const counted =
     progress.total !== undefined && progress.done !== undefined && progress.total > 0 && goal.progressMethod !== 'childRollup'
@@ -46,9 +46,9 @@ export function goalStatusLine(goal: Goal, progress: GoalProgress, pace: GoalPac
         : goal.progressMethod === 'habitConsistency' && progress.percent !== null
           ? `${Math.round(progress.percent)}% consistency`
           : null;
-  if (pace.state === 'behind') return { text: counted ? `${counted} · ${pace.sentence.charAt(0).toLowerCase()}${pace.sentence.slice(1)}` : pace.sentence, tone: 'warning' };
-  if (pace.state === 'on-pace') return { text: counted ? `${counted} · on pace` : 'On pace', tone: 'success' };
-  return { text: counted ? `${counted} · ${pace.sentence.charAt(0).toLowerCase()}${pace.sentence.slice(1)}` : pace.sentence, tone: 'quiet' };
+  if (pace.state === 'behind') return { text: counted ? `${counted}, ${pace.sentence.charAt(0).toLowerCase()}${pace.sentence.slice(1)}` : pace.sentence, tone: 'warning' };
+  if (pace.state === 'on-pace') return { text: counted ? `${counted}, on pace` : 'On pace', tone: 'success' };
+  return { text: counted ? `${counted}, ${pace.sentence.charAt(0).toLowerCase()}${pace.sentence.slice(1)}` : pace.sentence, tone: 'quiet' };
 }
 
 /** The "Now" column: a percent, a count, or an OKR score. */

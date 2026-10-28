@@ -48,7 +48,7 @@ export function periodLabel(period: Period, anchor: Day): string {
     case 'day':
       return `${WEEKDAYS[weekday(anchor)]!.slice(0, 3)} ${dayOfMonth(anchor)} ${SHORT_MONTHS[month(anchor) - 1]}`;
     case 'week':
-      return `Week ${isoWeek(from)} · ${dayOfMonth(from)} ${SHORT_MONTHS[month(from) - 1]} – ${dayOfMonth(to)} ${SHORT_MONTHS[month(to) - 1]}`;
+      return `Week ${isoWeek(from)}, ${dayOfMonth(from)} ${SHORT_MONTHS[month(from) - 1]} – ${dayOfMonth(to)} ${SHORT_MONTHS[month(to) - 1]}`;
     case 'month':
       return `${MONTHS[month(anchor) - 1]} ${year(anchor)}`;
     case 'year':

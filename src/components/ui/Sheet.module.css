@@ -23,6 +23,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .sheet[open] {
+    animation: none;
+  }
+}
+
 .sheet::backdrop {
   background: var(--scrim);
 }

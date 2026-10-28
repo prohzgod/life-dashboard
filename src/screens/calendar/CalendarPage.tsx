@@ -167,7 +167,7 @@ function Header({ view, anchor, days, today, go, onNewEvent }: { view: CalendarV
     view === 'week'
       ? [`Week ${isoWeek(days[0]!)}`, rangeLabel(days[0]!, days[6]!)]
       : view === 'day'
-        ? [formatDayLong(anchor).split(' · ')[0]!, `${dayOfMonth(anchor)} ${monthTitle(anchor)}`]
+        ? [formatDayLong(anchor).split(', ')[0]!, `${dayOfMonth(anchor)} ${monthTitle(anchor)}`]
         : view === 'month'
           ? [monthTitle(anchor).split(' ')[0]!, anchor.slice(0, 4)]
           : [anchor.slice(0, 4), ''];

@@ -22,7 +22,7 @@ export function VisionCard({ card, phone = false, onEdit, className, style }: Pr
   const goal = card.goal && (
     <Link to={`/goals/${card.goal.id}`} className={styles.goalChip}>
       {phone ? shortTitle(card.goal.title) : card.goal.title}
-      {card.goal.percent !== null && ` · ${Math.round(card.goal.percent)}%`}
+      {card.goal.percent !== null && `, ${Math.round(card.goal.percent)}%`}
     </Link>
   );
   const label = card.kind === 'words' ? `Edit “${card.text}”` : `Edit ${card.text ? `“${card.text}”` : 'picture'}`;

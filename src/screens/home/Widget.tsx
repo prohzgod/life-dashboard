@@ -37,7 +37,7 @@ export function Widget({ widget, data, today }: Props) {
           </Ring>
           <span className={styles.rowText}>
             <span className={styles.rowTitle}>Today</span>
-            <span className={styles.rowSub}>{next ? `Next · ${next}` : total ? 'All done. Nicely done.' : 'Nothing planned yet'}</span>
+            <span className={styles.rowSub}>{next ? `Next, ${next}` : total ? 'All done. Nicely done.' : 'Nothing planned yet'}</span>
           </span>
           <Icon name="chevronRight" size={16} className={styles.chevron} />
         </Link>
@@ -60,7 +60,7 @@ export function Widget({ widget, data, today }: Props) {
           )}
           {size !== 'S' && (
             <span className={styles.meta}>
-              <strong className={styles.good}>{onPace} on pace</strong> · {behind} behind
+              <strong className={styles.good}>{onPace} on pace</strong>, {behind} behind
             </span>
           )}
         </Link>
@@ -97,7 +97,7 @@ export function Widget({ widget, data, today }: Props) {
         <Link to="/review" className={cx(styles.tile, styles.row, styles.inverse)}>
           <span className={styles.rowText}>
             <span className={styles.reviewTitle}>Weekly review</span>
-            <span className={styles.reviewSub}>{data.review.done ? `Done for week ${data.review.week}` : `${data.review.isSunday ? 'Today' : 'Sunday'} · about 15 min · week ${data.review.week}`}</span>
+            <span className={styles.reviewSub}>{data.review.done ? `Done for week ${data.review.week}` : `${data.review.isSunday ? 'Today' : 'Sunday'}, about 15 min, week ${data.review.week}`}</span>
           </span>
           <span className={styles.start}>{data.review.done ? 'Open' : 'Start'}</span>
         </Link>
@@ -147,7 +147,7 @@ export function Widget({ widget, data, today }: Props) {
       return (
         <Link to="/finance" className={cx(styles.tile, styles.tinted)} style={{ background: 'var(--finance-soft)', color: 'var(--finance-ink)' }}>
           <span className={styles.financeTop}>
-            <span className={styles.smallLabel}>Spent · {monthLabel(data.finance.month, true)}</span>
+            <span className={styles.smallLabel}>Spent in {monthLabel(data.finance.month, true)}</span>
             <span className={styles.hiddenAmount} aria-label="Amount hidden">
               ••••
             </span>
@@ -230,7 +230,7 @@ function Pinned({ widget, data }: { widget: HomeWidget; data: HomeData }) {
       {pin.kind === 'node' && pin.total > 0 && !small && (
         <span className={styles.pinProgress}>
           <span className={styles.meta}>
-            {pin.label ? `${pin.label} · ` : ''}
+            {pin.label ? `${pin.label}, ` : ''}
             {pin.done} of {pin.total}
           </span>
           <span className={styles.track}>
@@ -240,13 +240,13 @@ function Pinned({ widget, data }: { widget: HomeWidget; data: HomeData }) {
       )}
       {pin.kind === 'goal' && !small && (
         <span className={styles.pinProgress}>
-          <span className={styles.meta}>{pin.percent === null ? pin.sentence : `${Math.round(pin.percent)}% · ${pin.sentence.toLowerCase()}`}</span>
+          <span className={styles.meta}>{pin.percent === null ? pin.sentence : `${Math.round(pin.percent)}%, ${pin.sentence.toLowerCase()}`}</span>
           <span className={styles.track}>
             <span style={{ width: `${pin.percent ?? 0}%`, background: bar }} />
           </span>
         </span>
       )}
-      {pin.kind === 'habit' && !small && <span className={styles.meta}>{pin.doneToday ? 'Done today' : 'Not yet today'}{pin.streak > 1 ? ` · ${pin.streak}-day streak` : ''}</span>}
+      {pin.kind === 'habit' && !small && <span className={styles.meta}>{pin.doneToday ? 'Done today' : 'Not yet today'}{pin.streak > 1 ? `, ${pin.streak}-day streak` : ''}</span>}
     </Link>
   );
 }

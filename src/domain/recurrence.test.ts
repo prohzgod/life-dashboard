@@ -112,7 +112,7 @@ describe('describeRRule', () => {
   });
 
   it('has a chip form', () => {
-    expect(describeRRuleShort(rule('FREQ=MONTHLY;BYMONTHDAY=1'))).toBe('Repeats monthly · day 1');
+    expect(describeRRuleShort(rule('FREQ=MONTHLY;BYMONTHDAY=1'))).toBe('Repeats monthly, day 1');
     expect(describeRRuleShort(rule('FREQ=WEEKLY;BYDAY=TU') as RRule)).toBe('Repeats every Tuesday');
   });
 });

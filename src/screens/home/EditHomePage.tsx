@@ -13,7 +13,7 @@ import { useToday } from '@/lib/useToday';
 import { AddToHomeSheet } from './AddToHomeSheet';
 import styles from './EditHome.module.css';
 
-/** Edit Home: drag to reorder, S · M · L to resize, − to hide. Hidden widgets keep their data. */
+/** Edit Home: drag to reorder, S, M, L to resize, − to hide. Hidden widgets keep their data. */
 export function EditHomePage() {
   const today = useToday();
   const navigate = useNavigate();

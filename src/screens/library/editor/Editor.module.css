@@ -1,5 +1,5 @@
 /* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
-/* BlockNote, dressed in Midnight & Brass. Its variables point at our tokens, so both themes follow. */
+/* BlockNote, dressed in Grid. Its variables point at our tokens, so both themes follow. */
 .editor {
   --bn-font-family: var(--font-sans);
   --bn-border-radius: var(--radius-sm);

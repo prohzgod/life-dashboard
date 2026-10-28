@@ -50,15 +50,15 @@ function DesktopToday() {
           </h1>
         </div>
         <div className={styles.headerSide}>
+          {/* The page's one field: how much of the year is behind you, set large. */}
           <div className={styles.year}>
-            <div className={styles.yearText}>
+            <span className={styles.yearFigure}>{percent}%</span>
+            <span className={styles.yearText}>
+              <span>of {year(today)} gone</span>
               <span>
-                {year(today)} · week {isoWeek(today)}
+                Day {day}, week {isoWeek(today)}
               </span>
-              <span>
-                Day {day} · {percent}%
-              </span>
-            </div>
+            </span>
             <div
               className={styles.yearTrack}
               role="progressbar"

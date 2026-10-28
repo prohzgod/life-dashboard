@@ -144,7 +144,7 @@ export async function completeWeeklyReview(reviewId: string, today: Day): Promis
   const focus = (await Promise.all(answers.focusGoalIds.map((id) => goalsRepo.get(id)))).filter((g): g is Goal => !!g);
 
   const blocks = [
-    heading(`Weekly review · week ${isoWeek(review.periodStart)}`),
+    heading(`Weekly review, week ${isoWeek(review.periodStart)}`),
     ...(answers.summary ? [paragraph(answers.summary)] : []),
     ...(answers.wentWell ? [heading('What went well', 3), paragraph(answers.wentWell)] : []),
     ...(answers.drained ? [heading('What drained me', 3), paragraph(answers.drained)] : []),

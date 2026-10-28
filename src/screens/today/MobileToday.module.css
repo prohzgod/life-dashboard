@@ -80,9 +80,9 @@
 .mood {
   height: 46px;
   padding: 0;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink-2);
   font-size: var(--text-caption-size);
 }
@@ -110,9 +110,9 @@
   gap: 8px;
   width: 100%;
   padding: 12px 4px;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-well);
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--primary);
 }
 

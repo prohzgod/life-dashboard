@@ -190,7 +190,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
           <Link to="/tasks?view=anytime" className={styles.tile}>
             <span className={styles.tileLabel}>Tasks</span>
             <span className={styles.tileValue}>
-              {links.openTasks} open · {links.doneTasks} done
+              {links.openTasks} open, {links.doneTasks} done
             </span>
           </Link>
           <div className={styles.tile}>

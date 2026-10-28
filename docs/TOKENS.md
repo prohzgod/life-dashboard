@@ -1,4 +1,4 @@
-# Design tokens · Midnight & Brass
+# Design tokens · Grid
 
 One source of truth, four formats:
 
@@ -15,113 +15,114 @@ Theme: set `data-theme="light"` or `"dark"` on `<html>`; with neither, the syste
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--bg` | `#EEF0F3` | `#0D111D` | Page background behind cards (the porcelain ground). |
-| `--surface` | `#FCFCFD` | `#171C2B` | Cards, panels and inputs on `bg`. |
-| `--raised` | `#FFFFFF` | `#313A56` | The selected pill in a segmented control, the active row in a list. Sits on `sunken-2` or `subtle`. |
-| `--sunken` | `#F2F4F7` | `#1C2234` | Tiles and wells inside a card (habit tiles, stat tiles, info notes). |
-| `--sunken-2` | `#E6E9EF` | `#252C42` | Chips, segmented-control tracks, progress tracks on `surface`. |
-| `--subtle` | `#F6F7F9` | `#131827` | Secondary panes (tree, filters) and quiet input fields. |
-| `--track` | `#E1E5EC` | `#2A3249` | Empty part of progress bars and missed-day squares. |
-| `--line` | `#DCE1E8` | `#2B334B` | Card borders and input borders. |
-| `--line-soft` | `#EAEDF2` | `#212839` | Dividers between rows inside a card. |
-| `--line-strong` | `#BEC5D2` | `#46506F` | Secondary-button borders, empty checkboxes, dashed drop zones, switch track when off. |
-| `--control` | `#858DA0` | `#737D9C` | Borders of empty checkboxes and radio buttons, switch track when off (3:1 on `surface`). |
-| `--ink` | `#141926` | `#ECEEF4` | Headlines and body text on `surface`, `bg`, `sunken`. |
-| `--ink-2` | `#444B5D` | `#B8BECD` | Secondary text and icons on `surface`, `bg`, `sunken`, `sunken-2`. |
-| `--ink-3` | `#5F6679` | `#959CAF` | Captions, metadata and timestamps on `surface`, `bg`, `sunken`, `sunken-2`. |
-| `--ink-4` | `#8E95A7` | `#6A7290` | Decorative strokes only: chart guides, arrows, drag handles. Never for text. |
-| `--inverse` | `#18203A` | `#EAE6DC` | High-emphasis dark block: chat bubbles, the current step, quote cards, pace ticks. |
-| `--on-inverse` | `#F6F3EC` | `#161B2A` | Text on `inverse`. |
-| `--on-inverse-2` | `#B6BDD0` | `#4F566A` | Secondary text on `inverse`. |
-| `--inverse-accent` | `#D4B57C` | `#7A5B22` | Eyebrow labels on `inverse`. |
-| `--primary` | `#22305A` | `#D4B57C` | Primary buttons, checked boxes, the active habit, focus ring. Midnight in light, brass in dark. |
-| `--primary-hover` | `#19244A` | `#E3C994` | Hover state of `primary` fills. |
-| `--on-primary` | `#F7F4EC` | `#161B2A` | Text and icons on `primary`. |
-| `--on-primary-2` | `#C3CAE0` | `#4E4128` | Secondary text on `primary`. |
-| `--primary-soft` | `#E5E9F4` | `#2C2B2C` | Selected states, time blocks, suggestion chips. |
-| `--primary-softer` | `#F3F5FA` | `#1B2030` | Today's column, quiet highlights. |
-| `--primary-ink` | `#1B2750` | `#E8D1A3` | Text on `primary-soft` and `primary-softer`. |
-| `--primary-line` | `#AAB6D6` | `#76623D` | Borders of selected items and dashed time blocks. |
-| `--link` | `#2D4585` | `#D9BC86` | Links and text buttons on `surface` and `bg`. |
-| `--accent` | `#A8844A` | `#D4B57C` | Brass: sparing highlights such as the word of the year, today's marker and the logo. Fills and marks, not body text. |
-| `--accent-soft` | `#F3ECDF` | `#2E2A24` | Brass-tinted fill behind `accent-ink` text. |
-| `--accent-ink` | `#6B5020` | `#E8D1A3` | Text on `accent-soft`. |
-| `--success` | `#2B6A52` | `#79C4A2` | On-pace text and saved/synced status on `surface`. Always paired with a word. |
-| `--success-soft` | `#E0EEE7` | `#18302A` | Fill behind success chips. |
-| `--warning` | `#92530E` | `#E6AB69` | Behind-pace and overdue text on `surface`. Always paired with a word. |
-| `--warning-soft` | `#F7EBDA` | `#35291B` | Offline banner, behind-pace chips, recovery-kit warning. |
-| `--warning-ink` | `#613708` | `#F2CA94` | Text on `warning-soft`. |
-| `--danger` | `#9E344B` | `#EE91A4` | Over-budget bars, destructive actions. |
-| `--danger-soft` | `#F6E2E6` | `#3A2029` | Fill behind danger and high-priority chips. |
-| `--danger-ink` | `#72213A` | `#F6BDC8` | Text on `danger-soft`. |
-| `--health` | `#3E7D63` | `#76C3A1` | Health area: dots, bars and charts. |
-| `--health-soft` | `#E2EFE8` | `#192E27` | Health area tint (chips, image placeholders). |
-| `--health-ink` | `#1E4B3A` | `#AADDC6` | Text on `health-soft`. |
-| `--career` | `#3A5A9A` | `#8FA9E2` | Career area; also work calendar events and sleep bars. |
-| `--career-soft` | `#E3E9F5` | `#1C2644` | Career tint; work events. |
-| `--career-ink` | `#203766` | `#C4D3F4` | Text on `career-soft`. |
-| `--finance` | `#A8742A` | `#E1B173` | Finance area: budgets, savings bars. |
-| `--finance-soft` | `#F6EBDA` | `#33291C` | Finance tint. |
-| `--finance-muted` | `#E4D2B2` | `#56472F` | Past months in finance charts. |
-| `--finance-ink` | `#633F0C` | `#F1CF9D` | Text on `finance-soft`. |
-| `--family` | `#A04E66` | `#E69BB0` | Family area and shared-space markers; the 'now' line in calendars. |
-| `--family-soft` | `#F6E3E9` | `#3A2231` | Family tint; family events. |
-| `--family-ink` | `#6B243D` | `#F5C4D2` | Text on `family-soft`. |
-| `--growth` | `#6A56A8` | `#B4A4E9` | Growth area: learning, writing. |
-| `--growth-soft` | `#ECE7F7` | `#29243F` | Growth tint; personal events. |
-| `--growth-ink` | `#42326C` | `#D9D0F7` | Text on `growth-soft`. |
-| `--home` | `#2F7C84` | `#7DC7CD` | Home area. |
-| `--home-soft` | `#DEEFF1` | `#16303A` | Home tint. |
-| `--home-ink` | `#1A4A50` | `#B1E1E4` | Text on `home-soft`. |
-| `--fun` | `#8F6F10` | `#DDBB5B` | Fun and travel area. |
-| `--fun-soft` | `#F4EDD3` | `#312A17` | Fun tint. |
-| `--fun-ink` | `#574409` | `#EED88F` | Text on `fun-soft`. |
-| `--viz-soft` | `#AFBEDC` | `#3F4F7A` | Second series in charts (below target, earlier period). |
-| `--mood-1` | `#9A3550` | `#D9728D` | Mood scale 1 (awful), year in pixels. |
-| `--mood-2` | `#DDA7AC` | `#7A4A5A` | Mood scale 2 (low). |
-| `--mood-3` | `#E1E4EB` | `#2E3650` | Mood scale 3 (okay). |
-| `--mood-4` | `#9DB1D8` | `#4F6DB2` | Mood scale 4 (good). |
-| `--mood-5` | `#2C437F` | `#AFC4F4` | Mood scale 5 (great). |
-| `--heat-0` | `#E4E7EE` | `#1F2638` | Habit heatmap: none done. |
-| `--heat-1` | `#C9D3E8` | `#2B3A60` | Habit heatmap: a few. |
-| `--heat-2` | `#93A7D2` | `#3F5A98` | Habit heatmap: half. |
-| `--heat-3` | `#5470AE` | `#7090D2` | Habit heatmap: most. |
-| `--heat-4` | `#22305A` | `#BACCF5` | Habit heatmap: all done. |
-| `--nav-bg` | `#131A2E` | `#090C16` | Sidebar background (midnight in both themes). |
-| `--nav-surface` | `#1D2542` | `#161C30` | Active item and search field in the sidebar. |
-| `--nav-line` | `#29314F` | `#1E2539` | Borders inside the sidebar. |
-| `--nav-ink` | `#EEF0F6` | `#EEF0F6` | Active item and titles on `nav-bg`. |
-| `--nav-ink-2` | `#AFB6CA` | `#AFB6CA` | Inactive items on `nav-bg`. |
-| `--nav-ink-3` | `#8189A3` | `#7E86A0` | Group labels and hints on `nav-bg`. |
-| `--nav-success` | `#79C4A2` | `#79C4A2` | Saved and synced status dot on `nav-bg`. |
-| `--nav-accent` | `#D4B57C` | `#D4B57C` | Brass in the sidebar: active icon, Quick capture button. |
-| `--on-nav-accent` | `#131A2E` | `#131A2E` | Text on `nav-accent`. |
-
+| `--bg` | `#F8F7F3` | `#0B0F18` | The sheet: page background, white poster paper. |
+| `--surface` | `#EDECE7` | `#141823` | Panels and cards on `bg`, a step darker. No border, no shadow. |
+| `--raised` | `#F8F7F3` | `#282E3B` | The selected segment in a segmented control. |
+| `--sunken` | `#E2DFDA` | `#1F2430` | Filled controls (secondary buttons, options), wells and tracks inside panels. |
+| `--sunken-2` | `#D6D4CE` | `#282E3B` | Segmented-control tracks and pressed fills. |
+| `--subtle` | `#EDECE7` | `#141823` | Side panes (tree, filters, calendar options). |
+| `--track` | `#E2DFDA` | `#1F2430` | Empty part of progress bars, empty day squares, disabled fills. |
+| `--line` | `#D8D6D0` | `#303540` | Hairlines between table rows; the edge of floating layers. |
+| `--line-soft` | `#E4E3DE` | `#222630` | Quiet dividers between list rows. |
+| `--line-strong` | `#BAB7B0` | `#4D535E` | Dashed drop zones and the add tile. |
+| `--control` | `#7D8088` | `#70747E` | The 1px line under inputs; empty checkboxes and switches. |
+| `--ink` | `#0F141E` | `#EDEBE7` | Headlines, body text and the primary control. |
+| `--ink-2` | `#2C303B` | `#C9C7C2` | Secondary text and icons. |
+| `--ink-3` | `#575B64` | `#9B9EA6` | Captions and labels. |
+| `--ink-4` | `#83868E` | `#656972` | Decoration and disabled text only (not for reading). |
+| `--inverse` | `#1F40BE` | `#678DEE` | The field: the ultramarine that floods a block (Today's year, the current review step, the Weekly review tile, chart ticks). |
+| `--on-inverse` | `#F8F7F3` | `#0B0F18` | Text and figures on the field. |
+| `--on-inverse-2` | `#C2D1F3` | `#222D47` | Quiet text and tracks on the field. |
+| `--inverse-accent` | `#F8F7F3` | `#0B0F18` | Labels on the field (never red on blue). |
+| `--primary` | `#0F141E` | `#EDEBE7` | The primary control: a square ink block. Checked states, focus ring. |
+| `--primary-hover` | `#2C303B` | `#C9C7C2` | Primary control on hover. |
+| `--on-primary` | `#F8F7F3` | `#0B0F18` | Text on the primary control. |
+| `--on-primary-2` | `#BAB7B0` | `#4D535E` | Quiet text on the primary control. |
+| `--primary-soft` | `#DAE5FD` | `#1F2C4C` | A pale ultramarine fill: the selected row, a time block, the current day. |
+| `--primary-softer` | `#EBF0FB` | `#171F30` | The palest ultramarine tint: today's column. |
+| `--primary-ink` | `#1F40BE` | `#A0BDFF` | Ultramarine text on `primary-soft`. |
+| `--primary-line` | `#9CB6F2` | `#3D5590` | Dashed edge of a time block. |
+| `--link` | `#1F40BE` | `#8DAFFE` | Links and quiet buttons (ultramarine). |
+| `--accent` | `#D9241B` | `#F45B4B` | The Swiss red mark: the wordmark square, today's marker, the one thing that needs you, text selection. |
+| `--accent-soft` | `#FDE3DE` | `#451E19` | A pale red fill behind `accent-ink` text. |
+| `--accent-ink` | `#9E1710` | `#FEAC9F` | Red text on `accent-soft`. |
+| `--success` | `#1F40BE` | `#8DAFFE` | Done and on pace: resolves to the ultramarine. |
+| `--success-soft` | `#DAE5FD` | `#1F2C4C` | Pale ultramarine behind done states. |
+| `--warning` | `#D9241B` | `#F45B4B` | Behind pace: resolves to the red mark. |
+| `--warning-soft` | `#FDE3DE` | `#451E19` | Pale red behind warnings. |
+| `--warning-ink` | `#9E1710` | `#FEAC9F` | Red text on `warning-soft`. |
+| `--danger` | `#D9241B` | `#F45B4B` | Over budget, errors, destructive actions: the red mark. |
+| `--danger-soft` | `#FDE3DE` | `#451E19` | Pale red behind errors. |
+| `--danger-ink` | `#9E1710` | `#FEAC9F` | Red text on `danger-soft`. |
+| `--health` | `#1F40BE` | `#678DEE` | Area colour for Health: the ultramarine, like every area (areas are told apart by name). |
+| `--health-soft` | `#EBF0FB` | `#1F2C4C` | Pale fill for Health chips and events. |
+| `--health-ink` | `#0F141E` | `#EDEBE7` | Text on `health-soft`. |
+| `--career` | `#1F40BE` | `#678DEE` | Area colour for Career: the ultramarine, like every area (areas are told apart by name). |
+| `--career-soft` | `#EBF0FB` | `#1F2C4C` | Pale fill for Career chips and events. |
+| `--career-ink` | `#0F141E` | `#EDEBE7` | Text on `career-soft`. |
+| `--finance` | `#1F40BE` | `#678DEE` | Area colour for Finance: the ultramarine, like every area (areas are told apart by name). |
+| `--finance-soft` | `#EBF0FB` | `#1F2C4C` | Pale fill for Finance chips and events. |
+| `--finance-muted` | `#DAE5FD` | `#1F2C4C` | Past months in the spending chart. |
+| `--finance-ink` | `#0F141E` | `#EDEBE7` | Text on `finance-soft`. |
+| `--family` | `#1F40BE` | `#678DEE` | Area colour for Family: the ultramarine, like every area (areas are told apart by name). |
+| `--family-soft` | `#EBF0FB` | `#1F2C4C` | Pale fill for Family chips and events. |
+| `--family-ink` | `#0F141E` | `#EDEBE7` | Text on `family-soft`. |
+| `--growth` | `#1F40BE` | `#678DEE` | Area colour for Growth: the ultramarine, like every area (areas are told apart by name). |
+| `--growth-soft` | `#EBF0FB` | `#1F2C4C` | Pale fill for Growth chips and events. |
+| `--growth-ink` | `#0F141E` | `#EDEBE7` | Text on `growth-soft`. |
+| `--home` | `#1F40BE` | `#678DEE` | Area colour for Home: the ultramarine, like every area (areas are told apart by name). |
+| `--home-soft` | `#EBF0FB` | `#1F2C4C` | Pale fill for Home chips and events. |
+| `--home-ink` | `#0F141E` | `#EDEBE7` | Text on `home-soft`. |
+| `--fun` | `#1F40BE` | `#678DEE` | Area colour for Fun: the ultramarine, like every area (areas are told apart by name). |
+| `--fun-soft` | `#EBF0FB` | `#1F2C4C` | Pale fill for Fun chips and events. |
+| `--fun-ink` | `#0F141E` | `#EDEBE7` | Text on `fun-soft`. |
+| `--viz-soft` | `#9CB6F2` | `#334673` | Second chart series, short nights. |
+| `--mood-1` | `#E2DFDA` | `#1F2430` | Mood 1 of 5 on the ultramarine ramp (pale = low, deep = great). |
+| `--mood-2` | `#BBCBEC` | `#2C4072` | Mood 2 of 5 on the ultramarine ramp (pale = low, deep = great). |
+| `--mood-3` | `#84A3EA` | `#405EAD` | Mood 3 of 5 on the ultramarine ramp (pale = low, deep = great). |
+| `--mood-4` | `#4A72DE` | `#5E84E3` | Mood 4 of 5 on the ultramarine ramp (pale = low, deep = great). |
+| `--mood-5` | `#1F40BE` | `#96B6FE` | Mood 5 of 5 on the ultramarine ramp (pale = low, deep = great). |
+| `--heat-0` | `#E2DFDA` | `#1F2430` | Heatmap step 0 on the ultramarine ramp. |
+| `--heat-1` | `#BBCBEC` | `#2C4072` | Heatmap step 1 on the ultramarine ramp. |
+| `--heat-2` | `#84A3EA` | `#405EAD` | Heatmap step 2 on the ultramarine ramp. |
+| `--heat-3` | `#4A72DE` | `#5E84E3` | Heatmap step 3 on the ultramarine ramp. |
+| `--heat-4` | `#1F40BE` | `#96B6FE` | Heatmap step 4 on the ultramarine ramp. |
+| `--nav-bg` | `#EDECE7` | `#141823` | Sidebar background (paper, a step darker). |
+| `--nav-surface` | `#E2DFDA` | `#1F2430` | Active sidebar item. |
+| `--nav-line` | `#D8D6D0` | `#303540` | Sidebar dividers. |
+| `--nav-ink` | `#0F141E` | `#EDEBE7` | Sidebar text. |
+| `--nav-ink-2` | `#2C303B` | `#C9C7C2` | Secondary sidebar text. |
+| `--nav-ink-3` | `#575B64` | `#9B9EA6` | Sidebar group labels. |
+| `--nav-success` | `#1F40BE` | `#8DAFFE` | The saved-on-this-device square. |
+| `--nav-accent` | `#0F141E` | `#EDEBE7` | Quick capture: the ink block. |
+| `--on-nav-accent` | `#F8F7F3` | `#0B0F18` | Text on Quick capture. |
 Also: `--scrim` (sheet backdrop) and `--glass` (caption over images).
 
 ## Fonts
 
-- `--font-display`: Cormorant Garamond 500 / 600 / italic 500. Titles, big numbers, quotes. Never below 18px.
-- `--font-sans`: Jost 400–700. Everything you read or tap.
+- `--font-display`: Radio Canada Big 400 / 700. Titles, big figures, the wordmark; set at 700 in sentence case with −0.03em tracking.
+- `--font-sans`: Radio Canada 400–700. Everything you read or tap. Labels are sentence case and untracked.
+
+Both are bundled with `@fontsource` (no network needed).
 
 ## Type scale
 
 | Style | Font | Size / line | Weight | Tracking | Use |
 | --- | --- | --- | --- | --- | --- |
-| `text-display-xl` | Cormorant | 64/64 | 500 | -0.01em | Covers, empty states, year in review |
-| `text-display-l` | Cormorant | 46/50 | 500 | -0.01em | Library page title (desktop) |
-| `text-display-m` | Cormorant | 38/42 | 500 | -0.01em | Desktop screen titles |
-| `text-mobile-title` | Cormorant | 41/44 | 500 | -0.01em | Mobile tab-root titles (Today, Tasks, Library); Home greeting uses 38/42 |
-| `text-mobile-page-title` | Cormorant | 36/40 | 500 | 0 | Mobile detail titles (goal, page, task, review step) |
-| `text-title` | Cormorant | 28/32 | 600 | 0 | Detail-panel titles, quote cards, sheet titles (26 on mobile) |
-| `text-numeral` | Cormorant | 36/40 | 500 | 0 | Big stat numbers; lining + tabular figures |
-| `text-heading` | Jost | 16/24 | 600 | 0 | Card and section headings |
-| `text-body-l` | Jost | 16/25 | 400 | 0 | Mobile editor text, form inputs (16px avoids iOS zoom) |
-| `text-body` | Jost | 15/24 | 400 | 0 | Running text, task titles, list rows |
-| `text-body-s` | Jost | 13/20 | 400 | 0 | Secondary lines, table cells, buttons |
-| `text-caption` | Jost | 12/16 | 500 | 0 | Metadata, chart labels, status lines |
-| `text-label` | Jost | 11/16 | 600 | 0.12em | Uppercase eyebrows and group labels |
-| `text-tab-label` | Jost | 11/14 | 500 | 0 | Mobile tab bar labels (700 when active) |
+| `text-display-xl` | Radio Canada Big | 64/64 | 700 | -0.03em | Covers, empty states, year in review |
+| `text-display-l` | Radio Canada Big | 46/50 | 700 | -0.03em | Library page title (desktop) |
+| `text-display-m` | Radio Canada Big | 38/42 | 700 | -0.03em | Desktop screen titles |
+| `text-mobile-title` | Radio Canada Big | 41/44 | 700 | -0.03em | Mobile tab-root titles; Home greeting uses 38/42 |
+| `text-mobile-page-title` | Radio Canada Big | 36/40 | 700 | -0.03em | Mobile detail titles |
+| `text-title` | Radio Canada Big | 28/32 | 700 | -0.03em | Detail-panel and sheet titles |
+| `text-numeral` | Radio Canada Big | 36/40 | 700 | -0.03em | Big figures; lining + tabular |
+| `text-heading` | Radio Canada | 16/24 | 600 | 0 | Panel and section headings |
+| `text-body-l` | Radio Canada | 16/25 | 400 | 0 | Mobile editor text, form inputs |
+| `text-body` | Radio Canada | 15/24 | 400 | 0 | Running text, task titles, list rows |
+| `text-body-s` | Radio Canada | 13/20 | 400 | 0 | Secondary lines, table cells, buttons |
+| `text-caption` | Radio Canada | 12/16 | 500 | 0 | Metadata, chart labels, status lines |
+| `text-label` | Radio Canada | 11/16 | 600 | 0 | Group labels, sentence case |
+| `text-tab-label` | Radio Canada | 11/14 | 500 | 0 | Mobile tab bar labels (700 when active) |
 
 ## Spacing (4px grid)
 
@@ -129,24 +130,15 @@ Also: `--scrim` (sheet backdrop) and `--glass` (caption over images).
 
 ## Radius
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `--radius-xs` | 6px | Checkboxes, kbd hints |
-| `--radius-sm` | 8px | Chips, segmented pills |
-| `--radius-md` | 10px | Buttons, inputs, nav items |
-| `--radius-well` | 14px | Stat tiles, habit tiles, wells |
-| `--radius-lg` | 18px | Cards and panels |
-| `--radius-tile` | 20px | Bento tiles on mobile Home |
-| `--radius-xl` | 24px | Bottom sheets, large media |
-| `--radius-pill` | 999px | Status pills, avatars, FAB |
+Every radius token is `0px`: Grid is square. The names stay so components keep working.
 
 ## Shadows
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--shadow-sm` | `0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03)` | `0 1px 2px rgba(0,0,0,0.45)` | Cards and the raised segmented pill. |
-| `--shadow-md` | `0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05)` | `0 14px 34px -14px rgba(0,0,0,0.7)` | Popovers, sheets and menus. |
-| `--shadow-primary` | `0 8px 20px -6px rgba(34,48,90,0.45)` | `0 8px 20px -6px rgba(0,0,0,0.6)` | The floating capture button. |
+| `--shadow-sm` | `none` | `none` | Nothing: panels sit flat. |
+| `--shadow-md` | `0 0 0 1px` line | `0 0 0 1px` line | A hairline edge for floating layers (menus, dialogs). |
+| `--shadow-primary` | `none` | `none` | Nothing. |
 
 ## Layout & sizes
 

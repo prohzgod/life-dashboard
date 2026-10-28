@@ -148,11 +148,11 @@ export function describeRRule(rule: RRule): string {
   return every;
 }
 
-/** The short form used on chips: "Repeats monthly · day 1". */
+/** The short form used on chips: "Repeats monthly, day 1". */
 export function describeRRuleShort(rule: RRule): string {
   if (rule.interval === 1 && rule.freq === 'MONTHLY' && rule.byMonthDay?.length === 1) {
     const d = rule.byMonthDay[0]!;
-    return `Repeats monthly · ${d === -1 ? 'last day' : `day ${d}`}`;
+    return `Repeats monthly, ${d === -1 ? 'last day' : `day ${d}`}`;
   }
   const long = describeRRule(rule);
   return `Repeats ${long.charAt(0).toLowerCase()}${long.slice(1)}`;

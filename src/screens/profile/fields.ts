@@ -7,7 +7,7 @@ export const ABOUT_FIELDS: Array<{ key: FieldKey; label: string; type?: string; 
   { key: 'gender', label: 'Gender', placeholder: '' },
   { key: 'birthday', label: 'Birthday', type: 'date', placeholder: '' },
   { key: 'pronouns', label: 'Pronouns', placeholder: 'e.g. she / her' },
-  { key: 'occupation', label: 'What you do', placeholder: 'Writer · runner' },
+  { key: 'occupation', label: 'What you do', placeholder: 'Writer, runner' },
   { key: 'city', label: 'Home city', placeholder: 'Where home is' },
   { key: 'email', label: 'Email', type: 'email', placeholder: 'you@example.com', inputMode: 'email' },
   { key: 'phone', label: 'Phone', type: 'tel', placeholder: '+84 …', inputMode: 'tel' },

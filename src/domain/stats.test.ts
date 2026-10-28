@@ -9,7 +9,7 @@ describe('periods', () => {
     expect(periodRange('week', '2026-10-28')).toEqual({ from: '2026-10-26', to: '2026-11-01' });
     expect(periodRange('month', '2026-02-10')).toEqual({ from: '2026-02-01', to: '2026-02-28' });
     expect(periodRange('year', '2026-06-01')).toEqual({ from: '2026-01-01', to: '2026-12-31' });
-    expect(periodLabel('week', '2026-10-28')).toBe('Week 44 · 26 Oct – 1 Nov');
+    expect(periodLabel('week', '2026-10-28')).toBe('Week 44, 26 Oct – 1 Nov');
     expect(periodLabel('month', '2026-10-28')).toBe('October 2026');
     expect(periodLabel('day', '2026-10-28')).toBe('Wed 28 Oct');
     expect(shiftPeriod('month', '2026-01-31', 1)).toBe('2026-02-28');

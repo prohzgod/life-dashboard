@@ -300,7 +300,6 @@
 .heatCell {
   width: 9px;
   height: 9px;
-  border: 1px solid var(--line);
   border-radius: 0;
 }
 

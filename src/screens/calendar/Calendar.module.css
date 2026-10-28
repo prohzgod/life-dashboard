@@ -152,9 +152,9 @@
   gap: var(--space-2);
   width: 100%;
   padding: var(--space-2) 12px;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: 0;
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink);
   font-size: var(--text-body-s-size);
   text-align: left;
@@ -332,9 +332,9 @@
   width: 32px;
   height: 32px;
   padding: 0;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink);
 }
 
@@ -813,7 +813,8 @@
 .field textarea {
   height: 38px;
   padding: 0 12px;
-  border: 1px solid var(--line);
+  border: 0;
+  border-bottom: 1px solid var(--control);
   border-radius: var(--radius-md);
   background: var(--surface);
   color-scheme: inherit;

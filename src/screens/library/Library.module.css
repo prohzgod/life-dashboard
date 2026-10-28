@@ -66,9 +66,9 @@
   height: 34px;
   margin: 0 var(--space-1);
   padding: 0 12px;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink-3);
 }
 
@@ -706,7 +706,6 @@ a.folderItem:hover {
 
 .treeMobile .treeBox {
   padding: var(--space-2);
-  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
 }
@@ -729,7 +728,6 @@ a.folderItem:hover {
   flex-grow: 1;
   overflow-y: auto;
   padding: var(--space-2);
-  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
 }

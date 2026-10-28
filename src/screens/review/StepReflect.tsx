@@ -71,8 +71,8 @@ export function StepReflect({ review, today }: { review: Review; today: Day }) {
                 </p>
                 <span className={styles.quiet}>
                   Mood {bestDay.mood}
-                  {bestDay.energy ? ` · energy ${bestDay.energy}` : ''}
-                  {bestDay.sleepMinutes ? ` · ${formatMinutes(bestDay.sleepMinutes)} sleep` : ''}
+                  {bestDay.energy ? `, energy ${bestDay.energy}` : ''}
+                  {bestDay.sleepMinutes ? `, ${formatMinutes(bestDay.sleepMinutes)} sleep` : ''}
                 </span>
               </>
             ) : (

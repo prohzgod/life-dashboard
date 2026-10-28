@@ -228,9 +228,9 @@
   height: 52px;
   margin-top: var(--space-2);
   padding: 0 var(--space-4);
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-lg);
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink);
 }
 

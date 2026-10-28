@@ -11,10 +11,10 @@ export function formatDayShort(day: Day): string {
   return `${WEEKDAYS_SHORT[d.getDay()]} ${d.getDate()} ${MONTHS_SHORT[d.getMonth()]}`;
 }
 
-/** "Tuesday · 29 September 2026" */
+/** "Tuesday, 29 September 2026" */
 export function formatDayLong(day: Day): string {
   const d = dayToDate(day);
-  return `${WEEKDAYS_LONG[d.getDay()]} · ${d.getDate()} ${MONTHS_LONG[d.getMonth()]} ${d.getFullYear()}`;
+  return `${WEEKDAYS_LONG[d.getDay()]}, ${d.getDate()} ${MONTHS_LONG[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 /** "Today", "Tomorrow", "Yesterday", or "Thu 1 Oct". */

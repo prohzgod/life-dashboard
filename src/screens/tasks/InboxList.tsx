@@ -35,7 +35,7 @@ export function InboxList({ tasks, today, lookups, onOpen }: Props) {
               <span className={styles.inboxMeta}>Captured {timeAgo(task.createdAt)}</span>
               <span className={styles.suggestion}>
                 <span>Suggested:</span>
-                <span className={styles.suggestionChip}>{parts.join(' · ')}</span>
+                <span className={styles.suggestionChip}>{parts.join(', ')}</span>
               </span>
             </div>
             <div className={styles.inboxActions}>

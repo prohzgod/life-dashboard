@@ -239,7 +239,7 @@ export function TaskDetail({ taskId, today, context, onClose, mobile }: Props) {
         </div>
         <p className={styles.meta}>
           Created {timeAgo(task.createdAt)}
-          {task.completedAt ? ` · done ${timeAgo(task.completedAt)}` : ''} · stored on this device
+          {task.completedAt ? `, done ${timeAgo(task.completedAt)}` : ''}, stored on this device
         </p>
       </div>
     </aside>

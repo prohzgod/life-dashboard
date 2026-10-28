@@ -56,4 +56,4 @@ Everything planned but not built yet, gathered from the "Later" list in `docs/PR
 
 ## Design
 
-- [ ] **Ink redesign** (Hallmark): the plan is in `docs/REDESIGN-DRAFT.md`.
+- [x] **Redesign** (Hallmark): done with the Grid theme; rules in `docs/DESIGN.md`, plan in `docs/REDESIGN-DRAFT.md`.

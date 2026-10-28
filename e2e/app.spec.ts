@@ -71,7 +71,7 @@ test('installable and works with no network', async ({ page, context }) => {
   await context.setOffline(true);
   await page.reload();
   await expect(h1(page)).toHaveText(/^Good (morning|afternoon|evening)\./);
-  await expect(page.getByText('Offline · everything still works')).toBeVisible();
+  await expect(page.getByText('Offline, everything still works')).toBeVisible();
 
   // A deep link that was never visited still loads from the cache.
   await page.goto('/vision');

@@ -81,7 +81,7 @@ export function Sidebar({ onSearch, onCapture }: SidebarProps) {
               <span>Saved on this device</span>
             </div>
             <div className={styles.statusLine}>
-              {online ? 'This device only · sync is off' : 'Offline · everything still works'}
+              {online ? 'This device only, sync is off' : 'Offline, everything still works'}
             </div>
           </div>
 

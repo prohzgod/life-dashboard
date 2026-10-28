@@ -14,13 +14,13 @@ describe('days', () => {
     expect(weekday('2026-10-25')).toBe(0); // Sunday
     expect(startOfWeek('2026-10-25')).toBe('2026-10-19');
     expect(startOfWeek('2026-10-26')).toBe('2026-10-26');
-    expect(isoWeek('2026-09-29')).toBe(40); // matches the Today mockup
+    expect(isoWeek('2026-09-29')).toBe(40);
     expect(isoWeek('2027-01-01')).toBe(53);
     expect(isoWeek('2026-01-01')).toBe(1);
   });
 
   it('counts day of year and month differences', () => {
-    expect(dayOfYear('2026-09-29')).toBe(272); // matches the Today mockup
+    expect(dayOfYear('2026-09-29')).toBe(272);
     expect(daysInYear(2028)).toBe(366);
     expect(diffMonths('2026-10-31', '2027-01-01')).toBe(3);
   });

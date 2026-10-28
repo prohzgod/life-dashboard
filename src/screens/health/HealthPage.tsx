@@ -39,7 +39,7 @@ export function HealthPage() {
 
   const monthName = MONTHS_SHORT[Number(today.slice(5, 7)) - 1]!;
   const w = data.workouts.month;
-  const workoutLine = w.count ? [w.runKm ? `${w.runKm} km run` : null, w.byKind.yoga ? `${w.byKind.yoga} yoga` : null, w.byKind.ride ? `${w.byKind.ride} rides` : null].filter(Boolean).join(' · ') || `${w.count} logged` : 'None yet';
+  const workoutLine = w.count ? [w.runKm ? `${w.runKm} km run` : null, w.byKind.yoga ? `${w.byKind.yoga} yoga` : null, w.byKind.ride ? `${w.byKind.ride} rides` : null].filter(Boolean).join(', ') || `${w.count} logged` : 'None yet';
 
   async function tap(m: MetricToday) {
     if (m.metric.valueType === 'scale') return setScale(m.metric);
@@ -82,7 +82,7 @@ export function HealthPage() {
         <section className={styles.card} aria-labelledby="phone-sleep">
           <div className={styles.cardHead}>
             <h2 id="phone-sleep" className={styles.cardTitle}>
-              Sleep · 14 nights
+              Sleep, 14 nights
             </h2>
             <strong>{data.sleep.average === null ? 'No nights yet' : `${sleepAvg} avg`}</strong>
           </div>
@@ -140,7 +140,7 @@ export function HealthPage() {
         <div className={styles.actions}>
           <button type="button" className={styles.sourceChip} onClick={() => setOpen({ kind: 'log', what: 'sleep' })}>
             <span className={styles.dot} aria-hidden="true" />
-            Manual entries · log a reading
+            Manual entries, log a reading
           </button>
           <button type="button" className={styles.connect} onClick={() => setOpen({ kind: 'source' })}>
             <Icon name="plus" size={14} />
@@ -150,11 +150,11 @@ export function HealthPage() {
       </header>
 
       <div className={styles.stats}>
-        <Tile label="Sleep · 14-night avg" value={sleepAvg} note={data.sleep.logged ? `target 7h · met ${data.sleep.met} of ${data.sleep.logged}` : 'Log last night to start'} onClick={() => setOpen({ kind: 'log', what: 'sleep' })} big />
-        <Tile label="Steps · daily avg" value={data.steps.average === null ? '–' : n(data.steps.average)} note={data.steps.today === null ? 'Nothing logged today' : `today ${n(data.steps.today)} so far`} onClick={() => setOpen({ kind: 'log', what: 'steps' })} big />
+        <Tile label="Sleep, 14-night avg" value={sleepAvg} note={data.sleep.logged ? `target 7h, met ${data.sleep.met} of ${data.sleep.logged}` : 'Log last night to start'} onClick={() => setOpen({ kind: 'log', what: 'sleep' })} big />
+        <Tile label="Steps, daily avg" value={data.steps.average === null ? '–' : n(data.steps.average)} note={data.steps.today === null ? 'Nothing logged today' : `today ${n(data.steps.today)} so far`} onClick={() => setOpen({ kind: 'log', what: 'steps' })} big />
         <Tile label="Resting heart rate" value={data.restingHr ? n(data.restingHr.latest) : '–'} unit="bpm" note={changeLine(data.restingHr, '')} onClick={() => setOpen({ kind: 'log', what: 'restingHr' })} big />
         <Tile label="Weight" value={data.weight ? data.weight.latest.toFixed(1) : '–'} unit="kg" note={changeLine(data.weight, 'kg', 1)} onClick={() => setOpen({ kind: 'log', what: 'weight' })} big />
-        <Tile label={`Workouts · ${monthName}`} value={String(w.count)} note={workoutLine} onClick={() => setOpen({ kind: 'workout' })} big />
+        <Tile label={`Workouts in ${monthName}`} value={String(w.count)} note={workoutLine} onClick={() => setOpen({ kind: 'workout' })} big />
       </div>
 
       <div className={styles.split}>
@@ -354,7 +354,7 @@ function MetricRow({ m, onTap, onEdit, compact = false }: { m: MetricToday; onTa
         ? today === null
           ? 'Not logged today'
           : `${today.toFixed(today % 1 ? 1 : 0)} / 5`
-        : `${today === null ? 0 : Math.round(today * 10) / 10}${metric.target ? ` / ${metric.target}` : ''}${metric.unit && (!compact || !metric.target) ? ` ${metric.unit}` : ''}${!metric.target && lastTime && !compact ? ` · last ${lastTime}` : ''}`;
+        : `${today === null ? 0 : Math.round(today * 10) / 10}${metric.target ? ` / ${metric.target}` : ''}${metric.unit && (!compact || !metric.target) ? ` ${metric.unit}` : ''}${!metric.target && lastTime && !compact ? `, last ${lastTime}` : ''}`;
   const unit = metric.unit ? ` ${metric.step === 1 ? singular(metric.unit) : metric.unit}` : '';
   const tapLabel = metric.valueType === 'number' ? `Add ${metric.step}${unit} to ${metric.name}` : `Log ${metric.name}`;
   return (

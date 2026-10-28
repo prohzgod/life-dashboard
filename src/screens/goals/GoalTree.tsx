@@ -94,7 +94,7 @@ export function GoalTree({ views, areas, areaId, selectedId, onSelect, footer }:
         })}
       </ul>
       <div className={styles.treeFoot}>
-        <span>Black tick = where you should be today</span>
+        <span>The tick marks where you should be today</span>
         <span>{footer}</span>
       </div>
     </section>

@@ -70,7 +70,7 @@ export function blocksToAttachmentIds(blocks: unknown): string[] {
   return [...ids];
 }
 
-/** The first checklist in a document, labelled by the heading above it: "Before we go · 1 of 3". */
+/** The first checklist in a document, labelled by the heading above it: "Before we go, 1 of 3". */
 export function checklistProgress(blocks: unknown): { label: string | null; done: number; total: number } | null {
   if (!Array.isArray(blocks)) return null;
   let heading: string | null = null;

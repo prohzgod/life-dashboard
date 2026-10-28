@@ -1,21 +1,21 @@
 /**
- * Renders the PWA icons in public/ from the logo mark (brass tile, midnight leaf).
+ * Renders the PWA icons in public/ from the Grid mark: one square of the Swiss red on poster paper.
  * Run with: npx tsx scripts/generate-icons.ts  (needs `npx playwright install chromium` once).
  */
 import { chromium } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 
-const leaf = 'M12 21v-9M12 12c0-4.4 3.1-7.5 7.5-7.5 0 4.4-3.1 7.5-7.5 7.5zM12 15c0-3.3-2.7-6-6.5-6 0 3.8 2.7 6 6.5 6z';
-const brass = '#D4B57C';
-const midnight = '#131A2E';
+const paper = '#F8F7F3';
+const red = '#D9241B';
 
-// `inset` is the share of the canvas the leaf may use; maskable icons keep it inside the 80% safe zone.
-function svg(size: number, { rounded, inset }: { rounded: boolean; inset: number }) {
-  const mark = size * inset;
-  const offset = (size - mark) / 2;
+// `inset` is the share of the canvas the red square takes; maskable icons keep it inside the 80% safe zone.
+// The square sits low and left on its tile, hung from the grid like the wordmark's square, never centred.
+function svg(size: number, { inset }: { rounded: boolean; inset: number }) {
+  const mark = Math.round(size * inset);
+  const margin = Math.round((size - mark) * 0.42);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-    <rect width="${size}" height="${size}" rx="${rounded ? size * 0.22 : 0}" fill="${brass}"/>
-    <g transform="translate(${offset} ${offset}) scale(${mark / 24})" fill="none" stroke="${midnight}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${leaf}"/></g>
+    <rect width="${size}" height="${size}" fill="${paper}"/>
+    <rect x="${margin}" y="${size - margin - mark}" width="${mark}" height="${mark}" fill="${red}"/>
   </svg>`;
 }
 

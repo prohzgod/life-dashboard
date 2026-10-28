@@ -75,7 +75,7 @@ export function GoalsPage() {
             areaId={areaId}
             selectedId={selectedId}
             onSelect={(goalId) => navigate(`/goals/${goalId}`)}
-            footer={`${thisYear.filter((v) => v.goal.status === 'done').length} completed · ${thisYear.filter((v) => v.goal.status === 'dropped').length} dropped this year`}
+            footer={`${thisYear.filter((v) => v.goal.status === 'done').length} completed, ${thisYear.filter((v) => v.goal.status === 'dropped').length} dropped this year`}
           />
         )}
       </div>

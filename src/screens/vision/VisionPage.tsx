@@ -247,7 +247,7 @@ function WordOfYear({ word, year, phone }: { word: string | null; year: number; 
   if (phone) {
     return (
       <div className={styles.phoneWord}>
-        <span>{year} · word of the year</span>
+        <span>{year}, word of the year</span>
         {word ? (
           <Link to="/goals" className={styles.wordPill}>
             {word}

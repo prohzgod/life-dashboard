@@ -11,7 +11,7 @@ const TABS: Array<{ tab: Tab; label: string; to: string; icon: IconName }> = [
   { tab: 'library', label: 'Library', to: '/library', icon: 'library' },
 ];
 
-/** Phones: Home · Today · + · Tasks · Library, with capture in the middle. */
+/** Phones: Home, Today, +, Tasks, Library, with capture in the middle. */
 export function TabBar({ active, onCapture }: { active: Tab; onCapture: () => void }) {
   const link = (t: (typeof TABS)[number]) => (
     <Link key={t.tab} to={t.to} className={cx(styles.tab, active === t.tab && styles.active)} aria-current={active === t.tab ? 'page' : undefined}>

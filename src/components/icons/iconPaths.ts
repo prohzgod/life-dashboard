@@ -1,4 +1,4 @@
-/** Line icons on a 24px grid, from the approved mockups. Stroke with currentColor. */
+/** Line icons on a 24px grid. Stroke with currentColor. */
 export const iconPaths = {
   today:
     'M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',

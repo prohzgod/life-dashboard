@@ -50,7 +50,7 @@ export function TimeGrid({ days, today, range, layers, areas, hourHeight, firstH
             <div key={day} className={cx(styles.dayHead, day === today && styles.dayHeadToday)}>
               <span className={styles.dayName}>
                 {WEEKDAYS[new Date(`${day}T12:00:00`).getDay()]}
-                {day === today && ' · today'}
+                {day === today && ', today'}
               </span>
               <span className={styles.dayNumber}>{dayOfMonth(day)}</span>
             </div>
@@ -180,7 +180,7 @@ function Item({ item, hourHeight, phone, onOpen }: { item: GridItem & { col: num
       {phone ? (
         <span className={styles.itemLine}>
           {item.title}
-          <span className={styles.itemMeta}> · {item.done ? 'done' : item.kind === 'block' ? 'time block' : item.time}</span>
+          <span className={styles.itemMeta}>, {item.done ? 'done' : item.kind === 'block' ? 'time block' : item.time}</span>
         </span>
       ) : short ? (
         <span className={styles.itemLine}>
@@ -191,7 +191,7 @@ function Item({ item, hourHeight, phone, onOpen }: { item: GridItem & { col: num
           <span className={styles.itemTitle}>{item.title}</span>
           <span className={styles.itemMeta}>
             {item.time}
-            {item.kind === 'block' && item.detail !== 'Time block' ? ` · ${item.detail}` : ''}
+            {item.kind === 'block' && item.detail !== 'Time block' ? `, ${item.detail}` : ''}
           </span>
         </>
       )}

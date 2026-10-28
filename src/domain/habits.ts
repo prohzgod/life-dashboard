@@ -13,7 +13,7 @@ export type HabitInput = {
 
 export type HabitLogInput = { day: Day; value: number; status: 'done' | 'skipped' | 'missed' };
 
-/** done · skipped (on purpose, neutral) · missed · pending (today, not yet) · off (not scheduled) · before (didn't exist) */
+/** done, skipped (on purpose, neutral), missed, pending (today, not yet), off (not scheduled), before (didn't exist) */
 export type HabitDayState = 'done' | 'skipped' | 'missed' | 'pending' | 'off' | 'before';
 
 export type HabitSummary = {

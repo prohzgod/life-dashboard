@@ -36,7 +36,7 @@ export function ProgressPage() {
     <div className={styles.page}>
       <PageHeader
         title="Progress"
-        subtitle={`${periodLabel(period, anchor)}${isCurrent && period !== 'day' ? ' so far' : ''} · ${plural(logged, 'day')} logged · computed on this device`}
+        subtitle={`${periodLabel(period, anchor)}${isCurrent && period !== 'day' ? ' so far' : ''}, ${plural(logged, 'day')} logged, computed on this device`}
         actions={
           <>
             <Segmented label="Period" options={PERIODS} value={period} onChange={(p) => setPeriod(p)} />
@@ -45,7 +45,7 @@ export function ProgressPage() {
                 <Icon name="chevronLeft" size={16} />
               </button>
               <span className={styles.stepLabel} aria-live="polite">
-                {period === 'year' ? year(anchor) : periodLabel(period, anchor).replace(/^Week \d+ · /, '')}
+                {period === 'year' ? year(anchor) : periodLabel(period, anchor).replace(/^Week \d+, /, '')}
               </span>
               <button type="button" className={styles.stepButton} aria-label={`Next ${period}`} disabled={isCurrent} onClick={() => setAnchor(shiftPeriod(period, anchor, 1))}>
                 <Icon name="chevronRight" size={16} />
@@ -72,7 +72,7 @@ export function ProgressPage() {
           <StatTile
             label="Average sleep"
             value={stats.avgSleepMinutes === null ? '–' : formatMinutes(Math.round(stats.avgSleepMinutes)).replace(/(\d+)h (\d)m$/, '$1h 0$2m')}
-            caption={stats.nightsOver7h === null ? 'log sleep in your check-in' : `target 7h · met ${Math.round(stats.nightsOver7h * 100)}% of nights`}
+            caption={stats.nightsOver7h === null ? 'log sleep in your check-in' : `target 7h, met ${Math.round(stats.nightsOver7h * 100)}% of nights`}
           />
           <StatTile
             label="Weekly reviews"

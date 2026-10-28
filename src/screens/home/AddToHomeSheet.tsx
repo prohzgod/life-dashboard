@@ -50,7 +50,7 @@ export function AddToHomeSheet({ open, onClose, data }: { open: boolean; onClose
                   key={w.id}
                   icon={ICONS[kind]}
                   title={WIDGET_INFO[kind].title}
-                  sub={w.hidden ? `Hidden · ${WIDGET_INFO[kind].description.toLowerCase()}` : WIDGET_INFO[kind].description}
+                  sub={w.hidden ? `Hidden, ${WIDGET_INFO[kind].description.toLowerCase()}` : WIDGET_INFO[kind].description}
                   on={!w.hidden}
                   onAdd={() => setWidgetHidden(w.id, false)}
                 />

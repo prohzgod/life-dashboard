@@ -27,7 +27,7 @@ export function PageOptionsSheet({ open, onClose, node, parentTitle, onPin, onTr
           <span className={styles.headText}>
             <span className={styles.title}>{node.title}</span>
             <span className={styles.sub}>
-              {parentTitle ? `${parentTitle} · ` : ''}edited {timeAgo(node.updatedAt)}
+              {parentTitle ? `${parentTitle}, ` : ''}edited {timeAgo(node.updatedAt)}
             </span>
           </span>
         </div>

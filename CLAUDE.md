@@ -4,9 +4,9 @@ A personal life dashboard: goals, tasks, habits, a daily check-in, reviews (day 
 
 Read these before starting any task:
 - `docs/PRODUCT.md`: scope, screens, data model, build phases.
-- `docs/DESIGN.md`: the Midnight & Brass visual rules.
+- `docs/DESIGN.md`: the Grid visual rules (white paper, blue-black ink, ultramarine fields, one Swiss red mark; square, flat, sentence case).
 - `design/TOKENS.md`: every design token (colors light/dark, fonts, type scale, spacing, radius, shadows, layout sizes, motion). Import `design/tokens.css` once; use `design/tokens.ts` for charts and logic; `design/tokens.json` is the source of truth.
-- `design/README.md`: the approved designs. Before building or changing any screen, look at its screenshots in `design/screens/` (light and dark) and read its markup in `design/mockups/` for exact sizes, spacing, copy and tokens. The built screen should match the screenshot.
+- `design/README.md`: there are no mockups any more; the running app is the reference. Build new screens from the rules in `docs/DESIGN.md` and the patterns of the existing screens, and check them at 1440×960 and 390×844 in both themes.
 
 ## Stack (decided)
 

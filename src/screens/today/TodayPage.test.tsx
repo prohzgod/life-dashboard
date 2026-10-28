@@ -23,7 +23,7 @@ describe('Today', () => {
     await userEvent.type(input, 'Call Mom at 18:00 #family !high');
 
     const preview = screen.getByLabelText('Will be saved as');
-    expect(within(preview).getByText('Today · 18:00')).toBeInTheDocument();
+    expect(within(preview).getByText('Today, 18:00')).toBeInTheDocument();
     expect(within(preview).getByText('Family')).toBeInTheDocument();
     expect(within(preview).getByText('High priority')).toBeInTheDocument();
 
@@ -87,7 +87,7 @@ describe('Today', () => {
     expect(await screen.findByRole('progressbar', { name: 'Run 10 km without stopping' })).toBeInTheDocument();
     // Only the nearest horizon stands in: the year goal appears as the parent, not as its own bar.
     expect(screen.queryByRole('progressbar', { name: 'Run a half-marathon' })).not.toBeInTheDocument();
-    expect(screen.getByText(/^Run a half-marathon · /)).toBeInTheDocument();
+    expect(screen.getByText(/^Run a half-marathon, /)).toBeInTheDocument();
     expect(screen.getByText(/Your weekly review picks this week’s focus/)).toBeInTheDocument();
   });
 });

@@ -99,7 +99,7 @@ export function StepCurrent({ today }: { today: Day }) {
                 <span>{habit.title}</span>
                 <span className={styles.quiet}>
                   {summary.last7.filter((d) => d.state === 'done').length} of {summary.last7.filter((d) => d.state === 'done' || d.state === 'missed').length || 0} days
-                  {summary.streak > 1 ? ` · ${summary.streak}-day streak` : ''}
+                  {summary.streak > 1 ? `, ${summary.streak}-day streak` : ''}
                 </span>
               </li>
             ))}

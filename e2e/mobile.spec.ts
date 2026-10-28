@@ -64,7 +64,7 @@ test('pin a Library page to Home from its options sheet', async ({ page }) => {
   await expect(toast).toBeVisible();
   await toast.getByRole('link', { name: 'View' }).click();
   const pinned = page.getByRole('list', { name: 'Home widgets' }).getByRole('link', { name: /Japan trip 2027/ });
-  await expect(pinned).toContainText('Before we go · 0 of 2');
+  await expect(pinned).toContainText('Before we go, 0 of 2');
 });
 
 test('profile: edit, blur by default, tap to reveal, blur all', async ({ page }) => {
@@ -97,7 +97,7 @@ test('capture works offline from the + button', async ({ page, context }) => {
   });
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByText('Offline · saved here')).toBeVisible();
+  await expect(page.getByText('Offline, saved here')).toBeVisible();
   await tabs(page).getByRole('button', { name: 'Quick capture' }).click();
   const sheet = page.getByRole('dialog', { name: 'Quick capture' });
   await expect(sheet.getByText('You’re offline.', { exact: false })).toBeVisible();
@@ -225,7 +225,7 @@ test('Finance on a phone: the month, hide amounts, and an expense', async ({ pag
 test('Health on a phone: the sleep card, tiles and quick log', async ({ page }) => {
   await page.goto('/health');
   await expect(page.getByRole('heading', { level: 1, name: 'Health' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Sleep · 14 nights' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sleep, 14 nights' })).toBeVisible();
   await page.getByRole('button', { name: 'Add metric' }).click();
   const dialog = page.getByRole('dialog', { name: 'Add a metric' });
   await dialog.getByLabel('Name').fill('Coffee');

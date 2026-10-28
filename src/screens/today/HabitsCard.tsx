@@ -22,8 +22,8 @@ function habitMeta(habit: Habit, s: HabitSummary): string {
   if (counted && !s.todayDone) return `${s.todayValue} of ${habit.target}${habit.unit ? ` ${habit.unit}` : ''} today`;
   if (s.atRisk) return 'Missed yesterday. Today keeps the streak.';
   const pct = s.consistency === null ? null : `${Math.round(s.consistency * 100)}%`;
-  if (s.streak >= 2) return s.graceUsed ? `${s.streak}-day streak · ${s.graceUsed} grace` : `${s.streak}-day streak${pct ? ` · ${pct}` : ''}`;
-  if (s.countedInWindow > 0) return `${s.doneInWindow} of ${plural(s.countedInWindow, 'day')} · ${pct}`;
+  if (s.streak >= 2) return s.graceUsed ? `${s.streak}-day streak, ${s.graceUsed} grace` : `${s.streak}-day streak${pct ? `, ${pct}` : ''}`;
+  if (s.countedInWindow > 0) return `${s.doneInWindow} of ${plural(s.countedInWindow, 'day')}, ${pct}`;
   return s.todayDone ? 'Day one. Nicely done.' : 'Start today';
 }
 

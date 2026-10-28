@@ -23,7 +23,7 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
     <div className={styles.phone}>
       <header className={styles.phoneHeader}>
         <div className={styles.phoneHeading}>
-          <span className={styles.phoneEyebrow}>Calendar · week {isoWeek(anchor)}</span>
+          <span className={styles.phoneEyebrow}>Calendar, week {isoWeek(anchor)}</span>
           <h1 className={styles.phoneTitle}>{monthTitle(anchor).split(' ')[0]}</h1>
         </div>
         <button type="button" className={styles.roundButton} aria-label="New event" onClick={() => newEvent(view === 'day' ? { day: anchor, startMin: 9 * 60 } : undefined)}>
@@ -90,7 +90,7 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
               Habits {habits.done} / {habits.due}
             </span>
           )}
-          <span className={styles.metaText}>{imported.length ? `${imported[0]!.name} ${latest ? `read ${timeAgo(latest)}` : 'imported'} · read-only` : 'Saved on this device'}</span>
+          <span className={styles.metaText}>{imported.length ? `${imported[0]!.name} ${latest ? `read ${timeAgo(latest)}` : 'imported'}, read-only` : 'Saved on this device'}</span>
         </div>
       )}
 
@@ -99,7 +99,7 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
           {itemsForDay(range, anchor, layers, areas).allDay.map((item) => (
             <button key={item.key} type="button" className={styles.phoneAllDay} onClick={() => openAllDay(item.eventId)} style={{ background: `var(--${item.tone}-soft)`, color: `var(--${item.tone}-ink)` }}>
               {item.title}
-              <span className={styles.itemMeta}> · all day</span>
+              <span className={styles.itemMeta}>, all day</span>
             </button>
           ))}
           <TimeGrid days={[anchor]} today={today} range={range} layers={layers} areas={areas} hourHeight={hourHeight} phone onSlot={(day, startMin) => newEvent({ day, startMin })} onItem={openItem} onAllDay={openAllDay} />

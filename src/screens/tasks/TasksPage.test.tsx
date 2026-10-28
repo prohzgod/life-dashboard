@@ -23,7 +23,7 @@ describe('Inbox', () => {
     await userEvent.type(await screen.findByRole('textbox', { name: 'Capture anything' }), 'Renew car insurance{Enter}');
 
     const list = await screen.findByRole('list', { name: 'To triage' });
-    expect(within(list).getByText('Task · Finance')).toBeInTheDocument();
+    expect(within(list).getByText('Task, Finance')).toBeInTheDocument();
     expect(screen.getByText(/^1 to triage\./)).toBeInTheDocument();
 
     await userEvent.click(within(list).getByRole('button', { name: /Accept “Renew car insurance”/ }));
@@ -48,7 +48,7 @@ describe('task views and the detail drawer', () => {
     await captureTask('Dentist tomorrow at 13:00', { today, status: 'open' });
     renderAt('/tasks?view=upcoming');
     const group = await screen.findByRole('region', { name: formatDayShort(addDays(today, 1)) });
-    expect(within(group).getByRole('heading', { name: /^Tomorrow · / })).toBeInTheDocument();
+    expect(within(group).getByRole('heading', { name: /^Tomorrow, / })).toBeInTheDocument();
     expect(within(group).getByRole('button', { name: 'Dentist' })).toBeInTheDocument();
   });
 

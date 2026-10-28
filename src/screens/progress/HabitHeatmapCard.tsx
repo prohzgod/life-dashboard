@@ -20,7 +20,7 @@ export function HabitHeatmapCard({ year, habits, today }: { year: number; habits
 
   return (
     <Card
-      title={habitId === 'all' ? `Habits · all ${habits.length} combined` : `Habits · ${chosen[0]?.title ?? ''}`}
+      title={habitId === 'all' ? `Habits, all ${habits.length} combined` : `Habits, ${chosen[0]?.title ?? ''}`}
       className={styles.wide}
       action={
         <select className={styles.select} aria-label="Which habits" value={habitId} onChange={(e) => setHabitId(e.target.value)}>

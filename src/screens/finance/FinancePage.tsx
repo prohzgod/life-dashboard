@@ -151,7 +151,7 @@ export function FinancePage() {
                   <span className={styles.phoneTxText}>
                     <span className={styles.strong}>{t.description}</span>
                     <span className={styles.statNote}>
-                      {formatDayShort(t.day).slice(4)} · {SOURCE[t.source]}
+                      {formatDayShort(t.day).slice(4)}, {SOURCE[t.source]}
                     </span>
                   </span>
                   <span className={cx(styles.amount, t.amount > 0 && styles.income)}>{money(t.amount, { signed: true, whole: Math.abs(t.amount) >= 100000 })}</span>
@@ -215,7 +215,7 @@ export function FinancePage() {
         </Stat>
         <Stat label="Saved" amount={whole(s.saved)}>
           <span className={styles.statNote}>
-            {s.savingsRate === null ? `Goal ${Math.round(data.savingsTarget * 100)}% of income` : `${Math.round(s.savingsRate * 100)}% savings rate · goal ${Math.round(data.savingsTarget * 100)}%${s.savingsRate >= data.savingsTarget ? ', reached' : ''}`}
+            {s.savingsRate === null ? `Goal ${Math.round(data.savingsTarget * 100)}% of income` : `${Math.round(s.savingsRate * 100)}% savings rate, goal ${Math.round(data.savingsTarget * 100)}%${s.savingsRate >= data.savingsTarget ? ', reached' : ''}`}
           </span>
         </Stat>
         <section className={styles.stat} aria-label="Net worth">
@@ -382,7 +382,7 @@ function BudgetFigure({ c, money }: { c: CategorySpend; money: (cents: number) =
     <span className={cx(styles.budgetFigure, c.over && styles.overFigure)}>
       {money(c.spent)}
       {c.budget !== null ? ` / ${money(c.budget)}` : ''}
-      {c.over ? ' · over' : c.budget === null ? ' · no limit' : ''}
+      {c.over ? ', over' : c.budget === null ? ', no limit' : ''}
     </span>
   );
 }
@@ -403,7 +403,7 @@ function SavingsRow({ goal, money, hidden }: { goal: SavingsGoal; money: (cents:
         {money(saved)} of {money(target)}
         {!hidden && view.pace.sentence ? (
           <>
-            {' · '}
+            {', '}
             <span className={view.pace.state === 'behind' ? styles.warn : undefined}>{view.pace.sentence}</span>
           </>
         ) : null}
@@ -447,7 +447,7 @@ function NetWorth({ hasAccounts, revealed, value, short = false, onReveal, onAcc
       {revealed ? <span className={styles.statAmount}>{value}</span> : <span className={styles.worthHidden}>{HIDDEN_MONEY}</span>}
       <span className={styles.worthActions}>
         <button type="button" className={styles.textButton} aria-pressed={revealed} onClick={onReveal}>
-          {revealed ? 'Hide' : short ? 'Reveal' : 'Hidden by default · reveal'}
+          {revealed ? 'Hide' : short ? 'Reveal' : 'Hidden by default, reveal'}
         </button>
         <button type="button" className={styles.textButton} onClick={onAccounts}>
           Accounts

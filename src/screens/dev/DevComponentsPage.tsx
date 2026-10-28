@@ -16,7 +16,7 @@ const periods = [
 export function DevComponentsPage() {
   return (
     <>
-      <PageHeader title="Components" eyebrow="Midnight & Brass · dev" subtitle="Base components from docs/DESIGN.md in the light and the dark theme." />
+      <PageHeader title="Components" eyebrow="Grid, dev" subtitle="Base components from docs/DESIGN.md in the light and the dark theme." />
       <div className={styles.columns}>
         <ThemePanel theme="light" />
         <ThemePanel theme="dark" />
@@ -36,7 +36,7 @@ function ThemePanel({ theme }: { theme: 'light' | 'dark' }) {
     <section data-theme={theme} className={styles.panel} aria-label={`${theme === 'light' ? 'Light' : 'Dark'} theme`}>
       <h2 className={styles.panelTitle}>{theme === 'light' ? 'Light' : 'Dark'}</h2>
 
-      <Card title="Button" meta="primary · secondary · quiet">
+      <Card title="Button" meta="primary, secondary, quiet">
         <div className={styles.row}>
           <Button variant="primary">Add to plan</Button>
           <Button>Save for later</Button>
@@ -53,7 +53,7 @@ function ThemePanel({ theme }: { theme: 'light' | 'dark' }) {
         </div>
       </Card>
 
-      <Card title="Chip" meta="status tones · life areas">
+      <Card title="Chip" meta="status tones, life areas">
         <div className={styles.row}>
           {statusTones.map((tone) => (
             <Chip key={tone} tone={tone}>

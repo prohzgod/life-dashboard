@@ -1,41 +1,55 @@
-# Midnight & Brass: design rules
+# Grid: design rules
 
-Calm porcelain pages, deep midnight ink, one line of brass. Tokens live in `design/tokens.json` (source of truth, with a usage note per token) and `design/tokens.css` (CSS variables, light + dark).
+Swiss style for a tool you open every morning: white poster paper, a blue-black ink, one ultramarine that floods a field, and one Swiss red that marks the thing that needs you. Structure comes from scale, space and changes of paper, never from strokes or shadows. The theme is Hallmark's **Grid**; it replaced Midnight & Brass in October 2026 (see `docs/REDESIGN-DRAFT.md`).
 
-## Color
+Tokens live in `design/tokens.json` (source of truth, a usage note per token) and `design/tokens.css` (CSS variables, light and dark). Token names kept from the first design (`--surface`, `--primary`, `--career-soft`…) so components didn't change; what they mean now is below.
 
-- Page `--bg`; cards `--surface` + `1px solid var(--line)` + `--radius-lg` + `--shadow-sm`. Wells inside cards `--sunken`; chips, tracks and segmented controls `--sunken-2`; secondary panes `--subtle`.
-- Text: `--ink` titles and body, `--ink-2` secondary, `--ink-3` captions. `--ink-4` is for decorative strokes only.
-- `--primary` is midnight in light and brass in dark: the one primary button per screen, checked states, focus ring. Text on it: `--on-primary`.
-- `--accent` (brass) is a sparing highlight: logo, word of the year, today's marker. Not for body text.
-- `--inverse` / `--on-inverse`: chat bubbles, the current review step, quote cards, the pace tick.
-- Life areas each have a base, `-soft` and `-ink`: `health`, `career`, `finance`, `family`, `growth`, `home`, `fun`. Base for dots, bars and charts; soft + ink for chips and tints.
-- Status: `--success`, `--warning`, `--danger` (with `-soft` / `-ink`), always paired with a word.
-- Sidebar is midnight in both themes: use only `--nav-*` tokens inside it. Active item: `--nav-surface` background, brass icon.
-- Charts: `--mood-1…5`, `--heat-0…4`, `--viz-soft` for a second series.
+## Colour: three roles and the paper
+
+- **Paper.** `--bg` is the sheet. Panels and cards are `--surface` (a step darker), with no border and no shadow. Wells, tracks and filled controls use `--sunken`; segmented tracks `--sunken-2`; side panes `--subtle`.
+- **Ink.** `--ink` for headings, body and the primary control (`--primary` is the ink block, `--on-primary` its text). `--ink-2` secondary text, `--ink-3` captions, `--ink-4` decoration and disabled text only.
+- **Field, the ultramarine.** `--inverse` / `--on-inverse` flood a block: the year field on Today, the current review step, the Weekly review tile. Also `--link`, progress fills and "done" (`--success` resolves to it). At most one field per screen region; two fields never touch.
+- **Mark, the Swiss red.** `--accent`, `--danger` and `--warning` all resolve to it: behind pace, over budget, today's marker, the wordmark square, text selection. One red field per page at most, and **never red on the ultramarine**.
+- **Data.** Life areas (`--health` … `--fun`), mood (`--mood-1…5`) and heatmaps (`--heat-0…4`) are names only: they all resolve to the one ultramarine ramp, by choice. Areas are told apart by their name, never by colour.
+- Dark mode keeps the roles: a blue-black sheet, warm white ink, the ultramarine and the red lifted for contrast.
 
 ## Type
 
-- `--font-display` Cormorant Garamond (500/600, italic): screen titles 38px, editor page titles 46px, big numbers 36px with `font-variant-numeric: lining-nums tabular-nums`, quote cards. Never below 18px.
-- `--font-sans` Jost: card headings 16/24 600, body 15/24, secondary 13/20, captions 12/16, labels 11/16 600 uppercase with 0.12em tracking.
+- `--font-display` **Radio Canada Big** 700, sentence case, tight tracking (−0.03em): screen titles, big figures, the wordmark. Figures may run larger than the head beside them.
+- `--font-sans` **Radio Canada** 400–700: body 15/24, secondary 13/20, captions 12/16. Labels, captions, table heads and nav groups are a step smaller, **sentence case, never capitals, never tracked**.
+- Both are bundled with `@fontsource`, so they work offline.
 
-## Layout and shape
+## Shape and surfaces
 
-- Desktop: 248px sidebar, content padding 32px, 24px between cards, 20px inside cards. Screens were designed at 1440×960.
-- Mobile (390×844): 18px gutters (`--mobile-gutter`), 84px tab bar (`--tabbar-height`) Home · Today · + · Tasks · Library with a centered 56px capture button; 44px avatar at the top-right of every tab root opens Profile. Home is a 4-column bento grid (`--bento-columns`, `--bento-gap` 9px, rows ~70px, `--radius-tile` 20px). Pushed screens use a 56px top bar with "‹ Back". Blurred personal values use `filter: blur(6px)` and an eye-off icon button. The capture button uses `--shadow-primary`; bottom sheets use `--radius-xl`.
-- Radius: `--radius-lg` cards, `--radius-md` buttons and inputs, `--radius-sm` chips and segmented pills, `--radius-pill` status pills, `--radius-xs` checkboxes.
+- **Radius 0** everywhere and **no shadows** (`--shadow-md` is a 1px hairline, used only by floating layers: menus, dialogs, suggestion lists).
+- **No strokes** around panels or controls. The only lines: hairlines between table rows, the 1px line under an input, and the 1px edge of a floating layer.
+- **Dashes mean something**: a time block from a task, a drop zone, the "add" tile, a target line on a chart. Nothing else is dashed.
+- Spacing on the 4px scale (`--space-*`).
 
-## Components to build first
+## Controls
 
-- **Button**: primary / secondary (border `--line-strong`) / quiet (`--link` text), 40px (32px small).
-- **Chip**: tones neutral, primary, success, warning, danger, accent and each area; optional dot.
-- **Checkbox**: 22px, `--control` border, checked fills `--primary`; done label goes `--ink-3` with strike-through.
-- **Switch**: 42×24, off `--control`, on `--primary`.
-- **Segmented control**: `--sunken-2` track, selected pill `--raised` + `--shadow-sm`.
-- **PaceBar**: 8px track `--track`, fill in the area color, 2×16px `--inverse` tick at the expected %, status line in `--success` or `--warning`.
-- **Card**, **StatTile** (label, display numeral, caption), **NavItem**, **HabitTile** (name, check button, 7 day squares, meta), **TaskRow**.
+- **Primary button**: a square ink block with paper text. One per screen.
+- **Secondary button**: a `--sunken` fill, no outline. **Quiet**: link-coloured text, underline on hover.
+- Every button moves 1px down while pressed. **Disabled** shows on three channels: a `--track` fill, `--ink-4` text and the not-allowed cursor (never opacity alone).
+- **Inputs**: no box; a 1px `--control` line beneath.
+- **Focus**: a 2px `--primary` outline, 2px offset, appearing at once.
+- **Switch, checkbox, segmented**: square; on and checked fill with ink.
 
-## Icons and motion
+## Layout
 
-- Inline line icons on a 24px grid, 1.7–2px round strokes, `currentColor`. No emoji.
-- Motion: 120ms hovers, 200ms toggles, 320ms sheets, `--ease`. Respect `prefers-reduced-motion`.
+- Desktop: 248px sidebar with the **wordmark** (a red square exactly two lines tall beside "Life / Dashboard"), content padding 32px, panels 20px inside. Library and Tasks are fixed-height panes that scroll on their own.
+- Phones (below 768px): 18px gutters, the 84px tab bar (Home · Today · + · Tasks · Library), the bento Home, pushed screens with "‹ Back to …" headers, 44px touch targets.
+- Heads hang flush left from the column; nothing is centred except empty-state copy inside its own panel.
+
+## Copy
+
+Plain, kind, second person, exact. No dashes as punctuation ("Thu 1 Jan to Thu 31 Dec"), and no middle dots joining a run of facts: use commas or separate lines ("4 days left, $660 under budget"). No emoji.
+
+## Motion
+
+State only: 120ms hovers, 200ms toggles, a 320ms rise for sheets, all on `--ease`. Width is never animated. `prefers-reduced-motion` turns it all off.
+
+## Checking a screen
+
+- Look at it at 1440×960 and 390×844, in light and dark, with real data seeded.
+- If the Hallmark skill is installed, lint with `node ~/.claude/skills/hallmark/scripts/sloplint.mjs src --scope app`: it should report 0 FAIL and 0 REFLEX. Every CSS module starts with the Hallmark stamp line; the full stamp and its record of reworded and dropped items is at the top of `src/styles/global.css`.

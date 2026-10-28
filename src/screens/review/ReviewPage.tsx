@@ -78,7 +78,7 @@ function ReviewFlow({ review, today }: { review: Review; today: Day }) {
         </ol>
         <div className={styles.mobileHeading}>
           <span className={styles.eyebrow}>
-            Step {step} of 5 · week {isoWeek(review.periodStart)}
+            Step {step} of 5, week {isoWeek(review.periodStart)}
           </span>
           <h1 className={styles.mobileTitle}>{steps[step - 1]!.title}</h1>
         </div>
@@ -110,7 +110,7 @@ function ReviewFlow({ review, today }: { review: Review; today: Day }) {
       <header className={styles.header}>
         <div className={styles.heading}>
           <span className={styles.eyebrow}>
-            Week {isoWeek(review.periodStart)} · {weekRange(review.periodStart)}
+            Week {isoWeek(review.periodStart)}, {weekRange(review.periodStart)}
           </span>
           <h1 className={styles.title}>Weekly review</h1>
         </div>
@@ -140,7 +140,7 @@ function ReviewFlow({ review, today }: { review: Review; today: Day }) {
                 </span>
                 <span className={styles.stepText}>
                   <span className={styles.stepTitle}>{s.title}</span>
-                  <span className={styles.stepHint}>{state === 'done' ? `${s.hint} · done` : s.hint}</span>
+                  <span className={styles.stepHint}>{state === 'done' ? `${s.hint}, done` : s.hint}</span>
                 </span>
               </button>
             </li>
@@ -162,8 +162,8 @@ function ReviewFlow({ review, today }: { review: Review; today: Day }) {
             Back
           </Button>
           <span className={styles.footerNote}>
-            Step {step} of 5 · you can skip any step
-            {step === 1 ? '' : ` · reviewing ${formatDayShort(review.periodStart)} – ${formatDayShort(addDays(review.periodStart, 6))}`}
+            Step {step} of 5, you can skip any step
+            {step === 1 ? '' : `, reviewing ${formatDayShort(review.periodStart)} – ${formatDayShort(addDays(review.periodStart, 6))}`}
           </span>
           {step < 5 ? (
             <Button variant="primary" onClick={() => go(step + 1)}>

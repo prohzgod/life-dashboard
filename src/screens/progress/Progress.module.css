@@ -18,9 +18,9 @@
   width: 34px;
   height: 34px;
   padding: 0;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: 0;
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink-2);
 }
 
@@ -173,7 +173,8 @@ a.pixel:hover {
 .select {
   height: 30px;
   padding: 0 var(--space-2);
-  border: 1px solid var(--line);
+  border: 0;
+  border-bottom: 1px solid var(--control);
   border-radius: var(--radius-sm);
   background: var(--surface);
   font-size: var(--text-body-s-size);

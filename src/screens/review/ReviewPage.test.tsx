@@ -21,17 +21,17 @@ describe('Weekly review', () => {
     await captureTask('Renew car insurance', { today, status: 'inbox' });
     renderReview();
 
-    // 1 · Get clear
+    // 1, Get clear
     const steps = await screen.findByRole('list', { name: 'Review steps' });
     expect(within(steps).getByRole('listitem', { current: 'step' })).toHaveTextContent('Get clear');
     await userEvent.click(await screen.findByRole('button', { name: /Accept “Renew car insurance”/ }));
     expect(await screen.findByText('Inbox zero. Nicely done.')).toBeInTheDocument();
 
-    // 2 · Get current
+    // 2, Get current
     await userEvent.click(screen.getByRole('button', { name: 'Next: get current' }));
     expect(await screen.findByRole('heading', { name: 'Coming up' })).toBeInTheDocument();
 
-    // 3 · Reflect
+    // 3, Reflect
     await userEvent.click(screen.getByRole('button', { name: 'Next: reflect' }));
     const wentWell = await screen.findByRole('textbox', { name: 'What went well?' });
     await userEvent.type(wentWell, 'Two phone-free evenings.');
@@ -39,7 +39,7 @@ describe('Weekly review', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Insert into review' }));
     expect(await screen.findByText(/In your review\./)).toBeInTheDocument();
 
-    // 4 · Plan
+    // 4, Plan
     await userEvent.click(screen.getByRole('button', { name: /^Next: plan week \d+$/ }));
     await userEvent.click(await screen.findByRole('checkbox', { name: /Run 10 km without stopping/ }));
     const name = screen.getByRole('textbox', { name: 'This week for Run 10 km without stopping' });
@@ -49,10 +49,10 @@ describe('Weekly review', () => {
     await userEvent.click(screen.getByRole('button', { name: /^Set focus for week/ }));
     expect(await screen.findByText('Saved. These show on Today next week.')).toBeInTheDocument();
 
-    // 5 · Done
+    // 5, Done
     await userEvent.click(screen.getByRole('button', { name: 'Next: wrap up' }));
     expect(await screen.findByText('Two phone-free evenings.')).toBeInTheDocument();
-    expect(await screen.findByText('Run 3× this week · Draft essay #9')).toBeInTheDocument();
+    expect(await screen.findByText('Run 3× this week, Draft essay #9')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Finish review' }));
     expect(await screen.findByRole('heading', { name: 'Review saved' })).toBeInTheDocument();
 

@@ -30,7 +30,7 @@ export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; toda
         <section className={styles.vision} aria-label={`${year(today)} vision`}>
           <span className={styles.eyebrow}>
             {year(today)}
-            {board.vision.wordOfYear ? ` · ${board.vision.wordOfYear}` : ''}
+            {board.vision.wordOfYear ? `, ${board.vision.wordOfYear}` : ''}
           </span>
           <p className={styles.statement}>{board.vision.title}</p>
         </section>
@@ -61,7 +61,7 @@ export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; toda
                 <span className={styles.cardTop}>
                   <span className={styles.areaLine}>
                     {area && <span className={styles.dot} style={{ background: `var(--${area.color})` }} aria-hidden="true" />}
-                    {area ? `${area.name} · ` : ''}
+                    {area ? `${area.name}, ` : ''}
                     {goal.horizon}
                   </span>
                   <span className={styles.now}>{goalNow(goal, progress)}</span>
@@ -80,7 +80,7 @@ export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; toda
       {(nested > 0 || completed > 0) && (
         <p className={styles.foot}>
           {nested > 0 ? `${nested} more inside these` : ''}
-          {nested > 0 && completed > 0 ? ' · ' : ''}
+          {nested > 0 && completed > 0 ? ', ' : ''}
           {completed > 0 ? `${completed} completed this year` : ''}
         </p>
       )}

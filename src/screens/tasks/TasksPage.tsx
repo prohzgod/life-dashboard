@@ -206,7 +206,7 @@ function DayGroups({ tasks, today, lookups, selectedId, onOpen, empty }: ListPro
       {groups.map((group) => (
         <section key={group.day} className={styles.dayGroup} aria-label={formatDayShort(group.day)}>
           <h3 className={styles.dayHeading}>
-            {group.day === addDays(today, 1) ? `Tomorrow · ${formatDayShort(group.day)}` : formatDayRelative(group.day, today)}
+            {group.day === addDays(today, 1) ? `Tomorrow, ${formatDayShort(group.day)}` : formatDayRelative(group.day, today)}
           </h3>
           <ul className={styles.plainList}>
             {group.tasks.map((task) => (

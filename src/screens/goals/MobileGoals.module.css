@@ -70,9 +70,9 @@
   gap: 8px;
   height: 36px;
   padding: 0 16px;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
-  background: var(--surface);
+  background: var(--sunken);
   font-size: var(--text-body-s-size);
 }
 

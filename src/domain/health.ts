@@ -95,7 +95,7 @@ export function lastTimeToday(entries: readonly MetricEntryLike[], today: Day): 
 export type WorkoutKind = 'run' | 'walk' | 'ride' | 'swim' | 'yoga' | 'strength' | 'other';
 export type WorkoutLike = { day: Day; kind: WorkoutKind; distanceKm: number | null; durationSec: number };
 
-/** "11 · 62 km run · 3 yoga" for a month. */
+/** "11, 62 km run, 3 yoga" for a month. */
 export function workoutMonth(workouts: readonly WorkoutLike[], month: string): { count: number; runKm: number; byKind: Partial<Record<WorkoutKind, number>> } {
   const inMonth = workouts.filter((w) => w.day.startsWith(month));
   const byKind: Partial<Record<WorkoutKind, number>> = {};

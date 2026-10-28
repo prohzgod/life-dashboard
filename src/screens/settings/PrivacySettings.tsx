@@ -242,7 +242,7 @@ export function PrivacySettings() {
     ? `${formatDayRelative(toLocalDay(new Date(state.backup.lastAt)), today)} ${formatTime(state.backup.lastAt)}`
     : null;
   const lastLine = last
-    ? `${last}${state.backup.lastSize ? ` · ${formatBytes(state.backup.lastSize)}` : ""}${state.backup.lastVerified ? " · verified" : ""}`
+    ? `${last}${state.backup.lastSize ? `, ${formatBytes(state.backup.lastSize)}` : ""}${state.backup.lastVerified ? ", verified" : ""}`
     : "No backups yet";
   const status = (
     <div
@@ -720,7 +720,7 @@ function StorageBar({
       </div>
       {compact ? (
         <p className={styles.settingSub}>
-          Works fully offline. Database {formatBytes(database)} · photos{" "}
+          Works fully offline. Database {formatBytes(database)}, photos{" "}
           {formatBytes(storage.images)}
         </p>
       ) : (
@@ -731,7 +731,7 @@ function StorageBar({
                 className={cx(styles.swatch, p.className)}
                 aria-hidden="true"
               />
-              {p.label} · {formatBytes(p.bytes)}
+              {p.label}, {formatBytes(p.bytes)}
             </li>
           ))}
         </ul>

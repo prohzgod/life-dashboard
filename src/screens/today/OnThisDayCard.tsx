@@ -26,7 +26,7 @@ export function OnThisDayCard({ today }: { today: Day }) {
         )}
       </div>
       <div className={styles.memoryText}>
-        <span className={styles.memoryEyebrow}>On this day{memory ? ` · ${year(memory.entry.day)}` : ''}</span>
+        <span className={styles.memoryEyebrow}>On this day{memory ? `, ${year(memory.entry.day)}` : ''}</span>
         {memory ? (
           <>
             <p className={styles.memoryQuote}>{memory.entry.line ? `“${memory.entry.line}”` : 'A photo from this day.'}</p>

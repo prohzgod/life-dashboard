@@ -24,7 +24,7 @@ PROMPTS.md describes a cloud branch-and-PR flow. **This repo doesn't use it.**
 
 ## Steps
 
-1. **Read.** Read the PRODUCT.md sections for the feature. Look at every matching `design/screens/*-{light,dark}.png`, desktop and `Mobile*`, and read its `design/mockups/*.dc.html` for sizes, copy and tokens.
+1. **Read.** Read the PRODUCT.md sections for the feature and `docs/DESIGN.md` (the Grid rules). There are no mockups: model new screens on the existing ones (header, panels, stat tiles, phone header with "‹ Home").
 2. **Domain.** Put pure logic in `src/domain/*.ts` with `*.test.ts` next to it, written test-first.
 3. **Data.** For any schema change:
    - Add `version(n+1)` in `src/data/db.ts` with an `.upgrade()` that calls a `normalizeX()`. Also apply that normalizer in `backup.ts` `importReplacingAll`, so older exports still import.
@@ -36,8 +36,9 @@ PROMPTS.md describes a cloud branch-and-PR flow. **This repo doesn't use it.**
 5. **Tests.** Desktop e2e goes in `e2e/<feature>.spec.ts`. Phone e2e goes **only** in `e2e/mobile.spec.ts`, because the `phone` project matches only that file.
 6. **Visual check.** Use `.scratch/` (git-ignored) and reuse `.scratch/seed.mjs` and `pairs.mjs`:
    - Seed realistic data first, because empty screens hide layout bugs.
-   - Take screenshots at the design size: desktop 1440×960, phone 390×844 (profile 390×1290), light and dark.
-   - Lay each one beside its design PNG and fix the differences.
+   - Take screenshots at desktop 1440×960 and phone 390×844 (profile 390×1290), light and dark.
+   - Check them against `docs/DESIGN.md`: flat panels without strokes, square corners, sentence-case labels, one ultramarine field, red only for what needs attention, no "a · b" strings.
+   - Start every new CSS module with the Hallmark stamp line, and lint with `node ~/.claude/skills/hallmark/scripts/sloplint.mjs src --scope app` when the Hallmark skill is installed: 0 FAIL, 0 REFLEX.
 7. **Verify.** Run `npm run lint`, `npm run typecheck`, `npm test` and `npm run test:e2e`. Run e2e more than once when a test drags or depends on timing.
    - Before e2e, check nothing is listening on port 4173 (`lsof -nP -iTCP:4173 -sTCP:LISTEN`). Playwright reuses a server that's already there, and a leftover `vite preview` serves an old build.
 8. **Report and stop.** Tell the user:

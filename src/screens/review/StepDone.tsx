@@ -44,7 +44,7 @@ export function StepDone({ review, today }: { review: Review; today: Day }) {
         {!!focus?.length && (
           <div>
             <dt>Focus</dt>
-            <dd>{focus.map((g) => g.title).join(' · ')}</dd>
+            <dd>{focus.map((g) => g.title).join(', ')}</dd>
           </div>
         )}
       </dl>

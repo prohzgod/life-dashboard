@@ -13,7 +13,7 @@ const MOODS = ['Awful', 'Low', 'Okay', 'Good', 'Great'];
 export function YearInPixels({ year, entries, today }: { year: number; entries: DayEntryLike[]; today: Day }) {
   const grid = yearPixels(year, entries);
   return (
-    <Card title="Year in pixels · mood" meta="One square per day. Pick a day to open its journal page." className={styles.wide}>
+    <Card title="Year in pixels, mood" meta="One square per day. Pick a day to open its journal page." className={styles.wide}>
       <div className={styles.pixels} role="grid" aria-label={`Mood for each day of ${year}`}>
         {grid.map((row, m) => (
           <div key={m} role="row" className={styles.pixelRow}>

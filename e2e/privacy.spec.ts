@@ -27,7 +27,7 @@ test('encrypted backup: set a passphrase, back up, change things, restore', asyn
   expect(file.suggestedFilename()).toMatch(/^life-dashboard-\d{4}-\d{2}-\d{2}-\d{4}\.backup\.json$/);
   const path = await file.path();
   expect(readFileSync(path, 'utf8')).not.toContain('Kept in the backup');
-  await expect(page.getByText(/· verified$/)).toBeVisible();
+  await expect(page.getByText(/, verified$/)).toBeVisible();
 
   // Change something after the backup, then restore it with the recovery key.
   await page.goto('/today');

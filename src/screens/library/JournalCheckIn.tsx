@@ -30,7 +30,7 @@ export function JournalCheckIn({ day }: { day: Day }) {
         <span className={styles.checkInLabel}>Check-in</span>
         {entry && (facts.length > 0 || entry.line) ? (
           <>
-            {facts.length > 0 && <span className={styles.checkInFacts}>{facts.join(' · ')}</span>}
+            {facts.length > 0 && <span className={styles.checkInFacts}>{facts.join(', ')}</span>}
             {entry.line && <p className={styles.checkInLine}>“{entry.line}”</p>}
           </>
         ) : (

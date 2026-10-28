@@ -24,7 +24,7 @@ export function PlanCard({ today }: { today: Day }) {
   const minutesLeft = open.reduce((sum, t) => sum + (t.estimateMin ?? 0), 0);
   const rolled = open.filter((t) => rolledOverDays(t, today) > 0).length;
   const meta = tasks?.length
-    ? `${done} of ${tasks.length} done${minutesLeft ? ` · about ${formatMinutes(minutesLeft)} left` : ''}`
+    ? `${done} of ${tasks.length} done${minutesLeft ? `, about ${formatMinutes(minutesLeft)} left` : ''}`
     : undefined;
 
   const open_ = (task: Task) => navigate(`/tasks?view=today&task=${task.id}`);

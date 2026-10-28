@@ -35,7 +35,7 @@ test('budgets, expenses and going over, in plain numbers', async ({ page }) => {
   await expect(spent).toContainText('$106');
   await expect(spent).toContainText('of $560');
   await expect(spent).toContainText('$454 under budget');
-  await expect(page.getByRole('region', { name: 'Budget by category' }).or(page.locator('section', { has: page.getByRole('heading', { name: 'Budget by category' }) }))).toContainText('$68 / $60 · over');
+  await expect(page.getByRole('region', { name: 'Budget by category' }).or(page.locator('section', { has: page.getByRole('heading', { name: 'Budget by category' }) }))).toContainText('$68 / $60, over');
 
   // Edit a transaction from the table.
   await table.getByRole('button', { name: 'Groceries' }).click();
@@ -88,7 +88,7 @@ test('net worth stays hidden until you reveal it', async ({ page }) => {
   await dialog.getByRole('button', { name: 'Done' }).click();
 
   await expect(worth).toContainText('••••••');
-  await worth.getByRole('button', { name: 'Hidden by default · reveal' }).click();
+  await worth.getByRole('button', { name: 'Hidden by default, reveal' }).click();
   await expect(worth).toContainText('1,600');
   expect(today).toMatch(/^\d{4}-/);
 });

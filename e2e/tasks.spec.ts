@@ -35,7 +35,7 @@ test('⌘N captures to the Inbox from anywhere, then Accept files it', async ({ 
 
   await page.getByRole('link', { name: /^Inbox/ }).first().click();
   const triage = page.getByRole('list', { name: 'To triage' });
-  await expect(triage.getByText(/Task · Finance · due/)).toBeVisible();
+  await expect(triage.getByText(/Task, Finance, due/)).toBeVisible();
   await triage.getByRole('button', { name: /Accept/ }).click();
   await expect(page.getByText(/Inbox zero/)).toBeVisible();
 });

@@ -48,7 +48,7 @@ describe('summarizeMonth', () => {
     expect(s.savingsRate).toBeCloseTo(60000 / 420000);
     expect(s.categories.find((c) => c.id === 'subs')).toMatchObject({ spent: 6800, over: true, share: 1 });
     expect(s.categories.find((c) => c.id === 'food')).toMatchObject({ spent: 2840, over: false });
-    expect(budgetSentence(s, (c) => `$${c / 100}`)).toBe('2 days left · $463.6 under budget');
+    expect(budgetSentence(s, (c) => `$${c / 100}`)).toBe('2 days left, $463.6 under budget');
   });
 
   it('closes past months and counts all days for future ones', () => {

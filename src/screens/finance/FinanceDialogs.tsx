@@ -437,7 +437,7 @@ function AccountsForm({ accounts, currency, onClose }: { accounts: Account[]; cu
             <li key={a.id}>
               <span>
                 {a.name}
-                <span className={styles.hint}>{a.kind === 'asset' ? ' · I own' : ' · I owe'}</span>
+                <span className={styles.hint}>{a.kind === 'asset' ? ', I own' : ', I owe'}</span>
               </span>
               <span className={styles.amount}>{formatMoney(a.kind === 'asset' ? a.balance : -a.balance, currency)}</span>
               <Button variant="quiet" size="sm" aria-label={`Remove ${a.name}`} onClick={() => removeAccount(a.id)}>
