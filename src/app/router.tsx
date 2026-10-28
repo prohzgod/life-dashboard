@@ -17,6 +17,7 @@ import { TaskRedirect } from '@/screens/tasks/TaskRedirect';
 import { CalendarPage } from '@/screens/calendar/CalendarPage';
 import { VisionPage } from '@/screens/vision/VisionPage';
 import { FinancePage } from '@/screens/finance/FinancePage';
+import { HealthPage } from '@/screens/health/HealthPage';
 
 export const routes: RouteObject[] = [
   {
@@ -42,7 +43,7 @@ export const routes: RouteObject[] = [
       { path: 'library/:nodeId', element: <LazyLibraryPage mode="node" /> },
       { path: 'vision', element: <VisionPage /> },
       { path: 'finance', element: <FinancePage /> },
-      { path: 'health', element: <ScreenPage screen="health" /> },
+      { path: 'health', element: <HealthPage /> },
       { path: 'assistant', element: <ScreenPage screen="assistant" /> },
       { path: 'settings', element: <Navigate to="/settings/privacy" replace /> },
       { path: 'settings/:tab', element: <SettingsPage /> },

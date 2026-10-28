@@ -28,6 +28,7 @@ import type {
   Budget,
   Transaction,
   Account,
+  Workout,
 } from './types';
 
 const bySortKey = <T extends { sortKey: string }>(a: T, b: T) => (a.sortKey < b.sortKey ? -1 : a.sortKey > b.sortKey ? 1 : 0);
@@ -103,3 +104,4 @@ export const visionCardsRepo = createRepository<VisionCard>(db.visionCards);
 export const budgetsRepo = createRepository<Budget>(db.budgets);
 export const transactionsRepo = createRepository<Transaction>(db.transactions);
 export const accountsRepo = createRepository<Account>(db.accounts);
+export const workoutsRepo = createRepository<Workout>(db.workouts);

@@ -27,6 +27,7 @@ import type {
   Budget,
   Transaction,
   Account,
+  Workout,
 } from './types';
 
 /**
@@ -60,6 +61,7 @@ export class LifeDb extends Dexie {
   budgets!: Table<Budget, string>;
   transactions!: Table<Transaction, string>;
   accounts!: Table<Account, string>;
+  workouts!: Table<Workout, string>;
   meta!: Table<MetaEntry, string>;
 
   constructor(name = 'life-dashboard') {
@@ -132,6 +134,15 @@ export class LifeDb extends Dexie {
       transactions: 'id, spaceId, day, categoryId, goalId, importKey, updatedAt',
       accounts: 'id, spaceId, sortKey, updatedAt',
     });
+    // v8: Health: workouts, and metrics gain a built-in key, a step and an order.
+    this.version(8)
+      .stores({ workouts: 'id, spaceId, day, goalId, updatedAt', metrics: 'id, spaceId, systemKey, updatedAt' })
+      .upgrade((tx) =>
+        tx
+          .table('metrics')
+          .toCollection()
+          .modify((metric: Metric) => normalizeMetric(metric)),
+      );
   }
 }
 
@@ -160,6 +171,14 @@ export function normalizeEvent(event: CalendarEvent): CalendarEvent {
   event.notes ??= '';
   if (event.source !== 'ics') event.source = 'local';
   return event;
+}
+
+/** Fills in metric fields added after a metric was first saved. Also used when importing older exports. */
+export function normalizeMetric(metric: Metric): Metric {
+  metric.systemKey ??= null;
+  metric.step ??= 1;
+  metric.sortKey ??= 'a0';
+  return metric;
 }
 
 const SEEDED_FOLDERS: Record<string, string> = { Journal: 'journal', Areas: 'areas', Projects: 'projects' };
@@ -201,6 +220,7 @@ export const dataTableNames = [
   'budgets',
   'transactions',
   'accounts',
+  'workouts',
 ] as const satisfies ReadonlyArray<keyof LifeDb>;
 
 export type DataTableName = (typeof dataTableNames)[number];

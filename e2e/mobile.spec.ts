@@ -221,3 +221,21 @@ test('Finance on a phone: the month, hide amounts, and an expense', async ({ pag
   await expect(hide).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('region', { name: 'Spent this month' })).toContainText('••••••');
 });
+
+test('Health on a phone: the sleep card, tiles and quick log', async ({ page }) => {
+  await page.goto('/health');
+  await expect(page.getByRole('heading', { level: 1, name: 'Health' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sleep · 14 nights' })).toBeVisible();
+  await page.getByRole('button', { name: 'Add metric' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Add a metric' });
+  await dialog.getByLabel('Name').fill('Coffee');
+  await dialog.getByLabel('Unit').fill('cups');
+  await dialog.getByRole('button', { name: 'Add metric' }).click();
+  const row = page.getByRole('listitem').filter({ has: page.getByRole('button', { name: 'Edit Coffee' }) });
+  await row.getByRole('button', { name: 'Add 1 cup to Coffee' }).click();
+  await expect(row).toContainText('1');
+  await page.getByRole('button', { name: /^Weight/ }).click();
+  await page.getByRole('dialog', { name: 'Log a reading' }).getByLabel(/^Value/).fill('70');
+  await page.getByRole('dialog', { name: 'Log a reading' }).getByRole('button', { name: 'Save' }).click();
+  await expect(page.getByRole('button', { name: /^Weight 70\.0 kg/ })).toBeVisible();
+});

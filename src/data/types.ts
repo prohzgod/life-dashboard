@@ -146,6 +146,11 @@ export interface Metric extends BaseRecord {
   valueType: 'number' | 'scale' | 'yesno';
   aggregation: 'sum' | 'average' | 'last';
   target: number | null;
+  /** Built-in health metrics (steps, resting heart rate, weight); null for ones you make. */
+  systemKey: 'steps' | 'restingHr' | 'weight' | null;
+  /** How much one tap of + adds (1 glass, 250 ml). */
+  step: number;
+  sortKey: string;
 }
 
 export interface MetricEntry extends BaseRecord {
@@ -355,6 +360,19 @@ export interface Account extends BaseRecord {
   /** Cents, always positive; debts count against net worth. */
   balance: number;
   sortKey: string;
+}
+
+export interface Workout extends BaseRecord {
+  day: LocalDay;
+  kind: 'run' | 'walk' | 'ride' | 'swim' | 'yoga' | 'strength' | 'other';
+  title: string;
+  distanceKm: number | null;
+  durationSec: number;
+  avgHr: number | null;
+  source: 'manual' | 'health';
+  /** A goal measured in km this counts toward (its longest distance). */
+  goalId: string | null;
+  notes: string;
 }
 
 /** Device bookkeeping (seed version, current space). Not user data, not exported. */

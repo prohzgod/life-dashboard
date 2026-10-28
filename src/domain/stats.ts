@@ -1,3 +1,4 @@
+import { sleepMoodPattern } from './health';
 import { addDays, dayOfMonth, daysInMonth, diffDays, isoWeek, makeDay, month, startOfWeek, weekday, year, type Day } from './days';
 import { dayState } from './habits';
 import { habitConsistencyBetween, type DayEntryLike, type HabitData } from './review';
@@ -161,24 +162,17 @@ export function periodStats({ from, to, today, completedDays, habits, entries, r
 
 export type Pattern = { text: string; detail: string; link: { label: string; to: string } | null };
 
-const MIN_DAYS = 5;
-
 /** Plain observations from your own data, only once there's enough of it to mean something. */
 export function findPatterns({ entries, completedDays, habits, reviewedWeeks, today }: Omit<StatsInput, 'from' | 'to' | 'since'>): Pattern[] {
   const out: Pattern[] = [];
 
-  const withSleep = entries.filter((e) => e.mood !== null && e.sleepMinutes !== null);
-  const rested = withSleep.filter((e) => e.sleepMinutes! >= 420);
-  const short = withSleep.filter((e) => e.sleepMinutes! < 420);
-  if (rested.length >= MIN_DAYS && short.length >= MIN_DAYS) {
-    const diff = avg(rested.map((e) => e.mood!)) - avg(short.map((e) => e.mood!));
-    if (Math.abs(diff) >= 0.3) {
-      out.push({
-        text: `Days after 7h+ sleep are rated ${Math.abs(diff).toFixed(1)} ${diff > 0 ? 'higher' : 'lower'} on mood.`,
-        detail: `${rested.length} rested days vs ${short.length} short nights`,
-        link: { label: 'See sleep data', to: '/health' },
-      });
-    }
+  const sleep = sleepMoodPattern(entries);
+  if (sleep && Math.abs(sleep.diff) >= 0.3) {
+    out.push({
+      text: `Days after 7h+ sleep are rated ${Math.abs(sleep.diff).toFixed(1)} ${sleep.diff > 0 ? 'higher' : 'lower'} on mood.`,
+      detail: `${sleep.restedDays} rested days vs ${sleep.shortDays} short nights`,
+      link: { label: 'See sleep data', to: '/health' },
+    });
   }
 
   if (completedDays.length >= 20) {

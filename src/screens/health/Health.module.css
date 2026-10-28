@@ -1,0 +1,651 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-display-m-size);
+  font-variant-numeric: lining-nums;
+  font-weight: var(--text-display-m-weight);
+  letter-spacing: var(--text-display-m-tracking);
+  line-height: var(--text-display-m-line);
+}
+
+.moduleChip {
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--sunken-2);
+  color: var(--ink-2);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.privacyNote {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sourceChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--sunken-2);
+  color: var(--ink);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--success);
+}
+
+.connect {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 var(--space-3);
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+/* ---- Tiles ---- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-well);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+}
+
+.tile:hover {
+  border-color: var(--line-strong);
+}
+
+.tileLabel {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+}
+
+.tileValue {
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.tileBig .tileValue {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-weight: 500;
+}
+
+.tileUnit {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-s-size);
+  font-weight: 500;
+}
+
+.tileNote {
+  overflow: hidden;
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Cards ---- */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 18px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.cardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.cardTitle {
+  font-size: var(--text-heading-size);
+  font-weight: 600;
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.textButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--link);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.textLink {
+  color: var(--link);
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.quiet,
+.note {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  line-height: 1.45;
+}
+
+.quiet {
+  font-size: var(--text-body-s-size);
+}
+
+.lead {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.selfStart {
+  align-self: flex-start;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  margin-left: var(--space-2);
+  border-radius: 2px;
+}
+
+.rested {
+  background: var(--career);
+}
+
+.short {
+  background: var(--viz-soft);
+}
+
+.none {
+  background: var(--track);
+}
+
+/* ---- Sleep chart ---- */
+
+.chart {
+  position: relative;
+  height: 170px;
+  margin: var(--space-2) 0 0;
+}
+
+.chartCompact {
+  height: 80px;
+}
+
+.bars {
+  display: grid;
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+  gap: var(--space-2);
+  height: 100%;
+  margin: 0;
+  padding: 0 0 22px;
+  list-style: none;
+}
+
+.chartCompact .bars {
+  gap: 5px;
+  padding-bottom: 0;
+}
+
+.barSlot {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+}
+
+.barLabel {
+  position: absolute;
+  right: 0;
+  bottom: -22px;
+  left: 0;
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  text-align: center;
+}
+
+.barLabel.strong {
+  color: var(--ink);
+}
+
+.target {
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  margin-bottom: 22px;
+  border-top: 1.5px dashed var(--ink-4);
+  pointer-events: none;
+}
+
+.chartCompact .target {
+  margin-bottom: 0;
+}
+
+.targetLabel {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  color: var(--ink-3);
+  font-size: 11px;
+}
+
+/* ---- Mood ---- */
+
+.moodBars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  font-size: var(--text-body-s-size);
+}
+
+.moodBars > div {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  align-items: center;
+}
+
+.moodBars dd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.moodTrack {
+  flex-grow: 1;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--sunken-2);
+}
+
+.moodTrack > span {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+}
+
+/* ---- Workouts ---- */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-s-size);
+}
+
+.table td {
+  padding: 10px var(--space-2) 10px 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--ink-2);
+}
+
+.rowButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+}
+
+.rowButton:hover {
+  text-decoration: underline;
+}
+
+/* ---- Metrics ---- */
+
+.metrics,
+.quickLog {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.metrics {
+  gap: 10px;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.metrics .metric {
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border-radius: 12px;
+  background: var(--sunken);
+}
+
+.quickLog .metric {
+  min-height: 52px;
+}
+
+.quickLog .metric + .metric {
+  border-top: 1px solid var(--line-soft);
+}
+
+.metricName {
+  flex-grow: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.metricValue {
+  color: var(--ink-2);
+  font-size: var(--text-body-s-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.plus {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.quickLog .plus {
+  width: var(--touch-min);
+  height: 40px;
+  border-radius: 12px;
+}
+
+/* ---- Dialogs ---- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.fieldLabel {
+  font-weight: 600;
+}
+
+.field input,
+.field select {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  color-scheme: inherit;
+  font-size: var(--text-body-l-size);
+  font-weight: 400;
+}
+
+.hint {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  font-weight: 400;
+}
+
+.fieldRow {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-body-s-size);
+}
+
+.formError {
+  color: var(--danger);
+  font-size: var(--text-body-s-size);
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.dangerButton {
+  color: var(--danger);
+}
+
+.scale {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+/* ---- Phone ---- */
+
+.phone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.phoneHeader {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--touch-min);
+}
+
+.phoneBack {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--touch-min);
+  padding-right: 10px;
+  color: var(--link);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.phoneTitle {
+  position: absolute;
+  right: 0;
+  left: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
+}
+
+.roundButton {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink-2);
+}
+
+.phoneSource {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+}
+
+.phoneSource .sourceChip {
+  height: 28px;
+  background: var(--health-soft);
+  color: var(--health-ink);
+  font-size: var(--text-caption-size);
+}
+
+.phone .card {
+  padding: var(--space-4);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.phoneTiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.phoneTiles .tile {
+  padding: var(--space-4);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 1180px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

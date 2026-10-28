@@ -178,12 +178,30 @@ export function Widget({ widget, data, today }: Props) {
           </span>
         </Link>
       );
-    case 'assistant':
-    case 'steps':
+    case 'steps': {
+      const max = Math.max(1, ...data.steps.week.map((n) => n ?? 0));
       return (
-        <Link to={widget.kind === 'assistant' ? '/assistant' : '/health'} className={styles.tile}>
-          <Label icon={widget.kind === 'assistant' ? 'assistant' : 'health'}>{WIDGET_INFO[widget.kind].title}</Label>
-          <span className={styles.meta}>{widget.kind === 'assistant' ? 'Comes with the Assistant module.' : 'Comes with the Health module.'}</span>
+        <Link to="/health" className={cx(styles.tile, styles.row)}>
+          <span className={styles.rowText}>
+            <span className={styles.smallLabel}>
+              <Icon name="health" size={13} /> Steps
+            </span>
+            <span className={styles.value}>{data.steps.today === null ? '–' : Math.round(data.steps.today).toLocaleString()}</span>
+            {size !== 'S' && data.steps.average !== null && <span className={styles.meta}>avg {Math.round(data.steps.average).toLocaleString()}</span>}
+          </span>
+          <span className={styles.bars} aria-hidden="true">
+            {data.steps.week.map((n, i) => (
+              <span key={i} className={styles.bar} style={{ height: `${Math.max(8, ((n ?? 0) / max) * 100)}%`, background: n === null ? 'var(--track)' : 'var(--health)' }} />
+            ))}
+          </span>
+        </Link>
+      );
+    }
+    case 'assistant':
+      return (
+        <Link to="/assistant" className={styles.tile}>
+          <Label icon="assistant">{WIDGET_INFO[widget.kind].title}</Label>
+          <span className={styles.meta}>Comes with the Assistant module.</span>
         </Link>
       );
     case 'pinned':
