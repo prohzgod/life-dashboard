@@ -1,8 +1,9 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .close {
@@ -33,7 +34,7 @@
 
 .text {
   min-height: 104px;
-  padding: var(--space-3) 14px;
+  padding: var(--space-3) 16px;
   border: 1.5px solid var(--primary);
   border-radius: var(--radius-lg);
   background: var(--surface);
@@ -62,7 +63,7 @@
 .chips > div {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .save {
@@ -84,7 +85,7 @@
 .offline {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-well);
   background: var(--warning-soft);

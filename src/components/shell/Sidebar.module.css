@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 /* The sidebar is midnight in both themes: only --nav-* tokens inside it. */
 .rail {
   flex-shrink: 0;
@@ -11,11 +12,11 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  gap: 18px;
+  gap: 20px;
   width: var(--sidebar-width);
   height: 100vh;
   height: 100dvh;
-  padding: 22px 14px 16px;
+  padding: 24px 16px 16px;
   overflow-y: auto;
   background: var(--nav-bg);
   color: var(--nav-ink);
@@ -29,26 +30,36 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 0 6px;
+  gap: 12px;
+  padding: 0 8px;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-md);
-  background: var(--nav-accent);
-  color: var(--on-nav-accent);
+.brand {
+  align-items: stretch;
+}
+
+/* Grid's wordmark: a square of the red mark, exactly two lines tall, beside the name in two lines. */
+.mark {
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  background: var(--accent);
 }
 
 .wordmark {
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-display);
-  font-size: 23px;
-  font-weight: 600;
-  line-height: 1;
+  font-size: 19px;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+}
+
+.wordmark strong {
+  font-weight: 700;
+}
+
+.wordmark span {
+  font-weight: 400;
 }
 
 .actions {
@@ -62,7 +73,7 @@
   align-items: center;
   gap: var(--space-2);
   height: 38px;
-  padding: 0 10px;
+  padding: 0 12px;
   border: 1px solid var(--nav-line);
   border-radius: var(--radius-md);
   background: var(--nav-surface);
@@ -77,9 +88,9 @@
 }
 
 .kbd {
-  padding: 2px 6px;
+  padding: 4px 8px;
   border: 1px solid var(--nav-line);
-  border-radius: 5px;
+  border-radius: 0;
   color: var(--nav-ink-2);
   font-size: 11px;
   line-height: 14px;
@@ -97,13 +108,12 @@
   color: var(--on-nav-accent);
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.01em;
 }
 
 .kbdOnAccent {
-  padding: 1px 6px;
+  padding: 1px 8px;
   border: 1px solid var(--on-nav-accent);
-  border-radius: 5px;
+  border-radius: 0;
   font-size: 11px;
   line-height: 14px;
 }
@@ -111,40 +121,38 @@
 .groups {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .group {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .groupLabel {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px 5px;
+  padding: 0 12px 4px;
   color: var(--nav-ink-3);
   font-size: var(--text-label-size);
   font-weight: var(--text-label-weight);
   line-height: var(--text-label-line);
   letter-spacing: var(--text-label-tracking);
-  text-transform: uppercase;
 }
 
 .groupHint {
   font-size: 11px;
   font-style: italic;
   font-weight: 500;
-  letter-spacing: 0.02em;
   text-transform: none;
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -153,9 +161,9 @@
 .item {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 12px;
   height: 36px;
-  padding: 0 10px;
+  padding: 0 12px;
   border-radius: var(--radius-md);
   color: var(--nav-ink-2);
   font-size: 14px;
@@ -190,7 +198,7 @@
 
 .badge {
   min-width: 22px;
-  padding: 1px 7px;
+  padding: 1px 8px;
   border: 1px solid var(--nav-line);
   border-radius: var(--radius-md);
   color: var(--nav-ink-2);
@@ -209,15 +217,15 @@
 .footer {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-top: auto;
 }
 
 .status {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: var(--space-3) 14px;
+  gap: 8px;
+  padding: var(--space-3) 16px;
   border: 1px solid var(--nav-line);
   border-radius: var(--radius-well);
 }
@@ -251,14 +259,14 @@
 .spaceRow {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .space {
   display: flex;
   flex-grow: 1;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
   height: 46px;
   padding: 0 var(--space-2);
@@ -281,7 +289,7 @@
   color: var(--nav-accent);
   font-family: var(--font-display);
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .spaceText {

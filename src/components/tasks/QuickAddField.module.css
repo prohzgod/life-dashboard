@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .inline {
   display: flex;
   flex-direction: column;
@@ -25,11 +26,12 @@
 .field {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .field:focus-within {
-  border-color: var(--primary-line);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .plus {
@@ -56,8 +58,8 @@
 }
 
 .kbd {
-  padding: 2px 6px;
-  border-radius: 5px;
+  padding: 4px 8px;
+  border-radius: 0;
   background: var(--sunken-2);
   color: var(--ink-2);
   font-size: 11px;
@@ -66,7 +68,7 @@
 
 .preview,
 .example {
-  padding-left: 26px;
+  padding-left: 28px;
 }
 
 .example {

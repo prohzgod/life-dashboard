@@ -1,817 +1,817 @@
 {
- "$description": "Life Dashboard · Midnight & Brass (W3C Design Tokens format). Colors have light and dark sets.",
+ "$description": "Life Dashboard · Grid (W3C Design Tokens format). Colors have light and dark sets.",
  "color": {
   "light": {
    "bg": {
     "$type": "color",
-    "$value": "#EEF0F3",
+    "$value": "#F8F7F3",
     "$description": "Page background behind cards (the porcelain ground)."
    },
    "surface": {
     "$type": "color",
-    "$value": "#FCFCFD",
+    "$value": "#EDECE7",
     "$description": "Cards, panels and inputs on `bg`."
    },
    "raised": {
     "$type": "color",
-    "$value": "#FFFFFF",
+    "$value": "#F8F7F3",
     "$description": "The selected pill in a segmented control, the active row in a list. Sits on `sunken-2` or `subtle`."
    },
    "sunken": {
     "$type": "color",
-    "$value": "#F2F4F7",
+    "$value": "#E2DFDA",
     "$description": "Tiles and wells inside a card (habit tiles, stat tiles, info notes)."
    },
    "sunken-2": {
     "$type": "color",
-    "$value": "#E6E9EF",
+    "$value": "#D6D4CE",
     "$description": "Chips, segmented-control tracks, progress tracks on `surface`."
    },
    "subtle": {
     "$type": "color",
-    "$value": "#F6F7F9",
+    "$value": "#EDECE7",
     "$description": "Secondary panes (tree, filters) and quiet input fields."
    },
    "track": {
     "$type": "color",
-    "$value": "#E1E5EC",
+    "$value": "#E2DFDA",
     "$description": "Empty part of progress bars and missed-day squares."
    },
    "line": {
     "$type": "color",
-    "$value": "#DCE1E8",
+    "$value": "#D8D6D0",
     "$description": "Card borders and input borders."
    },
    "line-soft": {
     "$type": "color",
-    "$value": "#EAEDF2",
+    "$value": "#E4E3DE",
     "$description": "Dividers between rows inside a card."
    },
    "line-strong": {
     "$type": "color",
-    "$value": "#BEC5D2",
+    "$value": "#BAB7B0",
     "$description": "Secondary-button borders, empty checkboxes, dashed drop zones, switch track when off."
    },
    "control": {
     "$type": "color",
-    "$value": "#858DA0",
+    "$value": "#7D8088",
     "$description": "Borders of empty checkboxes and radio buttons, switch track when off (3:1 on `surface`)."
    },
    "ink": {
     "$type": "color",
-    "$value": "#141926",
+    "$value": "#0F141E",
     "$description": "Headlines and body text on `surface`, `bg`, `sunken`."
    },
    "ink-2": {
     "$type": "color",
-    "$value": "#444B5D",
+    "$value": "#2C303B",
     "$description": "Secondary text and icons on `surface`, `bg`, `sunken`, `sunken-2`."
    },
    "ink-3": {
     "$type": "color",
-    "$value": "#5F6679",
+    "$value": "#575B64",
     "$description": "Captions, metadata and timestamps on `surface`, `bg`, `sunken`, `sunken-2`."
    },
    "ink-4": {
     "$type": "color",
-    "$value": "#8E95A7",
+    "$value": "#83868E",
     "$description": "Decorative strokes only: chart guides, arrows, drag handles. Never for text."
    },
    "inverse": {
     "$type": "color",
-    "$value": "#18203A",
+    "$value": "#1F40BE",
     "$description": "High-emphasis dark block: chat bubbles, the current step, quote cards, pace ticks."
    },
    "on-inverse": {
     "$type": "color",
-    "$value": "#F6F3EC",
+    "$value": "#F8F7F3",
     "$description": "Text on `inverse`."
    },
    "on-inverse-2": {
     "$type": "color",
-    "$value": "#B6BDD0",
+    "$value": "#C2D1F3",
     "$description": "Secondary text on `inverse`."
    },
    "inverse-accent": {
     "$type": "color",
-    "$value": "#D4B57C",
+    "$value": "#F8F7F3",
     "$description": "Eyebrow labels on `inverse`."
    },
    "primary": {
     "$type": "color",
-    "$value": "#22305A",
+    "$value": "#0F141E",
     "$description": "Primary buttons, checked boxes, the active habit, focus ring. Midnight in light, brass in dark."
    },
    "primary-hover": {
     "$type": "color",
-    "$value": "#19244A",
+    "$value": "#2C303B",
     "$description": "Hover state of `primary` fills."
    },
    "on-primary": {
     "$type": "color",
-    "$value": "#F7F4EC",
+    "$value": "#F8F7F3",
     "$description": "Text and icons on `primary`."
    },
    "on-primary-2": {
     "$type": "color",
-    "$value": "#C3CAE0",
+    "$value": "#BAB7B0",
     "$description": "Secondary text on `primary`."
    },
    "primary-soft": {
     "$type": "color",
-    "$value": "#E5E9F4",
+    "$value": "#DAE5FD",
     "$description": "Selected states, time blocks, suggestion chips."
    },
    "primary-softer": {
     "$type": "color",
-    "$value": "#F3F5FA",
+    "$value": "#EBF0FB",
     "$description": "Today's column, quiet highlights."
    },
    "primary-ink": {
     "$type": "color",
-    "$value": "#1B2750",
+    "$value": "#1F40BE",
     "$description": "Text on `primary-soft` and `primary-softer`."
    },
    "primary-line": {
     "$type": "color",
-    "$value": "#AAB6D6",
+    "$value": "#9CB6F2",
     "$description": "Borders of selected items and dashed time blocks."
    },
    "link": {
     "$type": "color",
-    "$value": "#2D4585",
+    "$value": "#1F40BE",
     "$description": "Links and text buttons on `surface` and `bg`."
    },
    "accent": {
     "$type": "color",
-    "$value": "#A8844A",
+    "$value": "#D9241B",
     "$description": "Brass: sparing highlights such as the word of the year, today's marker and the logo. Fills and marks, not body text."
    },
    "accent-soft": {
     "$type": "color",
-    "$value": "#F3ECDF",
+    "$value": "#FDE3DE",
     "$description": "Brass-tinted fill behind `accent-ink` text."
    },
    "accent-ink": {
     "$type": "color",
-    "$value": "#6B5020",
+    "$value": "#9E1710",
     "$description": "Text on `accent-soft`."
    },
    "success": {
     "$type": "color",
-    "$value": "#2B6A52",
+    "$value": "#1F40BE",
     "$description": "On-pace text and saved/synced status on `surface`. Always paired with a word."
    },
    "success-soft": {
     "$type": "color",
-    "$value": "#E0EEE7",
+    "$value": "#DAE5FD",
     "$description": "Fill behind success chips."
    },
    "warning": {
     "$type": "color",
-    "$value": "#92530E",
+    "$value": "#D9241B",
     "$description": "Behind-pace and overdue text on `surface`. Always paired with a word."
    },
    "warning-soft": {
     "$type": "color",
-    "$value": "#F7EBDA",
+    "$value": "#FDE3DE",
     "$description": "Offline banner, behind-pace chips, recovery-kit warning."
    },
    "warning-ink": {
     "$type": "color",
-    "$value": "#613708",
+    "$value": "#9E1710",
     "$description": "Text on `warning-soft`."
    },
    "danger": {
     "$type": "color",
-    "$value": "#9E344B",
+    "$value": "#D9241B",
     "$description": "Over-budget bars, destructive actions."
    },
    "danger-soft": {
     "$type": "color",
-    "$value": "#F6E2E6",
+    "$value": "#FDE3DE",
     "$description": "Fill behind danger and high-priority chips."
    },
    "danger-ink": {
     "$type": "color",
-    "$value": "#72213A",
+    "$value": "#9E1710",
     "$description": "Text on `danger-soft`."
    },
    "health": {
     "$type": "color",
-    "$value": "#3E7D63",
+    "$value": "#1F40BE",
     "$description": "Health area: dots, bars and charts."
    },
    "health-soft": {
     "$type": "color",
-    "$value": "#E2EFE8",
+    "$value": "#EBF0FB",
     "$description": "Health area tint (chips, image placeholders)."
    },
    "health-ink": {
     "$type": "color",
-    "$value": "#1E4B3A",
+    "$value": "#0F141E",
     "$description": "Text on `health-soft`."
    },
    "career": {
     "$type": "color",
-    "$value": "#3A5A9A",
+    "$value": "#1F40BE",
     "$description": "Career area; also work calendar events and sleep bars."
    },
    "career-soft": {
     "$type": "color",
-    "$value": "#E3E9F5",
+    "$value": "#EBF0FB",
     "$description": "Career tint; work events."
    },
    "career-ink": {
     "$type": "color",
-    "$value": "#203766",
+    "$value": "#0F141E",
     "$description": "Text on `career-soft`."
    },
    "finance": {
     "$type": "color",
-    "$value": "#A8742A",
+    "$value": "#1F40BE",
     "$description": "Finance area: budgets, savings bars."
    },
    "finance-soft": {
     "$type": "color",
-    "$value": "#F6EBDA",
+    "$value": "#EBF0FB",
     "$description": "Finance tint."
    },
    "finance-muted": {
     "$type": "color",
-    "$value": "#E4D2B2",
+    "$value": "#DAE5FD",
     "$description": "Past months in finance charts."
    },
    "finance-ink": {
     "$type": "color",
-    "$value": "#633F0C",
+    "$value": "#0F141E",
     "$description": "Text on `finance-soft`."
    },
    "family": {
     "$type": "color",
-    "$value": "#A04E66",
+    "$value": "#1F40BE",
     "$description": "Family area and shared-space markers; the 'now' line in calendars."
    },
    "family-soft": {
     "$type": "color",
-    "$value": "#F6E3E9",
+    "$value": "#EBF0FB",
     "$description": "Family tint; family events."
    },
    "family-ink": {
     "$type": "color",
-    "$value": "#6B243D",
+    "$value": "#0F141E",
     "$description": "Text on `family-soft`."
    },
    "growth": {
     "$type": "color",
-    "$value": "#6A56A8",
+    "$value": "#1F40BE",
     "$description": "Growth area: learning, writing."
    },
    "growth-soft": {
     "$type": "color",
-    "$value": "#ECE7F7",
+    "$value": "#EBF0FB",
     "$description": "Growth tint; personal events."
    },
    "growth-ink": {
     "$type": "color",
-    "$value": "#42326C",
+    "$value": "#0F141E",
     "$description": "Text on `growth-soft`."
    },
    "home": {
     "$type": "color",
-    "$value": "#2F7C84",
+    "$value": "#1F40BE",
     "$description": "Home area."
    },
    "home-soft": {
     "$type": "color",
-    "$value": "#DEEFF1",
+    "$value": "#EBF0FB",
     "$description": "Home tint."
    },
    "home-ink": {
     "$type": "color",
-    "$value": "#1A4A50",
+    "$value": "#0F141E",
     "$description": "Text on `home-soft`."
    },
    "fun": {
     "$type": "color",
-    "$value": "#8F6F10",
+    "$value": "#1F40BE",
     "$description": "Fun and travel area."
    },
    "fun-soft": {
     "$type": "color",
-    "$value": "#F4EDD3",
+    "$value": "#EBF0FB",
     "$description": "Fun tint."
    },
    "fun-ink": {
     "$type": "color",
-    "$value": "#574409",
+    "$value": "#0F141E",
     "$description": "Text on `fun-soft`."
    },
    "viz-soft": {
     "$type": "color",
-    "$value": "#AFBEDC",
+    "$value": "#9CB6F2",
     "$description": "Second series in charts (below target, earlier period)."
    },
    "mood-1": {
     "$type": "color",
-    "$value": "#9A3550",
+    "$value": "#E2DFDA",
     "$description": "Mood scale 1 (awful), year in pixels."
    },
    "mood-2": {
     "$type": "color",
-    "$value": "#DDA7AC",
+    "$value": "#BBCBEC",
     "$description": "Mood scale 2 (low)."
    },
    "mood-3": {
     "$type": "color",
-    "$value": "#E1E4EB",
+    "$value": "#84A3EA",
     "$description": "Mood scale 3 (okay)."
    },
    "mood-4": {
     "$type": "color",
-    "$value": "#9DB1D8",
+    "$value": "#4A72DE",
     "$description": "Mood scale 4 (good)."
    },
    "mood-5": {
     "$type": "color",
-    "$value": "#2C437F",
+    "$value": "#1F40BE",
     "$description": "Mood scale 5 (great)."
    },
    "heat-0": {
     "$type": "color",
-    "$value": "#E4E7EE",
+    "$value": "#E2DFDA",
     "$description": "Habit heatmap: none done."
    },
    "heat-1": {
     "$type": "color",
-    "$value": "#C9D3E8",
+    "$value": "#BBCBEC",
     "$description": "Habit heatmap: a few."
    },
    "heat-2": {
     "$type": "color",
-    "$value": "#93A7D2",
+    "$value": "#84A3EA",
     "$description": "Habit heatmap: half."
    },
    "heat-3": {
     "$type": "color",
-    "$value": "#5470AE",
+    "$value": "#4A72DE",
     "$description": "Habit heatmap: most."
    },
    "heat-4": {
     "$type": "color",
-    "$value": "#22305A",
+    "$value": "#1F40BE",
     "$description": "Habit heatmap: all done."
    },
    "nav-bg": {
     "$type": "color",
-    "$value": "#131A2E",
+    "$value": "#EDECE7",
     "$description": "Sidebar background (midnight in both themes)."
    },
    "nav-surface": {
     "$type": "color",
-    "$value": "#1D2542",
+    "$value": "#E2DFDA",
     "$description": "Active item and search field in the sidebar."
    },
    "nav-line": {
     "$type": "color",
-    "$value": "#29314F",
+    "$value": "#D8D6D0",
     "$description": "Borders inside the sidebar."
    },
    "nav-ink": {
     "$type": "color",
-    "$value": "#EEF0F6",
+    "$value": "#0F141E",
     "$description": "Active item and titles on `nav-bg`."
    },
    "nav-ink-2": {
     "$type": "color",
-    "$value": "#AFB6CA",
+    "$value": "#2C303B",
     "$description": "Inactive items on `nav-bg`."
    },
    "nav-ink-3": {
     "$type": "color",
-    "$value": "#8189A3",
+    "$value": "#575B64",
     "$description": "Group labels and hints on `nav-bg`."
    },
    "nav-success": {
     "$type": "color",
-    "$value": "#79C4A2",
+    "$value": "#1F40BE",
     "$description": "Saved and synced status dot on `nav-bg`."
    },
    "nav-accent": {
     "$type": "color",
-    "$value": "#D4B57C",
+    "$value": "#0F141E",
     "$description": "Brass in the sidebar: active icon, Quick capture button."
    },
    "on-nav-accent": {
     "$type": "color",
-    "$value": "#131A2E",
+    "$value": "#F8F7F3",
     "$description": "Text on `nav-accent`."
    }
   },
   "dark": {
    "bg": {
     "$type": "color",
-    "$value": "#0D111D",
+    "$value": "#0B0F18",
     "$description": "Page background behind cards (the porcelain ground)."
    },
    "surface": {
     "$type": "color",
-    "$value": "#171C2B",
+    "$value": "#141823",
     "$description": "Cards, panels and inputs on `bg`."
    },
    "raised": {
     "$type": "color",
-    "$value": "#313A56",
+    "$value": "#282E3B",
     "$description": "The selected pill in a segmented control, the active row in a list. Sits on `sunken-2` or `subtle`."
    },
    "sunken": {
     "$type": "color",
-    "$value": "#1C2234",
+    "$value": "#1F2430",
     "$description": "Tiles and wells inside a card (habit tiles, stat tiles, info notes)."
    },
    "sunken-2": {
     "$type": "color",
-    "$value": "#252C42",
+    "$value": "#282E3B",
     "$description": "Chips, segmented-control tracks, progress tracks on `surface`."
    },
    "subtle": {
     "$type": "color",
-    "$value": "#131827",
+    "$value": "#141823",
     "$description": "Secondary panes (tree, filters) and quiet input fields."
    },
    "track": {
     "$type": "color",
-    "$value": "#2A3249",
+    "$value": "#1F2430",
     "$description": "Empty part of progress bars and missed-day squares."
    },
    "line": {
     "$type": "color",
-    "$value": "#2B334B",
+    "$value": "#303540",
     "$description": "Card borders and input borders."
    },
    "line-soft": {
     "$type": "color",
-    "$value": "#212839",
+    "$value": "#222630",
     "$description": "Dividers between rows inside a card."
    },
    "line-strong": {
     "$type": "color",
-    "$value": "#46506F",
+    "$value": "#4D535E",
     "$description": "Secondary-button borders, empty checkboxes, dashed drop zones, switch track when off."
    },
    "control": {
     "$type": "color",
-    "$value": "#737D9C",
+    "$value": "#70747E",
     "$description": "Borders of empty checkboxes and radio buttons, switch track when off (3:1 on `surface`)."
    },
    "ink": {
     "$type": "color",
-    "$value": "#ECEEF4",
+    "$value": "#EDEBE7",
     "$description": "Headlines and body text on `surface`, `bg`, `sunken`."
    },
    "ink-2": {
     "$type": "color",
-    "$value": "#B8BECD",
+    "$value": "#C9C7C2",
     "$description": "Secondary text and icons on `surface`, `bg`, `sunken`, `sunken-2`."
    },
    "ink-3": {
     "$type": "color",
-    "$value": "#959CAF",
+    "$value": "#9B9EA6",
     "$description": "Captions, metadata and timestamps on `surface`, `bg`, `sunken`, `sunken-2`."
    },
    "ink-4": {
     "$type": "color",
-    "$value": "#6A7290",
+    "$value": "#656972",
     "$description": "Decorative strokes only: chart guides, arrows, drag handles. Never for text."
    },
    "inverse": {
     "$type": "color",
-    "$value": "#EAE6DC",
+    "$value": "#678DEE",
     "$description": "High-emphasis dark block: chat bubbles, the current step, quote cards, pace ticks."
    },
    "on-inverse": {
     "$type": "color",
-    "$value": "#161B2A",
+    "$value": "#0B0F18",
     "$description": "Text on `inverse`."
    },
    "on-inverse-2": {
     "$type": "color",
-    "$value": "#4F566A",
+    "$value": "#222D47",
     "$description": "Secondary text on `inverse`."
    },
    "inverse-accent": {
     "$type": "color",
-    "$value": "#7A5B22",
+    "$value": "#0B0F18",
     "$description": "Eyebrow labels on `inverse`."
    },
    "primary": {
     "$type": "color",
-    "$value": "#D4B57C",
+    "$value": "#EDEBE7",
     "$description": "Primary buttons, checked boxes, the active habit, focus ring. Midnight in light, brass in dark."
    },
    "primary-hover": {
     "$type": "color",
-    "$value": "#E3C994",
+    "$value": "#C9C7C2",
     "$description": "Hover state of `primary` fills."
    },
    "on-primary": {
     "$type": "color",
-    "$value": "#161B2A",
+    "$value": "#0B0F18",
     "$description": "Text and icons on `primary`."
    },
    "on-primary-2": {
     "$type": "color",
-    "$value": "#4E4128",
+    "$value": "#4D535E",
     "$description": "Secondary text on `primary`."
    },
    "primary-soft": {
     "$type": "color",
-    "$value": "#2C2B2C",
+    "$value": "#1F2C4C",
     "$description": "Selected states, time blocks, suggestion chips."
    },
    "primary-softer": {
     "$type": "color",
-    "$value": "#1B2030",
+    "$value": "#171F30",
     "$description": "Today's column, quiet highlights."
    },
    "primary-ink": {
     "$type": "color",
-    "$value": "#E8D1A3",
+    "$value": "#A0BDFF",
     "$description": "Text on `primary-soft` and `primary-softer`."
    },
    "primary-line": {
     "$type": "color",
-    "$value": "#76623D",
+    "$value": "#3D5590",
     "$description": "Borders of selected items and dashed time blocks."
    },
    "link": {
     "$type": "color",
-    "$value": "#D9BC86",
+    "$value": "#8DAFFE",
     "$description": "Links and text buttons on `surface` and `bg`."
    },
    "accent": {
     "$type": "color",
-    "$value": "#D4B57C",
+    "$value": "#F45B4B",
     "$description": "Brass: sparing highlights such as the word of the year, today's marker and the logo. Fills and marks, not body text."
    },
    "accent-soft": {
     "$type": "color",
-    "$value": "#2E2A24",
+    "$value": "#451E19",
     "$description": "Brass-tinted fill behind `accent-ink` text."
    },
    "accent-ink": {
     "$type": "color",
-    "$value": "#E8D1A3",
+    "$value": "#FEAC9F",
     "$description": "Text on `accent-soft`."
    },
    "success": {
     "$type": "color",
-    "$value": "#79C4A2",
+    "$value": "#8DAFFE",
     "$description": "On-pace text and saved/synced status on `surface`. Always paired with a word."
    },
    "success-soft": {
     "$type": "color",
-    "$value": "#18302A",
+    "$value": "#1F2C4C",
     "$description": "Fill behind success chips."
    },
    "warning": {
     "$type": "color",
-    "$value": "#E6AB69",
+    "$value": "#F45B4B",
     "$description": "Behind-pace and overdue text on `surface`. Always paired with a word."
    },
    "warning-soft": {
     "$type": "color",
-    "$value": "#35291B",
+    "$value": "#451E19",
     "$description": "Offline banner, behind-pace chips, recovery-kit warning."
    },
    "warning-ink": {
     "$type": "color",
-    "$value": "#F2CA94",
+    "$value": "#FEAC9F",
     "$description": "Text on `warning-soft`."
    },
    "danger": {
     "$type": "color",
-    "$value": "#EE91A4",
+    "$value": "#F45B4B",
     "$description": "Over-budget bars, destructive actions."
    },
    "danger-soft": {
     "$type": "color",
-    "$value": "#3A2029",
+    "$value": "#451E19",
     "$description": "Fill behind danger and high-priority chips."
    },
    "danger-ink": {
     "$type": "color",
-    "$value": "#F6BDC8",
+    "$value": "#FEAC9F",
     "$description": "Text on `danger-soft`."
    },
    "health": {
     "$type": "color",
-    "$value": "#76C3A1",
+    "$value": "#678DEE",
     "$description": "Health area: dots, bars and charts."
    },
    "health-soft": {
     "$type": "color",
-    "$value": "#192E27",
+    "$value": "#1F2C4C",
     "$description": "Health area tint (chips, image placeholders)."
    },
    "health-ink": {
     "$type": "color",
-    "$value": "#AADDC6",
+    "$value": "#EDEBE7",
     "$description": "Text on `health-soft`."
    },
    "career": {
     "$type": "color",
-    "$value": "#8FA9E2",
+    "$value": "#678DEE",
     "$description": "Career area; also work calendar events and sleep bars."
    },
    "career-soft": {
     "$type": "color",
-    "$value": "#1C2644",
+    "$value": "#1F2C4C",
     "$description": "Career tint; work events."
    },
    "career-ink": {
     "$type": "color",
-    "$value": "#C4D3F4",
+    "$value": "#EDEBE7",
     "$description": "Text on `career-soft`."
    },
    "finance": {
     "$type": "color",
-    "$value": "#E1B173",
+    "$value": "#678DEE",
     "$description": "Finance area: budgets, savings bars."
    },
    "finance-soft": {
     "$type": "color",
-    "$value": "#33291C",
+    "$value": "#1F2C4C",
     "$description": "Finance tint."
    },
    "finance-muted": {
     "$type": "color",
-    "$value": "#56472F",
+    "$value": "#1F2C4C",
     "$description": "Past months in finance charts."
    },
    "finance-ink": {
     "$type": "color",
-    "$value": "#F1CF9D",
+    "$value": "#EDEBE7",
     "$description": "Text on `finance-soft`."
    },
    "family": {
     "$type": "color",
-    "$value": "#E69BB0",
+    "$value": "#678DEE",
     "$description": "Family area and shared-space markers; the 'now' line in calendars."
    },
    "family-soft": {
     "$type": "color",
-    "$value": "#3A2231",
+    "$value": "#1F2C4C",
     "$description": "Family tint; family events."
    },
    "family-ink": {
     "$type": "color",
-    "$value": "#F5C4D2",
+    "$value": "#EDEBE7",
     "$description": "Text on `family-soft`."
    },
    "growth": {
     "$type": "color",
-    "$value": "#B4A4E9",
+    "$value": "#678DEE",
     "$description": "Growth area: learning, writing."
    },
    "growth-soft": {
     "$type": "color",
-    "$value": "#29243F",
+    "$value": "#1F2C4C",
     "$description": "Growth tint; personal events."
    },
    "growth-ink": {
     "$type": "color",
-    "$value": "#D9D0F7",
+    "$value": "#EDEBE7",
     "$description": "Text on `growth-soft`."
    },
    "home": {
     "$type": "color",
-    "$value": "#7DC7CD",
+    "$value": "#678DEE",
     "$description": "Home area."
    },
    "home-soft": {
     "$type": "color",
-    "$value": "#16303A",
+    "$value": "#1F2C4C",
     "$description": "Home tint."
    },
    "home-ink": {
     "$type": "color",
-    "$value": "#B1E1E4",
+    "$value": "#EDEBE7",
     "$description": "Text on `home-soft`."
    },
    "fun": {
     "$type": "color",
-    "$value": "#DDBB5B",
+    "$value": "#678DEE",
     "$description": "Fun and travel area."
    },
    "fun-soft": {
     "$type": "color",
-    "$value": "#312A17",
+    "$value": "#1F2C4C",
     "$description": "Fun tint."
    },
    "fun-ink": {
     "$type": "color",
-    "$value": "#EED88F",
+    "$value": "#EDEBE7",
     "$description": "Text on `fun-soft`."
    },
    "viz-soft": {
     "$type": "color",
-    "$value": "#3F4F7A",
+    "$value": "#334673",
     "$description": "Second series in charts (below target, earlier period)."
    },
    "mood-1": {
     "$type": "color",
-    "$value": "#D9728D",
+    "$value": "#1F2430",
     "$description": "Mood scale 1 (awful), year in pixels."
    },
    "mood-2": {
     "$type": "color",
-    "$value": "#7A4A5A",
+    "$value": "#2C4072",
     "$description": "Mood scale 2 (low)."
    },
    "mood-3": {
     "$type": "color",
-    "$value": "#2E3650",
+    "$value": "#405EAD",
     "$description": "Mood scale 3 (okay)."
    },
    "mood-4": {
     "$type": "color",
-    "$value": "#4F6DB2",
+    "$value": "#5E84E3",
     "$description": "Mood scale 4 (good)."
    },
    "mood-5": {
     "$type": "color",
-    "$value": "#AFC4F4",
+    "$value": "#96B6FE",
     "$description": "Mood scale 5 (great)."
    },
    "heat-0": {
     "$type": "color",
-    "$value": "#1F2638",
+    "$value": "#1F2430",
     "$description": "Habit heatmap: none done."
    },
    "heat-1": {
     "$type": "color",
-    "$value": "#2B3A60",
+    "$value": "#2C4072",
     "$description": "Habit heatmap: a few."
    },
    "heat-2": {
     "$type": "color",
-    "$value": "#3F5A98",
+    "$value": "#405EAD",
     "$description": "Habit heatmap: half."
    },
    "heat-3": {
     "$type": "color",
-    "$value": "#7090D2",
+    "$value": "#5E84E3",
     "$description": "Habit heatmap: most."
    },
    "heat-4": {
     "$type": "color",
-    "$value": "#BACCF5",
+    "$value": "#96B6FE",
     "$description": "Habit heatmap: all done."
    },
    "nav-bg": {
     "$type": "color",
-    "$value": "#090C16",
+    "$value": "#141823",
     "$description": "Sidebar background (midnight in both themes)."
    },
    "nav-surface": {
     "$type": "color",
-    "$value": "#161C30",
+    "$value": "#1F2430",
     "$description": "Active item and search field in the sidebar."
    },
    "nav-line": {
     "$type": "color",
-    "$value": "#1E2539",
+    "$value": "#303540",
     "$description": "Borders inside the sidebar."
    },
    "nav-ink": {
     "$type": "color",
-    "$value": "#EEF0F6",
+    "$value": "#EDEBE7",
     "$description": "Active item and titles on `nav-bg`."
    },
    "nav-ink-2": {
     "$type": "color",
-    "$value": "#AFB6CA",
+    "$value": "#C9C7C2",
     "$description": "Inactive items on `nav-bg`."
    },
    "nav-ink-3": {
     "$type": "color",
-    "$value": "#7E86A0",
+    "$value": "#9B9EA6",
     "$description": "Group labels and hints on `nav-bg`."
    },
    "nav-success": {
     "$type": "color",
-    "$value": "#79C4A2",
+    "$value": "#8DAFFE",
     "$description": "Saved and synced status dot on `nav-bg`."
    },
    "nav-accent": {
     "$type": "color",
-    "$value": "#D4B57C",
+    "$value": "#EDEBE7",
     "$description": "Brass in the sidebar: active icon, Quick capture button."
    },
    "on-nav-accent": {
     "$type": "color",
-    "$value": "#131A2E",
+    "$value": "#0B0F18",
     "$description": "Text on `nav-accent`."
    }
   }

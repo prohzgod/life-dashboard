@@ -24,10 +24,10 @@ export function Sidebar({ onSearch, onCapture }: SidebarProps) {
     <div className={styles.rail}>
       <nav aria-label="Main navigation" className={styles.sidebar}>
         <div className={styles.brand}>
-          <span className={styles.logo}>
-            <Icon name="logo" size={18} strokeWidth={2} />
+          <span className={styles.mark} aria-hidden="true" />
+          <span className={styles.wordmark}>
+            <strong>Life</strong> <span>Dashboard</span>
           </span>
-          <span className={styles.wordmark}>Life Dashboard</span>
         </div>
 
         <div className={styles.actions}>

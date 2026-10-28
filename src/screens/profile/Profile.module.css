@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: flex;
   flex-direction: column;
@@ -20,7 +21,7 @@
 .link {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   padding: 0;
   border: 0;
   background: none;
@@ -31,7 +32,7 @@
 }
 
 .back {
-  margin-left: -6px;
+  margin-left: -8px;
 }
 
 .edit,
@@ -63,7 +64,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   text-align: center;
 }
 
@@ -71,7 +72,7 @@
   margin-top: var(--space-2);
   font-family: var(--font-display);
   font-size: 34px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.15;
 }
 
@@ -86,12 +87,12 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   margin-top: var(--space-1);
 }
 
 .chip {
-  padding: 4px 9px;
+  padding: 4px 8px;
   border-radius: var(--radius-sm);
   background: var(--sunken-2);
   color: var(--ink-2);
@@ -100,10 +101,8 @@
 }
 
 .card {
-  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
 }
 
 .cardHead {
@@ -130,9 +129,9 @@
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   height: 40px;
-  padding: 0 14px;
+  padding: 0 16px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-pill);
   background: var(--surface);
@@ -274,7 +273,7 @@
 .photoActions {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .field {
@@ -310,7 +309,7 @@
 .inputWrap textarea {
   width: 100%;
   min-height: 48px;
-  padding: 0 14px;
+  padding: 0 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius-well);
   background: var(--surface);
@@ -319,7 +318,7 @@
 }
 
 .inputWrap textarea {
-  padding: var(--space-3) 14px;
+  padding: var(--space-3) 16px;
   resize: vertical;
 }
 
@@ -339,7 +338,7 @@
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   height: 34px;
   padding: 0 var(--space-3);
   border: 1px solid var(--line);
@@ -402,8 +401,8 @@
 
 .note {
   display: flex;
-  gap: 10px;
-  padding: var(--space-3) 14px;
+  gap: 12px;
+  padding: var(--space-3) 16px;
   border-radius: var(--radius-well);
   background: var(--sunken);
   color: var(--ink-2);
@@ -418,7 +417,7 @@
   gap: var(--space-2);
   height: 50px;
   border: 1px solid var(--line-strong);
-  border-radius: 14px;
+  border-radius: 0;
   background: var(--surface);
   color: var(--ink);
   font-size: 15px;

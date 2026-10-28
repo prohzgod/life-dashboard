@@ -1,7 +1,8 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .header {
@@ -14,7 +15,7 @@
 .heading {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -22,16 +23,14 @@
   color: var(--ink-3);
   font-size: var(--text-caption-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .title {
   font-family: var(--font-display);
   font-size: var(--text-display-m-size);
-  font-weight: 500;
+  font-weight: 700;
   line-height: var(--text-display-m-line);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
 }
 
 .headerSide {
@@ -43,9 +42,9 @@
 .saved {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   height: 30px;
-  padding: 0 10px;
+  padding: 0 12px;
   border-radius: var(--radius-pill);
   background: var(--success-soft);
   color: var(--success);
@@ -88,15 +87,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
   min-width: 0;
-  padding: 14px;
+  padding: 16px;
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: var(--radius-tile);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
   color: var(--ink);
   text-decoration: none;
 }
@@ -110,7 +107,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 14px;
+  gap: 16px;
   padding: 0 var(--space-4);
 }
 
@@ -118,14 +115,14 @@
   border-color: transparent;
   background: var(--inverse);
   color: var(--on-inverse);
-  padding: 0 var(--space-3) 0 18px;
+  padding: 0 var(--space-3) 0 20px;
 }
 
 .rowText {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -150,12 +147,10 @@
 .label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
 .tinted .label,
@@ -166,7 +161,7 @@
 .smallLabel {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   color: var(--ink-3);
   font-size: 11px;
   font-weight: 600;
@@ -194,13 +189,13 @@
 .ringDisplay {
   font-family: var(--font-display);
   font-size: 19px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .goalBody {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .goalTitle {
@@ -227,20 +222,18 @@
 .calDay {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
 .calNumber {
   font-family: var(--font-display);
   font-size: 40px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 38px;
   font-variant-numeric: lining-nums;
 }
 
 .pill {
-  padding: 3px var(--space-2);
+  padding: 4px var(--space-2);
   border-radius: var(--radius-md);
   background: var(--surface);
   font-size: 11px;
@@ -258,7 +251,7 @@
 
 .calList span {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -271,7 +264,7 @@
 .reviewTitle {
   font-family: var(--font-display);
   font-size: 23px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 26px;
 }
 
@@ -295,32 +288,32 @@
 
 .heat {
   display: flex;
-  gap: 2px;
+  gap: 4px;
 }
 
 .heatCol {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .heatCell {
   width: 9px;
   height: 9px;
   border: 1px solid var(--line);
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .bigLine {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 8px;
 }
 
 .big {
   font-family: var(--font-display);
   font-size: 26px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 26px;
   font-variant-numeric: lining-nums;
 }
@@ -335,24 +328,24 @@
   display: flex;
   flex-shrink: 0;
   align-items: flex-end;
-  gap: 3px;
+  gap: 4px;
   height: 32px;
 }
 
 .bar {
   width: 7px;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .swatches {
   display: flex;
-  gap: 3px;
+  gap: 4px;
 }
 
 .swatches span {
   width: 16px;
   height: 40px;
-  border-radius: 7px;
+  border-radius: 0;
 }
 
 .word {
@@ -360,7 +353,7 @@
   color: var(--accent-ink);
   font-family: var(--font-display);
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 18px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -369,7 +362,7 @@
 .pinTitle {
   font-family: var(--font-display);
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 25px;
 }
 
@@ -388,14 +381,14 @@
 .pinProgress {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .track {
   display: block;
   height: 5px;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 0;
   background: var(--surface);
 }
 
@@ -406,7 +399,7 @@
 .track span {
   display: block;
   height: 100%;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .editTile {
@@ -432,19 +425,18 @@
 .hiddenAmount {
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.1em;
 }
 
 .financeTrack {
   height: 6px;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 0;
   background: var(--surface);
 }
 
 .financeTrack > span {
   display: block;
   height: 100%;
-  border-radius: 3px;
+  border-radius: 0;
   background: var(--finance);
 }

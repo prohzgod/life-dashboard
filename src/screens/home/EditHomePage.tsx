@@ -50,7 +50,7 @@ export function EditHomePage() {
           Done
         </Button>
       </header>
-      <p className={styles.intro}>Drag to reorder, tap S · M · L to resize, − to hide. Hidden widgets keep their data.</p>
+      <p className={styles.intro}>Drag to reorder. Tap a size to resize, or the minus to hide. Hidden widgets keep their data.</p>
 
       {data && (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>

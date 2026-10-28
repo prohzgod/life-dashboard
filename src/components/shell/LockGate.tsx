@@ -109,7 +109,7 @@ function LockScreen({ credentialId }: { credentialId: string | null }) {
           {waiting ? `Try again in ${Math.ceil((waitUntil - now) / 1000)} seconds.` : error}
         </p>
         <Button type="submit" variant="primary" disabled={waiting || !passcode}>
-          Unlock
+          Open
         </Button>
         {credentialId && (
           <Button
@@ -119,7 +119,7 @@ function LockScreen({ credentialId }: { credentialId: string | null }) {
               else setError('Your device didn’t confirm it. Use your passcode instead.');
             }}
           >
-            Unlock with Touch ID or Face ID
+            Use Touch ID or Face ID
           </Button>
         )}
         <p className={styles.hint}>

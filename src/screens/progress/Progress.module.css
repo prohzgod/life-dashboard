@@ -1,7 +1,8 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .stepper {
@@ -18,13 +19,15 @@
   height: 34px;
   padding: 0;
   border: 1px solid var(--line);
-  border-radius: 9px;
+  border-radius: 0;
   background: var(--surface);
   color: var(--ink-2);
 }
 
 .stepButton:disabled {
-  opacity: 0.4;
+  background: var(--track);
+  color: var(--ink-4);
+  cursor: not-allowed;
 }
 
 .stepLabel {
@@ -109,7 +112,7 @@
 .pixelGap {
   width: 15px;
   height: 15px;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 .pixel {
@@ -137,7 +140,7 @@ a.pixel:hover {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2) 14px;
+  gap: var(--space-2) 16px;
   color: var(--ink-2);
   font-size: var(--text-caption-size);
 }
@@ -145,14 +148,14 @@ a.pixel:hover {
 .legendItem {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .legendSwatch {
   display: inline-block;
   width: 11px;
   height: 11px;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .lineSolid,
@@ -184,7 +187,7 @@ a.pixel:hover {
 .heatMonths,
 .heatRowWrap {
   display: grid;
-  gap: 2px;
+  gap: 4px;
 }
 
 .heatMonths {
@@ -196,7 +199,7 @@ a.pixel:hover {
 .heat {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .heatRowWrap {
@@ -212,7 +215,7 @@ a.pixel:hover {
 .heatCell {
   width: 12px;
   height: 12px;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .heatEmpty {
@@ -294,7 +297,7 @@ a.pixel:hover {
 @media (max-width: 767px) {
   .tiles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 12px;
   }
 
   .tiles > :last-child:nth-child(odd) {
@@ -303,7 +306,7 @@ a.pixel:hover {
 
   .pixelRow {
     grid-template-columns: 14px repeat(31, minmax(0, 1fr));
-    gap: 2px;
+    gap: 4px;
   }
 
   .pixel,
@@ -311,7 +314,7 @@ a.pixel:hover {
     width: auto;
     height: auto;
     aspect-ratio: 1;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   .pixelMonth {

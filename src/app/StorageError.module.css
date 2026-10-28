@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: flex;
   align-items: center;
@@ -12,10 +13,8 @@
   gap: var(--space-3);
   max-width: 520px;
   padding: var(--space-8);
-  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
 }
 
 .title {

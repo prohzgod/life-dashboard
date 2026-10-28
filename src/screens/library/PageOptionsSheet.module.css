@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .sheet {
   border-radius: var(--radius-xl);
   margin-bottom: var(--space-3);
@@ -59,8 +60,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  margin: 0 10px 10px;
-  padding: 14px;
+  margin: 0 12px 12px;
+  padding: 16px;
   border-radius: var(--radius-well);
   background: var(--primary-soft);
   color: var(--primary-ink);
@@ -84,7 +85,7 @@
 .row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   width: 100%;
   min-height: 54px;
   padding: 0 var(--space-5);

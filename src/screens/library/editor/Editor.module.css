@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 /* BlockNote, dressed in Midnight & Brass. Its variables point at our tokens, so both themes follow. */
 .editor {
   --bn-font-family: var(--font-sans);
@@ -22,11 +23,11 @@
   --bn-colors-side-menu: var(--ink-4);
   --bn-shadow-medium: var(--shadow-md);
   --bn-shadow-light: var(--shadow-sm);
-  margin: 0 -54px;
+  margin: 0 -56px;
 }
 
 .editor :global(.bn-editor) {
-  padding-inline: 54px;
+  padding-inline: 56px;
   background: transparent;
   color: var(--ink);
   font-size: var(--text-body-l-size);
@@ -69,7 +70,7 @@
   height: 18px;
   margin: 0 4px 0 0;
   border: 1.5px solid var(--control);
-  border-radius: 5px;
+  border-radius: 0;
   background: var(--surface);
   appearance: none;
   cursor: pointer;
@@ -83,7 +84,7 @@
 .editor :global([data-content-type='checkListItem'] input[type='checkbox']:checked)::after {
   width: 9px;
   height: 5px;
-  margin-top: -2px;
+  margin-top: -4px;
   border-bottom: 2px solid var(--on-primary);
   border-left: 2px solid var(--on-primary);
   content: '';
@@ -111,8 +112,8 @@
 /* [[Page]] links and @mentions */
 .pageLink,
 .goalMention {
-  padding: 1px 6px;
-  border-radius: 5px;
+  padding: 1px 8px;
+  border-radius: 0;
   background: var(--primary-soft);
   color: var(--primary-ink);
   font-weight: 600;
@@ -155,7 +156,7 @@
   justify-content: space-between;
   gap: var(--space-3);
   height: 34px;
-  padding: 0 10px;
+  padding: 0 12px;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -185,7 +186,7 @@
 .gallery {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   margin: var(--space-2) 0;
 }
@@ -193,7 +194,7 @@
 .tile {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   margin: 0;
 }
 
@@ -260,7 +261,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   height: 118px;
   border: 1.5px dashed var(--line-strong);
   border-radius: var(--radius-md);

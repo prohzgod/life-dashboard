@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -38,7 +39,7 @@
 .rows {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .fileRow {
@@ -59,7 +60,9 @@
 }
 
 .fileRow:disabled {
-  opacity: 0.5;
+  background: var(--track);
+  color: var(--ink-4);
+  cursor: not-allowed;
 }
 
 .fileLabel {
@@ -143,7 +146,7 @@
   display: flex;
   height: 10px;
   overflow: hidden;
-  border-radius: 5px;
+  border-radius: 0;
   background: var(--track);
 }
 
@@ -173,13 +176,13 @@
 .legend li {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .swatch {
   width: 10px;
   height: 10px;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 /* ---- Rows of settings ---- */
@@ -195,7 +198,7 @@
 .settingText {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -226,7 +229,7 @@
 }
 
 .onTag {
-  padding: 2px 10px;
+  padding: 4px 12px;
   border-radius: var(--radius-pill);
   background: var(--success-soft);
   color: var(--success);
@@ -235,7 +238,7 @@
 }
 
 .warning {
-  padding: 10px var(--space-3);
+  padding: 12px var(--space-3);
   border-radius: var(--radius-md);
   background: var(--warning-soft);
   color: var(--warning-ink);
@@ -244,7 +247,7 @@
 }
 
 .notice {
-  padding: 10px var(--space-3);
+  padding: 12px var(--space-3);
   border-radius: var(--radius-md);
   background: var(--sunken);
   color: var(--ink-2);
@@ -298,7 +301,7 @@
 .options {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -307,7 +310,7 @@
 .option {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
   padding: var(--space-3);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
@@ -317,7 +320,7 @@
 .option > span {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .option > span > span {
@@ -338,20 +341,20 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   font-size: var(--text-body-s-size);
   font-weight: 600;
 }
 
 .field input {
   height: 40px;
-  padding: 0 10px;
+  padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -362,7 +365,7 @@
 
 .field input[type='file'] {
   height: auto;
-  padding: var(--space-2) 10px;
+  padding: var(--space-2) 12px;
   font-size: var(--text-body-s-size);
 }
 
@@ -393,7 +396,6 @@
   font-size: 17px;
   font-variant-numeric: tabular-nums;
   font-weight: 600;
-  letter-spacing: 0.06em;
   text-align: center;
   word-break: break-all;
 }
@@ -408,10 +410,8 @@
 
 .group {
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
 }
 
 .groupLabel {
@@ -420,8 +420,6 @@
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .phoneStorage {

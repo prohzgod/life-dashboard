@@ -1,15 +1,15 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 /* The Tasks screen spans the full height beside the sidebar, so it undoes the shell's padding. */
 .page {
   display: flex;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   margin: -28px calc(-1 * var(--desktop-padding)) calc(-1 * var(--desktop-padding));
 }
 
 .nav {
   display: flex;
-  position: sticky;
-  top: 0;
   flex-direction: column;
   flex-shrink: 0;
   gap: var(--space-5);
@@ -25,25 +25,23 @@
 .navGroup {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .navLabel {
-  padding: 0 10px 6px;
+  padding: 0 12px 8px;
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
   line-height: var(--text-label-line);
-  text-transform: uppercase;
 }
 
 .navItem {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   height: 34px;
-  padding: 0 10px;
+  padding: 0 12px;
   border-radius: var(--radius-md);
   color: var(--ink-2);
   font-size: 14px;
@@ -63,7 +61,6 @@
 
 .navActive {
   background: var(--raised);
-  box-shadow: var(--shadow-sm);
   color: var(--ink);
   font-weight: 600;
 }
@@ -79,7 +76,7 @@
 }
 
 .navCountInbox {
-  padding: 1px 7px;
+  padding: 1px 8px;
   border-radius: var(--radius-md);
   background: var(--primary-soft);
   color: var(--primary-ink);
@@ -95,12 +92,12 @@
 .tagCloud {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 10px;
+  gap: 8px;
+  padding: 0 12px;
 }
 
 .tag {
-  padding: 3px 9px;
+  padding: 4px 8px;
   border-radius: var(--radius-pill);
   background: var(--sunken-2);
   color: var(--ink-2);
@@ -118,20 +115,20 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: 18px;
+  gap: 20px;
   min-width: 0;
   padding: 28px;
+  overflow-y: auto;
 }
 
 .listCard {
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
   list-style: none;
 }
 
@@ -171,8 +168,6 @@
   color: var(--ink-2);
   font-size: var(--text-body-s-size);
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
 /* Inbox */
@@ -180,11 +175,10 @@
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: 4px 14px;
+  padding: 4px 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
   list-style: none;
 }
 
@@ -215,7 +209,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: 5px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -242,13 +236,13 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--ink-2);
   font-size: var(--text-caption-size);
 }
 
 .suggestionChip {
-  padding: 2px var(--space-2);
+  padding: 4px var(--space-2);
   border-radius: var(--radius-xs);
   background: var(--sunken-2);
   font-weight: 600;
@@ -257,7 +251,7 @@
 .inboxActions {
   display: flex;
   flex-shrink: 0;
-  gap: 6px;
+  gap: 8px;
 }
 
 .moreButton {
@@ -281,7 +275,7 @@
 .mobilePage {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .mobileHeader {
@@ -293,7 +287,7 @@
 .mobileTitle {
   font-family: var(--font-display);
   font-size: var(--text-mobile-title-size);
-  font-weight: 500;
+  font-weight: 700;
   line-height: var(--text-mobile-title-line);
 }
 
@@ -316,7 +310,7 @@
 
 @media (max-width: 767px) {
   .inbox {
-    gap: 10px;
+    gap: 12px;
     padding: 0;
     border: 0;
     background: transparent;
@@ -325,11 +319,10 @@
 
   .inboxItem {
     flex-wrap: wrap;
-    padding: 14px;
+    padding: 16px;
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     background: var(--surface);
-    box-shadow: var(--shadow-sm);
   }
 
   .inboxItem + .inboxItem {
@@ -344,7 +337,7 @@
     flex-direction: row-reverse;
     width: 100%;
     justify-content: flex-start;
-    padding-left: 42px;
+    padding-left: 44px;
   }
 
   .inboxActions button {
@@ -353,6 +346,6 @@
   }
 
   .listCard {
-    padding: 4px 14px;
+    padding: 4px 16px;
   }
 }

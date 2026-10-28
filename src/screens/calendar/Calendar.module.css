@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 /* Full height beside the sidebar, like Tasks and Library: undo the shell's padding. */
 .page {
   display: flex;
@@ -38,9 +39,7 @@
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
   line-height: var(--text-label-line);
-  text-transform: uppercase;
 }
 
 .sideLabelRow .sideLabel {
@@ -86,7 +85,7 @@
 .calendarCheck {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   height: 30px;
   font-size: var(--text-body-s-size);
   cursor: pointer;
@@ -152,9 +151,9 @@
   align-items: center;
   gap: var(--space-2);
   width: 100%;
-  padding: var(--space-2) 10px;
+  padding: var(--space-2) 12px;
   border: 1px solid var(--line);
-  border-radius: 9px;
+  border-radius: 0;
   background: var(--surface);
   color: var(--ink);
   font-size: var(--text-body-s-size);
@@ -229,7 +228,7 @@
 .miniGrid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  row-gap: 2px;
+  row-gap: 4px;
   font-size: var(--text-caption-size);
   font-variant-numeric: tabular-nums;
   text-align: center;
@@ -244,7 +243,7 @@
   height: 26px;
   padding: 0;
   border: 0;
-  border-radius: 6px;
+  border-radius: 0;
   background: transparent;
   color: var(--ink);
   font-size: var(--text-caption-size);
@@ -264,16 +263,16 @@
 }
 
 .miniWeekStart {
-  border-radius: 6px 0 0 6px;
+  border-radius: 0;
 }
 
 .miniWeekEnd {
-  border-radius: 0 6px 6px 0;
+  border-radius: 0;
 }
 
 .miniAnchor,
 .miniAnchor:hover {
-  border-radius: 6px;
+  border-radius: 0;
   background: var(--primary);
   color: var(--on-primary);
   font-weight: 700;
@@ -308,8 +307,8 @@
   font-family: var(--font-display);
   font-size: 34px;
   font-variant-numeric: lining-nums;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   line-height: 1.1;
   white-space: nowrap;
 }
@@ -354,13 +353,13 @@
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .swatch {
   width: 14px;
   height: 10px;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .swatchBlock {
@@ -378,7 +377,6 @@
   flex-grow: 1;
   min-height: 0;
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: var(--radius-well);
   background: var(--surface);
 }
@@ -403,7 +401,7 @@
   display: flex;
   flex-direction: column;
   gap: 1px;
-  padding: var(--space-2) 10px;
+  padding: var(--space-2) 12px;
   border-left: 1px solid var(--line-soft);
 }
 
@@ -448,7 +446,7 @@
 }
 
 .allDayLabel {
-  padding: 9px 6px;
+  padding: 8px 8px;
   color: var(--ink-3);
   font-size: 11px;
 }
@@ -456,9 +454,9 @@
 .allDayCell {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
-  padding: 5px 6px;
+  padding: 4px 8px;
   border-left: 1px solid var(--line-soft);
 }
 
@@ -468,9 +466,9 @@
 
 .allDayChip {
   overflow: hidden;
-  padding: 3px 6px;
+  padding: 4px 8px;
   border: 0;
-  border-radius: 6px;
+  border-radius: 0;
   font-size: var(--text-caption-size);
   font-weight: 600;
   text-align: left;
@@ -530,9 +528,9 @@
   flex-direction: column;
   align-items: flex-start;
   overflow: hidden;
-  padding: 4px 6px;
+  padding: 4px 8px;
   border: 0;
-  border-radius: 7px;
+  border-radius: 0;
   font-size: var(--text-caption-size);
   font-weight: 600;
   line-height: 16px;
@@ -542,8 +540,8 @@
 }
 
 .short {
-  padding: 3px 6px;
-  border-radius: 6px;
+  padding: 4px 8px;
+  border-radius: 0;
   font-size: 11px;
 }
 
@@ -600,7 +598,7 @@
 
 .dragOverlay {
   max-width: 220px;
-  padding: 6px 10px;
+  padding: 8px 12px;
   overflow: hidden;
   border: 1px dashed var(--primary-line);
   border-radius: var(--radius-md);
@@ -622,7 +620,6 @@
   flex-grow: 1;
   min-height: 0;
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: var(--radius-well);
   background: var(--surface);
 }
@@ -640,7 +637,7 @@
 }
 
 .monthHead span {
-  padding: var(--space-2) 10px;
+  padding: var(--space-2) 12px;
 }
 
 .monthBody {
@@ -651,10 +648,10 @@
 .monthDay {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
   min-height: 0;
-  padding: 6px;
+  padding: 8px;
   overflow: hidden;
   border: 0;
   border-top: 1px solid var(--line-soft);
@@ -700,14 +697,14 @@
 .monthItems {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   width: 100%;
 }
 
 .monthChip {
   overflow: hidden;
-  padding: 2px 6px;
-  border-radius: 5px;
+  padding: 4px 8px;
+  border-radius: 0;
   font-size: 11px;
   font-weight: 600;
   text-overflow: ellipsis;
@@ -725,21 +722,21 @@
 }
 
 .more {
-  padding: 0 6px;
+  padding: 0 8px;
   color: var(--ink-3);
   font-size: 11px;
 }
 
 .dots {
   display: flex;
-  gap: 2px;
+  gap: 4px;
   color: var(--ink-4);
 }
 
 .dot {
   width: 4px;
   height: 4px;
-  border-radius: 2px;
+  border-radius: 0;
   background: currentColor;
 }
 
@@ -749,7 +746,6 @@
   gap: var(--space-6);
   padding: var(--space-5);
   overflow-y: auto;
-  border: 1px solid var(--line);
   border-radius: var(--radius-well);
   background: var(--surface);
 }
@@ -770,7 +766,7 @@
   height: 26px;
   padding: 0;
   border: 0;
-  border-radius: 6px;
+  border-radius: 0;
   background: transparent;
   color: var(--ink);
   font-size: var(--text-caption-size);
@@ -786,7 +782,7 @@
   left: calc(50% - 2px);
   width: 4px;
   height: 4px;
-  border-radius: 2px;
+  border-radius: 0;
   background: var(--career);
 }
 
@@ -799,14 +795,14 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .field {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
   font-size: var(--text-body-s-size);
   font-weight: 600;
@@ -816,7 +812,7 @@
 .field select,
 .field textarea {
   height: 38px;
-  padding: 0 10px;
+  padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -827,12 +823,12 @@
 
 .field input[type='file'] {
   height: auto;
-  padding: var(--space-2) 10px;
+  padding: var(--space-2) 12px;
 }
 
 .field textarea {
   height: auto;
-  padding: var(--space-2) 10px;
+  padding: var(--space-2) 12px;
   resize: vertical;
 }
 
@@ -929,23 +925,21 @@
 .phoneHeading {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .phoneEyebrow {
   color: var(--ink-3);
   font-size: var(--text-caption-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .phoneTitle {
   font-family: var(--font-display);
   font-size: var(--text-mobile-title-size);
   font-variant-numeric: lining-nums;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   line-height: var(--text-mobile-title-line);
 }
 
@@ -960,21 +954,20 @@
   border: 0;
   border-radius: var(--radius-pill);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
   color: var(--ink-2);
 }
 
 .phoneTabs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 3px;
-  border-radius: 12px;
+  gap: 4px;
+  border-radius: 0;
 }
 
 .phoneTabs > button {
   justify-content: center;
   height: 32px;
-  border-radius: 9px;
+  border-radius: 0;
 }
 
 .phoneNav {
@@ -1004,11 +997,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   height: 64px;
   padding: 0;
   border: 0;
-  border-radius: 14px;
+  border-radius: 0;
   background: transparent;
   color: var(--ink-2);
 }
@@ -1027,7 +1020,7 @@
 
 .stripDots {
   display: flex;
-  gap: 2px;
+  gap: 4px;
   height: 4px;
   color: var(--ink-4);
 }
@@ -1035,7 +1028,7 @@
 .stripDot {
   width: 4px;
   height: 4px;
-  border-radius: 2px;
+  border-radius: 0;
   background: currentColor;
 }
 
@@ -1061,7 +1054,7 @@
 .phoneMeta {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -1070,7 +1063,7 @@
   flex-shrink: 0;
   align-items: center;
   height: 26px;
-  padding: 0 9px;
+  padding: 0 8px;
   border-radius: var(--radius-md);
   background: var(--sunken-2);
   color: var(--ink-2);
@@ -1088,9 +1081,9 @@
 }
 
 .phoneAllDay {
-  padding: 6px 10px;
+  padding: 8px 12px;
   border: 0;
-  border-radius: 9px;
+  border-radius: 0;
   font-size: 13px;
   font-weight: 600;
   text-align: left;
@@ -1134,8 +1127,8 @@
 
 .itemPhone {
   justify-content: center;
-  padding: 4px 10px;
-  border-radius: 9px;
+  padding: 4px 12px;
+  border-radius: 0;
   font-size: 13px;
 }
 
@@ -1159,7 +1152,7 @@
 .weekDay {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .weekDayTitle button {
@@ -1183,7 +1176,6 @@
 
 .weekItems {
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
 }
@@ -1195,7 +1187,7 @@
 .weekItem {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   min-height: var(--touch-min);
   padding: 0 var(--space-3);
@@ -1218,7 +1210,7 @@
   flex-shrink: 0;
   width: 3px;
   height: 18px;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .weekBarBlock {
@@ -1240,7 +1232,7 @@
 
 .monthPhone .monthBody {
   grid-template-rows: none;
-  gap: 2px;
+  gap: 4px;
 }
 
 .monthPhone .monthDay {

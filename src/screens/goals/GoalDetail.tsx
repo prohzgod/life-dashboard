@@ -54,7 +54,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
           )}
           <span className={styles.chip}>{goalTypeChip(goal)}</span>
           <span className={styles.chip}>
-            {formatDayShort(goal.startDate)} – {formatDayShort(goal.endDate)}
+            {formatDayShort(goal.startDate)} to {formatDayShort(goal.endDate)}
           </span>
         </div>
         <Menu

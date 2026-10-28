@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .avatar {
   display: flex;
   flex-shrink: 0;
@@ -7,10 +8,9 @@
   border: 1.5px solid var(--accent);
   border-radius: var(--radius-pill);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
   color: var(--accent-ink);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
 }
 

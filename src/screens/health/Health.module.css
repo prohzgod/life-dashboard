@@ -1,7 +1,8 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .header {
@@ -21,7 +22,7 @@
 .titleRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .title {
@@ -34,7 +35,7 @@
 }
 
 .moduleChip {
-  padding: 3px 9px;
+  padding: 4px 8px;
   border-radius: var(--radius-pill);
   background: var(--sunken-2);
   color: var(--ink-2);
@@ -45,7 +46,7 @@
 .privacyNote {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--ink-3);
   font-size: var(--text-body-s-size);
 }
@@ -59,7 +60,7 @@
 .sourceChip {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   height: 32px;
   padding: 0 var(--space-3);
   border: 0;
@@ -73,14 +74,14 @@
 .dot {
   width: 8px;
   height: 8px;
-  border-radius: 4px;
+  border-radius: 0;
   background: var(--success);
 }
 
 .connect {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   height: 32px;
   padding: 0 var(--space-3);
   border: 1.5px dashed var(--line-strong);
@@ -102,10 +103,9 @@
 .tile {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
-  padding: 14px var(--space-4);
-  border: 1px solid var(--line);
+  padding: 16px var(--space-4);
   border-radius: var(--radius-well);
   background: var(--surface);
   color: var(--ink);
@@ -132,7 +132,7 @@
   font-family: var(--font-display);
   font-size: 34px;
   font-variant-numeric: lining-nums tabular-nums;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .tileUnit {
@@ -155,7 +155,7 @@
 .split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 400px;
-  gap: 18px;
+  gap: 20px;
 }
 
 .card {
@@ -163,9 +163,8 @@
   flex-direction: column;
   gap: var(--space-3);
   min-width: 0;
-  padding: 18px 20px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
+  padding: 20px 20px;
+  border-radius: 0;
   background: var(--surface);
 }
 
@@ -229,7 +228,7 @@
 .legend {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--ink-2);
   font-size: var(--text-caption-size);
 }
@@ -238,7 +237,7 @@
   width: 10px;
   height: 10px;
   margin-left: var(--space-2);
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .rested {
@@ -271,12 +270,12 @@
   gap: var(--space-2);
   height: 100%;
   margin: 0;
-  padding: 0 0 22px;
+  padding: 0 0 24px;
   list-style: none;
 }
 
 .chartCompact .bars {
-  gap: 5px;
+  gap: 4px;
   padding-bottom: 0;
 }
 
@@ -289,7 +288,7 @@
 
 .bar {
   width: 100%;
-  border-radius: 4px 4px 0 0;
+  border-radius: 0;
 }
 
 .barLabel {
@@ -311,7 +310,7 @@
   right: 0;
   left: 0;
   z-index: 1;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
   border-top: 1.5px dashed var(--ink-4);
   pointer-events: none;
 }
@@ -333,7 +332,7 @@
 .moodBars {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   font-size: var(--text-body-s-size);
 }
@@ -355,14 +354,14 @@
   flex-grow: 1;
   height: 12px;
   overflow: hidden;
-  border-radius: 6px;
+  border-radius: 0;
   background: var(--sunken-2);
 }
 
 .moodTrack > span {
   display: block;
   height: 100%;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 /* ---- Workouts ---- */
@@ -374,7 +373,7 @@
 }
 
 .table td {
-  padding: 10px var(--space-2) 10px 0;
+  padding: 12px var(--space-2) 12px 0;
   border-top: 1px solid var(--line-soft);
 }
 
@@ -412,7 +411,7 @@
 }
 
 .metrics {
-  gap: 10px;
+  gap: 12px;
 }
 
 .metric {
@@ -423,7 +422,7 @@
 
 .metrics .metric {
   padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
-  border-radius: 12px;
+  border-radius: 0;
   background: var(--sunken);
 }
 
@@ -461,7 +460,7 @@
   height: 36px;
   padding: 0;
   border: 0;
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--primary);
   color: var(--on-primary);
 }
@@ -469,7 +468,7 @@
 .quickLog .plus {
   width: var(--touch-min);
   height: 40px;
-  border-radius: 12px;
+  border-radius: 0;
 }
 
 /* ---- Dialogs ---- */
@@ -477,14 +476,14 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .field {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
   font-size: var(--text-body-s-size);
   font-weight: 600;
@@ -497,7 +496,7 @@
 .field input,
 .field select {
   height: 38px;
-  padding: 0 10px;
+  padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -572,9 +571,9 @@
   position: relative;
   z-index: 1;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   min-height: var(--touch-min);
-  padding-right: 10px;
+  padding-right: 12px;
   color: var(--link);
   font-size: 15px;
   font-weight: 500;
@@ -603,7 +602,6 @@
   border: 0;
   border-radius: var(--radius-pill);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
   color: var(--ink-2);
 }
 
@@ -624,20 +622,18 @@
 
 .phone .card {
   padding: var(--space-4);
-  border-radius: 18px;
-  box-shadow: var(--shadow-sm);
+  border-radius: 0;
 }
 
 .phoneTiles {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
 .phoneTiles .tile {
   padding: var(--space-4);
-  border-radius: 18px;
-  box-shadow: var(--shadow-sm);
+  border-radius: 0;
 }
 
 @media (max-width: 1180px) {

@@ -1,5 +1,6 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }

@@ -1,15 +1,15 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 /* Full height beside the sidebar, like Tasks: undo the shell's padding. */
 .page {
   display: flex;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   margin: -28px calc(-1 * var(--desktop-padding)) calc(-1 * var(--desktop-padding));
 }
 
 /* Tree pane */
 .tree {
-  position: sticky;
-  top: 0;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -17,7 +17,7 @@
   width: 280px;
   height: 100vh;
   height: 100dvh;
-  padding: 22px 10px 14px;
+  padding: 24px 12px 16px;
   border-right: 1px solid var(--line);
   background: var(--subtle);
 }
@@ -26,13 +26,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 6px;
+  padding: 0 8px;
 }
 
 .treeTitle {
   font-family: var(--font-display);
   font-size: 29px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.1;
 }
 
@@ -65,7 +65,7 @@
   gap: var(--space-2);
   height: 34px;
   margin: 0 var(--space-1);
-  padding: 0 10px;
+  padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -86,13 +86,11 @@
 }
 
 .sectionLabel {
-  padding: 6px 10px 0;
+  padding: 8px 12px 0;
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
   line-height: var(--text-label-line);
-  text-transform: uppercase;
 }
 
 .favourites {
@@ -108,7 +106,7 @@
   gap: var(--space-2);
   height: 30px;
   padding: 0 var(--space-2);
-  border-radius: 7px;
+  border-radius: 0;
   color: var(--ink-2);
   font-size: 14px;
   text-decoration: none;
@@ -149,10 +147,10 @@
 .row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   height: 30px;
   padding-right: var(--space-2);
-  border-radius: 7px;
+  border-radius: 0;
   color: var(--ink-2);
   font-size: 14px;
   cursor: pointer;
@@ -172,7 +170,6 @@
 .rowActive,
 .rowActive:hover {
   background: var(--raised);
-  box-shadow: var(--shadow-sm);
   color: var(--ink);
   font-weight: 600;
 }
@@ -236,7 +233,7 @@
 }
 
 .treeNote {
-  padding: 10px;
+  padding: 12px;
   border-radius: var(--radius-md);
   background: var(--sunken-2);
   color: var(--ink-2);
@@ -252,7 +249,7 @@
 .plainList {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -261,8 +258,8 @@
 .result {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: var(--space-2) 10px;
+  gap: 4px;
+  padding: var(--space-2) 12px;
   border-radius: var(--radius-sm);
   color: var(--ink);
   text-decoration: none;
@@ -293,6 +290,7 @@
   flex-direction: column;
   flex-grow: 1;
   min-width: 0;
+  overflow-y: auto;
   background: var(--surface);
 }
 
@@ -341,13 +339,13 @@
 .topActions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .saved {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--ink-2);
   font-size: var(--text-caption-size);
   white-space: nowrap;
@@ -419,7 +417,7 @@
   align-items: center;
   gap: 4px;
   height: 24px;
-  padding: 0 9px;
+  padding: 0 8px;
   border-radius: var(--radius-xs);
   background: var(--sunken);
   color: var(--ink-2);
@@ -456,8 +454,8 @@
 .checkIn {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px var(--space-4);
+  gap: 16px;
+  padding: 16px var(--space-4);
   border-radius: var(--radius-well);
   background: var(--sunken);
 }
@@ -481,8 +479,6 @@
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .checkInFacts {
@@ -493,7 +489,7 @@
 .checkInLine {
   font-family: var(--font-display);
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.35;
 }
 
@@ -520,7 +516,7 @@
 .folderItem {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-height: 44px;
   padding: 0 var(--space-2);
   border-bottom: 1px solid var(--line-soft);
@@ -535,7 +531,7 @@ a.folderItem:hover {
 .photoGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -557,8 +553,6 @@ a.folderItem:hover {
 
 /* Rail */
 .rail {
-  position: sticky;
-  top: 0;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -566,7 +560,7 @@ a.folderItem:hover {
   width: 280px;
   height: 100vh;
   height: 100dvh;
-  padding: 22px var(--space-5);
+  padding: 24px var(--space-5);
   overflow-y: auto;
   border-left: 1px solid var(--line-soft);
   background: var(--surface);
@@ -581,7 +575,7 @@ a.folderItem:hover {
 .railSection {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .railHeading {
@@ -605,8 +599,8 @@ a.folderItem:hover {
 .backlink {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 10px var(--space-3);
+  gap: 4px;
+  padding: 12px var(--space-3);
   border-radius: var(--radius-md);
   background: var(--sunken);
   color: var(--ink);
@@ -643,7 +637,7 @@ a.folderItem:hover {
   flex-direction: column;
   gap: var(--space-2);
   margin-top: auto;
-  padding: 14px;
+  padding: 16px;
   border-radius: var(--radius-well);
   background: var(--sunken);
   color: var(--ink-2);
@@ -653,7 +647,7 @@ a.folderItem:hover {
 .storedTitle {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--ink);
   font-weight: 600;
 }
@@ -668,16 +662,15 @@ a.folderItem:hover {
   border: 0;
   border-radius: var(--radius-pill);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
   color: var(--ink-2);
 }
 
 .mobileBack {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   min-height: var(--touch-min);
-  margin-left: -6px;
+  margin-left: -8px;
   color: var(--link);
   font-size: 15px;
   font-weight: 600;
@@ -709,7 +702,6 @@ a.folderItem:hover {
   height: var(--touch-min);
   border-radius: var(--radius-pill);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
 }
 
 .treeMobile .treeBox {

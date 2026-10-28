@@ -1,7 +1,8 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
 }
 
 .header {
@@ -15,7 +16,7 @@
 .heading {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -23,8 +24,6 @@
   color: var(--ink-3);
   font-size: var(--text-caption-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .title {
@@ -45,14 +44,14 @@
 .year {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   width: 220px;
 }
 
 .yearText {
   display: flex;
   justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
   color: var(--ink-2);
   font-size: var(--text-caption-size);
   font-variant-numeric: tabular-nums;
@@ -60,13 +59,13 @@
 
 .yearTrack {
   height: 6px;
-  border-radius: 3px;
+  border-radius: 0;
   background: var(--track);
 }
 
 .yearFill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 0;
   background: var(--primary);
 }
 
@@ -86,7 +85,7 @@
 .column {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
   min-width: 0;
 }
 
@@ -118,7 +117,7 @@
 }
 
 .agendaEmpty {
-  padding: 14px var(--space-3);
+  padding: 16px var(--space-3);
   border: 1px dashed var(--line-strong);
   border-radius: var(--radius-md);
   text-align: center;
@@ -127,7 +126,7 @@
 .agenda {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -136,15 +135,15 @@
 .agendaItem {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
-  padding: 10px var(--space-3);
-  border-radius: 10px;
+  padding: 12px var(--space-3);
+  border-radius: 0;
   background: var(--tone-soft, var(--sunken));
 }
 
 .agendaBlock {
-  padding: 9px 11px;
+  padding: 8px 12px;
   border: 1px dashed var(--primary-line);
   background: var(--primary-soft);
 }
@@ -207,7 +206,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
-  padding: 6px 6px 6px var(--space-3);
+  padding: 8px 8px 8px var(--space-3);
   border-radius: var(--radius-md);
   background: var(--warning-soft);
   color: var(--warning-ink);
@@ -218,7 +217,7 @@
 .habits {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -254,7 +253,7 @@
 .dayCell {
   width: 16px;
   height: 16px;
-  border-radius: 4px;
+  border-radius: 0;
   background: var(--track);
 }
 
@@ -285,13 +284,13 @@
 
 /* Check-in */
 .checkIn {
-  gap: 14px;
+  gap: 16px;
 }
 
 .scale {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .scaleLabel {
@@ -303,12 +302,12 @@
 .scaleOptions {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 6px;
+  gap: 8px;
 }
 
 .scaleOption {
   height: 38px;
-  padding: 0 2px;
+  padding: 0 4px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -359,7 +358,7 @@
 
 .sleepEdit,
 .sleepSave {
-  padding: 4px 6px;
+  padding: 4px 8px;
   border: 0;
   border-radius: var(--radius-sm);
   background: none;
@@ -378,7 +377,7 @@
 .sleepInputs input {
   width: 48px;
   height: 30px;
-  padding: 0 6px;
+  padding: 0 8px;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   background: var(--surface);
@@ -435,12 +434,11 @@
 .memory {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   padding: var(--space-4);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
 }
 
 .memoryPhoto {
@@ -480,14 +478,12 @@
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .memoryQuote {
   font-family: var(--font-display);
   font-size: 19px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.35;
   font-variant-numeric: lining-nums;
 }

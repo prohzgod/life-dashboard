@@ -1,10 +1,9 @@
-import '@fontsource/jost/400.css';
-import '@fontsource/jost/500.css';
-import '@fontsource/jost/600.css';
-import '@fontsource/jost/700.css';
-import '@fontsource/cormorant-garamond/500.css';
-import '@fontsource/cormorant-garamond/600.css';
-import '@fontsource/cormorant-garamond/500-italic.css';
+import '@fontsource/radio-canada/400.css';
+import '@fontsource/radio-canada/500.css';
+import '@fontsource/radio-canada/600.css';
+import '@fontsource/radio-canada/700.css';
+import '@fontsource/radio-canada-big/400.css';
+import '@fontsource/radio-canada-big/700.css';
 import '@design/tokens.css';
 import './styles/global.css';
 

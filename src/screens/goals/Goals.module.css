@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 420px;
@@ -21,13 +22,13 @@
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .filter {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   height: 30px;
   padding: 0 var(--space-3);
   border: 1px solid var(--line);
@@ -73,8 +74,6 @@
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .visionStatement,
@@ -85,7 +84,7 @@
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 25px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.3;
   text-align: left;
   font-variant-numeric: lining-nums;
@@ -103,7 +102,7 @@
   flex-direction: column;
   flex-shrink: 0;
   align-items: flex-end;
-  gap: 6px;
+  gap: 8px;
 }
 
 .wordLabel {
@@ -121,7 +120,7 @@
   color: var(--primary-ink);
   font-family: var(--font-display);
   font-size: 19px;
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -141,7 +140,7 @@
 .tree {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   padding: var(--space-2);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
@@ -151,7 +150,7 @@
 .plainList {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -167,16 +166,14 @@
 }
 
 .treeHead {
-  padding-block: 6px;
+  padding-block: 8px;
   color: var(--ink-3);
   font-size: var(--text-label-size);
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
 .topRow {
-  padding-block: 10px;
+  padding-block: 12px;
 }
 
 .topRow + .topRow,
@@ -205,7 +202,7 @@ li:not(.topRow) + .topRow {
 .goalText {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -235,7 +232,7 @@ li:not(.topRow) + .topRow {
 }
 
 .typeChip {
-  padding: 1px 7px;
+  padding: 1px 8px;
   border-radius: var(--radius-xs);
   background: var(--sunken);
   color: var(--ink-2);
@@ -270,18 +267,18 @@ li:not(.topRow) + .topRow {
 .bar {
   position: relative;
   height: 6px;
-  border-radius: 3px;
+  border-radius: 0;
   background: var(--sunken-2);
 }
 
 .barTop {
   height: 8px;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 .fill {
   height: 100%;
-  border-radius: inherit;
+  border-radius: 0;
   background: var(--primary);
 }
 
@@ -318,7 +315,7 @@ li:not(.topRow) + .topRow {
   justify-content: space-between;
   gap: var(--space-2);
   margin-top: var(--space-2);
-  padding: 10px var(--space-3);
+  padding: 12px var(--space-3);
   border-top: 1px solid var(--line-soft);
   color: var(--ink-3);
   font-size: var(--text-caption-size);
@@ -330,12 +327,11 @@ li:not(.topRow) + .topRow {
   top: var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 12px;
   padding: var(--space-5) var(--space-6);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
 }
 
 .detailTop {
@@ -348,11 +344,11 @@ li:not(.topRow) + .topRow {
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .chip {
-  padding: 3px 9px;
+  padding: 4px 8px;
   border-radius: var(--radius-pill);
   background: var(--sunken);
   color: var(--ink-2);
@@ -368,9 +364,9 @@ li:not(.topRow) + .topRow {
 .detailTitle {
   font-family: var(--font-display);
   font-size: 34px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
   font-variant-numeric: lining-nums;
 }
 
@@ -394,19 +390,19 @@ li:not(.topRow) + .topRow {
 .bigText {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .big {
   font-family: var(--font-display);
   font-size: 53px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1;
   font-variant-numeric: lining-nums tabular-nums;
 }
 
 .pill {
-  padding: 5px 10px;
+  padding: 4px 12px;
   border-radius: var(--radius-pill);
   font-size: var(--text-body-s-size);
   font-weight: 600;
@@ -453,7 +449,7 @@ li:not(.topRow) + .topRow {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-3) 14px;
+  padding: var(--space-3) 16px;
   border-radius: var(--radius-well);
   background: var(--sunken);
   font-size: var(--text-body-s-size);
@@ -478,7 +474,7 @@ li:not(.topRow) + .topRow {
 .milestone {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-height: 28px;
   font-size: 14px;
 }
@@ -560,10 +556,9 @@ li:not(.topRow) + .topRow {
 .tile {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
-  padding: 10px var(--space-3);
-  border: 1px solid var(--line);
+  padding: 12px var(--space-3);
   border-radius: var(--radius-md);
   color: var(--ink);
   text-decoration: none;
@@ -587,14 +582,14 @@ a.tile:hover {
 .form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
   font-size: var(--text-body-s-size);
   font-weight: 600;
@@ -604,7 +599,7 @@ a.tile:hover {
 .field select,
 .field textarea {
   height: 38px;
-  padding: 0 10px;
+  padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -615,7 +610,7 @@ a.tile:hover {
 
 .field textarea {
   height: auto;
-  padding: var(--space-2) 10px;
+  padding: var(--space-2) 12px;
   resize: vertical;
 }
 

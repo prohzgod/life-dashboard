@@ -64,16 +64,16 @@ test('app lock: set a passcode, lock now, unlock, and it locks again on reopenin
   await expect(locked).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toHaveCount(0);
   await page.getByLabel('Passcode').fill('1357');
-  await page.getByRole('button', { name: 'Unlock' }).click();
+  await page.getByRole('button', { name: 'Open', exact: true }).click();
   await expect(page.getByRole('alert')).toHaveText('That passcode isn’t right.');
   await page.getByLabel('Passcode').fill('2468');
-  await page.getByRole('button', { name: 'Unlock' }).click();
+  await page.getByRole('button', { name: 'Open', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
 
   await page.reload();
   await expect(locked).toBeVisible();
   await page.getByLabel('Passcode').fill('2468');
-  await page.getByRole('button', { name: 'Unlock' }).click();
+  await page.getByRole('button', { name: 'Open', exact: true }).click();
 
   // Turning it off needs the passcode.
   await page.getByRole('switch', { name: 'Passcode' }).click();

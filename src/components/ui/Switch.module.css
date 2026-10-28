@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .switch {
   position: relative;
   flex-shrink: 0;
@@ -30,5 +31,7 @@
 }
 
 .switch:disabled {
-  opacity: 0.5;
+  background: var(--track);
+  color: var(--ink-4);
+  cursor: not-allowed;
 }

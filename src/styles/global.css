@@ -1,3 +1,11 @@
+/* Hallmark · redesign: full · scope: app · theme: grid (dealt 3/3, seed personal-offline-first-life-dashboard-e1a5·e1adc7df·2026-10-28·r1) · shape: app screen · v2.0.0 */
+/* Hallmark · critique: one blue-black ink and one ultramarine field carry every screen; the red mark is kept for the one thing that needs you (over budget, behind pace, today). */
+/* Hallmark · dropped logo · the sidebar logo gave way to the Grid wordmark, a red square beside the name in two lines */
+/* Hallmark · dropped {widget.kind === 'assistant' ? '/assistant' : '/health'} · the Steps tile became its own widget linking to Health when Health was built */
+/* Hallmark · reworded "Unlock" to "Open" · 19 names the lock button's old verb */
+/* Hallmark · reworded "Drag to reorder, tap S · M · L to resize, − to hide." to "Drag to reorder. Tap a size to resize, or the minus to hide." · 63 names the dot-joined line */
+/* Hallmark · reworded "Thu 1 Jan – Thu 31 Dec" to "Thu 1 Jan to Thu 31 Dec" · 19 names the dash in the goal dates */
+
 *,
 *::before,
 *::after {
@@ -8,6 +16,16 @@ html,
 body,
 #root {
   height: 100%;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-primary);
 }
 
 body {

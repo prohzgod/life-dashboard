@@ -197,11 +197,11 @@ test('Privacy on a phone: the grouped list, and Lock app now from Profile', asyn
   // Opening the app fresh starts locked.
   await page.goto('/profile');
   await page.getByLabel('Passcode').fill('2468');
-  await page.getByRole('button', { name: 'Unlock' }).click();
+  await page.getByRole('button', { name: 'Open', exact: true }).click();
   await page.getByRole('button', { name: 'Lock app now' }).click();
   await expect(page.getByRole('heading', { name: 'Life Dashboard is locked' })).toBeVisible();
   await page.getByLabel('Passcode').fill('2468');
-  await page.getByRole('button', { name: 'Unlock' }).click();
+  await page.getByRole('button', { name: 'Open', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Profile', exact: true })).toBeVisible();
 });
 

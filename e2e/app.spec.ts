@@ -53,7 +53,7 @@ test('system theme follows the OS setting', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/');
   const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  expect(bg).toBe('rgb(13, 17, 29)'); // --bg in dark
+  expect(bg).toBe('rgb(11, 15, 24)'); // --bg in dark (Grid)
 });
 
 test('installable and works with no network', async ({ page, context }) => {

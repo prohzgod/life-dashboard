@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .button {
   display: inline-flex;
   align-items: center;
@@ -14,7 +15,8 @@
   transition:
     background-color var(--dur-fast) var(--ease),
     border-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease);
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 
 .sm {
@@ -35,17 +37,16 @@
 }
 
 .secondary {
-  border-color: var(--line-strong);
-  background: var(--surface);
+  background: var(--sunken);
   color: var(--ink);
 }
 
 .secondary:hover:not(:disabled) {
-  background: var(--sunken);
+  background: var(--sunken-2);
 }
 
 .quiet {
-  padding: 0 10px;
+  padding: 0 12px;
   background: transparent;
   color: var(--link);
 }
@@ -59,8 +60,20 @@
   text-underline-offset: 3px;
 }
 
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Disabled reads on three channels, not just fading: a flat fill, quiet ink, and the cursor. */
 .button:disabled {
-  opacity: 0.5;
+  border-color: transparent;
+  background: var(--track);
+  color: var(--ink-4);
+  cursor: not-allowed;
+}
+
+.quiet:disabled {
+  background: transparent;
 }
 
 .link {

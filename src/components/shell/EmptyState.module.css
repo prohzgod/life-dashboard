@@ -1,3 +1,4 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .card,
 .bare {
   display: flex;
@@ -9,10 +10,8 @@
 
 .card {
   padding: var(--space-12) var(--space-8);
-  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
 }
 
 .bare {

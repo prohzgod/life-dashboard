@@ -27,11 +27,11 @@ describe('LockGate', () => {
     expect(screen.queryByText('Your plans')).not.toBeInTheDocument();
 
     await userEvent.type(screen.getByLabelText('Passcode'), '1357');
-    await userEvent.click(screen.getByRole('button', { name: 'Unlock' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
     expect(await screen.findByText('That passcode isn’t right.')).toBeInTheDocument();
 
     await userEvent.type(screen.getByLabelText('Passcode'), '2468');
-    await userEvent.click(screen.getByRole('button', { name: 'Unlock' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
     expect(await screen.findByText('Your plans')).toBeInTheDocument();
 
     lockNow();
@@ -44,7 +44,7 @@ describe('LockGate', () => {
     render(<LockGate>{app()}</LockGate>);
     for (let i = 0; i < 5; i++) {
       await userEvent.type(screen.getByLabelText('Passcode'), '0000');
-      await userEvent.click(screen.getByRole('button', { name: 'Unlock' }));
+      await userEvent.click(screen.getByRole('button', { name: 'Open' }));
     }
     expect(await screen.findByText(/Try again in \d+ seconds/)).toBeInTheDocument();
     expect(screen.getByLabelText('Passcode')).toBeDisabled();
