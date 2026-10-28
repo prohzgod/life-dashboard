@@ -1021,37 +1021,37 @@
  "radius": {
   "radius-xs": {
    "$type": "dimension",
-   "$value": "6px",
+   "$value": "8px",
    "$description": "Checkboxes, kbd hints"
   },
   "radius-sm": {
    "$type": "dimension",
-   "$value": "8px",
+   "$value": "12px",
    "$description": "Chips, segmented pills"
   },
   "radius-md": {
    "$type": "dimension",
-   "$value": "10px",
+   "$value": "16px",
    "$description": "Buttons, inputs, nav items"
   },
   "radius-well": {
    "$type": "dimension",
-   "$value": "14px",
+   "$value": "20px",
    "$description": "Stat tiles, habit tiles, wells"
   },
   "radius-lg": {
    "$type": "dimension",
-   "$value": "18px",
+   "$value": "24px",
    "$description": "Cards and panels"
   },
   "radius-tile": {
    "$type": "dimension",
-   "$value": "20px",
+   "$value": "24px",
    "$description": "Bento tiles on mobile Home"
   },
   "radius-xl": {
    "$type": "dimension",
-   "$value": "24px",
+   "$value": "28px",
    "$description": "Bottom sheets, large media"
   },
   "radius-pill": {
@@ -1091,6 +1091,11 @@
    "$value": "84px",
    "$description": "Mobile tab bar incl. 20px home-indicator space"
   },
+  "float-inset": {
+   "$type": "dimension",
+   "$value": "12px",
+   "$description": "Gap between a floating nav (sidebar, tab bar) and the window edge"
+  },
   "fab-size": {
    "$type": "dimension",
    "$value": "56px",
@@ -1126,25 +1131,25 @@
   "light": {
    "shadow-sm": {
     "$type": "shadow",
-    "$value": "0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03)"
+    "$value": "none"
    },
    "shadow-md": {
     "$type": "shadow",
-    "$value": "0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05)"
+    "$value": "0 12px 32px -12px rgba(15,20,30,0.28), 0 2px 6px rgba(15,20,30,0.06)"
    },
    "shadow-primary": {
     "$type": "shadow",
-    "$value": "0 8px 20px -6px rgba(34,48,90,0.45)"
+    "$value": "0 8px 20px -6px rgba(15,20,30,0.35)"
    }
   },
   "dark": {
    "shadow-sm": {
     "$type": "shadow",
-    "$value": "0 1px 2px rgba(0,0,0,0.45)"
+    "$value": "none"
    },
    "shadow-md": {
     "$type": "shadow",
-    "$value": "0 14px 34px -14px rgba(0,0,0,0.7)"
+    "$value": "0 14px 34px -12px rgba(0,0,0,0.75), 0 0 0 1px #303540"
    },
    "shadow-primary": {
     "$type": "shadow",

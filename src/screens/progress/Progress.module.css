@@ -19,7 +19,7 @@
   height: 34px;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   background: var(--sunken);
   color: var(--ink-2);
 }
@@ -112,7 +112,7 @@
 .pixelGap {
   width: 15px;
   height: 15px;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .pixel {
@@ -155,7 +155,7 @@ a.pixel:hover {
   display: inline-block;
   width: 11px;
   height: 11px;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .lineSolid,
@@ -173,10 +173,9 @@ a.pixel:hover {
 .select {
   height: 30px;
   padding: 0 var(--space-2);
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   font-size: var(--text-body-s-size);
   color-scheme: inherit;
 }
@@ -216,7 +215,7 @@ a.pixel:hover {
 .heatCell {
   width: 12px;
   height: 12px;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .heatEmpty {
@@ -315,7 +314,7 @@ a.pixel:hover {
     width: auto;
     height: auto;
     aspect-ratio: 1;
-    border-radius: 0;
+    border-radius: 6px;
   }
 
   .pixelMonth {

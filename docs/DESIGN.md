@@ -1,6 +1,6 @@
 # Grid: design rules
 
-Swiss style for a tool you open every morning: white poster paper, a blue-black ink, one ultramarine that floods a field, and one Swiss red that marks the thing that needs you. Structure comes from scale, space and changes of paper, never from strokes or shadows. The theme is Hallmark's **Grid**; it replaced Midnight & Brass in October 2026 (see `docs/REDESIGN-DRAFT.md`).
+Swiss style for a tool you open every morning: white poster paper, a blue-black ink, one ultramarine that floods a field, and one Swiss red that marks the thing that needs you. Structure comes from scale, space and changes of paper, never from strokes; soft, very round shapes keep it friendly. The theme is Hallmark's **Grid**; it replaced Midnight & Brass in October 2026 (see `docs/REDESIGN-DRAFT.md`).
 
 Tokens live in `design/tokens.json` (source of truth, a usage note per token) and `design/tokens.css` (CSS variables, light and dark). Token names kept from the first design (`--surface`, `--primary`, `--career-soft`…) so components didn't change; what they mean now is below.
 
@@ -21,24 +21,25 @@ Tokens live in `design/tokens.json` (source of truth, a usage note per token) an
 
 ## Shape and surfaces
 
-- **Radius 0** everywhere and **no shadows** (`--shadow-md` is a 1px hairline, used only by floating layers: menus, dialogs, suggestion lists).
-- **No strokes** around panels or controls. The only lines: hairlines between table rows, the 1px line under an input, and the 1px edge of a floating layer.
+- **Very round.** Panels and cards `--radius-lg` (24px), tiles and big blocks `--radius-xl` (28px), wells `--radius-well`, small insets `--radius-sm`/`--radius-md`. Buttons, inputs, chips, segmented controls and switches are **pills** (`--radius-pill`); multi-line text boxes take `--radius-md` or `--radius-lg`.
+- **Shadows only on things that float**: `--shadow-md` on the sidebar, the phone tab bar, menus, dialogs and sheets; `--shadow-primary` under the capture button. Panels on the page have none.
+- **No strokes** around panels or controls. The only lines: hairlines between table rows and the 1px edge a floating layer gets in dark mode.
 - **Dashes mean something**: a time block from a task, a drop zone, the "add" tile, a target line on a chart. Nothing else is dashed.
 - Spacing on the 4px scale (`--space-*`).
 
 ## Controls
 
-- **Primary button**: a square ink block with paper text. One per screen.
+- **Primary button**: an ink pill with paper text. One per screen.
 - **Secondary button**: a `--sunken` fill, no outline. **Quiet**: link-coloured text, underline on hover.
 - Every button moves 1px down while pressed. **Disabled** shows on three channels: a `--track` fill, `--ink-4` text and the not-allowed cursor (never opacity alone).
-- **Inputs**: no box; a 1px `--control` line beneath.
+- **Inputs**: a `--sunken` pill, no line; textareas round to `--radius-md`.
 - **Focus**: a 2px `--primary` outline, 2px offset, appearing at once.
-- **Switch, checkbox, segmented**: square; on and checked fill with ink.
+- **Switch and segmented**: pills; **checkbox**: a softly rounded square. On and checked fill with ink.
 
 ## Layout
 
-- Desktop: 248px sidebar with the **wordmark** (a red square exactly two lines tall beside "Life / Dashboard"), content padding 32px, panels 20px inside. Library and Tasks are fixed-height panes that scroll on their own.
-- Phones (below 768px): 18px gutters, the 84px tab bar (Home · Today · + · Tasks · Library), the bento Home, pushed screens with "‹ Back to …" headers, 44px touch targets.
+- Desktop: a **floating sidebar**, a 248px rounded panel inset `--float-inset` (12px) from the window, with the **wordmark** (a red square exactly two lines tall beside "Life / Dashboard"), content padding 32px, panels 20px inside. Library, Tasks and Calendar are fixed-height pages whose side panes float the same way (inset 12px, `--radius-xl`) and scroll on their own.
+- Phones (below 768px): 18px gutters, the **floating tab bar**, a pill inset 12px from the sides and the bottom (Home, Today, +, Tasks, Library; `--tabbar-height` reserves its room), the bento Home, pushed screens with "‹ Back to …" headers, 44px touch targets.
 - Heads hang flush left from the column; nothing is centred except empty-state copy inside its own panel.
 
 ## Copy

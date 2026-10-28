@@ -70,7 +70,7 @@
   height: 18px;
   margin: 0 4px 0 0;
   border: 1.5px solid var(--control);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: var(--surface);
   appearance: none;
   cursor: pointer;
@@ -113,7 +113,7 @@
 .pageLink,
 .goalMention {
   padding: 1px 8px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: var(--primary-soft);
   color: var(--primary-ink);
   font-weight: 600;

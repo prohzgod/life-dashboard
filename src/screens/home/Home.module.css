@@ -300,7 +300,7 @@
 .heatCell {
   width: 9px;
   height: 9px;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .bigLine {
@@ -333,7 +333,7 @@
 
 .bar {
   width: 7px;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .swatches {
@@ -344,7 +344,7 @@
 .swatches span {
   width: 16px;
   height: 40px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
 }
 
 .word {
@@ -387,7 +387,7 @@
   display: block;
   height: 5px;
   overflow: hidden;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--surface);
 }
 
@@ -398,7 +398,7 @@
 .track span {
   display: block;
   height: 100%;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .editTile {
@@ -429,13 +429,13 @@
 .financeTrack {
   height: 6px;
   overflow: hidden;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--surface);
 }
 
 .financeTrack > span {
   display: block;
   height: 100%;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--finance);
 }

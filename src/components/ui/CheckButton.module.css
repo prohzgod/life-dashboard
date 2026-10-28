@@ -28,13 +28,13 @@
 .md {
   width: 24px;
   height: 24px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
 }
 
 .lg {
   width: 30px;
   height: 30px;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   color: var(--ink-2);
 }
 

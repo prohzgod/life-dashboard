@@ -65,7 +65,7 @@
   height: 36px;
   padding: 0 var(--space-3);
   border: 1px solid transparent;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   background: var(--sunken);
   color: var(--ink);
   color-scheme: inherit;
@@ -146,7 +146,7 @@
   display: block;
   position: relative;
   height: 8px;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--sunken-2);
 }
 
@@ -157,7 +157,7 @@
 .fill {
   display: block;
   height: 100%;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--finance);
 }
 
@@ -191,7 +191,7 @@
   gap: var(--space-3);
   min-width: 0;
   padding: 20px 20px;
-  border-radius: 0;
+  border-radius: var(--radius-well);
   background: var(--surface);
 }
 
@@ -299,7 +299,7 @@
 .reminder {
   margin-top: auto;
   padding: var(--space-3);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   background: var(--sunken);
   color: var(--ink-2);
   font-size: var(--text-caption-size);
@@ -405,7 +405,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  border-radius: 0;
+  border-radius: 8px 8px 0 0;
   background: var(--finance-muted);
 }
 
@@ -461,10 +461,9 @@
 .addRow input {
   height: 38px;
   padding: 0 12px;
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: var(--radius-md);
-  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   color: var(--ink);
   color-scheme: inherit;
   font-size: var(--text-body-l-size);
@@ -621,7 +620,7 @@
 
 .phone .card {
   padding: var(--space-4);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
 }
 
 .phoneHero {

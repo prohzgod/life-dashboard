@@ -5,18 +5,20 @@
   flex-shrink: 0;
   gap: 20px;
   width: 372px;
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - 2 * var(--float-inset));
+  height: calc(100dvh - 2 * var(--float-inset));
   padding: var(--space-6);
   overflow-y: auto;
-  border-left: 1px solid var(--line);
   background: var(--surface);
+  margin: var(--float-inset) var(--float-inset) var(--float-inset) 0;
+  border-radius: var(--radius-xl);
 }
 
 /* Narrower windows: the drawer floats over the list instead of squeezing it. */
 @media (max-width: 1200px) {
   .drawer {
     position: fixed;
+    top: 0;
     right: 0;
     z-index: 5;
     box-shadow: var(--shadow-md);
@@ -203,10 +205,9 @@
 .notes {
   min-height: 88px;
   padding: var(--space-2);
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: var(--radius-sm);
-  background: var(--subtle);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   color: var(--ink-2);
   font-size: 14px;
   line-height: 1.5;

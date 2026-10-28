@@ -310,10 +310,9 @@
   width: 100%;
   min-height: 48px;
   padding: 0 16px;
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: var(--radius-well);
-  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   font-size: 16px;
   color-scheme: inherit;
 }
@@ -321,6 +320,7 @@
 .inputWrap textarea {
   padding: var(--space-3) 16px;
   resize: vertical;
+  border-radius: var(--radius-md);
 }
 
 .quoteInput {
@@ -418,7 +418,7 @@
   gap: var(--space-2);
   height: 50px;
   border: 1px solid transparent;
-  border-radius: 0;
+  border-radius: var(--radius-well);
   background: var(--sunken);
   color: var(--ink);
   font-size: 15px;

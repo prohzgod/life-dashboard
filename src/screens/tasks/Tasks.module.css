@@ -14,12 +14,13 @@
   flex-shrink: 0;
   gap: var(--space-5);
   width: 224px;
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - 2 * var(--float-inset));
+  height: calc(100dvh - 2 * var(--float-inset));
   padding: 28px var(--space-3);
   overflow-y: auto;
-  border-right: 1px solid var(--line);
   background: var(--subtle);
+  margin: var(--float-inset) 0 var(--float-inset) var(--float-inset);
+  border-radius: var(--radius-xl);
 }
 
 .navGroup {

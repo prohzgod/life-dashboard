@@ -130,15 +130,26 @@ Both are bundled with `@fontsource` (no network needed).
 
 ## Radius
 
-Every radius token is `0px`: Grid is square. The names stay so components keep working.
+Very round. Buttons, inputs, chips, segmented controls and switches are pills.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--radius-xs` | 8px | Tiny marks: tags inside a row, keyboard hints |
+| `--radius-sm` | 12px | Small insets, menu items, list rows |
+| `--radius-md` | 16px | Textareas, wells inside a panel, small cards |
+| `--radius-well` | 20px | Larger wells and empty states |
+| `--radius-lg` | 24px | Panels and cards |
+| `--radius-tile` | 24px | Phone Home tiles |
+| `--radius-xl` | 28px | Big blocks and floating panes (sidebar, side panes) |
+| `--radius-pill` | 999px | Buttons, inputs, chips, segmented, switches, the tab bar |
 
 ## Shadows
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--shadow-sm` | `none` | `none` | Nothing: panels sit flat. |
-| `--shadow-md` | `0 0 0 1px` line | `0 0 0 1px` line | A hairline edge for floating layers (menus, dialogs). |
-| `--shadow-primary` | `none` | `none` | Nothing. |
+| `--shadow-sm` | `none` | `none` | Nothing: panels on the page sit flat. |
+| `--shadow-md` | soft 12/32 drop | deeper drop plus a 1px edge | Things that float: the sidebar, the phone tab bar, menus, dialogs, sheets. |
+| `--shadow-primary` | soft 8/20 drop | darker drop | Under the phone capture button. |
 
 ## Layout & sizes
 
@@ -150,6 +161,7 @@ Every radius token is `0px`: Grid is square. The names stay so components keep w
 | `--mobile-gutter` | 18px | Mobile side padding |
 | `--mobile-topbar-height` | 56px | Mobile pushed-screen top bar |
 | `--tabbar-height` | 84px | Mobile tab bar incl. 20px home-indicator space |
+| `--float-inset` | 12px | Gap between a floating nav (sidebar, tab bar) and the window edge |
 | `--fab-size` | 56px | Centre capture button |
 | `--touch-min` | 44px | Minimum touch target |
 | `--bento-columns` | 4 | Mobile Home grid columns |

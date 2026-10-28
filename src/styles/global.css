@@ -1,5 +1,5 @@
 /* Hallmark · redesign: full · scope: app · theme: grid (dealt 3/3, seed personal-offline-first-life-dashboard-e1a5·e1adc7df·2026-10-28·r1) · shape: app screen · v2.0.0 */
-/* Hallmark · critique: one blue-black ink and one ultramarine field carry every screen; the red mark is kept for the one thing that needs you (over budget, behind pace, today). */
+/* Hallmark · critique: one blue-black ink and one ultramarine field carry every screen; the red mark is kept for the one thing that needs you (over budget, behind pace, today); by request, very round corners and a floating sidebar and tab bar soften the square grid. */
 /* Hallmark · dropped logo · the sidebar logo gave way to the Grid wordmark, a red square beside the name in two lines */
 /* Hallmark · dropped {widget.kind === 'assistant' ? '/assistant' : '/health'} · the Steps tile became its own widget linking to Health when Health was built */
 /* Hallmark · reworded "Unlock" to "Open" · 19 names the lock button's old verb */

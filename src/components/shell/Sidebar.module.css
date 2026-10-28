@@ -1,24 +1,27 @@
 /* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 /* The sidebar is midnight in both themes: only --nav-* tokens inside it. */
+/* The sidebar floats: a rounded panel inset from the window edges, the rail keeps its column. */
 .rail {
   flex-shrink: 0;
-  width: var(--sidebar-width);
-  background: var(--nav-bg);
+  width: calc(var(--sidebar-width) + var(--float-inset));
+  padding: var(--float-inset) 0 var(--float-inset) var(--float-inset);
 }
 
 .sidebar {
   position: sticky;
-  top: 0;
+  top: var(--float-inset);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  gap: 20px;
+  gap: var(--space-4);
   width: var(--sidebar-width);
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - 2 * var(--float-inset));
+  height: calc(100dvh - 2 * var(--float-inset));
   padding: 24px 16px 16px;
   overflow-y: auto;
+  border-radius: var(--radius-xl);
   background: var(--nav-bg);
+  box-shadow: var(--shadow-md);
   color: var(--nav-ink);
   font-family: var(--font-sans);
 }
@@ -90,7 +93,7 @@
 .kbd {
   padding: 4px 8px;
   border: 1px solid var(--nav-line);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   color: var(--nav-ink-2);
   font-size: 11px;
   line-height: 14px;
@@ -113,7 +116,7 @@
 .kbdOnAccent {
   padding: 1px 8px;
   border: 1px solid var(--on-nav-accent);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   font-size: 11px;
   line-height: 14px;
 }

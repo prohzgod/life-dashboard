@@ -213,25 +213,25 @@ export const space = {
 } as const;
 
 export const radius = {
-  xs: 6, // Checkboxes, kbd hints
-  sm: 8, // Chips, segmented pills
-  md: 10, // Buttons, inputs, nav items
-  well: 14, // Stat tiles, habit tiles, wells
-  lg: 18, // Cards and panels
-  tile: 20, // Bento tiles on mobile Home
-  xl: 24, // Bottom sheets, large media
+  xs: 8, // Checkboxes, kbd hints
+  sm: 12, // Chips, segmented pills
+  md: 16, // Wells, notes, nav items (buttons and inputs are pills)
+  well: 20, // Stat tiles, habit tiles, wells
+  lg: 24, // Panels and cards
+  tile: 24, // Bento tiles on mobile Home
+  xl: 28, // Bottom sheets, large media
   pill: 999, // Status pills, avatars, FAB
 } as const;
 
 export const shadows = {
   light: {
-    sm: '0 1px 2px rgba(20,25,38,0.06), 0 1px 1px rgba(20,25,38,0.03)',
-    md: '0 12px 32px -14px rgba(20,25,38,0.22), 0 2px 6px rgba(20,25,38,0.05)',
-    primary: '0 8px 20px -6px rgba(34,48,90,0.45)',
+    sm: 'none',
+    md: '0 12px 32px -12px rgba(15,20,30,0.28), 0 2px 6px rgba(15,20,30,0.06)',
+    primary: '0 8px 20px -6px rgba(15,20,30,0.35)',
   },
   dark: {
-    sm: '0 1px 2px rgba(0,0,0,0.45)',
-    md: '0 14px 34px -14px rgba(0,0,0,0.7)',
+    sm: 'none',
+    md: '0 14px 34px -12px rgba(0,0,0,0.75), 0 0 0 1px #303540',
     primary: '0 8px 20px -6px rgba(0,0,0,0.6)',
   },
 } as const;
@@ -243,6 +243,7 @@ export const layout = {
   mobileGutter: 18, // Mobile side padding
   mobileTopbarHeight: 56, // Mobile pushed-screen top bar
   tabbarHeight: 84, // Mobile tab bar incl. 20px home-indicator space
+  floatInset: 12, // Gap between a floating nav (sidebar, tab bar) and the window edge
   fabSize: 56, // Centre capture button
   touchMin: 44, // Minimum touch target
   bentoColumns: 4, // Mobile Home grid columns

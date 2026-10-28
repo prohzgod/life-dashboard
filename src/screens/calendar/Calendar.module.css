@@ -16,9 +16,11 @@
   gap: var(--space-5);
   width: 256px;
   padding: var(--space-6) var(--space-4);
+  align-self: stretch;
   overflow-y: auto;
-  border-right: 1px solid var(--line);
   background: var(--subtle);
+  margin: var(--float-inset) 0 var(--float-inset) var(--float-inset);
+  border-radius: var(--radius-xl);
 }
 
 .sideSection {
@@ -153,7 +155,7 @@
   width: 100%;
   padding: var(--space-2) 12px;
   border: 1px solid transparent;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   background: var(--sunken);
   color: var(--ink);
   font-size: var(--text-body-s-size);
@@ -243,7 +245,7 @@
   height: 26px;
   padding: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--ink);
   font-size: var(--text-caption-size);
@@ -263,16 +265,16 @@
 }
 
 .miniWeekStart {
-  border-radius: 0;
+  border-radius: 8px 0 0 8px;
 }
 
 .miniWeekEnd {
-  border-radius: 0;
+  border-radius: 0 8px 8px 0;
 }
 
 .miniAnchor,
 .miniAnchor:hover {
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: var(--primary);
   color: var(--on-primary);
   font-weight: 700;
@@ -359,7 +361,7 @@
 .swatch {
   width: 14px;
   height: 10px;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .swatchBlock {
@@ -468,7 +470,7 @@
   overflow: hidden;
   padding: 4px 8px;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   font-size: var(--text-caption-size);
   font-weight: 600;
   text-align: left;
@@ -530,7 +532,7 @@
   overflow: hidden;
   padding: 4px 8px;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   font-size: var(--text-caption-size);
   font-weight: 600;
   line-height: 16px;
@@ -541,7 +543,7 @@
 
 .short {
   padding: 4px 8px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   font-size: 11px;
 }
 
@@ -704,7 +706,7 @@
 .monthChip {
   overflow: hidden;
   padding: 4px 8px;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   font-size: 11px;
   font-weight: 600;
   text-overflow: ellipsis;
@@ -736,7 +738,7 @@
 .dot {
   width: 4px;
   height: 4px;
-  border-radius: 0;
+  border-radius: 6px;
   background: currentColor;
 }
 
@@ -766,7 +768,7 @@
   height: 26px;
   padding: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--ink);
   font-size: var(--text-caption-size);
@@ -782,7 +784,7 @@
   left: calc(50% - 2px);
   width: 4px;
   height: 4px;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--career);
 }
 
@@ -813,10 +815,9 @@
 .field textarea {
   height: 38px;
   padding: 0 12px;
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: var(--radius-md);
-  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   color-scheme: inherit;
   font-size: 14px;
   font-weight: 400;
@@ -831,6 +832,7 @@
   height: auto;
   padding: var(--space-2) 12px;
   resize: vertical;
+  border-radius: var(--radius-md);
 }
 
 .fieldRow {
@@ -962,13 +964,13 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4px;
-  border-radius: 0;
+  border-radius: var(--radius-well);
 }
 
 .phoneTabs > button {
   justify-content: center;
   height: 32px;
-  border-radius: 0;
+  border-radius: var(--radius-md);
 }
 
 .phoneNav {
@@ -1002,7 +1004,7 @@
   height: 64px;
   padding: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-well);
   background: transparent;
   color: var(--ink-2);
 }
@@ -1029,7 +1031,7 @@
 .stripDot {
   width: 4px;
   height: 4px;
-  border-radius: 0;
+  border-radius: 6px;
   background: currentColor;
 }
 
@@ -1084,7 +1086,7 @@
 .phoneAllDay {
   padding: 8px 12px;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 600;
   text-align: left;
@@ -1129,7 +1131,7 @@
 .itemPhone {
   justify-content: center;
   padding: 4px 12px;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   font-size: 13px;
 }
 
@@ -1211,7 +1213,7 @@
   flex-shrink: 0;
   width: 3px;
   height: 18px;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .weekBarBlock {

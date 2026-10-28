@@ -15,11 +15,12 @@
   flex-shrink: 0;
   gap: var(--space-3);
   width: 280px;
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - 2 * var(--float-inset));
+  height: calc(100dvh - 2 * var(--float-inset));
   padding: 24px 12px 16px;
-  border-right: 1px solid var(--line);
   background: var(--subtle);
+  margin: var(--float-inset) 0 var(--float-inset) var(--float-inset);
+  border-radius: var(--radius-xl);
 }
 
 .treeHeader {
@@ -106,7 +107,7 @@
   gap: var(--space-2);
   height: 30px;
   padding: 0 var(--space-2);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   color: var(--ink-2);
   font-size: 14px;
   text-decoration: none;
@@ -150,7 +151,7 @@
   gap: 8px;
   height: 30px;
   padding-right: var(--space-2);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   color: var(--ink-2);
   font-size: 14px;
   cursor: pointer;
@@ -290,7 +291,9 @@
   flex-direction: column;
   flex-grow: 1;
   min-width: 0;
+  margin: var(--float-inset);
   overflow-y: auto;
+  border-radius: var(--radius-xl);
   background: var(--surface);
 }
 
@@ -558,12 +561,13 @@ a.folderItem:hover {
   flex-shrink: 0;
   gap: var(--space-5);
   width: 280px;
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - 2 * var(--float-inset));
+  height: calc(100dvh - 2 * var(--float-inset));
   padding: 24px var(--space-5);
   overflow-y: auto;
-  border-left: 1px solid var(--line-soft);
   background: var(--surface);
+  margin: var(--float-inset) var(--float-inset) var(--float-inset) 0;
+  border-radius: var(--radius-xl);
 }
 
 @media (max-width: 1280px) {

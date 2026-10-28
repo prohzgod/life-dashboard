@@ -8,7 +8,7 @@
   gap: 4px;
   height: 24px;
   padding: 0 var(--space-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   background: var(--chip-bg);
   color: var(--chip-ink);
   font-size: var(--text-caption-size);

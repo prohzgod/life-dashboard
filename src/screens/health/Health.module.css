@@ -74,7 +74,7 @@
 .dot {
   width: 8px;
   height: 8px;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--success);
 }
 
@@ -164,7 +164,7 @@
   gap: var(--space-3);
   min-width: 0;
   padding: 20px 20px;
-  border-radius: 0;
+  border-radius: var(--radius-well);
   background: var(--surface);
 }
 
@@ -237,7 +237,7 @@
   width: 10px;
   height: 10px;
   margin-left: var(--space-2);
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .rested {
@@ -288,7 +288,7 @@
 
 .bar {
   width: 100%;
-  border-radius: 0;
+  border-radius: 6px 6px 0 0;
 }
 
 .barLabel {
@@ -354,14 +354,14 @@
   flex-grow: 1;
   height: 12px;
   overflow: hidden;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: var(--sunken-2);
 }
 
 .moodTrack > span {
   display: block;
   height: 100%;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
 }
 
 /* ---- Workouts ---- */
@@ -422,7 +422,7 @@
 
 .metrics .metric {
   padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
-  border-radius: 0;
+  border-radius: var(--radius-well);
   background: var(--sunken);
 }
 
@@ -460,7 +460,7 @@
   height: 36px;
   padding: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   background: var(--primary);
   color: var(--on-primary);
 }
@@ -468,7 +468,7 @@
 .quickLog .plus {
   width: var(--touch-min);
   height: 40px;
-  border-radius: 0;
+  border-radius: var(--radius-well);
 }
 
 /* ---- Dialogs ---- */
@@ -497,10 +497,9 @@
 .field select {
   height: 38px;
   padding: 0 12px;
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: var(--radius-md);
-  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   color: var(--ink);
   color-scheme: inherit;
   font-size: var(--text-body-l-size);
@@ -623,7 +622,7 @@
 
 .phone .card {
   padding: var(--space-4);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
 }
 
 .phoneTiles {
@@ -634,7 +633,7 @@
 
 .phoneTiles .tile {
   padding: var(--space-4);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
 }
 
 @media (max-width: 1180px) {

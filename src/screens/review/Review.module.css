@@ -298,7 +298,7 @@
 .swatch {
   width: 10px;
   height: 10px;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .moodSwatch,
@@ -335,7 +335,7 @@
 
 .bar {
   width: 14px;
-  border-radius: 0;
+  border-radius: 6px 6px 0 0;
 }
 
 .barLabel {
@@ -361,10 +361,9 @@
 
 .question textarea {
   padding: 12px var(--space-3);
-  border: 0;
-  border-bottom: 1px solid var(--control);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
-  background: var(--subtle);
+  background: var(--sunken);
   font-size: 14px;
   line-height: 1.5;
   resize: vertical;
@@ -560,10 +559,9 @@
   flex-grow: 1;
   height: 32px;
   padding: 0 12px;
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: 0;
-  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   font-size: 14px;
 }
 
@@ -641,7 +639,7 @@
   height: 4px;
   padding: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--track);
 }
 

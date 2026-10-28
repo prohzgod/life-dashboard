@@ -48,6 +48,7 @@
   gap: var(--space-1) var(--space-3);
   width: 260px;
   padding: var(--space-3) var(--space-4) var(--space-4);
+  border-radius: var(--radius-lg);
   background: var(--inverse);
   color: var(--on-inverse);
 }
@@ -152,7 +153,7 @@
   gap: 4px;
   min-width: 0;
   padding: 12px var(--space-3);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   background: var(--tone-soft, var(--sunken));
 }
 
@@ -267,7 +268,7 @@
 .dayCell {
   width: 16px;
   height: 16px;
-  border-radius: 0;
+  border-radius: 6px;
   background: var(--track);
 }
 
@@ -392,10 +393,9 @@
   width: 48px;
   height: 30px;
   padding: 0 8px;
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
@@ -410,10 +410,9 @@
   min-width: 0;
   height: 42px;
   padding: 0 var(--space-3);
-  border: 0;
-  border-bottom: 1px solid var(--control);
-  border-radius: var(--radius-md);
-  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
   font-size: 14px;
 }
 
