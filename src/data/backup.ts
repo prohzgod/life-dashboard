@@ -1,4 +1,5 @@
 import { ensureCalendars } from './calendar';
+import { ensureBudgets } from './finance';
 import { dataTableNames, db, normalizeEvent, normalizeGoal, normalizeNode, normalizeTask, type DataTableName } from './db';
 import { nowIso } from './ids';
 import { setCurrentSpaceId } from './session';
@@ -100,6 +101,7 @@ export async function importReplacingAll(file: ExportFile): Promise<{ records: n
   setCurrentSpaceId(personal.id);
   // Exports from before calendars existed have none.
   await ensureCalendars();
+  await ensureBudgets();
   return { records: countExportRecords(file) };
 }
 

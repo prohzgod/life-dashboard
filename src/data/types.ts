@@ -322,6 +322,41 @@ export interface VisionCard extends BaseRecord {
   sortKey: string;
 }
 
+/** A spending category with its monthly budget, or the Income and Savings buckets. */
+export interface Budget extends BaseRecord {
+  name: string;
+  kind: 'expense' | 'income' | 'savings';
+  /** Monthly budget in cents; null when none is set. */
+  amount: number | null;
+  sortKey: string;
+}
+
+export interface Transaction extends BaseRecord {
+  day: LocalDay;
+  description: string;
+  /** Cents: negative spends, positive comes in. A move to savings is negative in the Savings category. */
+  amount: number;
+  /** A Budget id (category), or null when not sorted yet. */
+  categoryId: string | null;
+  source: 'manual' | 'receipt' | 'csv' | 'recurring' | 'goal';
+  /** A savings goal this money went to; its progress moves with it. */
+  goalId: string | null;
+  /** A receipt photo, in `attachments`. */
+  attachmentId: string | null;
+  /** From a CSV import, so the same row isn't imported twice. */
+  importKey: string | null;
+  notes: string;
+}
+
+/** Something you own or owe, for net worth. Balances are typed in, never fetched from a bank. */
+export interface Account extends BaseRecord {
+  name: string;
+  kind: 'asset' | 'debt';
+  /** Cents, always positive; debts count against net worth. */
+  balance: number;
+  sortKey: string;
+}
+
 /** Device bookkeeping (seed version, current space). Not user data, not exported. */
 export interface MetaEntry {
   key: string;

@@ -24,6 +24,9 @@ import type {
   Tagging,
   Task,
   VisionCard,
+  Budget,
+  Transaction,
+  Account,
 } from './types';
 
 /**
@@ -54,6 +57,9 @@ export class LifeDb extends Dexie {
   calendars!: Table<Calendar, string>;
   events!: Table<CalendarEvent, string>;
   visionCards!: Table<VisionCard, string>;
+  budgets!: Table<Budget, string>;
+  transactions!: Table<Transaction, string>;
+  accounts!: Table<Account, string>;
   meta!: Table<MetaEntry, string>;
 
   constructor(name = 'life-dashboard') {
@@ -120,6 +126,12 @@ export class LifeDb extends Dexie {
       );
     // v6: vision board cards.
     this.version(6).stores({ visionCards: 'id, spaceId, sortKey, updatedAt' });
+    // v7: Finance: budget categories, transactions and accounts.
+    this.version(7).stores({
+      budgets: 'id, spaceId, sortKey, updatedAt',
+      transactions: 'id, spaceId, day, categoryId, goalId, importKey, updatedAt',
+      accounts: 'id, spaceId, sortKey, updatedAt',
+    });
   }
 }
 
@@ -186,6 +198,9 @@ export const dataTableNames = [
   'calendars',
   'events',
   'visionCards',
+  'budgets',
+  'transactions',
+  'accounts',
 ] as const satisfies ReadonlyArray<keyof LifeDb>;
 
 export type DataTableName = (typeof dataTableNames)[number];

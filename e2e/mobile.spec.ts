@@ -204,3 +204,20 @@ test('Privacy on a phone: the grouped list, and Lock app now from Profile', asyn
   await page.getByRole('button', { name: 'Unlock' }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Profile', exact: true })).toBeVisible();
 });
+
+test('Finance on a phone: the month, hide amounts, and an expense', async ({ page }) => {
+  await page.goto('/finance');
+  await expect(page.getByRole('heading', { level: 1, name: 'Finance' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to Home' })).toBeVisible();
+  await page.getByRole('button', { name: 'Add expense' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Add expense' });
+  await dialog.getByLabel(/^Amount/).fill('12.50');
+  await dialog.getByLabel('What for').fill('Coffee beans');
+  await dialog.getByRole('button', { name: 'Add', exact: true }).click();
+  const recent = page.locator('section', { has: page.getByRole('heading', { name: 'Recent' }) });
+  await expect(recent.getByRole('button', { name: /Coffee beans/ })).toBeVisible();
+  const hide = page.getByRole('button', { name: 'Hide amounts' });
+  await hide.click();
+  await expect(hide).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('region', { name: 'Spent this month' })).toContainText('••••••');
+});

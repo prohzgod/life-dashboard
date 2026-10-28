@@ -5,6 +5,7 @@ import type { HomeData, HomeWidget } from '@/data';
 import { Icon, type IconName } from '@/components/icons/Icon';
 import { Ring } from '@/components/ui/Ring';
 import { cx } from '@/components/ui/cx';
+import { monthLabel } from '@/domain/finance';
 import { formatMinutes, weekdayName } from '@/lib/format';
 import styles from './Home.module.css';
 
@@ -145,8 +146,22 @@ export function Widget({ widget, data, today }: Props) {
     case 'finance':
       return (
         <Link to="/finance" className={cx(styles.tile, styles.tinted)} style={{ background: 'var(--finance-soft)', color: 'var(--finance-ink)' }}>
-          <span className={styles.smallLabel}>Finance</span>
-          <span className={styles.meta}>{size === 'S' ? 'Set up budgets' : 'Set up budgets to see spending here, hidden until you tap.'}</span>
+          <span className={styles.financeTop}>
+            <span className={styles.smallLabel}>Spent · {monthLabel(data.finance.month, true)}</span>
+            <span className={styles.hiddenAmount} aria-label="Amount hidden">
+              ••••
+            </span>
+          </span>
+          {data.finance.budget > 0 ? (
+            <>
+              <span className={styles.financeTrack} aria-hidden="true">
+                <span style={{ width: `${Math.min(100, (data.finance.spent / data.finance.budget) * 100)}%` }} />
+              </span>
+              <span className={styles.meta}>{Math.round((data.finance.spent / data.finance.budget) * 100)}% of budget</span>
+            </>
+          ) : (
+            <span className={styles.meta}>{size === 'S' ? 'Set budgets' : 'Set budgets to see how the month is going.'}</span>
+          )}
         </Link>
       );
     case 'vision':

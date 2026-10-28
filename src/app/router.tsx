@@ -16,6 +16,7 @@ import { EditProfilePage } from '@/screens/profile/EditProfilePage';
 import { TaskRedirect } from '@/screens/tasks/TaskRedirect';
 import { CalendarPage } from '@/screens/calendar/CalendarPage';
 import { VisionPage } from '@/screens/vision/VisionPage';
+import { FinancePage } from '@/screens/finance/FinancePage';
 
 export const routes: RouteObject[] = [
   {
@@ -40,7 +41,7 @@ export const routes: RouteObject[] = [
       { path: 'library/day/:day', element: <LazyLibraryPage mode="day" /> },
       { path: 'library/:nodeId', element: <LazyLibraryPage mode="node" /> },
       { path: 'vision', element: <VisionPage /> },
-      { path: 'finance', element: <ScreenPage screen="finance" /> },
+      { path: 'finance', element: <FinancePage /> },
       { path: 'health', element: <ScreenPage screen="health" /> },
       { path: 'assistant', element: <ScreenPage screen="assistant" /> },
       { path: 'settings', element: <Navigate to="/settings/privacy" replace /> },

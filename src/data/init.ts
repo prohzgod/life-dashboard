@@ -1,4 +1,5 @@
 import { ensureCalendars } from './calendar';
+import { ensureBudgets } from './finance';
 import { db } from './db';
 import { ensureHomeWidgets } from './homeWidgets';
 import { ensureProfile } from './profile';
@@ -16,6 +17,7 @@ export function initData(): Promise<void> {
     await ensureHomeWidgets();
     await ensureProfile();
     await ensureCalendars();
+    await ensureBudgets();
   })().catch((error: unknown) => {
     ready = null;
     throw error;

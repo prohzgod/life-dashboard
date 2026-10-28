@@ -33,8 +33,8 @@ export function mobileChrome(pathname: string, search = ''): MobileChrome {
   if (p.startsWith('/settings')) return { tab: 'home', back: null, hideTabBar: false };
   // The calendar draws its own header; Home is one tap away in the tab bar.
   if (p === '/calendar') return { tab: 'home', back: null, hideTabBar: false };
-  // The board draws its own "‹ Home" header with the + button beside it.
-  if (p === '/vision') return { tab: 'home', back: null, hideTabBar: false };
+  // These draw their own "‹ Home" header with a button beside it.
+  if (p === '/vision' || p === '/finance') return { tab: 'home', back: null, hideTabBar: false };
   if (p === '/review') return { tab: 'home', back: null, hideTabBar: true };
   if (/^\/goals\/[^/]+$/.test(p)) return { tab: 'home', back: { label: 'Goals', to: '/goals' }, hideTabBar: false };
   return { tab: 'home', back: home, hideTabBar: false };

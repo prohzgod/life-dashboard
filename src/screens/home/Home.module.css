@@ -422,3 +422,29 @@
   font-weight: 600;
   text-decoration: none;
 }
+
+.financeTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hiddenAmount {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.financeTrack {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.financeTrack > span {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--finance);
+}
