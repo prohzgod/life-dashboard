@@ -1,0 +1,94 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  align-items: start;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 36px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.sub,
+.note {
+  color: var(--ink-3);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+}
+
+.input {
+  height: 36px;
+  padding: 0 var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
+  color: var(--ink);
+  color-scheme: inherit;
+  font: inherit;
+  font-size: var(--text-body-s-size);
+  font-weight: 400;
+}
+
+.input:disabled {
+  background: var(--track);
+  color: var(--ink-4);
+  cursor: not-allowed;
+}
+
+.success,
+.error {
+  font-size: var(--text-body-s-size);
+  font-weight: 600;
+}
+
+.success:empty,
+.error:empty {
+  display: none;
+}
+
+.success {
+  color: var(--success);
+}
+
+.error {
+  color: var(--danger);
+}
+
+@media (max-width: 767px) {
+  .row,
+  .input {
+    min-height: var(--touch-min);
+  }
+}

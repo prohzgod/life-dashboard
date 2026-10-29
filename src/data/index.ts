@@ -17,6 +17,7 @@ export * from './vision';
 export * from './privacy';
 export * from './finance';
 export * from './health';
+export * from './notifications';
 export { countExportRecords, countRecords, exportAllAsJson, ImportError, importReplacingAll, parseExport, type ExportFile } from './backup';
 export { newId, nowIso, toLocalDay } from './ids';
 export { initData } from './init';

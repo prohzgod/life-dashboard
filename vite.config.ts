@@ -34,6 +34,8 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         navigateFallback: '/index.html',
+        // Opens the app at a reminder's page when you click its notification.
+        importScripts: ['notification-click.js'],
         runtimeCaching: [
           {
             // tokens.css also pulls the fonts from Google; the app bundles them too, so this is only a bonus cache.

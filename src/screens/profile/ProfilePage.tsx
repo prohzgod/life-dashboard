@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ageOn, visibilityOf } from '@/domain/profile';
-import { getPrivacyState, getProfile, listHomeWidgets, setAllVisibility, setFieldVisibility } from '@/data';
+import { getPrivacyState, getProfile, getReminderPrefs, listHomeWidgets, setAllVisibility, setFieldVisibility } from '@/data';
 import { lockNow } from '@/components/shell/lock';
 import { Icon, type IconName } from '@/components/icons/Icon';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
@@ -18,6 +18,7 @@ export function ProfilePage() {
   const today = useToday();
   const [theme] = useThemePreference();
   const data = useLiveQuery(async () => ({ profile: await getProfile(), widgets: (await listHomeWidgets()).filter((w) => !w.hidden).length, locked: Boolean((await getPrivacyState()).lock.passcode) }));
+  const reminders = useLiveQuery(getReminderPrefs);
   if (!data) return null;
   const { profile } = data;
   const vis = (field: string) => visibilityOf(profile.visibility, field);
@@ -111,7 +112,7 @@ export function ProfilePage() {
           <SettingRow icon="lock" label="Privacy & data" detail="On this phone" to="/settings/privacy" />
           <SettingRow icon="palette" label="Appearance" detail={theme[0]!.toUpperCase() + theme.slice(1)} to="/settings/appearance" />
           <SettingRow icon="widgets" label="Home & modules" detail={`${data.widgets} widgets`} to="/home/edit" />
-          <SettingRow icon="bell" label="Notifications" detail="Review on Sun" to="/settings/general" />
+          <SettingRow icon="bell" label="Notifications" detail={reminders?.enabled ? 'On' : 'Off'} to="/settings/notifications" />
           <SettingRow icon="users" label="Spaces" detail="Personal" to="/settings/spaces" />
           <SettingRow icon="download" label="Backup & export" detail="Encrypted backups" to="/settings/privacy" />
         </ul>

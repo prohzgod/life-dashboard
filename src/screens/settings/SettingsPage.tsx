@@ -4,6 +4,7 @@ import { useIsMobile } from '@/lib/useMediaQuery';
 import { EmptyState } from '@/components/shell/EmptyState';
 import { PageHeader } from '@/components/shell/PageHeader';
 import { AppearanceSettings } from './AppearanceSettings';
+import { NotificationSettings } from './NotificationSettings';
 import { PrivacySettings } from './PrivacySettings';
 import styles from './SettingsPage.module.css';
 
@@ -11,6 +12,7 @@ const settingsTabs = [
   { slug: 'general', label: 'General', empty: 'Your name, week start and language.' },
   { slug: 'spaces', label: 'Spaces & sharing', empty: 'A shared Family space, alongside your Personal one.' },
   { slug: 'privacy', label: 'Privacy & data', empty: 'Storage on this device, sync, encryption, backups, and export and import.' },
+  { slug: 'notifications', label: 'Notifications', empty: '' },
   { slug: 'modules', label: 'Modules', empty: 'Turn Calendar, Finance, Health, Assistant and Vision board on or off. Nothing is deleted.' },
   { slug: 'appearance', label: 'Appearance', empty: '' },
 ] as const;
@@ -57,5 +59,6 @@ export function SettingsPage() {
 function TabContent({ slug, empty }: { slug: TabSlug; empty: string }) {
   if (slug === 'appearance') return <AppearanceSettings />;
   if (slug === 'privacy') return <PrivacySettings />;
+  if (slug === 'notifications') return <NotificationSettings />;
   return <EmptyState icon="settings" heading="Arrives with your data" body={empty} />;
 }

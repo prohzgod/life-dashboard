@@ -10,10 +10,12 @@ import { MobileCapture } from './MobileCapture';
 import { QuickCapture } from './QuickCapture';
 import { Sidebar } from './Sidebar';
 import { TabBar } from './TabBar';
+import { useReminders } from './useReminders';
 
 type Overlay = 'search' | 'capture' | null;
 
 export function AppShell() {
+  useReminders();
   return (
     <LockGate>
       <Shell />
