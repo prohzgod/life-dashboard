@@ -161,7 +161,7 @@ function Item({ item, hourHeight, phone, onOpen }: { item: GridItem & { col: num
     height,
     left: `calc(${(item.col / item.cols) * 100}% + 4px)`,
     width: `calc(${100 / item.cols}% - 8px)`,
-    ...(item.tone === 'block' ? {} : toneStyle(item.tone)),
+    ...(item.tone === 'block' ? {} : { ...toneStyle(item.tone), ['--tone' as string]: `var(--${item.tone})` }),
   };
   const label = `${item.title}, ${item.time}${item.kind === 'block' ? ', time block' : `, ${item.calendarName}`}${item.done ? ', done' : ''}${item.readOnly ? ', read-only' : ''}`;
 
@@ -169,7 +169,7 @@ function Item({ item, hourHeight, phone, onOpen }: { item: GridItem & { col: num
     <button
       ref={setNodeRef}
       type="button"
-      className={cx(styles.item, item.tone === 'block' && styles.block, item.done && styles.done, short && styles.short, phone && styles.itemPhone, isDragging && styles.dragging)}
+      className={cx(styles.item, item.tone === 'block' ? styles.block : styles.event, item.done && styles.done, short && styles.short, phone && styles.itemPhone, isDragging && styles.dragging)}
       style={style}
       aria-label={label}
       onClick={onOpen}

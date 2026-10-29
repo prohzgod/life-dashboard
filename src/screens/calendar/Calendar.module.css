@@ -515,8 +515,9 @@
   border-left: 1px solid var(--line-soft);
 }
 
+/* Today's column is the lighter paper, never a blue: events are the blue things on the grid. */
 .todayTint {
-  background: var(--primary-softer);
+  background: var(--bg);
 }
 
 .dropTarget {
@@ -539,6 +540,11 @@
   text-align: left;
   cursor: pointer;
   touch-action: none;
+}
+
+/* An event's edge carries its area colour, so it reads on any column. */
+.event {
+  box-shadow: inset 3px 0 0 var(--tone);
 }
 
 .short {
