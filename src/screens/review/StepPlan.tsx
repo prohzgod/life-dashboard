@@ -1,13 +1,13 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { Day } from '@/domain/days';
-import { goalsRepo, loadGoalBoard, readAnswers, setWeekFocus, type Review } from '@/data';
+import { goalsRepo, loadGoalBoard, readAnswers, setWeekFocus, type Goal, type Review } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { Button, Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
 import styles from './Review.module.css';
 
-type Pick = { key: string; parentGoalId: string | null; title: string };
+export type Pick = { key: string; parentGoalId: string | null; title: string };
 
 /** Step 4: pick 1–3 things to focus on next week. They become Today's "This week's focus". */
 export function StepPlan({ review, today, nextWeek }: { review: Review; today: Day; nextWeek: number }) {
@@ -17,14 +17,33 @@ export function StepPlan({ review, today, nextWeek }: { review: Review; today: D
     return { board, existing };
   }, [today, review.id]);
   if (!data) return null;
-  return <Planner key={data.existing.map((g) => g.id).join()} review={review} data={data} nextWeek={nextWeek} />;
+  return (
+    <Planner
+      key={data.existing.map((g) => g.id).join()}
+      data={data}
+      offer={(h) => h !== 'week'}
+      copy={{
+        title: `Plan week ${nextWeek}`,
+        lead: 'Choose up to three things that would make next week a good one. Name each as something you can do this week.',
+        nameLabel: (title) => `This week for ${title}`,
+        ownPlaceholder: 'Or add your own, e.g. “Draft essay #9”',
+        saved: 'Saved. These show on Today next week.',
+        button: `Set focus for week ${nextWeek}`,
+      }}
+      onSave={(picks) => setWeekFocus(review, picks)}
+    />
+  );
 }
 
-function Planner({ review, data, nextWeek }: { review: Review; data: { board: Awaited<ReturnType<typeof loadGoalBoard>>; existing: Array<{ id: string; title: string; parentGoalId: string | null }> }; nextWeek: number }) {
+export type PlannerData = { board: Awaited<ReturnType<typeof loadGoalBoard>>; existing: Array<{ id: string; title: string; parentGoalId: string | null }> };
+export type PlannerCopy = { title: string; lead: string; nameLabel: (goalTitle: string) => string; ownPlaceholder: string; saved: string; button: string };
+
+/** Pick up to three focus items, each following a bigger goal or your own. Nothing is saved until you press the button. */
+export function Planner({ data, offer, copy, onSave, children }: { data: PlannerData; offer: (horizon: Goal['horizon']) => boolean; copy: PlannerCopy; onSave: (picks: Pick[]) => Promise<void>; children?: ReactNode }) {
   const [picks, setPicks] = useState<Pick[]>(() => data.existing.map((g) => ({ key: g.id, parentGoalId: g.parentGoalId, title: g.title })));
   const [own, setOwn] = useState('');
   const [saved, setSaved] = useState(data.existing.length > 0);
-  const candidates = data.board.views.filter((v) => v.goal.status === 'active' && v.goal.horizon !== 'week');
+  const candidates = data.board.views.filter((v) => v.goal.status === 'active' && offer(v.goal.horizon));
   const full = picks.length >= 3;
   const toggle = (goalId: string, title: string) => {
     setSaved(false);
@@ -32,8 +51,9 @@ function Planner({ review, data, nextWeek }: { review: Review; data: { board: Aw
   };
 
   return (
-    <Card title={`Plan week ${nextWeek}`} meta={`${picks.length} of 3 picked`} className={styles.card}>
-      <p className={styles.lead}>Choose up to three things that would make next week a good one. Name each as something you can do this week.</p>
+    <Card title={copy.title} meta={`${picks.length} of 3 picked`} className={styles.card}>
+      <p className={styles.lead}>{copy.lead}</p>
+      {children}
       <ul className={styles.picks}>
         {candidates.map(({ goal, pace }) => {
           const pick = picks.find((p) => p.parentGoalId === goal.id);
@@ -49,7 +69,7 @@ function Planner({ review, data, nextWeek }: { review: Review; data: { board: Aw
               {pick && (
                 <input
                   className={styles.pickName}
-                  aria-label={`This week for ${goal.title}`}
+                  aria-label={copy.nameLabel(goal.title)}
                   value={pick.title}
                   onChange={(e) => {
                     setSaved(false);
@@ -84,24 +104,24 @@ function Planner({ review, data, nextWeek }: { review: Review; data: { board: Aw
           setOwn('');
         }}
       >
-        <input aria-label="Your own focus item" placeholder={full ? 'Three is plenty' : 'Or add your own, e.g. “Draft essay #9”'} value={own} disabled={full} onChange={(e) => setOwn(e.target.value)} />
+        <input aria-label="Your own focus item" placeholder={full ? 'Three is plenty' : copy.ownPlaceholder} value={own} disabled={full} onChange={(e) => setOwn(e.target.value)} />
         <Button size="sm" type="submit" disabled={full || !own.trim()}>
           Add
         </Button>
       </form>
       <div className={styles.planActions}>
         <span className={styles.quiet} role="status">
-          {saved ? 'Saved. These show on Today next week.' : ''}
+          {saved ? copy.saved : ''}
         </span>
         <Button
           variant="primary"
           disabled={!picks.length}
           onClick={async () => {
-            await setWeekFocus(review, picks);
+            await onSave(picks);
             setSaved(true);
           }}
         >
-          Set focus for week {nextWeek}
+          {copy.button}
         </Button>
       </div>
     </Card>

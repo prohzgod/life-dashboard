@@ -21,7 +21,7 @@ Everything can link to everything: a task to a goal, a journal photo to a goal, 
 
 Desktop: a 248px midnight sidebar.
 - **Plan:** Today (home), Inbox, Tasks, Calendar
-- **Grow:** Goals, Progress, Weekly review
+- **Grow:** Goals, Progress, Reviews
 - **Remember:** Library & journal, Vision board
 - **Modules (optional):** Finance, Health, Assistant
 - Footer: sync status ("Saved on this device · Synced with 2 devices"), space switcher (Personal / Family), Settings.
@@ -43,6 +43,8 @@ Mobile (below 768px): tab bar **Home · Today · ＋ capture · Tasks · Library
 | Goals | Vision statement + word of the year; goal tree (year → quarter → week → habits/tasks) with progress bar and a "where you should be today" tick; detail panel with why it matters, progress chart vs pace line, milestones, linked habits/tasks/notes/journal, a catch-up suggestion |
 | Progress | Day / Week / Month / Year tabs; stat tiles; year in pixels (mood per day); wheel of life radar (now vs last quarter); habit heatmap; patterns ("days after 7h+ sleep are rated 0.9 higher") |
 | Library | Tree (Journal › year › month › day, Areas, Projects, Reading notes, Recipes, All photos, Trash) with drag-and-drop; block editor page with properties (area, goal, tags, space), checklists, image galleries, `[[links]]`, `@mentions`; right rail with backlinks, attachments, "stored on this device, encrypted", version history |
+| Reviews | One page for every review: the week, month, quarter and year that's due (the one to do next in the ultramarine field), with Start or Continue, and the reviews you've finished with their journal pages. A finished period stays on offer for a while (2 weeks for a month, a month for a quarter, 2 months for a year), and the current one opens early in its last days |
+| Monthly, quarterly, yearly review | 4 steps: Look back (stats against the period before, mood by day or month, goals that moved, a draft summary) → Reflect (three questions; quarters and years also rate the wheel of life) → Plan the next period (up to 3 goals of that horizon; the year also sets next year's word) → Done, written to the journal page for the period's last day |
 | Weekly review | 5 steps: Get clear (inbox to zero) → Get current → Reflect → Plan next week (pick 1–3 focus items) → Done. Pre-filled with the week's stats, mood/energy per day, best day, goals that moved; optional on-device AI draft summary |
 | Calendar | Week grid with events from read-only Google/iCloud calendars, personal and family events, time blocks created from tasks (dashed), drag unscheduled tasks onto the week |
 | Vision board | Grid or free canvas of images and quote cards per area, each can pin a goal with its progress |

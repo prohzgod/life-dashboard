@@ -2,8 +2,9 @@ import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-do
 import { AppShell } from '@/components/shell/AppShell';
 import { DevComponentsPage } from '@/screens/dev/DevComponentsPage';
 import { LazyLibraryPage } from '@/screens/library/LazyLibraryPage';
-import { LazyGoalsPage, LazyProgressPage } from '@/screens/LazyScreens';
 import { ReviewPage } from '@/screens/review/ReviewPage';
+import { ReviewsPage } from '@/screens/review/ReviewsPage';
+import { LazyGoalsPage, LazyPeriodReviewPage, LazyProgressPage } from '@/screens/LazyScreens';
 import { NotFoundPage } from '@/screens/NotFoundPage';
 import { ScreenPage } from '@/screens/ScreenPage';
 import { SettingsPage } from '@/screens/settings/SettingsPage';
@@ -36,6 +37,8 @@ export const routes: RouteObject[] = [
       { path: 'goals/:id', element: <LazyGoalsPage /> },
       { path: 'progress', element: <LazyProgressPage /> },
       { path: 'review', element: <ReviewPage /> },
+      { path: 'review/:period', element: <LazyPeriodReviewPage /> },
+      { path: 'reviews', element: <ReviewsPage /> },
       { path: 'library', element: <LazyLibraryPage mode="home" /> },
       { path: 'library/trash', element: <LazyLibraryPage mode="trash" /> },
       { path: 'library/photos', element: <LazyLibraryPage mode="photos" /> },

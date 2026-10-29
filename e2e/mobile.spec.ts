@@ -239,3 +239,14 @@ test('Health on a phone: the sleep card, tiles and quick log', async ({ page }) 
   await page.getByRole('dialog', { name: 'Log a reading' }).getByRole('button', { name: 'Save' }).click();
   await expect(page.getByRole('button', { name: /^Weight 70\.0 kg/ })).toBeVisible();
 });
+
+test('Reviews on a phone: the hub with a back link, and a monthly review full-screen', async ({ page }) => {
+  await page.goto('/reviews');
+  await expect(page.getByRole('heading', { level: 1, name: 'Reviews' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to Home' })).toBeVisible();
+  await page.getByRole('list', { name: 'Your reviews' }).getByRole('link', { name: /^Start monthly review/ }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Look back' })).toBeVisible();
+  await expect(tabs(page)).toHaveCount(0);
+  await page.getByRole('link', { name: 'Close and finish later' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Reviews' })).toBeVisible();
+});

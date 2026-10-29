@@ -1,0 +1,137 @@
+/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
+.slots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 1180px) {
+  .slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .slots {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 200px;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+/* The review to do next floods with the ultramarine. */
+.lead {
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+.slotText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.slotTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-title-size);
+  font-weight: var(--text-title-weight);
+  line-height: var(--text-title-line);
+  letter-spacing: var(--text-title-tracking);
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+.slotName {
+  font-size: var(--text-body-size);
+  font-weight: 600;
+}
+
+.slotState,
+.slotAbout {
+  color: var(--ink-2);
+  font-size: var(--text-body-s-size);
+  line-height: var(--text-body-s-line);
+}
+
+.lead .slotState,
+.lead .slotAbout {
+  color: var(--on-inverse);
+}
+
+.done .slotState {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.slotAction {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.past {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pastRow {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 44px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: var(--text-body-s-size);
+}
+
+.pastRow:last-child {
+  border-bottom: 0;
+}
+
+.pastKind {
+  color: var(--ink-2);
+}
+
+.pastName {
+  font-weight: 600;
+}
+
+.pastLink {
+  color: var(--link);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pastLink:hover {
+  text-decoration: underline;
+}
+
+.quiet {
+  color: var(--ink-3);
+  font-size: var(--text-body-s-size);
+}
+
+@media (max-width: 767px) {
+  .pastRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: var(--space-2) 0;
+  }
+
+  .pastKind {
+    grid-column: 1 / -1;
+  }
+}

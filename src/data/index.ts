@@ -6,6 +6,7 @@ export * from './checkIns';
 export * from './goalQueries';
 export * from './goalActions';
 export * from './reviewActions';
+export * from './periodReviews';
 export * from './progressQueries';
 export * from './library';
 export * from './tags';

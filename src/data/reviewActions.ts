@@ -20,9 +20,11 @@ export type ReviewAnswers = {
   focusGoalIds: string[];
   /** The draft summary, once inserted. */
   summary: string;
+  /** Yearly review: next year's word. */
+  word: string;
 };
 
-const emptyAnswers: ReviewAnswers = { step: 1, wentWell: '', drained: '', differently: '', focusGoalIds: [], summary: '' };
+export const emptyAnswers: ReviewAnswers = { step: 1, wentWell: '', drained: '', differently: '', focusGoalIds: [], summary: '', word: '' };
 
 export function readAnswers(review: Review): ReviewAnswers {
   return { ...emptyAnswers, ...(review.answers as Partial<ReviewAnswers>) };
@@ -49,9 +51,12 @@ export async function openWeeklyReview(today: Day): Promise<Review> {
   });
 }
 
+/** Merges answers in one transaction, so saving a step and an answer at once never loses either. */
 export async function saveReviewAnswers(id: string, patch: Partial<ReviewAnswers>): Promise<void> {
-  const review = await reviewsRepo.get(id);
-  if (review) await reviewsRepo.update(id, { answers: { ...readAnswers(review), ...patch } });
+  await db.transaction('rw', db.reviews, async () => {
+    const review = await reviewsRepo.get(id);
+    if (review) await reviewsRepo.update(id, { answers: { ...readAnswers(review), ...patch } });
+  });
 }
 
 export type WeekData = {
@@ -100,6 +105,17 @@ export async function loadWeekData(weekStart: Day, today: Day): Promise<WeekData
  */
 export async function setWeekFocus(review: Review, items: ReadonlyArray<{ parentGoalId: string | null; title: string }>): Promise<void> {
   const nextWeek = addDays(review.periodStart, 7);
+  await setFocusGoals(review, items, 'week', nextWeek, addDays(nextWeek, 6));
+}
+
+/** Replaces a review's focus picks with new goals of the given horizon and dates. */
+export async function setFocusGoals(
+  review: Review,
+  items: ReadonlyArray<{ parentGoalId: string | null; title: string }>,
+  horizon: Goal['horizon'],
+  startDate: Day,
+  endDate: Day,
+): Promise<void> {
   const answers = readAnswers(review);
   await db.transaction('rw', [db.goals, db.reviews], async () => {
     for (const id of answers.focusGoalIds) await goalsRepo.remove(id);
@@ -112,15 +128,15 @@ export async function setWeekFocus(review: Review, items: ReadonlyArray<{ parent
           why: '',
           areaId: parent?.areaId ?? null,
           parentGoalId: parent?.id ?? null,
-          horizon: 'week',
+          horizon,
           type: 'milestone',
           progressMethod: 'manual',
           startValue: 0,
           targetValue: 100,
           currentValue: 0,
           unit: null,
-          startDate: nextWeek,
-          endDate: addDays(nextWeek, 6),
+          startDate,
+          endDate,
           status: 'active',
           commitment: 'committed',
           progressLog: [],
@@ -128,12 +144,14 @@ export async function setWeekFocus(review: Review, items: ReadonlyArray<{ parent
         }),
       );
     }
-    await reviewsRepo.update(review.id, { answers: { ...answers, focusGoalIds: created.map((g) => g.id) } });
+    // Read again: other answers may have changed since this review was loaded.
+    const latest = await reviewsRepo.get(review.id);
+    await reviewsRepo.update(review.id, { answers: { ...readAnswers(latest ?? review), focusGoalIds: created.map((g) => g.id) } });
   });
 }
 
-const paragraph = (text: string) => ({ type: 'paragraph', props: {}, content: [{ type: 'text', text, styles: {} }], children: [] });
-const heading = (text: string, level = 2) => ({ type: 'heading', props: { level }, content: [{ type: 'text', text, styles: {} }], children: [] });
+export const paragraph = (text: string) => ({ type: 'paragraph', props: {}, content: [{ type: 'text', text, styles: {} }], children: [] });
+export const heading = (text: string, level = 2) => ({ type: 'heading', props: { level }, content: [{ type: 'text', text, styles: {} }], children: [] });
 
 /** Finishes the review: saved, written into the week's Sunday journal page, and the review task ticked off. */
 export async function completeWeeklyReview(reviewId: string, today: Day): Promise<void> {

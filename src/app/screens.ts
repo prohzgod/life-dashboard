@@ -24,6 +24,8 @@ export type Screen = {
   icon: IconName;
   /** Optional badge in the sidebar, e.g. the weekly review day. */
   badge?: string;
+  /** Other paths that light this item up in the sidebar, e.g. a review in progress. */
+  activeFor?: string;
   /** Show a live count of open work next to it. */
   countKey?: 'today' | 'inbox';
   empty: { heading: string; body: string };
@@ -104,9 +106,10 @@ export const screens = {
   }),
   review: screen({
     key: 'review',
-    navLabel: 'Weekly review',
-    title: 'Weekly review',
-    path: '/review',
+    navLabel: 'Reviews',
+    title: 'Reviews',
+    path: '/reviews',
+    activeFor: '/review',
     icon: 'review',
     badge: 'Sun',
     empty: {

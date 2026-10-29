@@ -61,6 +61,10 @@
   list-style: none;
 }
 
+.steps4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .step {
   display: flex;
   align-items: center;
@@ -702,4 +706,27 @@
   .barGrid {
     gap: 4px;
   }
+}
+
+/* A month's mood runs to 31 days: narrower bars, tighter gaps. */
+.barGridDense {
+  gap: var(--space-1);
+}
+
+.barGridDense .barPair {
+  width: 100%;
+}
+
+.barGridDense .bar {
+  width: 100%;
+}
+
+.wordInput {
+  height: 40px;
+  padding: 0 var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--sunken);
+  color: var(--ink);
+  font: inherit;
 }

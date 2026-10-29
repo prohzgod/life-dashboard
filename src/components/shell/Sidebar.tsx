@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { countViews } from '@/domain/tasks';
 import { tasksRepo } from '@/data';
 import { useToday } from '@/lib/useToday';
@@ -16,6 +16,7 @@ type SidebarProps = {
 
 export function Sidebar({ onSearch, onCapture }: SidebarProps) {
   const online = useOnlineStatus();
+  const { pathname } = useLocation();
   const today = useToday();
   const counts = useLiveQuery(async () => countViews(withCompletedOn(await tasksRepo.list()), today), [today]);
 
@@ -56,7 +57,7 @@ export function Sidebar({ onSearch, onCapture }: SidebarProps) {
                     <NavLink
                       to={screen.path}
                       end={screen.path === '/'}
-                      className={({ isActive }) => (isActive ? `${styles.item} ${styles.active}` : styles.item)}
+                      className={({ isActive }) => (isActive || (screen.activeFor && (pathname === screen.activeFor || pathname.startsWith(`${screen.activeFor}/`))) ? `${styles.item} ${styles.active}` : styles.item)}
                     >
                       <Icon name={screen.icon} className={styles.itemIcon} />
                       <span className={styles.grow}>{screen.navLabel}</span>

@@ -10,7 +10,8 @@ Everything planned but not built yet, gathered from the "Later" list in `docs/PR
 ## Product gaps
 
 - [ ] **Family shared space**: a second space beside Personal; the space switcher in the sidebar; the Family calendar in Calendar.
-- [ ] **Monthly, quarterly and yearly reviews** (only the weekly review exists).
+- [x] **Monthly, quarterly and yearly reviews**: the Reviews page, four steps each, the wheel of life for quarters and years, next year's word.
+- [ ] Reminders for the monthly, quarterly and yearly reviews (only the weekly one nudges you).
 - [x] **Notifications and reminders**: local notifications for task reminders, the daily check-in and the weekly review; Settings › Notifications.
 - [ ] **Reminders while the app is closed**: today they arrive while it's open (or when you next open it, up to a day late). True background reminders need Web Push and a server.
 - [ ] Quiet hours, and snoozing a reminder from the notification.

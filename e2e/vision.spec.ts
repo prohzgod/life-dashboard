@@ -1,4 +1,23 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+/** Rows of one IndexedDB table, read straight from the browser: lets a test wait until a save has landed. */
+async function stored<T>(page: Page, table: string): Promise<T[]> {
+  return page.evaluate(
+    (name) =>
+      new Promise<T[]>((resolve) => {
+        const open = indexedDB.open('life-dashboard');
+        open.onsuccess = () => {
+          const read = open.result.transaction(name).objectStore(name).getAll();
+          read.onsuccess = () => {
+            open.result.close();
+            resolve(read.result as T[]);
+          };
+        };
+      }),
+    table,
+  );
+}
+
 
 // A tiny real PNG (1×1), so thumbnails are made by the browser.
 const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
@@ -64,8 +83,13 @@ test('free canvas: move a card with the keyboard, and it stays there', async ({ 
   const before = (await placed.boundingBox())!;
   const handle = page.getByRole('button', { name: /^Move “Calm about money\.”/ });
   await handle.focus();
+  const savedRect = async () => (await stored<{ text: string; canvas: { x: number; y: number } | null }>(page, 'visionCards')).find((c) => c.text === 'Calm about money.')?.canvas ?? null;
+  // Each move is saved before the next, and before the reload checks that they stick.
   await page.keyboard.press('Shift+ArrowRight');
+  await expect.poll(savedRect).not.toBeNull();
+  const first = (await savedRect())!;
   await page.keyboard.press('Shift+ArrowDown');
+  await expect.poll(async () => (await savedRect())?.y).toBe(first.y + 64);
   await expect.poll(async () => (await placed.boundingBox())!.x).toBeGreaterThan(before.x + 20);
 
   await page.reload();

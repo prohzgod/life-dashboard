@@ -125,7 +125,7 @@ export function StepReflect({ review, today }: { review: Review; today: Day }) {
   );
 }
 
-function Glance({ label, value, extra }: { label: string; value: string | number; extra?: string }) {
+export function Glance({ label, value, extra }: { label: string; value: string | number; extra?: string }) {
   return (
     <div className={styles.glanceTile}>
       <span className={styles.glanceLabel}>{label}</span>
@@ -137,7 +137,7 @@ function Glance({ label, value, extra }: { label: string; value: string | number
 }
 
 /** A reflection question that saves as you type. */
-function Question({ id, label, placeholder, review, value }: { id: keyof Pick<ReviewAnswers, 'wentWell' | 'drained' | 'differently'>; label: string; placeholder: string; review: Review; value: string }) {
+export function Question({ id, label, placeholder, review, value }: { id: keyof Pick<ReviewAnswers, 'wentWell' | 'drained' | 'differently'>; label: string; placeholder: string; review: Review; value: string }) {
   const [text, setText] = useState(value);
   const timer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(timer.current), []);

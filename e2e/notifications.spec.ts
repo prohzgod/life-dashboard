@@ -1,4 +1,23 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+/** Rows of one IndexedDB table, read straight from the browser: lets a test wait until a save has landed. */
+async function stored<T>(page: Page, table: string): Promise<T[]> {
+  return page.evaluate(
+    (name) =>
+      new Promise<T[]>((resolve) => {
+        const open = indexedDB.open('life-dashboard');
+        open.onsuccess = () => {
+          const read = open.result.transaction(name).objectStore(name).getAll();
+          read.onsuccess = () => {
+            open.result.close();
+            resolve(read.result as T[]);
+          };
+        };
+      }),
+    table,
+  );
+}
+
 
 // The browser's notifications are stubbed: permission is granted when asked, and every notice
 // shown (by the page or the service worker) is recorded on window.__notices.
@@ -52,6 +71,7 @@ test('turn reminders on, and a task reminder shows as a notification', async ({ 
   await add.press('Enter');
   await page.getByRole('list', { name: 'Today’s tasks' }).getByRole('button', { name: 'Call the dentist' }).click();
   await page.getByLabel('Reminder').fill(localInput(new Date(Date.now() - 60_000)));
+  await expect.poll(async () => (await stored<{ title: string; reminderAt: string | null }>(page, 'tasks')).find((t) => t.title === 'Call the dentist')?.reminderAt).toBeTruthy();
 
   // Opening the app checks straight away.
   await page.goto('/today');
