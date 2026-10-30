@@ -100,7 +100,7 @@ describe('workouts', () => {
 describe('older data', () => {
   it('fills in new metric fields from older exports', async () => {
     const file = await exportAll();
-    file.tables.metrics = [{ id: 'old', spaceId: (await metricsRepo.list())[0]!.spaceId, createdAt: 'x', updatedAt: 'x', deletedAt: null, name: 'Coffee', unit: 'cups', valueType: 'number', aggregation: 'sum', target: null }];
+    file.tables.metrics = [{ id: 'old', createdAt: 'x', updatedAt: 'x', deletedAt: null, name: 'Coffee', unit: 'cups', valueType: 'number', aggregation: 'sum', target: null }];
     await importReplacingAll(file);
     expect(await db.metrics.get('old')).toMatchObject({ systemKey: null, step: 1 });
     expect((await metricsRepo.list((m) => m.systemKey !== null)).length).toBe(3);

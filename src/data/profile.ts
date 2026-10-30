@@ -1,10 +1,9 @@
 import { db } from './db';
 import { newId } from './ids';
 import { attachmentsRepo, profileRepo } from './repositories';
-import { getCurrentSpaceId } from './session';
 import type { Profile } from './types';
 
-export type ProfileFields = Omit<Profile, 'id' | 'spaceId' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
+export type ProfileFields = Omit<Profile, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 const blank: ProfileFields = {
   displayName: '',
@@ -24,14 +23,14 @@ const blank: ProfileFields = {
 /** Creates the empty profile row once. Runs at startup (writes can't happen inside live queries). */
 export async function ensureProfile(): Promise<void> {
   await db.transaction('rw', db.profile, async () => {
-    const existing = (await profileRepo.list()).find((p) => p.spaceId === getCurrentSpaceId());
+    const existing = (await profileRepo.list())[0];
     if (!existing) await profileRepo.create({ ...blank });
   });
 }
 
 /** The one profile row (see ensureProfile). */
 export async function getProfile(): Promise<Profile> {
-  const existing = (await profileRepo.list()).find((p) => p.spaceId === getCurrentSpaceId());
+  const existing = (await profileRepo.list())[0];
   if (!existing) throw new Error('The profile is missing: call ensureProfile() at startup.');
   return existing;
 }

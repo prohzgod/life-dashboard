@@ -120,7 +120,7 @@ describe('loadCalendarRange', () => {
 describe('older data', () => {
   it('upgrades events from before calendars and imports old exports', async () => {
     const file = await exportAll();
-    file.tables.events = [{ id: 'old', spaceId: (await listCalendars())[0]!.spaceId, createdAt: 'x', updatedAt: 'x', deletedAt: null, source: 'google', title: 'Old', start: '2026-09-29T09:00:00.000Z', end: '2026-09-29T10:00:00.000Z', allDay: false, readOnly: false }];
+    file.tables.events = [{ id: 'old', createdAt: 'x', updatedAt: 'x', deletedAt: null, source: 'google', title: 'Old', start: '2026-09-29T09:00:00.000Z', end: '2026-09-29T10:00:00.000Z', allDay: false, readOnly: false }];
     delete file.tables.calendars;
     await importReplacingAll(file);
     expect(await db.events.get('old')).toMatchObject({ calendarId: null, source: 'local', uid: null, location: '', notes: '' });

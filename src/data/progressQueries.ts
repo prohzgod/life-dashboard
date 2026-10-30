@@ -1,8 +1,8 @@
 import { addDays, toDay, type Day } from '@/domain/days';
 import type { DayEntryLike, HabitData } from '@/domain/review';
 import { listHabitData } from './habitActions';
-import { areaRatingsRepo, areasRepo, dailyEntriesRepo, spacesRepo, tasksRepo } from './repositories';
-import { getCurrentSpaceId } from './session';
+import { db } from './db';
+import { areaRatingsRepo, areasRepo, dailyEntriesRepo, tasksRepo } from './repositories';
 import { listReviewedWeeks } from './reviewActions';
 import type { AreaRating, LifeArea } from './types';
 
@@ -17,19 +17,19 @@ export type ProgressData = {
 
 /** Everything the Progress screen computes from. */
 export async function loadProgressData(): Promise<ProgressData> {
-  const [entries, tasks, habits, reviewedWeeks, space] = await Promise.all([
+  const [entries, tasks, habits, reviewedWeeks, seededAt] = await Promise.all([
     dailyEntriesRepo.list(),
     tasksRepo.list((t) => t.status === 'done' && t.completedAt !== null && !t.parentTaskId),
     listHabitData(),
     listReviewedWeeks(),
-    spacesRepo.get(getCurrentSpaceId()),
+    db.meta.get('seededAt'),
   ]);
   return {
     entries,
     completedDays: tasks.map((t) => toDay(new Date(t.completedAt!))),
     habits,
     reviewedWeeks,
-    since: space ? toDay(new Date(space.createdAt)) : toDay(new Date()),
+    since: typeof seededAt?.value === 'string' ? toDay(new Date(seededAt.value)) : toDay(new Date()),
   };
 }
 
@@ -63,6 +63,6 @@ export async function saveAreaRatings(today: Day, scores: ReadonlyMap<string, nu
   const existing = await areaRatingsRepo.list((r) => r.date === today);
   for (const r of existing) await areaRatingsRepo.remove(r.id);
   for (const [areaId, score] of scores) {
-    await areaRatingsRepo.create({ areaId, date: today, score: Math.min(10, Math.max(1, Math.round(score))) } satisfies Omit<AreaRating, 'id' | 'spaceId' | 'createdAt' | 'updatedAt' | 'deletedAt'>);
+    await areaRatingsRepo.create({ areaId, date: today, score: Math.min(10, Math.max(1, Math.round(score))) } satisfies Omit<AreaRating, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>);
   }
 }

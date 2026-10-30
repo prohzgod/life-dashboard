@@ -2,7 +2,6 @@
 import { countExportRecords, exportAll, exportAllAsJson, ImportError, importReplacingAll, parseExport } from './backup';
 import { db } from './db';
 import { attachmentsRepo, nodesRepo, tasksRepo } from './repositories';
-import { getCurrentSpaceId } from './session';
 import { freshDatabase } from './testing';
 
 beforeEach(freshDatabase);
@@ -13,7 +12,7 @@ describe('export', () => {
     await tasksRepo.remove(review!.id);
 
     const file = await exportAll();
-    expect(file).toMatchObject({ format: 'life-dashboard-export', version: 1, schemaVersion: 8 });
+    expect(file).toMatchObject({ format: 'life-dashboard-export', version: 2, schemaVersion: 9 });
     expect(file.tables.areas).toHaveLength(8);
     expect(file.tables.tasks).toEqual([expect.objectContaining({ id: review!.id, deletedAt: expect.any(String) })]);
     expect(Object.keys(file.tables)).toContain('events');
@@ -42,7 +41,6 @@ describe('export', () => {
     expect(result.records).toBe(countExportRecords(parseExport(json)));
     expect(await db.tasks.toArray()).toEqual(before);
     expect(await db.areas.count()).toBe(8); // replaced, not doubled
-    expect(await db.spaces.count()).toBe(1);
 
     const restored = await attachmentsRepo.get(photo.id);
     expect(restored?.caption).toBe('First long run');
@@ -50,15 +48,25 @@ describe('export', () => {
     expect(restored!.blob.type).toBe('image/png');
   });
 
-  it('switches to the imported Personal space', async () => {
-    const json = await exportAllAsJson();
-    const exportedSpace = getCurrentSpaceId();
+  it('imports a version 1 export, dropping its spaces', async () => {
+    const file = await exportAll();
+    const v1 = {
+      ...file,
+      version: 1,
+      tables: {
+        ...file.tables,
+        spaces: [{ id: 'p', spaceId: 'p', name: 'Personal', type: 'personal', createdAt: 'x', updatedAt: 'x', deletedAt: null }],
+        tasks: file.tables.tasks!.map((t) => ({ ...(t as object), spaceId: 'p' })),
+      },
+    };
     await freshDatabase();
-    expect(getCurrentSpaceId()).not.toBe(exportedSpace);
+    const parsed = parseExport(JSON.stringify(v1));
+    expect(countExportRecords(parsed)).toBe(countExportRecords(file));
 
-    await importReplacingAll(parseExport(json));
-    expect(getCurrentSpaceId()).toBe(exportedSpace);
-    expect(await db.meta.get('currentSpaceId')).toEqual({ key: 'currentSpaceId', value: exportedSpace });
+    await importReplacingAll(parsed);
+    const [task] = await db.tasks.toArray();
+    expect(task).toBeDefined();
+    expect(task).not.toHaveProperty('spaceId');
     expect(await tasksRepo.list()).toHaveLength(1);
   });
 });
@@ -79,12 +87,11 @@ describe('parseExport', () => {
     expect(() => parseExport(JSON.stringify(file))).toThrow('newer version');
   });
 
-  it('rejects unknown tables, damaged rows and a missing Personal space', async () => {
+  it('rejects unknown tables and damaged rows', async () => {
     const file = await valid();
     const tables = file.tables as Record<string, unknown[]>;
     expect(() => parseExport(JSON.stringify({ ...file, tables: { ...tables, secrets: [] } }))).toThrow('unknown table');
     expect(() => parseExport(JSON.stringify({ ...file, tables: { ...tables, tasks: [{ title: 'no id' }] } }))).toThrow('damaged');
-    expect(() => parseExport(JSON.stringify({ ...file, tables: { ...tables, spaces: [] } }))).toThrow('no Personal space');
   });
 
   it('fills in task fields added since an older export', async () => {

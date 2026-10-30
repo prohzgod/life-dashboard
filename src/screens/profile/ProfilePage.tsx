@@ -113,7 +113,6 @@ export function ProfilePage() {
           <SettingRow icon="palette" label="Appearance" detail={theme[0]!.toUpperCase() + theme.slice(1)} to="/settings/appearance" />
           <SettingRow icon="widgets" label="Home & modules" detail={`${data.widgets} widgets`} to="/home/edit" />
           <SettingRow icon="bell" label="Notifications" detail={reminders?.enabled ? 'On' : 'Off'} to="/settings/notifications" />
-          <SettingRow icon="users" label="Spaces" detail="Personal" to="/settings/spaces" />
           <SettingRow icon="download" label="Backup & export" detail="Encrypted backups" to="/settings/privacy" />
         </ul>
       </nav>

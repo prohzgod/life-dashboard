@@ -159,7 +159,7 @@ export async function goalConnections(goalId: string) {
   const [tasks, habits, nodes, links] = await Promise.all([
     tasksRepo.list((t) => t.goalId === goalId && !t.parentTaskId),
     habitsRepo.list((h) => h.goalId === goalId),
-    db.nodes.where('spaceId').equals((await goalsRepo.get(goalId))?.spaceId ?? '').toArray(),
+    db.nodes.toArray(),
     db.links.toArray(),
   ]);
   const mentionedBy = new Set(links.filter((l) => l.deletedAt === null && l.toType === 'goal' && l.toId === goalId && l.fromType === 'node').map((l) => l.fromId));

@@ -19,7 +19,6 @@ import type {
   Milestone,
   Profile,
   Review,
-  Space,
   Tag,
   Tagging,
   Task,
@@ -35,7 +34,6 @@ import type {
  * Changing an index means adding a new `version(n)` below, never editing an old one.
  */
 export class LifeDb extends Dexie {
-  spaces!: Table<Space, string>;
   areas!: Table<LifeArea, string>;
   areaRatings!: Table<AreaRating, string>;
   goals!: Table<Goal, string>;
@@ -143,6 +141,47 @@ export class LifeDb extends Dexie {
           .toCollection()
           .modify((metric: Metric) => normalizeMetric(metric)),
       );
+    // v9: no more spaces: drop the table, the spaceId indexes and the field on every row.
+    this.version(9)
+      .stores({
+        spaces: null,
+        areas: 'id, sortKey, updatedAt',
+        areaRatings: 'id, areaId, date, updatedAt',
+        goals: 'id, areaId, parentGoalId, horizon, status, updatedAt',
+        keyResults: 'id, goalId, updatedAt',
+        milestones: 'id, goalId, dueDate, updatedAt',
+        tasks: 'id, areaId, goalId, keyResultId, parentTaskId, status, doOn, dueAt, updatedAt',
+        habits: 'id, areaId, goalId, updatedAt',
+        habitLogs: 'id, habitId, day, [habitId+day], updatedAt',
+        metrics: 'id, systemKey, updatedAt',
+        metricEntries: 'id, metricId, at, updatedAt',
+        dailyEntries: 'id, day, updatedAt',
+        nodes: 'id, parentId, kind, systemKey, updatedAt',
+        attachments: 'id, nodeId, updatedAt',
+        links: 'id, [fromType+fromId], [toType+toId], updatedAt',
+        tags: 'id, name, updatedAt',
+        taggings: 'id, tagId, [targetType+targetId], updatedAt',
+        homeWidgets: 'id, sortKey, updatedAt',
+        reviews: 'id, [period+periodStart], updatedAt',
+        calendars: 'id, updatedAt',
+        events: 'id, calendarId, start, updatedAt',
+        visionCards: 'id, sortKey, updatedAt',
+        budgets: 'id, sortKey, updatedAt',
+        transactions: 'id, day, categoryId, goalId, importKey, updatedAt',
+        accounts: 'id, sortKey, updatedAt',
+        workouts: 'id, day, goalId, updatedAt',
+      })
+      .upgrade(async (tx) => {
+        for (const name of dataTableNames) {
+          await tx
+            .table(name)
+            .toCollection()
+            .modify((row: { spaceId?: string }) => {
+              delete row.spaceId;
+            });
+        }
+        await tx.table('meta').delete('currentSpaceId');
+      });
   }
 }
 
@@ -194,7 +233,6 @@ export function normalizeNode(node: LibraryNode): LibraryNode {
 
 /** Every table that holds user data, in a stable order (used by export and import). */
 export const dataTableNames = [
-  'spaces',
   'areas',
   'areaRatings',
   'goals',

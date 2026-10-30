@@ -1,31 +1,23 @@
 import type { Table } from 'dexie';
 import { newId, nowIso } from './ids';
-import { getCurrentSpaceId } from './session';
 import type { BaseRecord } from './types';
 
 /** What callers pass to create(): the record without its bookkeeping fields. */
-export type NewRecord<T extends BaseRecord> = Omit<T, keyof BaseRecord> & Partial<Pick<BaseRecord, 'id' | 'spaceId'>>;
+export type NewRecord<T extends BaseRecord> = Omit<T, keyof BaseRecord> & Partial<Pick<BaseRecord, 'id'>>;
 /** What callers pass to update(): any user fields, never the bookkeeping ones. */
 export type RecordPatch<T extends BaseRecord> = Partial<Omit<T, keyof BaseRecord>>;
 
-type Options = {
-  /** Scope reads to the current space. Off for tables that span spaces (spaces itself, profile). */
-  scoped?: boolean;
-};
-
 /**
  * Create, read, update and soft-delete for one table. Every read skips deleted rows
- * unless it says otherwise, and every write stamps ULID, space and timestamps.
+ * unless it says otherwise, and every write stamps ULID and timestamps.
  */
-export function createRepository<T extends BaseRecord>(table: Table<T, string>, { scoped = true }: Options = {}) {
-  const visible = (record: T | undefined): record is T =>
-    !!record && record.deletedAt === null && (!scoped || record.spaceId === getCurrentSpaceId());
+export function createRepository<T extends BaseRecord>(table: Table<T, string>) {
+  const visible = (record: T | undefined): record is T => !!record && record.deletedAt === null;
 
   function stamp(input: NewRecord<T>, now: string): T {
     return {
       ...input,
       id: input.id ?? newId(),
-      spaceId: input.spaceId ?? getCurrentSpaceId(),
       createdAt: now,
       updatedAt: now,
       deletedAt: null,
@@ -33,7 +25,7 @@ export function createRepository<T extends BaseRecord>(table: Table<T, string>, 
   }
 
   async function all(): Promise<T[]> {
-    return scoped ? table.where('spaceId').equals(getCurrentSpaceId()).toArray() : table.toArray();
+    return table.toArray();
   }
 
   return {
@@ -70,7 +62,7 @@ export function createRepository<T extends BaseRecord>(table: Table<T, string>, 
     async update(id: string, patch: RecordPatch<T>): Promise<T> {
       const current = await table.get(id);
       if (!visible(current)) throw new Error(`No ${table.name} record with id ${id}`);
-      const next = { ...current, ...patch, id: current.id, spaceId: current.spaceId, createdAt: current.createdAt, deletedAt: null, updatedAt: nowIso() };
+      const next = { ...current, ...patch, id: current.id, createdAt: current.createdAt, deletedAt: null, updatedAt: nowIso() };
       await table.put(next);
       return next;
     },
@@ -85,7 +77,7 @@ export function createRepository<T extends BaseRecord>(table: Table<T, string>, 
 
     async restore(id: string): Promise<void> {
       const current = await table.get(id);
-      if (!current || current.deletedAt === null || (scoped && current.spaceId !== getCurrentSpaceId())) return;
+      if (!current || current.deletedAt === null) return;
       await table.put({ ...current, deletedAt: null, updatedAt: nowIso() });
     },
 

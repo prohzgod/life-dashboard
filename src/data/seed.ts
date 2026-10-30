@@ -2,7 +2,7 @@ import { generateNKeysBetween } from 'fractional-indexing';
 import type { Area } from '@design/tokens';
 import { db } from './db';
 import { newId, nowIso, toLocalDay } from './ids';
-import type { BaseRecord, Goal, Habit, LibraryNode, LifeArea, Space, Task } from './types';
+import type { BaseRecord, Goal, Habit, LibraryNode, LifeArea, Task } from './types';
 
 export const SEED_VERSION = 1;
 
@@ -20,18 +20,14 @@ const defaultAreas: Array<{ name: string; color: Area }> = [
 
 /**
  * Creates the first-launch defaults if this device has never been seeded.
- * Runs in one transaction, so a failure leaves nothing half-made. Returns the Personal space id.
+ * Runs in one transaction, so a failure leaves nothing half-made.
  */
-export async function seedIfNeeded(today: Date = new Date()): Promise<string> {
-  return db.transaction('rw', [db.meta, db.spaces, db.areas, db.goals, db.habits, db.nodes, db.tasks], async () => {
-    const existing = await db.meta.get('currentSpaceId');
-    if (existing && typeof existing.value === 'string') return existing.value;
+export async function seedIfNeeded(today: Date = new Date()): Promise<void> {
+  return db.transaction('rw', [db.meta, db.areas, db.goals, db.habits, db.nodes, db.tasks], async () => {
+    if (await db.meta.get('seededAt')) return;
 
     const now = nowIso();
-    const spaceId = newId();
-    const base = (): BaseRecord => ({ id: newId(), spaceId, createdAt: now, updatedAt: now, deletedAt: null });
-
-    const space: Space = { ...base(), id: spaceId, name: 'Personal', type: 'personal' };
+    const base = (): BaseRecord => ({ id: newId(), createdAt: now, updatedAt: now, deletedAt: null });
 
     const areaKeys = generateNKeysBetween(null, null, defaultAreas.length);
     const areas: LifeArea[] = defaultAreas.map((a, i) => ({ ...base(), ...a, icon: null, sortKey: areaKeys[i]! }));
@@ -127,18 +123,15 @@ export async function seedIfNeeded(today: Date = new Date()): Promise<string> {
       repeatOfId: null,
     };
 
-    await db.spaces.add(space);
     await db.areas.bulkAdd(areas);
     await db.goals.bulkAdd([yearGoal, quarterGoal]);
     await db.habits.bulkAdd(habits);
     await db.nodes.bulkAdd(folders);
     await db.tasks.add(weeklyReview);
     await db.meta.bulkPut([
-      { key: 'currentSpaceId', value: spaceId },
       { key: 'seedVersion', value: SEED_VERSION },
       { key: 'seededAt', value: now },
     ]);
-    return spaceId;
   });
 }
 

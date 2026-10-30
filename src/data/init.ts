@@ -5,15 +5,14 @@ import { db } from './db';
 import { ensureHomeWidgets } from './homeWidgets';
 import { ensureProfile } from './profile';
 import { seedIfNeeded } from './seed';
-import { setCurrentSpaceId } from './session';
 
 let ready: Promise<void> | null = null;
 
-/** Opens the database, seeds a first launch, and picks the current space. Safe to call more than once. */
+/** Opens the database and seeds a first launch. Safe to call more than once. */
 export function initData(): Promise<void> {
   ready ??= (async () => {
     await db.open();
-    setCurrentSpaceId(await seedIfNeeded());
+    await seedIfNeeded();
     // Rows added after the first seed: created on the first start that needs them.
     await ensureHomeWidgets();
     await ensureProfile();
@@ -30,5 +29,4 @@ export function initData(): Promise<void> {
 /** For tests: forget the cached init so the next call runs again. */
 export function resetInitForTests() {
   ready = null;
-  setCurrentSpaceId(null);
 }

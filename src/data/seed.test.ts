@@ -1,22 +1,13 @@
 // @vitest-environment node
 import { db } from './db';
 import { initData, resetInitForTests } from './init';
-import { areasRepo, goalsRepo, habitsRepo, nodesRepo, spacesRepo, tasksRepo } from './repositories';
+import { areasRepo, goalsRepo, habitsRepo, nodesRepo, tasksRepo } from './repositories';
 import { nextSunday, seedIfNeeded } from './seed';
-import { getCurrentSpaceId } from './session';
 import { freshDatabase } from './testing';
 
 beforeEach(freshDatabase);
 
 describe('first launch', () => {
-  it('creates the Personal space and makes it current', async () => {
-    const spaces = await spacesRepo.list();
-    expect(spaces).toHaveLength(1);
-    expect(spaces[0]).toMatchObject({ name: 'Personal', type: 'personal' });
-    expect(spaces[0]!.spaceId).toBe(spaces[0]!.id);
-    expect(getCurrentSpaceId()).toBe(spaces[0]!.id);
-  });
-
   it('creates 8 life areas in order, each with an area color token', async () => {
     const areas = await areasRepo.listOrdered();
     expect(areas.map((a) => a.name)).toEqual(['Health', 'Career', 'Finance', 'Family', 'Friends', 'Growth', 'Home', 'Fun']);
@@ -48,11 +39,9 @@ describe('first launch', () => {
   });
 
   it('only seeds once', async () => {
-    const id = getCurrentSpaceId();
     resetInitForTests();
     await initData();
-    expect(await seedIfNeeded()).toBe(id);
-    expect(await db.spaces.count()).toBe(1);
+    await seedIfNeeded();
     expect(await db.areas.count()).toBe(8);
   });
 });

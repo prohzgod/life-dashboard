@@ -3,11 +3,13 @@ import { ensureBudgets } from './finance';
 import { ensureHealthMetrics } from './health';
 import { dataTableNames, db, normalizeEvent, normalizeGoal, normalizeMetric, normalizeNode, normalizeTask, type DataTableName } from './db';
 import { nowIso } from './ids';
-import { setCurrentSpaceId } from './session';
-import type { BaseRecord, CalendarEvent, Goal, LibraryNode, Metric, Space, Task } from './types';
+import type { BaseRecord, CalendarEvent, Goal, LibraryNode, Metric, Task } from './types';
 
 export const EXPORT_FORMAT = 'life-dashboard-export';
-export const EXPORT_VERSION = 1;
+/** 2: spaces are gone (no `spaces` table, no `spaceId` on rows). Version 1 files still import. */
+export const EXPORT_VERSION = 2;
+/** Tables older exports may carry that this version drops on import. */
+const LEGACY_TABLES = ['spaces'];
 
 export type ExportFile = {
   format: typeof EXPORT_FORMAT;
@@ -56,21 +58,18 @@ export function parseExport(text: string): ExportFile {
   if (!isObject(data.tables)) throw new ImportError('That export has no data in it.');
 
   for (const [name, rows] of Object.entries(data.tables)) {
+    if (LEGACY_TABLES.includes(name)) continue;
     if (!(dataTableNames as readonly string[]).includes(name)) throw new ImportError(`That export has an unknown table, “${name}”.`);
     if (!Array.isArray(rows) || !rows.every((row) => isObject(row) && typeof row.id === 'string')) {
       throw new ImportError(`The “${name}” data in that export is damaged.`);
     }
-  }
-  const spaces = (data.tables.spaces ?? []) as Space[];
-  if (!spaces.some((s) => s.type === 'personal' && s.deletedAt === null)) {
-    throw new ImportError('That export has no Personal space, so it can’t be restored.');
   }
   return data as ExportFile;
 }
 
 /** Number of records in an export, for the confirmation message. */
 export function countExportRecords(file: ExportFile): number {
-  return Object.values(file.tables).reduce((sum, rows) => sum + (rows?.length ?? 0), 0);
+  return dataTableNames.reduce((sum, name) => sum + (file.tables[name]?.length ?? 0), 0);
 }
 
 /**
@@ -80,14 +79,13 @@ export function countExportRecords(file: ExportFile): number {
 export async function importReplacingAll(file: ExportFile): Promise<{ records: number }> {
   const decoded: Partial<Record<DataTableName, BaseRecord[]>> = {};
   for (const name of dataTableNames) {
-    decoded[name] = (file.tables[name] ?? []).map((row) => decodeValue(row) as BaseRecord);
+    decoded[name] = (file.tables[name] ?? []).map((row) => withoutSpace(decodeValue(row) as BaseRecord));
   }
   decoded.tasks = (decoded.tasks as Task[]).map(normalizeTask);
   decoded.nodes = (decoded.nodes as LibraryNode[]).map(normalizeNode);
   decoded.goals = (decoded.goals as Goal[]).map(normalizeGoal);
   decoded.events = (decoded.events as CalendarEvent[]).map(normalizeEvent);
   decoded.metrics = (decoded.metrics as Metric[]).map(normalizeMetric);
-  const personal = (decoded.spaces as Space[]).find((s) => s.type === 'personal' && s.deletedAt === null)!;
 
   await db.transaction('rw', [...dataTableNames.map((name) => db[name]), db.meta], async () => {
     for (const name of dataTableNames) {
@@ -95,12 +93,9 @@ export async function importReplacingAll(file: ExportFile): Promise<{ records: n
       // The table types differ per name; rows were checked in parseExport.
       await (db[name] as unknown as { bulkAdd(rows: BaseRecord[]): Promise<unknown> }).bulkAdd(decoded[name] ?? []);
     }
-    await db.meta.bulkPut([
-      { key: 'currentSpaceId', value: personal.id },
-      { key: 'importedAt', value: nowIso() },
-    ]);
+    await db.meta.delete('currentSpaceId');
+    await db.meta.put({ key: 'importedAt', value: nowIso() });
   });
-  setCurrentSpaceId(personal.id);
   // Exports from before calendars existed have none.
   await ensureCalendars();
   await ensureBudgets();
@@ -140,6 +135,12 @@ function decodeValue(value: unknown): unknown {
     return out;
   }
   return value;
+}
+
+/** Version 1 exports stamp every row with a space; drop it. */
+function withoutSpace(row: BaseRecord): BaseRecord {
+  delete (row as BaseRecord & { spaceId?: unknown }).spaceId;
+  return row;
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {

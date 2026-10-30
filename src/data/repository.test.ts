@@ -1,8 +1,8 @@
 // @vitest-environment node
+import Dexie from 'dexie';
 import { decodeTime } from 'ulid';
-import { db } from './db';
-import { goalsRepo, spacesRepo, tasksRepo } from './repositories';
-import { getCurrentSpaceId, setCurrentSpaceId } from './session';
+import { db, LifeDb } from './db';
+import { goalsRepo, tasksRepo } from './repositories';
 import { freshDatabase } from './testing';
 import type { NewRecord } from './repository';
 import type { Task } from './types';
@@ -31,13 +31,12 @@ const task = (title: string, extra: Partial<NewRecord<Task>> = {}): NewRecord<Ta
 beforeEach(freshDatabase);
 
 describe('createRepository', () => {
-  it('stamps a ULID, the current space and UTC timestamps on create', async () => {
+  it('stamps a ULID and UTC timestamps on create', async () => {
     const before = Date.now();
     const created = await tasksRepo.create(task('Call Mom'));
 
     expect(created.id).toMatch(/^[0-9A-HJKMNP-TV-Z]{26}$/);
     expect(decodeTime(created.id)).toBeGreaterThanOrEqual(before);
-    expect(created.spaceId).toBe(getCurrentSpaceId());
     expect(created.createdAt).toMatch(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/);
     expect(created.updatedAt).toBe(created.createdAt);
     expect(created.deletedAt).toBeNull();
@@ -66,9 +65,9 @@ describe('createRepository', () => {
     expect(updated.createdAt).toBe(created.createdAt);
     expect(updated.updatedAt > created.updatedAt).toBe(true);
     // A patch can't smuggle in bookkeeping fields.
-    const sneaky = await tasksRepo.update(created.id, { id: 'other', spaceId: 'other' } as never);
+    const sneaky = await tasksRepo.update(created.id, { id: 'other', createdAt: 'other' } as never);
     expect(sneaky.id).toBe(created.id);
-    expect(sneaky.spaceId).toBe(created.spaceId);
+    expect(sneaky.createdAt).toBe(created.createdAt);
   });
 
   it('soft-deletes: the row stays but disappears from reads, and can be restored', async () => {
@@ -97,25 +96,37 @@ describe('createRepository', () => {
     await expect(tasksRepo.update('missing', { title: 'x' })).rejects.toThrow();
   });
 
-  it('only reads records from the current space', async () => {
-    const personal = getCurrentSpaceId();
-    const mine = await tasksRepo.create(task('Mine'));
-    const family = await spacesRepo.create({ name: 'Family', type: 'shared', spaceId: 'pending' });
-    await tasksRepo.create(task('Shared', { spaceId: family.id }));
-
-    expect((await tasksRepo.list()).map((t) => t.title)).toEqual(expect.arrayContaining(['Mine']));
-    expect((await tasksRepo.list()).map((t) => t.title)).not.toContain('Shared');
-
-    setCurrentSpaceId(family.id);
-    expect((await tasksRepo.list()).map((t) => t.title)).toEqual(['Shared']);
-    expect(await tasksRepo.get(mine.id)).toBeUndefined();
-    setCurrentSpaceId(personal);
-  });
-
   it('queries by index and by parent', async () => {
     const [root] = await goalsRepo.listRoots();
     const children = await goalsRepo.listChildren(root!.id);
     expect(children.map((g) => g.title)).toEqual(['Run 10 km without stopping']);
     expect(await goalsRepo.where('horizon', 'quarter')).toHaveLength(1);
+  });
+});
+
+describe('schema v8 → v9', () => {
+  it('drops spaces and the spaceId on every row', async () => {
+    const name = 'migration-v9-test';
+    const v8 = new Dexie(name);
+    v8.version(8).stores({
+      spaces: 'id, type, updatedAt',
+      dailyEntries: 'id, spaceId, day, [spaceId+day], updatedAt',
+      tasks: 'id, spaceId, areaId, goalId, keyResultId, parentTaskId, status, doOn, dueAt, updatedAt',
+      meta: 'key',
+    });
+    await v8.table('spaces').add({ id: 's', spaceId: 's', name: 'Personal', type: 'personal', deletedAt: null });
+    await v8.table('tasks').add({ id: 'old', title: 'Old task', spaceId: 's', time: null, repeatOfId: null, deletedAt: null });
+    await v8.table('dailyEntries').add({ id: 'd', spaceId: 's', day: '2026-10-29', deletedAt: null });
+    await v8.table('meta').bulkAdd([{ key: 'currentSpaceId', value: 's' }, { key: 'seededAt', value: '2026-01-01T00:00:00.000Z' }]);
+    v8.close();
+
+    const upgraded = new LifeDb(name);
+    expect(await upgraded.tasks.get('old')).not.toHaveProperty('spaceId');
+    expect(await upgraded.dailyEntries.where('day').equals('2026-10-29').count()).toBe(1);
+    expect(upgraded.tables.map((t) => t.name)).not.toContain('spaces');
+    expect(await upgraded.meta.get('currentSpaceId')).toBeUndefined();
+    expect(await upgraded.meta.get('seededAt')).toBeDefined();
+    upgraded.close();
+    await Dexie.delete(name);
   });
 });

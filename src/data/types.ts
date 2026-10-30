@@ -4,7 +4,6 @@ import type { Area } from '@design/tokens';
 export interface BaseRecord {
   /** ULID created on this device. */
   id: string;
-  spaceId: string;
   /** UTC ISO timestamps. */
   createdAt: string;
   updatedAt: string;
@@ -14,11 +13,6 @@ export interface BaseRecord {
 
 /** A local calendar day, `YYYY-MM-DD`. */
 export type LocalDay = string;
-
-export interface Space extends BaseRecord {
-  name: string;
-  type: 'personal' | 'shared';
-}
 
 export interface LifeArea extends BaseRecord {
   name: string;

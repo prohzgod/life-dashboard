@@ -6,7 +6,6 @@ import { searchDocs, type SearchHit } from '@/domain/search';
 import { db } from './db';
 import { nowIso } from './ids';
 import { attachmentsRepo, linksRepo, nodesRepo } from './repositories';
-import { getCurrentSpaceId } from './session';
 import { setTags, tagsFor } from './tags';
 import type { Attachment, LibraryNode } from './types';
 
@@ -91,8 +90,7 @@ export async function trashNode(id: string): Promise<void> {
 /** Brings a trashed page back with what was trashed alongside it. If its folder is gone, it returns to the top level. */
 export async function restoreNode(id: string): Promise<void> {
   await db.transaction('rw', db.nodes, async () => {
-    const space = getCurrentSpaceId();
-    const all = (await db.nodes.where('spaceId').equals(space).toArray()) as LibraryNode[];
+    const all = (await db.nodes.toArray()) as LibraryNode[];
     const node = all.find((n) => n.id === id);
     if (!node?.deletedAt) return;
     const stamp = node.deletedAt;
@@ -223,7 +221,7 @@ export async function searchLibrary(query: string): Promise<SearchHit[]> {
 
 async function bySystemKey(key: string): Promise<LibraryNode | undefined> {
   const rows = await db.nodes.where('systemKey').equals(key).toArray();
-  return rows.find((n) => n.deletedAt === null && n.spaceId === getCurrentSpaceId());
+  return rows.find((n) => n.deletedAt === null);
 }
 
 async function ensureSystemNode(key: string, parentId: string | null, title: string, kind: 'folder' | 'page'): Promise<LibraryNode> {
@@ -257,7 +255,7 @@ export async function ensureJournalPage(day: Day): Promise<LibraryNode> {
     const yearNode = await ensureSystemNode(`journal:${y}`, journal.id, y, 'folder');
     const monthNode = await ensureSystemNode(`journal:${m}`, yearNode.id, MONTHS[month(day) - 1]!, 'folder');
     const page = await ensureSystemNode(`journal:${day}`, monthNode.id, journalPageTitle(day), 'page');
-    const entry = (await db.dailyEntries.where('[spaceId+day]').equals([getCurrentSpaceId(), day]).toArray()).find((e) => e.deletedAt === null);
+    const entry = (await db.dailyEntries.where('day').equals(day).toArray()).find((e) => e.deletedAt === null);
     if (entry && entry.journalNodeId !== page.id) await db.dailyEntries.put({ ...entry, journalNodeId: page.id, updatedAt: nowIso() });
     return page;
   });

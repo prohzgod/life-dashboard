@@ -20,7 +20,6 @@ import type {
   Milestone,
   Profile,
   Review,
-  Space,
   Tag,
   Tagging,
   Task,
@@ -33,8 +32,7 @@ import type {
 
 const bySortKey = <T extends { sortKey: string }>(a: T, b: T) => (a.sortKey < b.sortKey ? -1 : a.sortKey > b.sortKey ? 1 : 0);
 
-export const spacesRepo = createRepository<Space>(db.spaces, { scoped: false });
-export const profileRepo = createRepository<Profile>(db.profile, { scoped: false });
+export const profileRepo = createRepository<Profile>(db.profile);
 
 const areas = createRepository<LifeArea>(db.areas);
 export const areasRepo = {

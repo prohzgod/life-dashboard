@@ -7,7 +7,6 @@ import { listHabitData } from './habitActions';
 import { nowIso } from './ids';
 import { ensureJournalPage, savePageContent } from './library';
 import { dailyEntriesRepo, goalsRepo, reviewsRepo, tasksRepo } from './repositories';
-import { getCurrentSpaceId } from './session';
 import { completeTask } from './taskActions';
 import type { DailyEntry, Goal, Review } from './types';
 
@@ -32,7 +31,7 @@ export function readAnswers(review: Review): ReviewAnswers {
 
 async function weekReview(weekStart: Day): Promise<Review | undefined> {
   const rows = await db.reviews.where('[period+periodStart]').equals(['week', weekStart]).toArray();
-  return rows.find((r) => r.deletedAt === null && r.spaceId === getCurrentSpaceId());
+  return rows.find((r) => r.deletedAt === null);
 }
 
 /** Mondays of every week whose review is done. */

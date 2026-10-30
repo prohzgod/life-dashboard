@@ -20,7 +20,6 @@ import { nowIso } from './ids';
 import { ensureJournalPage, savePageContent } from './library';
 import { dailyEntriesRepo, goalsRepo, reviewsRepo, tasksRepo } from './repositories';
 import { emptyAnswers, heading, paragraph, readAnswers, setFocusGoals } from './reviewActions';
-import { getCurrentSpaceId } from './session';
 import type { DailyEntry, Goal, Review } from './types';
 
 /** Starts of every period whose review is done. */
@@ -30,7 +29,7 @@ export async function listReviewedPeriods(period: ReviewPeriod | 'week'): Promis
 
 async function findReview(period: ReviewPeriod, start: Day): Promise<Review | undefined> {
   const rows = await db.reviews.where('[period+periodStart]').equals([period, start]).toArray();
-  return rows.find((r) => r.deletedAt === null && r.spaceId === getCurrentSpaceId());
+  return rows.find((r) => r.deletedAt === null);
 }
 
 /** The review for the period that's due (or the one starting on `start`), created on first open. */

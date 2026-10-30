@@ -1,6 +1,6 @@
 # Life Dashboard
 
-A personal life dashboard: goals, tasks, habits, a daily check-in, reviews (day / week / month / year) and a Library of notes and images in a tree. **Offline-first and local-first.** Optional modules: Calendar, Finance, Health, AI assistant, Vision board, plus privacy/encryption and backup.
+A personal life dashboard: goals, tasks, habits, a daily check-in, reviews (day / week / month / year) and a Library of notes and images in a tree. **Offline-first and local-first**, for one person: there are no shared spaces. Optional modules: Calendar, Finance, Health, AI assistant, Vision board, plus privacy/encryption and backup.
 
 Read these before starting any task:
 - `docs/PRODUCT.md`: scope, screens, data model, build phases.
@@ -24,7 +24,7 @@ Read these before starting any task:
 - Every color, radius, shadow, space and font comes from a token (`var(--surface)`, `var(--radius-lg)` …). If a token is missing, add it to `design/tokens.json` and `design/tokens.css`, don't inline a value.
 - Every screen must work in both themes (`data-theme="light"` / `"dark"` on `<html>`, plus system preference).
 - IDs are ULIDs created on the client. Timestamps are UTC ISO strings; habit and journal days are local `YYYY-MM-DD` strings.
-- Every record has `spaceId` (Personal now, a shared Family space later), `createdAt`, `updatedAt` and `deletedAt` (soft delete), so sync can be added later.
+- Every record has `createdAt`, `updatedAt` and `deletedAt` (soft delete), so sync can be added later. There is no `spaceId`: the app holds one person's data.
 - The tree uses `parentId` + a fractional-index `sortKey` (package `fractional-indexing`), so a drag-and-drop move updates one row.
 - Progress and pace calculations live in `src/domain/` as pure, unit-tested functions.
 - Accessibility: real buttons, links and inputs; visible focus (2px `--primary` outline, 2px offset); 44px touch targets on mobile; text contrast 4.5:1.

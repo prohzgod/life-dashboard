@@ -24,13 +24,13 @@ Desktop: a 248px midnight sidebar.
 - **Grow:** Goals, Progress, Reviews
 - **Remember:** Library & journal, Vision board
 - **Modules (optional):** Finance, Health, Assistant
-- Footer: sync status ("Saved on this device · Synced with 2 devices"), space switcher (Personal / Family), Settings.
+- Footer: sync status ("Saved on this device · Synced with 2 devices"), Settings.
 - Everywhere: Quick capture ⌘N, command palette / search ⌘K.
 
 Mobile (below 768px): tab bar **Home · Today · ＋ capture · Tasks · Library**. The app opens on Home.
 - **Home** is a customizable bento grid of live widgets: Today (always on), Goals, Calendar, Weekly review, Progress, Sleep, Finance, Vision, Ask AI, Steps, plus any **pinned** Library page, goal or habit. Widgets come in S / M / L sizes, can be reordered, resized and hidden in **Edit Home**; hidden widgets keep their data and are re-added from the "Add to Home" sheet (Widgets · From Library · Goals & habits). Turning a module off removes its widgets.
 - **Pin to Home**: the "…" menu on a Library page (and on goals/habits) has a Pin to Home switch.
-- **Profile**: the avatar in the top-right of every tab root opens Profile, which holds Settings (Privacy & data, Appearance, Home & modules, Notifications, Spaces, Backup & export) and "Lock app now".
+- **Profile**: the avatar in the top-right of every tab root opens Profile, which holds Settings (Privacy & data, Appearance, Home & modules, Notifications, Backup & export) and "Lock app now".
 - Profile fields: photo or initial, display name, quote/motto, gender, birthday (age derived), pronouns, what you do, home city, email, phone, plus custom fields. Every field has its own Shown / Blurred setting; blurred values render with a blur until tapped, "Blur all" blurs every field, and blurred fields are never read by the Assistant.
 - Screens not in the tab bar are pushed from Home tiles with a "‹ Home" back button. Weekly review and the Library editor are full-screen (no tab bar).
 
@@ -42,11 +42,11 @@ Mobile (below 768px): tab bar **Home · Today · ＋ capture · Tasks · Library
 | Inbox & tasks | Views (Inbox, Today, Upcoming, Anytime, Someday, Logbook), areas, tags; Inbox items with a suggested destination and Accept; Upcoming grouped by day; task detail drawer (area, goal / key result, do-on date, deadline, repeat rule, reminder, priority, estimate, tags, subtasks, notes, attachments) |
 | Goals | Vision statement + word of the year; goal tree (year → quarter → week → habits/tasks) with progress bar and a "where you should be today" tick; detail panel with why it matters, progress chart vs pace line, milestones, linked habits/tasks/notes/journal, a catch-up suggestion |
 | Progress | Day / Week / Month / Year tabs; stat tiles; year in pixels (mood per day); wheel of life radar (now vs last quarter); habit heatmap; patterns ("days after 7h+ sleep are rated 0.9 higher") |
-| Library | Tree (Journal › year › month › day, Areas, Projects, Reading notes, Recipes, All photos, Trash) with drag-and-drop; block editor page with properties (area, goal, tags, space), checklists, image galleries, `[[links]]`, `@mentions`; right rail with backlinks, attachments, "stored on this device, encrypted", version history |
+| Library | Tree (Journal › year › month › day, Areas, Projects, Reading notes, Recipes, All photos, Trash) with drag-and-drop; block editor page with properties (area, goal, tags), checklists, image galleries, `[[links]]`, `@mentions`; right rail with backlinks, attachments, "stored on this device, encrypted", version history |
 | Reviews | One page for every review: the week, month, quarter and year that's due (the one to do next in the ultramarine field), with Start or Continue, and the reviews you've finished with their journal pages. A finished period stays on offer for a while (2 weeks for a month, a month for a quarter, 2 months for a year), and the current one opens early in its last days |
 | Monthly, quarterly, yearly review | 4 steps: Look back (stats against the period before, mood by day or month, goals that moved, a draft summary) → Reflect (three questions; quarters and years also rate the wheel of life) → Plan the next period (up to 3 goals of that horizon; the year also sets next year's word) → Done, written to the journal page for the period's last day |
 | Weekly review | 5 steps: Get clear (inbox to zero) → Get current → Reflect → Plan next week (pick 1–3 focus items) → Done. Pre-filled with the week's stats, mood/energy per day, best day, goals that moved; optional on-device AI draft summary |
-| Calendar | Week grid with events from read-only Google/iCloud calendars, personal and family events, time blocks created from tasks (dashed), drag unscheduled tasks onto the week |
+| Calendar | Week grid with events from read-only Google/iCloud calendars, your own events, time blocks created from tasks (dashed), drag unscheduled tasks onto the week |
 | Vision board | Grid or free canvas of images and quote cards per area, each can pin a goal with its progress |
 | Finance (module) | Spent vs budget, income, savings rate, net worth hidden by default; budget per category; savings goals linked to Goals; transactions (manual, receipt photo, CSV import); 6-month trend |
 | Health (module) | Sources (Apple Health / Health Connect via a future phone app, manual); sleep, steps, resting HR, weight, workouts; sleep chart vs 7h target; sleep → mood pattern; custom metrics (water, coffee, any number/scale/yes-no) |
@@ -55,9 +55,9 @@ Mobile (below 768px): tab bar **Home · Today · ＋ capture · Tasks · Library
 
 ## Data model (IndexedDB tables)
 
-All tables: `id` (ULID), `spaceId`, `createdAt`, `updatedAt`, `deletedAt`.
+All tables: `id` (ULID), `createdAt`, `updatedAt`, `deletedAt`. The app holds one person's data, so there are no spaces.
 
-- `spaces` (name, type: personal | shared), `areas` (name, color token, icon, sortKey), `areaRatings` (areaId, date, score 1–10)
+- `areas` (name, color token, icon, sortKey), `areaRatings` (areaId, date, score 1–10)
 - `goals` (areaId, parentGoalId, title, why, horizon: vision | year | quarter | month | week, type: target | average | milestone | habit | okr | qualitative, progressMethod, startValue, targetValue, currentValue, unit, startDate, endDate, status, commitment: committed | aspirational)
 - `keyResults` (goalId, title, start/target/current, weight)
 - `milestones` (goalId, title, dueDate, doneAt)
@@ -88,6 +88,6 @@ All tables: `id` (ULID), `spaceId`, `createdAt`, `updatedAt`, `deletedAt`.
 2. **Core loop (MVP):** Today, Inbox & tasks (recurrence, natural-language capture), Habits (never-miss-twice), daily check-in, Goals (tree, pace, detail), Library (tree, BlockNote, images, backlinks, search), Weekly review, Progress (year in pixels, heatmap, wheel of life).
 3. **Depth:** monthly/quarterly/yearly reviews, OKRs, custom metrics, Calendar (ICS import, time blocks), Vision board, "on this day".
 4. **Privacy & data:** app lock, end-to-end encryption, automatic backups, Markdown + images export, sync between devices.
-5. **Modules:** Finance, Health (phone companion app), Assistant (on-device first), Family shared space.
+5. **Modules:** Finance, Health (phone companion app), Assistant (on-device first).
 
 Success test after phase 2: used daily for 30 days and 4 weekly reviews completed.

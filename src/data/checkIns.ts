@@ -1,13 +1,12 @@
 import { type Day, month, dayOfMonth, year } from '@/domain/days';
 import { db } from './db';
 import { attachmentsRepo, dailyEntriesRepo } from './repositories';
-import { getCurrentSpaceId } from './session';
 import type { Attachment, DailyEntry } from './types';
 
 type EntryFields = Partial<Pick<DailyEntry, 'mood' | 'energy' | 'sleepMinutes' | 'line' | 'photoId'>>;
 
 export async function getDailyEntry(day: Day): Promise<DailyEntry | undefined> {
-  const rows = await db.dailyEntries.where('[spaceId+day]').equals([getCurrentSpaceId(), day]).toArray();
+  const rows = await db.dailyEntries.where('day').equals(day).toArray();
   return rows.find((r) => r.deletedAt === null);
 }
 

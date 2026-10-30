@@ -6,12 +6,11 @@ import { db } from './db';
 import { listHabitData } from './habitActions';
 import { newId, nowIso } from './ids';
 import { calendarsRepo, eventsRepo, tasksRepo } from './repositories';
-import { getCurrentSpaceId } from './session';
 import type { Calendar, CalendarEvent, Task } from './types';
 
 export { IcsError };
 
-const PERSONAL: Omit<Calendar, 'id' | 'spaceId' | 'createdAt' | 'updatedAt' | 'deletedAt'> = {
+const PERSONAL: Omit<Calendar, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'> = {
   name: 'Personal',
   color: 'growth',
   source: 'local',
@@ -144,7 +143,6 @@ async function replaceEvents(calendarId: string, parsed: readonly IcsEvent[]): P
       } else {
         puts.push({
           id: newId(),
-          spaceId: getCurrentSpaceId(),
           createdAt: now,
           updatedAt: now,
           deletedAt: null,

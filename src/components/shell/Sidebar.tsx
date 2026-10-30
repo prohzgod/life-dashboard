@@ -86,23 +86,13 @@ export function Sidebar({ onSearch, onCapture }: SidebarProps) {
             </div>
           </div>
 
-          <div className={styles.spaceRow}>
-            <button type="button" className={styles.space} aria-disabled="true" title="Shared spaces arrive in a later version">
-              <span className={styles.avatar} aria-hidden="true">P</span>
-              <span className={styles.spaceText}>
-                <span className={styles.spaceName}>Personal space</span>
-                <span className={styles.spaceHint}>Family space soon</span>
-              </span>
-              <Icon name="chevronsUpDown" size={16} strokeWidth={2} className={styles.spaceChevron} />
-            </button>
-            <NavLink
-              to="/settings"
-              aria-label="Settings"
-              className={({ isActive }) => (isActive ? `${styles.settings} ${styles.settingsActive}` : styles.settings)}
-            >
-              <Icon name="settings" />
-            </NavLink>
-          </div>
+          <NavLink
+            to="/settings"
+            className={({ isActive }) => (isActive ? `${styles.settings} ${styles.settingsActive}` : styles.settings)}
+          >
+            <Icon name="settings" />
+            <span>Settings</span>
+          </NavLink>
         </div>
       </nav>
     </div>
