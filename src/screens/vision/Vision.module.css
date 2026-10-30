@@ -1,4 +1,3 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: flex;
   flex-direction: column;
@@ -55,7 +54,7 @@
   font-family: var(--font-display);
   font-size: 18px;
   font-variant-numeric: lining-nums;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .actions {
@@ -167,7 +166,7 @@
   overflow: hidden;
   font-family: var(--font-display);
   font-variant-numeric: lining-nums;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.17;
   overflow-wrap: break-word;
@@ -562,7 +561,7 @@
   color: var(--accent-ink);
   font-family: var(--font-display);
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 

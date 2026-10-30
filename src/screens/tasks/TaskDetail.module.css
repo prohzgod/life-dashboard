@@ -1,27 +1,29 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .drawer {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   gap: 20px;
   width: 372px;
-  height: calc(100vh - 2 * var(--float-inset));
-  height: calc(100dvh - 2 * var(--float-inset));
+  height: 100%;
   padding: var(--space-6);
   overflow-y: auto;
   background: var(--surface);
-  margin: var(--float-inset) var(--float-inset) var(--float-inset) 0;
-  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
 }
 
 /* Narrower windows: the drawer floats over the list instead of squeezing it. */
 @media (max-width: 1200px) {
   .drawer {
     position: fixed;
-    top: 0;
-    right: 0;
+    top: var(--tabbar-inset);
+    right: var(--tabbar-inset);
     z-index: 5;
-    box-shadow: var(--shadow-md);
+    height: calc(100dvh - 2 * var(--tabbar-inset));
+    background: var(--float);
+    box-shadow: var(--shadow-card);
   }
 }
 
@@ -70,7 +72,7 @@
   background: transparent;
   font-family: var(--font-display);
   font-size: 31px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.2;
   font-variant-numeric: lining-nums;
 }

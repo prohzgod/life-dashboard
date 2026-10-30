@@ -1,10 +1,9 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
-/* Full height beside the sidebar, like Tasks and Library: undo the shell's padding. */
+/* Fills the window below the top nav; its panes are glass cards side by side. */
 .page {
   display: flex;
-  height: 100vh;
-  height: 100dvh;
-  margin: -28px calc(-1 * var(--desktop-padding)) calc(-1 * var(--desktop-padding));
+  gap: var(--card-gap);
+  height: var(--workspace-h);
+  min-height: 480px;
 }
 
 /* ---- Options pane ---- */
@@ -19,8 +18,10 @@
   align-self: stretch;
   overflow-y: auto;
   background: var(--subtle);
-  margin: var(--float-inset) 0 var(--float-inset) var(--float-inset);
-  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
 }
 
 .sideSection {
@@ -288,7 +289,6 @@
   flex-grow: 1;
   gap: var(--space-3);
   min-width: 0;
-  padding: 20px var(--space-6);
 }
 
 .header {
@@ -309,7 +309,7 @@
   font-family: var(--font-display);
   font-size: 34px;
   font-variant-numeric: lining-nums;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1.1;
   white-space: nowrap;
@@ -515,9 +515,9 @@
   border-left: 1px solid var(--line-soft);
 }
 
-/* Today's column is the lighter paper, never a blue: events are the blue things on the grid. */
+/* Today's column takes a faint wash of the accent. */
 .todayTint {
-  background: var(--bg);
+  background: var(--primary-softer);
 }
 
 .dropTarget {
@@ -947,7 +947,7 @@
   font-family: var(--font-display);
   font-size: var(--text-mobile-title-size);
   font-variant-numeric: lining-nums;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: -0.03em;
   line-height: var(--text-mobile-title-line);
 }

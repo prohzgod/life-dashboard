@@ -385,6 +385,8 @@
   --float-inset: var(--tabbar-inset);
   --fab-size: var(--fab);
   --header-h: calc(var(--control-h) + 2 * var(--space-5));
+  /* Full-height screens (Tasks, Calendar, Library) fill the window below the top nav. */
+  --workspace-h: calc(100dvh - var(--control-h) - 2 * var(--space-7) - var(--space-8));
   --bento-columns: 4;
   --bento-gap: 9px;
   --bento-row: 70px;

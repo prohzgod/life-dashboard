@@ -1,4 +1,3 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .page {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 420px;
@@ -83,7 +82,7 @@
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 25px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.3;
   text-align: left;
   font-variant-numeric: lining-nums;
@@ -119,7 +118,7 @@
   color: var(--primary-ink);
   font-family: var(--font-display);
   font-size: 19px;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
 }
 
@@ -361,7 +360,7 @@ li:not(.topRow) + .topRow {
 .detailTitle {
   font-family: var(--font-display);
   font-size: 34px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.03em;
   font-variant-numeric: lining-nums;
@@ -393,7 +392,7 @@ li:not(.topRow) + .topRow {
 .big {
   font-family: var(--font-display);
   font-size: 53px;
-  font-weight: 700;
+  font-weight: 300;
   line-height: 1;
   font-variant-numeric: lining-nums tabular-nums;
 }

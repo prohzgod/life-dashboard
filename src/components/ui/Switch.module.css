@@ -24,7 +24,7 @@
   height: 22px;
   border-radius: var(--radius-pill);
   background: var(--on-inverse);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-fab);
   transition: transform var(--dur) var(--ease);
 }
 

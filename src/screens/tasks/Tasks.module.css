@@ -1,11 +1,10 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
-/* The Tasks screen spans the full height beside the sidebar, so it undoes the shell's padding. */
+/* Fills the window below the top nav; its panes are glass cards side by side. */
 .page {
   display: flex;
-  height: 100vh;
-  height: 100dvh;
+  gap: var(--card-gap);
+  height: var(--workspace-h);
+  min-height: 480px;
   overflow: hidden;
-  margin: -28px calc(-1 * var(--desktop-padding)) calc(-1 * var(--desktop-padding));
 }
 
 .nav {
@@ -14,13 +13,14 @@
   flex-shrink: 0;
   gap: var(--space-5);
   width: 224px;
-  height: calc(100vh - 2 * var(--float-inset));
-  height: calc(100dvh - 2 * var(--float-inset));
+  height: 100%;
   padding: 28px var(--space-3);
   overflow-y: auto;
   background: var(--subtle);
-  margin: var(--float-inset) 0 var(--float-inset) var(--float-inset);
-  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
 }
 
 .navGroup {
@@ -118,7 +118,7 @@
   flex-grow: 1;
   gap: 20px;
   min-width: 0;
-  padding: 28px;
+  padding: var(--space-1) var(--space-1) var(--space-6);
   overflow-y: auto;
 }
 
@@ -287,7 +287,7 @@
 .mobileTitle {
   font-family: var(--font-display);
   font-size: var(--text-mobile-title-size);
-  font-weight: 700;
+  font-weight: 500;
   line-height: var(--text-mobile-title-line);
 }
 
