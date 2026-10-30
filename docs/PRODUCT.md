@@ -17,6 +17,10 @@ Everything can link to everything: a task to a goal, a journal photo to a goal, 
 5. Nothing is required: a task can exist without a goal, a note without a folder.
 6. Private by default: data lives on the device; money and health can be hidden; export is always available.
 
+## Languages
+
+Vietnamese (the default) and English, picked in Settings › General and saved on the device. All copy, dates, numbers and money follow it; starter content (areas, sample goal, habits, folders, budgets) is created in the language active on first launch. Quick capture understands both ("ngày mai lúc 18:00 #tàichính !cao", "tomorrow 6pm #finance !high").
+
 ## Navigation
 
 Desktop: a 248px midnight sidebar.

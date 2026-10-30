@@ -17,6 +17,7 @@ Read these before starting any task:
 - Rich text: BlockNote. Tree view: react-arborist. Charts: Apache ECharts (`echarts-for-react`).
 - Styling: CSS Modules + the CSS variables in `design/tokens.css`. No Tailwind, no UI kit, no hard-coded hex colors in components.
 - Tests: Vitest + Testing Library for logic and components; Playwright for main flows.
+- Languages: Vietnamese (default) and English, with a small typed i18n layer in `src/i18n/` (no library). BlockNote uses its own `vi`/`en` dictionaries.
 - Package manager: npm.
 
 ## Rules
@@ -29,6 +30,8 @@ Read these before starting any task:
 - Progress and pace calculations live in `src/domain/` as pure, unit-tested functions.
 - Accessibility: real buttons, links and inputs; visible focus (2px `--primary` outline, 2px offset); 44px touch targets on mobile; text contrast 4.5:1.
 - Copy is plain, kind and second person ("Rolled over from yesterday", not "OVERDUE!"). No emoji in the UI.
+- No hard-coded UI text. Every string lives in `src/i18n/en/*.ts` and the matching `src/i18n/vi/*.ts` (typed as `Messages`, so a missing key fails typecheck). Components read it with `useT()`; formatters, domain and data code with `messages()`. Dates, numbers and money go through `src/lib/format.ts`, `src/lib/money.ts` or `intlLocale()`, never a hard-coded `'en-US'`. Vietnamese copy uses "bạn" and sentence case.
+- Anything stored as text that the app later looks up (seeded names, the weekly review task) must match in either language: compare against `LOCALES.map((l) => messages(l)…)`, or store a key instead.
 - Keep commits small and run `npm run lint`, `npm run typecheck` and `npm test` before pushing.
 
 ## Commands (create these in the first task)

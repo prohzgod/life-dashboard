@@ -14,7 +14,7 @@ Everything planned but not built yet, gathered from the "Later" list in `docs/PR
 - [x] **Notifications and reminders**: local notifications for task reminders, the daily check-in and the weekly review; Settings › Notifications.
 - [ ] **Reminders while the app is closed**: today they arrive while it's open (or when you next open it, up to a day late). True background reminders need Web Push and a server.
 - [ ] Quiet hours, and snoozing a reminder from the notification.
-- [ ] **Settings tabs**: General and Modules are still placeholders. Modules on/off should remove a module's widgets without deleting data.
+- [ ] **Settings tabs**: General has the language picker; your name and week start still to come. Modules is still a placeholder. Modules on/off should remove a module's widgets without deleting data.
 
 ## Export and import
 
