@@ -9,15 +9,17 @@ import { useOnlineStatus } from '@/components/shell/useOnlineStatus';
 import { CheckButton } from '@/components/ui';
 import { Ring } from '@/components/ui/Ring';
 import { cx } from '@/components/ui/cx';
-import { formatDayShort, formatMinutes, singular } from '@/lib/format';
+import { useT } from '@/i18n';
+import { formatDayShort, formatMinutes } from '@/lib/format';
+import { habitCheckLabel } from '@/lib/habitText';
 import { withCompletedOn } from '@/lib/taskView';
 import { useToday } from '@/lib/useToday';
 import styles from './MobileToday.module.css';
 
-const MOODS = ['Awful', 'Low', 'Okay', 'Good', 'Great'];
-
 /** Today on phones: how you feel, your habits, and the plan. */
 export function MobileToday() {
+  const t = useT();
+  const m = t.today.mobile;
   const today = useToday();
   const navigate = useNavigate();
   const online = useOnlineStatus();
@@ -32,33 +34,33 @@ export function MobileToday() {
     <div className={styles.page}>
       <header className={styles.top}>
         <span className={styles.date}>
-          {formatDayShort(today)}, week {isoWeek(today)}
+          {m.dateWeek(formatDayShort(today), isoWeek(today))}
         </span>
         <span className={styles.side}>
           {!online && (
             <span className={styles.offline}>
               <Icon name="offline" size={14} />
-              Offline, saved here
+              {m.offline}
             </span>
           )}
           <ProfileAvatar />
         </span>
       </header>
-      <h1 className={styles.title}>Today</h1>
+      <h1 className={styles.title}>{t.screens.today.title}</h1>
 
       <section className={styles.card} aria-labelledby="how-today">
         <div className={styles.cardHead}>
           <h2 id="how-today" className={styles.cardTitle}>
-            How’s today?
+            {m.howToday}
           </h2>
-          {data.entry?.sleepMinutes != null && <span className={styles.meta}>sleep {formatMinutes(data.entry.sleepMinutes)}</span>}
+          {data.entry?.sleepMinutes != null && <span className={styles.meta}>{m.sleep(formatMinutes(data.entry.sleepMinutes))}</span>}
         </div>
-        <div className={styles.moods} role="group" aria-label="Mood">
-          {MOODS.map((m, i) => {
+        <div className={styles.moods} role="group" aria-label={t.today.checkIn.mood}>
+          {t.today.checkIn.moods.map((mood, i) => {
             const selected = data.entry?.mood === i + 1;
             return (
-              <button key={m} type="button" aria-pressed={selected} className={cx(styles.mood, selected && styles.moodOn)} onClick={() => void saveDailyEntry(today, { mood: selected ? null : i + 1 })}>
-                {m}
+              <button key={mood} type="button" aria-pressed={selected} className={cx(styles.mood, selected && styles.moodOn)} onClick={() => void saveDailyEntry(today, { mood: selected ? null : i + 1 })}>
+                {mood}
               </button>
             );
           })}
@@ -66,15 +68,11 @@ export function MobileToday() {
       </section>
 
       {data.habits.length > 0 && (
-        <ul className={styles.habits} aria-label="Habits">
+        <ul className={styles.habits} aria-label={t.today.habits.title}>
           {data.habits.map(({ habit, summary }) => {
             const counted = habit.kind === 'count' || habit.kind === 'duration';
             const percent = summary.todayDone ? 100 : counted ? (summary.todayValue / habit.target) * 100 : 0;
-            const label = summary.todayDone
-              ? `Undo today’s ${habit.title}`
-              : counted
-                ? `Add one${habit.unit ? ` ${singular(habit.unit)}` : ''} to ${habit.title} (${summary.todayValue} of ${habit.target})`
-                : `Check in ${habit.title} for today`;
+            const label = habitCheckLabel(habit, summary, counted);
             return (
               <li key={habit.id}>
                 <button type="button" role="checkbox" aria-checked={summary.todayDone} aria-label={label} className={styles.habit} onClick={() => void tapHabit(habit, today)}>
@@ -98,28 +96,26 @@ export function MobileToday() {
       <section className={styles.card} aria-labelledby="plan">
         <div className={styles.cardHead}>
           <h2 id="plan" className={styles.cardTitle}>
-            Plan
+            {m.plan}
           </h2>
           {data.tasks.length > 0 && (
-            <span className={styles.meta}>
-              {done} of {data.tasks.length} done
-            </span>
+            <span className={styles.meta}>{t.today.plan.meta(done, data.tasks.length)}</span>
           )}
         </div>
         {data.tasks.length === 0 ? (
-          <p className={styles.empty}>Nothing planned. Tap + to add something.</p>
+          <p className={styles.empty}>{m.empty}</p>
         ) : (
           <ul className={styles.tasks}>
-            {data.tasks.map((t) => {
-              const rolled = rolledOverDays(t, today);
+            {data.tasks.map((task) => {
+              const rolled = rolledOverDays(task, today);
               return (
-                <li key={t.id} className={styles.task}>
-                  <CheckButton checked={t.status === 'done'} onToggle={() => void toggleTask(t, today)} label={t.status === 'done' ? `Mark “${t.title}” as not done` : `Mark “${t.title}” as done`} />
-                  <button type="button" className={styles.taskText} onClick={() => navigate(`/tasks?view=today&task=${t.id}`)}>
-                    <span className={t.status === 'done' ? styles.taskDone : undefined}>{t.title}</span>
-                    {rolled > 0 && <span className={styles.rolled}>{rolled === 1 ? 'from yesterday' : `from ${formatDayShort(t.doOn!)}`}</span>}
+                <li key={task.id} className={styles.task}>
+                  <CheckButton checked={task.status === 'done'} onToggle={() => void toggleTask(task, today)} label={task.status === 'done' ? t.tasks.markNotDone(task.title) : t.tasks.markDone(task.title)} />
+                  <button type="button" className={styles.taskText} onClick={() => navigate(`/tasks?view=today&task=${task.id}`)}>
+                    <span className={task.status === 'done' ? styles.taskDone : undefined}>{task.title}</span>
+                    {rolled > 0 && <span className={styles.rolled}>{rolled === 1 ? m.fromYesterday : m.from(formatDayShort(task.doOn!))}</span>}
                   </button>
-                  {(t.time || t.estimateMin) && <span className={styles.when}>{t.time ?? formatMinutes(t.estimateMin!)}</span>}
+                  {(task.time || task.estimateMin) && <span className={styles.when}>{task.time ?? formatMinutes(task.estimateMin!)}</span>}
                 </li>
               );
             })}

@@ -2,13 +2,19 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { freshDatabase } from '@/data/testing';
+import { LOCALE_STORAGE_KEY } from '@/i18n';
 import { THEME_STORAGE_KEY } from '@/theme/theme';
+import { LocaleRoot } from './LocaleRoot';
 import { routes } from './router';
 import { screens } from './screens';
 
 function renderAt(path: string) {
   const router = createMemoryRouter(routes, { initialEntries: [path] });
-  render(<RouterProvider router={router} />);
+  render(
+    <LocaleRoot>
+      <RouterProvider router={router} />
+    </LocaleRoot>,
+  );
   return router;
 }
 
@@ -81,6 +87,22 @@ describe('theme setting', () => {
 
     await userEvent.click(within(group).getByRole('radio', { name: 'System' }));
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
+  });
+});
+
+describe('language setting', () => {
+  it('switches to Vietnamese from Settings › General and back', async () => {
+    renderAt('/settings/general');
+    const group = screen.getByRole('radiogroup', { name: 'Language' });
+    await userEvent.click(within(group).getByRole('radio', { name: 'Tiếng Việt' }));
+
+    expect(document.documentElement.lang).toBe('vi');
+    expect(localStorage.getItem(LOCALE_STORAGE_KEY)).toBe('vi');
+    expect(await screen.findByRole('heading', { level: 1, name: 'Cài đặt' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Hôm nay/ })).toBeInTheDocument();
+
+    await userEvent.click(within(screen.getByRole('radiogroup', { name: 'Ngôn ngữ' })).getByRole('radio', { name: 'English' }));
+    expect(await screen.findByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument();
   });
 });
 

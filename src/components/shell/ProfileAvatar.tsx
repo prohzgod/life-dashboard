@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { Link } from 'react-router-dom';
 import { initialOf } from '@/domain/profile';
 import { getAttachment, getProfile } from '@/data';
+import { messages } from '@/i18n';
 import { useObjectUrl } from '@/lib/useObjectUrl';
 import { Icon } from '../icons/Icon';
 import { cx } from '../ui/cx';
@@ -19,7 +20,7 @@ export function ProfileAvatar({ size = 'sm', asLink = true }: { size?: 'sm' | 'l
   const content = url ? <img src={url} alt="" /> : initial || <Icon name="users" size={size === 'lg' ? 34 : 18} />;
   if (!asLink) return <span className={cx(styles.avatar, styles[size])}>{content}</span>;
   return (
-    <Link to="/profile" className={cx(styles.avatar, styles[size])} aria-label="Profile and settings">
+    <Link to="/profile" className={cx(styles.avatar, styles[size])} aria-label={messages().shell.profileAndSettings}>
       {content}
     </Link>
   );

@@ -26,20 +26,20 @@ import {
 import { Button, Segmented } from '@/components/ui';
 import { Dialog } from '@/components/ui/Dialog';
 import { formatDayShort, formatMinutes, timeAgo } from '@/lib/format';
+import { messages, useT } from '@/i18n';
 import { timeText } from './items';
 import styles from './Calendar.module.css';
 
-const COLOR_NAMES: Record<Area, string> = { health: 'Green', career: 'Blue', finance: 'Amber', family: 'Rose', growth: 'Violet', home: 'Teal', fun: 'Gold' };
-
 function ColorField({ value, onChange }: { value: Area; onChange: (c: Area) => void }) {
+  const t = useT().calendar.dialog;
   const id = useId();
   return (
     <div className={styles.field}>
-      <label htmlFor={id}>Color</label>
+      <label htmlFor={id}>{t.color}</label>
       <select id={id} value={value} onChange={(e) => onChange(e.target.value as Area)}>
         {AREA_COLORS.map((c) => (
           <option key={c} value={c}>
-            {COLOR_NAMES[c]}
+            {t.colors[c]}
           </option>
         ))}
       </select>
@@ -69,7 +69,8 @@ type EventDialogProps = {
 };
 
 export function EventDialog({ open, onClose, event, draft, calendars }: EventDialogProps) {
-  const title = event ? (event.readOnly ? event.title : 'Edit event') : 'New event';
+  const t = useT().calendar.dialog;
+  const title = event ? (event.readOnly ? event.title : t.editEvent) : t.newEvent;
   return (
     <Dialog open={open} onClose={onClose} title={title}>
       {open && (event?.readOnly ? <EventDetails event={event} /> : <EventForm key={event?.id ?? `${draft?.day}-${draft?.startMin}`} event={event} draft={draft} calendars={calendars} onDone={onClose} />)}
@@ -78,16 +79,17 @@ export function EventDialog({ open, onClose, event, draft, calendars }: EventDia
 }
 
 function eventWhen(event: CalendarEvent): string {
+  const t = messages().calendar.dialog;
   if (event.allDay) {
     const last = addDays(event.end > event.start ? event.end : addDays(event.start, 1), -1);
-    return last === event.start ? `${formatDayShort(event.start)}, all day` : `${formatDayShort(event.start)} to ${formatDayShort(last)}, all day`;
+    return last === event.start ? t.allDayOn(formatDayShort(event.start)) : t.allDayRange(formatDayShort(event.start), formatDayShort(last));
   }
   const start = new Date(event.start);
   const end = new Date(event.end);
   const sameDay = toDay(start) === toDay(end);
   return sameDay
     ? `${formatDayShort(toDay(start))}, ${timeText(minutesOfDay(start), minutesOfDay(end) || 1440)}`
-    : `${formatDayShort(toDay(start))} ${clockLabel(minutesOfDay(start))} to ${formatDayShort(toDay(end))} ${clockLabel(minutesOfDay(end))}`;
+    : t.across(`${formatDayShort(toDay(start))} ${clockLabel(minutesOfDay(start))}`, `${formatDayShort(toDay(end))} ${clockLabel(minutesOfDay(end))}`);
 }
 
 function EventDetails({ event }: { event: CalendarEvent & { calendar: Calendar } }) {
@@ -96,14 +98,13 @@ function EventDetails({ event }: { event: CalendarEvent & { calendar: Calendar }
       <p className={styles.detailsWhen}>{eventWhen(event)}</p>
       {event.location && <p>{event.location}</p>}
       {event.notes && <p className={styles.detailsNotes}>{event.notes}</p>}
-      <p className={styles.quiet}>
-        From {event.calendar.name}. Imported calendars are read-only here: change this event where it came from, then refresh.
-      </p>
+      <p className={styles.quiet}>{messages().calendar.dialog.fromCalendar(event.calendar.name)}</p>
     </div>
   );
 }
 
 function EventForm({ event, draft, calendars, onDone }: { event?: CalendarEvent; draft?: EventDraft; calendars: Calendar[]; onDone: () => void }) {
+  const t = useT().calendar.dialog;
   const id = useId();
   const local = calendars.filter((c) => !c.readOnly);
   const startDate = event ? (event.allDay ? event.start : toDay(new Date(event.start))) : (draft?.day ?? toDay(new Date()));
@@ -125,17 +126,17 @@ function EventForm({ event, draft, calendars, onDone }: { event?: CalendarEvent;
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    if (!form.title.trim()) return setError('Give the event a name.');
+    if (!form.title.trim()) return setError(t.nameIt);
     let start: string;
     let end: string;
     if (form.allDay) {
-      if (form.endDay < form.day) return setError('The last day comes before the first.');
+      if (form.endDay < form.day) return setError(t.lastBeforeFirst);
       start = form.day;
       end = addDays(form.endDay, 1);
     } else {
       const s = parseClock(form.start);
       const f = parseClock(form.end);
-      if (s === null || f === null) return setError('Use times like 09:30.');
+      if (s === null || f === null) return setError(t.useTimes);
       start = new Date(`${form.day}T${form.start}:00`).toISOString();
       // An end before the start runs past midnight.
       end = new Date(`${f <= s ? addDays(form.day, 1) : form.day}T${form.end}:00`).toISOString();
@@ -149,27 +150,27 @@ function EventForm({ event, draft, calendars, onDone }: { event?: CalendarEvent;
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
       <div className={styles.field}>
-        <label htmlFor={`${id}-title`}>Event</label>
-        <input id={`${id}-title`} data-autofocus autoFocus value={form.title} onChange={(e) => set('title', e.target.value)} placeholder="Lunch with Linh" />
+        <label htmlFor={`${id}-title`}>{t.event}</label>
+        <input id={`${id}-title`} data-autofocus autoFocus value={form.title} onChange={(e) => set('title', e.target.value)} placeholder={t.eventPlaceholder} />
       </div>
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <label htmlFor={`${id}-day`}>{form.allDay ? 'First day' : 'Day'}</label>
+          <label htmlFor={`${id}-day`}>{form.allDay ? t.firstDay : t.day}</label>
           <input id={`${id}-day`} type="date" value={form.day} onChange={(e) => setForm((f) => ({ ...f, day: e.target.value, endDay: f.endDay < e.target.value ? e.target.value : f.endDay }))} />
         </div>
         {form.allDay ? (
           <div className={styles.field}>
-            <label htmlFor={`${id}-end-day`}>Last day</label>
+            <label htmlFor={`${id}-end-day`}>{t.lastDay}</label>
             <input id={`${id}-end-day`} type="date" value={form.endDay} onChange={(e) => set('endDay', e.target.value)} />
           </div>
         ) : (
           <>
             <div className={styles.field}>
-              <label htmlFor={`${id}-start`}>Starts</label>
+              <label htmlFor={`${id}-start`}>{t.starts}</label>
               <input id={`${id}-start`} type="time" step={300} value={form.start} onChange={(e) => set('start', e.target.value)} />
             </div>
             <div className={styles.field}>
-              <label htmlFor={`${id}-end`}>Ends</label>
+              <label htmlFor={`${id}-end`}>{t.ends}</label>
               <input id={`${id}-end`} type="time" step={300} value={form.end} onChange={(e) => set('end', e.target.value)} />
             </div>
           </>
@@ -177,11 +178,11 @@ function EventForm({ event, draft, calendars, onDone }: { event?: CalendarEvent;
       </div>
       <label className={styles.check}>
         <input type="checkbox" checked={form.allDay} onChange={(e) => set('allDay', e.target.checked)} />
-        All day
+        {t.allDay}
       </label>
       {local.length > 1 && (
         <div className={styles.field}>
-          <label htmlFor={`${id}-calendar`}>Calendar</label>
+          <label htmlFor={`${id}-calendar`}>{t.calendar}</label>
           <select id={`${id}-calendar`} value={form.calendarId} onChange={(e) => set('calendarId', e.target.value)}>
             {local.map((c) => (
               <option key={c.id} value={c.id}>
@@ -192,11 +193,11 @@ function EventForm({ event, draft, calendars, onDone }: { event?: CalendarEvent;
         </div>
       )}
       <div className={styles.field}>
-        <label htmlFor={`${id}-where`}>Where</label>
-        <input id={`${id}-where`} value={form.location} onChange={(e) => set('location', e.target.value)} placeholder="Optional" />
+        <label htmlFor={`${id}-where`}>{t.where}</label>
+        <input id={`${id}-where`} value={form.location} onChange={(e) => set('location', e.target.value)} placeholder={t.optional} />
       </div>
       <div className={styles.field}>
-        <label htmlFor={`${id}-notes`}>Notes</label>
+        <label htmlFor={`${id}-notes`}>{t.notes}</label>
         <textarea id={`${id}-notes`} rows={2} value={form.notes} onChange={(e) => set('notes', e.target.value)} />
       </div>
       <ErrorLine text={error} />
@@ -210,13 +211,13 @@ function EventForm({ event, draft, calendars, onDone }: { event?: CalendarEvent;
               onDone();
             }}
           >
-            Delete event
+            {t.deleteEvent}
           </Button>
         )}
         <span className={styles.spacer} />
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          {event ? 'Save' : 'Add event'}
+          {event ? t.save : t.addEvent}
         </Button>
       </div>
     </form>
@@ -230,13 +231,14 @@ const LENGTHS = [15, 30, 45, 60, 90, 120, 180];
 /** A task's place on the calendar: set its day, time and length, mark it done, or take it off. */
 export function BlockDialog({ open, onClose, task, draft, today }: { open: boolean; onClose: () => void; task?: Task; draft?: EventDraft; today: Day }) {
   return (
-    <Dialog open={open} onClose={onClose} title={task?.time ? 'Time block' : 'Put on the calendar'}>
+    <Dialog open={open} onClose={onClose} title={task?.time ? messages().calendar.dialog.timeBlock : messages().calendar.dialog.putOnCalendar}>
       {open && task && <BlockForm key={task.id} task={task} draft={draft} today={today} onDone={onClose} />}
     </Dialog>
   );
 }
 
 function BlockForm({ task, draft, today, onDone }: { task: Task; draft?: EventDraft; today: Day; onDone: () => void }) {
+  const t = useT().calendar.dialog;
   const id = useId();
   const [day, setDay] = useState(draft?.day ?? task.doOn ?? today);
   const [time, setTime] = useState(draft ? clockLabel(draft.startMin) : (task.time ?? '09:00'));
@@ -246,7 +248,7 @@ function BlockForm({ task, draft, today, onDone }: { task: Task; draft?: EventDr
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    if (parseClock(time) === null) return setError('Use a time like 09:30.');
+    if (parseClock(time) === null) return setError(t.useTime);
     await scheduleTask(task.id, day, time);
     if (length !== task.estimateMin) await tasksRepo.update(task.id, { estimateMin: length });
     onDone();
@@ -257,15 +259,15 @@ function BlockForm({ task, draft, today, onDone }: { task: Task; draft?: EventDr
       <p className={styles.blockTitle}>{task.title}</p>
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <label htmlFor={`${id}-day`}>Day</label>
+          <label htmlFor={`${id}-day`}>{t.day}</label>
           <input id={`${id}-day`} type="date" value={day} onChange={(e) => setDay(e.target.value)} />
         </div>
         <div className={styles.field}>
-          <label htmlFor={`${id}-time`}>Starts</label>
+          <label htmlFor={`${id}-time`}>{t.starts}</label>
           <input id={`${id}-time`} data-autofocus type="time" step={300} value={time} onChange={(e) => setTime(e.target.value)} />
         </div>
         <div className={styles.field}>
-          <label htmlFor={`${id}-length`}>For</label>
+          <label htmlFor={`${id}-length`}>{t.for}</label>
           <select id={`${id}-length`} value={length} onChange={(e) => setLength(Number(e.target.value))}>
             {[...new Set([...LENGTHS, length])]
               .sort((a, b) => a - b)
@@ -288,7 +290,7 @@ function BlockForm({ task, draft, today, onDone }: { task: Task; draft?: EventDr
                 onDone();
               }}
             >
-              {task.status === 'done' ? 'Not done yet' : 'Mark as done'}
+              {task.status === 'done' ? t.notDoneYet : t.markDone}
             </Button>
             <Button
               variant="quiet"
@@ -297,16 +299,16 @@ function BlockForm({ task, draft, today, onDone }: { task: Task; draft?: EventDr
                 onDone();
               }}
             >
-              Take off the calendar
+              {t.takeOff}
             </Button>
           </>
         )}
         <Link to={`/tasks/${task.id}`} className={styles.textLink}>
-          Open task
+          {t.openTask}
         </Link>
         <span className={styles.spacer} />
         <Button type="submit" variant="primary">
-          {scheduled ? 'Save' : 'Put on calendar'}
+          {scheduled ? t.save : t.putOn}
         </Button>
       </div>
     </form>
@@ -317,7 +319,7 @@ function BlockForm({ task, draft, today, onDone }: { task: Task; draft?: EventDr
 
 export function AddCalendarDialog({ open, onClose, onAdded }: { open: boolean; onClose: () => void; onAdded: (result: ImportResult) => void }) {
   return (
-    <Dialog open={open} onClose={onClose} title="Add a calendar">
+    <Dialog open={open} onClose={onClose} title={messages().calendar.dialog.addCalendar}>
       {open && (
         <AddCalendarForm
           onDone={(result) => {
@@ -331,6 +333,7 @@ export function AddCalendarDialog({ open, onClose, onAdded }: { open: boolean; o
 }
 
 function AddCalendarForm({ onDone }: { onDone: (result?: ImportResult) => void }) {
+  const t = useT().calendar.dialog;
   const id = useId();
   const [mode, setMode] = useState<'file' | 'link'>('file');
   const [file, setFile] = useState<File | null>(null);
@@ -343,14 +346,14 @@ function AddCalendarForm({ onDone }: { onDone: (result?: ImportResult) => void }
   async function submit(e: FormEvent) {
     e.preventDefault();
     setError('');
-    if (mode === 'file' && !file) return setError('Choose a .ics file first.');
-    if (mode === 'link' && !/^(https?|webcals?):\/\//i.test(url.trim())) return setError('Paste the calendar’s address, starting with https:// or webcal://.');
+    if (mode === 'file' && !file) return setError(t.chooseFile);
+    if (mode === 'link' && !/^(https?|webcals?):\/\//i.test(url.trim())) return setError(t.pasteAddress);
     setBusy(true);
     try {
-      const result = mode === 'file' ? await importIcs(await file!.text(), { name, fallbackName: file!.name.replace(/\.ics$/i, ''), color }) : await subscribeToCalendar(url, { name, fallbackName: 'Subscribed calendar', color });
+      const result = mode === 'file' ? await importIcs(await file!.text(), { name, fallbackName: file!.name.replace(/\.ics$/i, ''), color }) : await subscribeToCalendar(url, { name, fallbackName: messages().calendar.subscribed, color });
       onDone(result);
     } catch (err) {
-      setError(err instanceof IcsError ? err.message : 'That calendar couldn’t be read.');
+      setError(err instanceof IcsError ? err.message : t.unreadable);
     } finally {
       setBusy(false);
     }
@@ -358,39 +361,39 @@ function AddCalendarForm({ onDone }: { onDone: (result?: ImportResult) => void }
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
-      <p className={styles.quiet}>Imported calendars are read-only and stay on this device. Export one from Google Calendar, iCloud or Outlook as a .ics file, or paste its address.</p>
+      <p className={styles.quiet}>{t.importIntro}</p>
       <Segmented
-        label="How to add it"
+        label={t.how}
         value={mode}
         onChange={setMode}
         options={[
-          { value: 'file', label: 'From a file' },
-          { value: 'link', label: 'From a link' },
+          { value: 'file', label: t.fromFile },
+          { value: 'link', label: t.fromLink },
         ]}
       />
       {mode === 'file' ? (
         <div className={styles.field}>
-          <label htmlFor={`${id}-file`}>Calendar file</label>
+          <label htmlFor={`${id}-file`}>{t.file}</label>
           <input id={`${id}-file`} type="file" accept=".ics,text/calendar" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
         </div>
       ) : (
         <div className={styles.field}>
-          <label htmlFor={`${id}-url`}>Calendar address</label>
+          <label htmlFor={`${id}-url`}>{t.address}</label>
           <input id={`${id}-url`} type="url" inputMode="url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://calendar.google.com/…/basic.ics" />
         </div>
       )}
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <label htmlFor={`${id}-name`}>Name</label>
-          <input id={`${id}-name`} value={name} onChange={(e) => setName(e.target.value)} placeholder="Taken from the calendar" />
+          <label htmlFor={`${id}-name`}>{t.name}</label>
+          <input id={`${id}-name`} value={name} onChange={(e) => setName(e.target.value)} placeholder={t.namePlaceholder} />
         </div>
         <ColorField value={color} onChange={setColor} />
       </div>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
-        <Button onClick={() => onDone()}>Cancel</Button>
+        <Button onClick={() => onDone()}>{t.cancel}</Button>
         <Button type="submit" variant="primary" disabled={busy}>
-          {busy ? 'Reading…' : 'Add calendar'}
+          {busy ? t.reading : t.addCalendarButton}
         </Button>
       </div>
     </form>
@@ -399,13 +402,14 @@ function AddCalendarForm({ onDone }: { onDone: (result?: ImportResult) => void }
 
 export function CalendarSettingsDialog({ calendar, onClose, onMessage }: { calendar: Calendar | null; onClose: () => void; onMessage: (text: string) => void }) {
   return (
-    <Dialog open={Boolean(calendar)} onClose={onClose} title={calendar ? calendar.name : 'Calendar'}>
+    <Dialog open={Boolean(calendar)} onClose={onClose} title={calendar ? calendar.name : messages().calendar.dialog.calendar}>
       {calendar && <CalendarSettingsForm key={calendar.id} calendar={calendar} onDone={onClose} onMessage={onMessage} />}
     </Dialog>
   );
 }
 
 function CalendarSettingsForm({ calendar, onDone, onMessage }: { calendar: Calendar; onDone: () => void; onMessage: (text: string) => void }) {
+  const t = useT().calendar.dialog;
   const id = useId();
   const [name, setName] = useState(calendar.name);
   const [color, setColor] = useState<Area>(calendar.color);
@@ -418,10 +422,10 @@ function CalendarSettingsForm({ calendar, onDone, onMessage }: { calendar: Calen
     setBusy(true);
     try {
       const result = file ? await refreshIcs(calendar.id, await file.text()) : await refreshFromUrl(calendar.id);
-      onMessage(`${calendar.name} is up to date: ${result.added} added, ${result.updated} changed, ${result.removed} removed.`);
+      onMessage(t.upToDate(calendar.name, result.added, result.updated, result.removed));
       onDone();
     } catch (err) {
-      setError(err instanceof IcsError ? err.message : 'That calendar couldn’t be read.');
+      setError(err instanceof IcsError ? err.message : t.unreadable);
     } finally {
       setBusy(false);
     }
@@ -439,21 +443,21 @@ function CalendarSettingsForm({ calendar, onDone, onMessage }: { calendar: Calen
     >
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <label htmlFor={`${id}-name`}>Name</label>
+          <label htmlFor={`${id}-name`}>{t.name}</label>
           <input id={`${id}-name`} data-autofocus value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <ColorField value={color} onChange={setColor} />
       </div>
       {calendar.source === 'ics' && (
         <div className={styles.syncBox}>
-          <p className={styles.quiet}>{calendar.lastSyncedAt ? `Last read ${timeAgo(calendar.lastSyncedAt)}.` : 'Not read yet.'}</p>
+          <p className={styles.quiet}>{calendar.lastSyncedAt ? t.lastRead(timeAgo(calendar.lastSyncedAt)) : t.notRead}</p>
           {calendar.url ? (
             <Button size="sm" disabled={busy} onClick={() => refresh()}>
-              {busy ? 'Refreshing…' : 'Refresh now'}
+              {busy ? t.refreshing : t.refresh}
             </Button>
           ) : (
             <div className={styles.field}>
-              <label htmlFor={`${id}-file`}>Update from a newer file</label>
+              <label htmlFor={`${id}-file`}>{t.newerFile}</label>
               <input id={`${id}-file`} type="file" accept=".ics,text/calendar" disabled={busy} onChange={(e) => e.target.files?.[0] && refresh(e.target.files[0])} />
             </div>
           )}
@@ -468,21 +472,21 @@ function CalendarSettingsForm({ calendar, onDone, onMessage }: { calendar: Calen
               className={styles.dangerButton}
               onClick={async () => {
                 await removeCalendar(calendar.id);
-                onMessage(`Removed ${calendar.name}.`);
+                onMessage(t.removed(calendar.name));
                 onDone();
               }}
             >
-              Remove it and its events
+              {t.removeConfirm}
             </Button>
           ) : (
             <Button variant="quiet" onClick={() => setConfirming(true)}>
-              Remove calendar
+              {t.remove}
             </Button>
           ))}
         <span className={styles.spacer} />
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          Save
+          {t.save}
         </Button>
       </div>
     </form>

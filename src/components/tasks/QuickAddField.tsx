@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { parseCapture } from '@/domain/quickAdd';
 import type { Day } from '@/domain/days';
 import type { LifeArea } from '@/data';
+import { useT } from '@/i18n';
 import { Icon } from '../icons/Icon';
 import { CaptureChips } from './CaptureChips';
 import styles from './QuickAddField.module.css';
@@ -19,6 +20,7 @@ type QuickAddFieldProps = {
 
 /** A one-line add field that parses as you type and shows what it understood. */
 export function QuickAddField({ label, placeholder, today, areas, onSubmit, variant = 'inline', autoFocus }: QuickAddFieldProps) {
+  const t = useT().tasks;
   const [text, setText] = useState('');
   const [saving, setSaving] = useState(false);
   const parsed = useMemo(
@@ -52,7 +54,7 @@ export function QuickAddField({ label, placeholder, today, areas, onSubmit, vari
           data-autofocus={autoFocus || undefined}
           enterKeyHint="done"
         />
-        {variant === 'inline' && <kbd className={styles.kbd}>Enter</kbd>}
+        {variant === 'inline' && <kbd className={styles.kbd}>{t.enter}</kbd>}
       </label>
       {parsed ? (
         <div className={styles.preview}>
@@ -60,9 +62,7 @@ export function QuickAddField({ label, placeholder, today, areas, onSubmit, vari
         </div>
       ) : (
         variant === 'box' && (
-          <p className={styles.example}>
-            e.g. “Pay rent every 1st #finance !high” becomes a monthly task on day 1, in Finance, high priority.
-          </p>
+          <p className={styles.example}>{t.example}</p>
         )
       )}
     </form>

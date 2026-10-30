@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { areasRepo, captureTask } from '@/data';
+import { useT } from '@/i18n';
 import { useToday } from '@/lib/useToday';
 import { QuickAddField } from '../tasks/QuickAddField';
 import { Dialog } from '../ui/Dialog';
@@ -11,6 +12,7 @@ type QuickCaptureProps = { open: boolean; onClose: () => void };
 
 /** ⌘N: one line into the Inbox, from anywhere. Sort it later. */
 export function QuickCapture({ open, onClose }: QuickCaptureProps) {
+  const t = useT();
   const today = useToday();
   const loaded = useLiveQuery(() => areasRepo.listOrdered());
   const areas = useMemo(() => loaded ?? [], [loaded]);
@@ -23,12 +25,12 @@ export function QuickCapture({ open, onClose }: QuickCaptureProps) {
         setSaved(null);
         onClose();
       }}
-      title="Quick capture"
+      title={t.shell.quickCapture}
     >
       <QuickAddField
         variant="box"
-        label="Capture anything"
-        placeholder="Capture anything. Natural language works."
+        label={t.shell.capture.label}
+        placeholder={t.shell.capture.placeholder}
         today={today}
         areas={areas}
         autoFocus
@@ -40,10 +42,14 @@ export function QuickCapture({ open, onClose }: QuickCaptureProps) {
       <p className={styles.status} role="status">
         {saved ? (
           <>
-            Saved “{saved}” to your <Link to="/inbox" onClick={onClose}>Inbox</Link>. Add another, or press Esc.
+            {t.shell.capture.savedBefore(saved)}
+            <Link to="/inbox" onClick={onClose}>
+              {t.shell.capture.inbox}
+            </Link>
+            {t.shell.capture.savedAfter}
           </>
         ) : (
-          'Press Enter to save to your Inbox. It works offline too.'
+          t.shell.capture.hint
         )}
       </p>
     </Dialog>

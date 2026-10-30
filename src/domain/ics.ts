@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { addDays, dayOfMonth, daysInMonth, diffDays, makeDay, month, startOfWeek, weekday, year, type Day } from './days';
 
 /**
@@ -39,7 +40,7 @@ export function defaultWindow(now = new Date()): IcsWindow {
 
 export function parseIcs(text: string, window: IcsWindow = defaultWindow()): IcsCalendar {
   const lines = unfold(text);
-  if (!lines.some((l) => /^BEGIN:VCALENDAR$/i.test(l.trim()))) throw new IcsError('That file isn’t a calendar (.ics) file.');
+  if (!lines.some((l) => /^BEGIN:VCALENDAR$/i.test(l.trim()))) throw new IcsError(messages().calendar.errors.notIcs);
 
   let name: string | null = null;
   const blocks: Prop[][] = [];
@@ -152,7 +153,7 @@ const getAll = (block: Prop[], name: string) => block.filter((p) => p.name === n
 
 function parseStamp(prop: Prop, value = prop.value): Stamp {
   const m = /^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})?(Z)?)?$/i.exec(value.trim());
-  if (!m) throw new IcsError(`A date in that file isn’t readable (“${value}”).`);
+  if (!m) throw new IcsError(messages().calendar.errors.badDate(value));
   const day = makeDay(Number(m[1]), Number(m[2]), Number(m[3]));
   const allDay = prop.params.VALUE?.toUpperCase() === 'DATE' || m[4] === undefined;
   if (allDay) return { day, minutes: 0, seconds: 0, allDay: true, zone: null };
@@ -236,7 +237,7 @@ function base(block: Prop[]): Base | null {
   const uid = get(block, 'UID')?.value.trim() || `${summary?.value ?? 'event'}-${dtstart.value}`;
   return {
     uid,
-    title: summary ? unescapeText(summary.value).trim() || 'Untitled event' : 'Untitled event',
+    title: (summary ? unescapeText(summary.value).trim() : '') || messages().calendar.untitled,
     location: unescapeText(get(block, 'LOCATION')?.value ?? '').trim(),
     notes: unescapeText(get(block, 'DESCRIPTION')?.value ?? '').trim(),
     start,

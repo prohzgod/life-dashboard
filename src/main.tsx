@@ -14,9 +14,12 @@ import { initData } from './data';
 import { router } from './app/router';
 import { registerServiceWorker } from './app/registerServiceWorker';
 import { StorageError } from './app/StorageError';
+import { applyLocale, readLocale } from './i18n';
+import { LocaleRoot } from './app/LocaleRoot';
 import { applyThemePreference, readThemePreference } from './theme/theme';
 
 applyThemePreference(readThemePreference());
+applyLocale(readLocale());
 registerServiceWorker();
 
 const root = createRoot(document.getElementById('root')!);
@@ -26,7 +29,9 @@ initData().then(
   () =>
     root.render(
       <StrictMode>
-        <RouterProvider router={router} />
+        <LocaleRoot>
+          <RouterProvider router={router} />
+        </LocaleRoot>
       </StrictMode>,
     ),
   (error: unknown) => {

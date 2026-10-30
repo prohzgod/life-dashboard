@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { startsIn } from '@/domain/calendar';
 import { addDays, dayToDate, type Day } from '@/domain/days';
 import { areasRepo, loadCalendarRange } from '@/data';
+import { messages } from '@/i18n';
 import { itemsForDay, readLayers } from '@/screens/calendar/items';
 
 /** Minutes since 1970, ticking each minute, so "in 40 min" stays true. */
@@ -32,12 +33,14 @@ export type AgendaEntry = {
 export function useAgenda(today: Day): { entries: AgendaEntry[]; calendars: string[] } | undefined {
   const minute = useMinute();
   return useLiveQuery(async () => {
+    const { agenda } = messages().today;
+    const tb = messages().calendar.timeBlock;
     const [range, areas] = await Promise.all([loadCalendarRange(today, addDays(today, 1), today), areasRepo.listOrdered()]);
     const { timed, allDay } = itemsForDay(range, today, { ...readLayers(), blocks: true }, areas);
     const midnight = dayToDate(today).getTime();
     const at = (min: number) => midnight + min * 60_000;
     const entries: AgendaEntry[] = [
-      ...allDay.map((a) => ({ key: a.key, title: a.title, time: 'All day', source: a.calendarName, tone: a.tone, block: false, allDay: true, done: false, soon: null })),
+      ...allDay.map((a) => ({ key: a.key, title: a.title, time: agenda.allDay, source: a.calendarName, tone: a.tone, block: false, allDay: true, done: false, soon: null })),
       ...[...timed]
         .sort((a, b) => a.startMin - b.startMin)
         .map((t) => {
@@ -46,7 +49,7 @@ export function useAgenda(today: Day): { entries: AgendaEntry[]; calendars: stri
             key: t.key,
             title: t.title,
             time: t.time,
-            source: t.kind === 'block' ? (t.detail === 'Time block' ? 'Time block' : `Time block, ${t.detail}`) : t.calendarName,
+            source: t.kind === 'block' ? (t.detail === tb ? tb : agenda.timeBlockOf(t.detail)) : t.calendarName,
             tone: t.tone,
             block: t.kind === 'block',
             allDay: false,
@@ -55,7 +58,7 @@ export function useAgenda(today: Day): { entries: AgendaEntry[]; calendars: stri
           };
         }),
     ];
-    return { entries, calendars: range.calendars.filter((c) => c.visible).map((c) => (c.readOnly ? `${c.name} (read-only)` : c.name)) };
+    return { entries, calendars: range.calendars.filter((c) => c.visible).map((c) => (c.readOnly ? agenda.readOnly(c.name) : c.name)) };
   }, [today, minute]);
 }
 

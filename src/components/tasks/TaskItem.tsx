@@ -4,6 +4,7 @@ import { toDay, type Day } from '@/domain/days';
 import { toggleTask, type Task } from '@/data';
 import { CheckButton } from '@/components/ui/CheckButton';
 import { cx } from '@/components/ui/cx';
+import { useT } from '@/i18n';
 import { formatDayRelative, formatDayShort, formatMinutes } from '@/lib/format';
 import { rolledOverText } from '@/lib/taskText';
 import { Icon } from '../icons/Icon';
@@ -30,6 +31,7 @@ function whenText(task: Task): string | null {
 }
 
 export function TaskItem({ task, today, lookups, variant = 'compact', selected, onOpen, showDay }: TaskItemProps) {
+  const t = useT().tasks;
   const done = task.status === 'done';
   const area = task.areaId ? lookups.areaById.get(task.areaId) : undefined;
   const goal = task.goalId ? lookups.goalById.get(task.goalId) : undefined;
@@ -41,7 +43,7 @@ export function TaskItem({ task, today, lookups, variant = 'compact', selected, 
     <CheckButton
       checked={done}
       onToggle={() => void toggleTask(task, today)}
-      label={done ? `Mark “${task.title}” as not done` : `Mark “${task.title}” as done`}
+      label={done ? t.markNotDone(task.title) : t.markDone(task.title)}
       size={variant === 'plan' ? 'md' : 'sm'}
     />
   );
@@ -59,10 +61,10 @@ export function TaskItem({ task, today, lookups, variant = 'compact', selected, 
       area?.name,
       task.time,
       task.estimateMin ? formatMinutes(task.estimateMin) : null,
-      rule ? describeRRuleShort(rule).replace(/^R/, 'r') : null,
-      task.dueAt ? `due ${formatDayShort(toDay(new Date(task.dueAt)))}` : null,
-      task.priority === 1 ? 'high' : null,
-      ...tags.map((t) => `#${t}`),
+      rule ? t.repeat.inline(describeRRuleShort(rule)) : null,
+      task.dueAt ? t.due(formatDayShort(toDay(new Date(task.dueAt)))) : null,
+      task.priority === 1 ? t.high : null,
+      ...tags.map((tag) => `#${tag}`),
     ].filter(Boolean);
     return (
       <li className={cx(styles.compact, selected && styles.selected, done && styles.done)}>
@@ -98,7 +100,7 @@ export function TaskItem({ task, today, lookups, variant = 'compact', selected, 
             </span>
           )}
           {rolled > 0 && <span className={styles.rolled}>{rolledOverText(rolled, task.doOn!)}</span>}
-          {task.priority === 1 && !done && <span className={styles.high}>High priority</span>}
+          {task.priority === 1 && !done && <span className={styles.high}>{t.highPriority}</span>}
         </span>
       </div>
       {when && <span className={styles.when}>{when}</span>}

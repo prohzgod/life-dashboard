@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { addDays, type Day, dayOfMonth, daysInMonth, diffDays, diffMonths, maxDay, month, startOfWeek, weekday, year } from './days';
 
 export const WEEKDAYS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'] as const;
@@ -118,47 +119,13 @@ export function nextAfterCompletion(rule: RRule, doOn: Day | null, completedOn: 
   return nextOccurrence(rule, anchor, maxDay(anchor, completedOn));
 }
 
-const DAY_NAMES: Record<Weekday, string> = {
-  MO: 'Monday',
-  TU: 'Tuesday',
-  WE: 'Wednesday',
-  TH: 'Thursday',
-  FR: 'Friday',
-  SA: 'Saturday',
-  SU: 'Sunday',
-};
-
-/** Plain English, e.g. "Every Tuesday", "Every 3 days", "Monthly on day 1". */
+/** In your language, e.g. "Every Tuesday", "Every 3 days", "Monthly on day 1". */
 export function describeRRule(rule: RRule): string {
-  const n = rule.interval;
-  const unit = { DAILY: 'day', WEEKLY: 'week', MONTHLY: 'month', YEARLY: 'year' }[rule.freq];
-  const every = n === 1 ? `Every ${unit}` : n === 2 ? `Every other ${unit}` : `Every ${n} ${unit}s`;
-
-  if (rule.freq === 'WEEKLY' && rule.byDay?.length) {
-    const days = rule.byDay;
-    if (days.join() === 'MO,TU,WE,TH,FR' && n === 1) return 'Every weekday';
-    if (days.join() === 'SA,SU' && n === 1) return 'Every weekend';
-    const names = listJoin(days.map((d) => DAY_NAMES[d]));
-    return n === 1 ? `Every ${names}` : `${every} on ${names}`;
-  }
-  if (rule.freq === 'MONTHLY' && rule.byMonthDay?.length) {
-    const dates = listJoin(rule.byMonthDay.map((d) => (d === -1 ? 'the last day' : `day ${d}`)));
-    return n === 1 ? `Monthly on ${dates}` : `${every} on ${dates}`;
-  }
-  return every;
+  return messages().tasks.repeat.describe(rule);
 }
 
 /** The short form used on chips: "Repeats monthly, day 1". */
 export function describeRRuleShort(rule: RRule): string {
-  if (rule.interval === 1 && rule.freq === 'MONTHLY' && rule.byMonthDay?.length === 1) {
-    const d = rule.byMonthDay[0]!;
-    return `Repeats monthly, ${d === -1 ? 'last day' : `day ${d}`}`;
-  }
-  const long = describeRRule(rule);
-  return `Repeats ${long.charAt(0).toLowerCase()}${long.slice(1)}`;
+  return messages().tasks.repeat.short(rule);
 }
 
-function listJoin(items: string[]): string {
-  if (items.length <= 1) return items.join('');
-  return `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;
-}

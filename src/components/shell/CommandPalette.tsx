@@ -3,30 +3,33 @@ import { useMemo, useState, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { screens } from '@/app/screens';
 import { searchLibrary } from '@/data';
+import { messages, useT } from '@/i18n';
 import { Icon, type IconName } from '../icons/Icon';
 import { Dialog } from '../ui/Dialog';
 import styles from './CommandPalette.module.css';
 
 type Destination = { label: string; path: string; icon: IconName; detail?: string };
 
-const destinations: Destination[] = [
+const destinations = (): Destination[] => [
   ...Object.values(screens).map((s) => ({ label: s.navLabel, path: s.path, icon: s.icon })),
-  { label: 'Settings', path: '/settings', icon: 'settings' },
-  { label: 'Appearance', path: '/settings/appearance', icon: 'sun' },
+  { label: messages().shell.settings, path: '/settings', icon: 'settings' },
+  { label: messages().shell.appearance, path: '/settings/appearance', icon: 'sun' },
 ];
 
 type CommandPaletteProps = { open: boolean; onClose: () => void };
 
 /** ⌘K: jump to any screen, or to a Library page by words in its title or text. */
 export function CommandPalette({ open, onClose }: CommandPaletteProps) {
+  const t = useT();
   return (
-    <Dialog open={open} onClose={onClose} title="Search or jump to">
+    <Dialog open={open} onClose={onClose} title={t.shell.palette.title}>
       {open && <PaletteBody onClose={onClose} />}
     </Dialog>
   );
 }
 
 function PaletteBody({ onClose }: { onClose: () => void }) {
+  const t = useT();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
@@ -34,7 +37,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
   const pages = useLiveQuery(() => (query.trim().length >= 2 ? searchLibrary(query) : Promise.resolve([])), [query]);
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const screensFound = q ? destinations.filter((d) => d.label.toLowerCase().includes(q)) : destinations;
+    const screensFound = q ? destinations().filter((d) => d.label.toLowerCase().includes(q)) : destinations();
     const pagesFound: Destination[] = (pages ?? []).slice(0, 8).map((hit) => ({ label: hit.title, path: `/library/${hit.id}`, icon: 'page', detail: hit.snippet }));
     return [...screensFound, ...pagesFound];
   }, [query, pages]);
@@ -66,7 +69,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
         autoFocus
         data-autofocus
         className={styles.input}
-        placeholder="Type a screen or page…"
+        placeholder={t.shell.palette.placeholder}
         value={query}
         onChange={(event) => {
           setQuery(event.target.value);
@@ -77,10 +80,10 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
         aria-expanded="true"
         aria-controls="palette-results"
         aria-activedescendant={activeId}
-        aria-label="Search screens and pages"
+        aria-label={t.shell.palette.label}
       />
       {results.length ? (
-        <ul id="palette-results" role="listbox" aria-label="Screens" className={styles.list}>
+        <ul id="palette-results" role="listbox" aria-label={t.shell.palette.results} className={styles.list}>
           {results.map((d, index) => (
             <li
               key={d.path}
@@ -100,7 +103,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>Nothing matches “{query}”.</p>
+        <p className={styles.empty}>{t.shell.palette.nothing(query)}</p>
       )}
     </div>
   );

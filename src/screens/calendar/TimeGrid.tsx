@@ -5,9 +5,9 @@ import { dayOfMonth, type Day } from '@/domain/days';
 import type { CalendarRange, LifeArea } from '@/data';
 import { cx } from '@/components/ui/cx';
 import { itemsForDay, toneStyle, type GridItem, type Layers } from './items';
+import { messages, useT } from '@/i18n';
 import styles from './Calendar.module.css';
 
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const HOURS = Array.from({ length: 24 }, (_, h) => h);
 
 type Props = {
@@ -39,18 +39,20 @@ export function TimeGrid({ days, today, range, layers, areas, hourHeight, firstH
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const { calendar, format } = useT();
+  const t = calendar.grid;
   const columns = { '--days': days.length, '--hour': `${hourHeight}px` } as CSSProperties;
 
   return (
-    <section aria-label={days.length === 1 ? 'Day' : 'Week grid'} className={cx(styles.grid, phone && styles.gridPhone)} style={columns}>
+    <section aria-label={days.length === 1 ? t.day : t.week} className={cx(styles.grid, phone && styles.gridPhone)} style={columns}>
       {!phone && (
         <div className={styles.gridHead}>
           <span />
           {days.map((day) => (
             <div key={day} className={cx(styles.dayHead, day === today && styles.dayHeadToday)}>
               <span className={styles.dayName}>
-                {WEEKDAYS[new Date(`${day}T12:00:00`).getDay()]}
-                {day === today && ', today'}
+                {format.weekdaysShort[new Date(`${day}T12:00:00`).getDay()]}
+                {day === today && t.todaySuffix}
               </span>
               <span className={styles.dayNumber}>{dayOfMonth(day)}</span>
             </div>
@@ -59,12 +61,12 @@ export function TimeGrid({ days, today, range, layers, areas, hourHeight, firstH
       )}
       {showAllDay && (
         <div className={styles.allDayRow}>
-          <span className={styles.allDayLabel}>all-day</span>
+          <span className={styles.allDayLabel}>{t.allDay}</span>
           {perDay.map(({ day, allDay }) => (
             <div key={day} className={cx(styles.allDayCell, day === today && styles.todayTint)}>
               {layers.habits && range.habits[day] && (
                 <span className={styles.habitCount}>
-                  habits {range.habits[day].done}/{range.habits[day].due}
+                  {t.habits(range.habits[day].done, range.habits[day].due)}
                 </span>
               )}
               {allDay.map((item) => (
@@ -74,7 +76,7 @@ export function TimeGrid({ days, today, range, layers, areas, hourHeight, firstH
                   className={styles.allDayChip}
                   style={toneStyle(item.tone)}
                   onClick={() => onAllDay(item.eventId)}
-                  aria-label={`${item.title}, all day, ${item.calendarName}`}
+                  aria-label={t.allDayItem(item.title, item.calendarName)}
                 >
                   {item.title}
                 </button>
@@ -163,7 +165,8 @@ function Item({ item, hourHeight, phone, onOpen }: { item: GridItem & { col: num
     width: `calc(${100 / item.cols}% - 8px)`,
     ...(item.tone === 'block' ? {} : { ...toneStyle(item.tone), ['--tone' as string]: `var(--${item.tone})` }),
   };
-  const label = `${item.title}, ${item.time}${item.kind === 'block' ? ', time block' : `, ${item.calendarName}`}${item.done ? ', done' : ''}${item.readOnly ? ', read-only' : ''}`;
+  const t = useT().calendar.grid;
+  const label = `${item.title}, ${item.time}${item.kind === 'block' ? t.blockSuffix : `, ${item.calendarName}`}${item.done ? t.doneSuffix : ''}${item.readOnly ? t.readOnlySuffix : ''}`;
 
   return (
     <button
@@ -175,12 +178,12 @@ function Item({ item, hourHeight, phone, onOpen }: { item: GridItem & { col: num
       onClick={onOpen}
       {...(draggable ? listeners : {})}
       {...(draggable ? attributes : {})}
-      aria-roledescription={draggable ? 'draggable item' : undefined}
+      aria-roledescription={draggable ? t.draggable : undefined}
     >
       {phone ? (
         <span className={styles.itemLine}>
           {item.title}
-          <span className={styles.itemMeta}>, {item.done ? 'done' : item.kind === 'block' ? 'time block' : item.time}</span>
+          <span className={styles.itemMeta}>, {item.done ? t.done : item.kind === 'block' ? t.block : item.time}</span>
         </span>
       ) : short ? (
         <span className={styles.itemLine}>
@@ -191,7 +194,7 @@ function Item({ item, hourHeight, phone, onOpen }: { item: GridItem & { col: num
           <span className={styles.itemTitle}>{item.title}</span>
           <span className={styles.itemMeta}>
             {item.time}
-            {item.kind === 'block' && item.detail !== 'Time block' ? `, ${item.detail}` : ''}
+            {item.kind === 'block' && item.detail !== messages().calendar.timeBlock ? `, ${item.detail}` : ''}
           </span>
         </>
       )}

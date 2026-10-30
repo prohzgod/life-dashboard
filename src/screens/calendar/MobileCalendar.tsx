@@ -1,4 +1,4 @@
-import { dayOfMonth, isoWeek } from '@/domain/days';
+import { dayOfMonth, dayToDate, isoWeek } from '@/domain/days';
 import { rangeLabel } from '@/domain/calendar';
 import { Icon } from '@/components/icons/Icon';
 import { Segmented } from '@/components/ui';
@@ -8,12 +8,13 @@ import type { CalendarScreen } from './CalendarPage';
 import { itemsForDay, monthTitle, stepAnchor, viewRange } from './items';
 import { MonthGrid } from './MonthViews';
 import { TimeGrid } from './TimeGrid';
+import { useT } from '@/i18n';
 import styles from './Calendar.module.css';
-
-const INITIALS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 /** The phone calendar: a strip of the week's days over one day's timeline; week as a list; month as dots. */
 export function MobileCalendar({ view, anchor, today, range, layers, areas, go, openItem, openAllDay, newEvent, hourHeight }: CalendarScreen & { hourHeight: number }) {
+  const tc = useT().calendar;
+  const t = tc.phone;
   const week = viewRange('week', anchor).days;
   const imported = range?.calendars.filter((c) => c.source === 'ics' && c.visible) ?? [];
   const latest = imported.map((c) => c.lastSyncedAt).filter(Boolean).sort().at(-1);
@@ -23,40 +24,36 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
     <div className={styles.phone}>
       <header className={styles.phoneHeader}>
         <div className={styles.phoneHeading}>
-          <span className={styles.phoneEyebrow}>Calendar, week {isoWeek(anchor)}</span>
-          <h1 className={styles.phoneTitle}>{monthTitle(anchor).split(' ')[0]}</h1>
+          <span className={styles.phoneEyebrow}>{t.eyebrow(isoWeek(anchor))}</span>
+          <h1 className={styles.phoneTitle}>{tc.monthName(dayToDate(anchor))}</h1>
         </div>
-        <button type="button" className={styles.roundButton} aria-label="New event" onClick={() => newEvent(view === 'day' ? { day: anchor, startMin: 9 * 60 } : undefined)}>
+        <button type="button" className={styles.roundButton} aria-label={tc.newEvent} onClick={() => newEvent(view === 'day' ? { day: anchor, startMin: 9 * 60 } : undefined)}>
           <Icon name="plus" size={20} />
         </button>
       </header>
 
       <Segmented
-        label="Calendar view"
+        label={tc.viewLabel}
         className={styles.phoneTabs}
         value={view === 'year' ? 'month' : view}
         onChange={(v) => go(v, anchor)}
-        options={[
-          { value: 'day', label: 'Day' },
-          { value: 'week', label: 'Week' },
-          { value: 'month', label: 'Month' },
-        ]}
+        options={(['day', 'week', 'month'] as const).map((v) => ({ value: v, label: tc.views[v] }))}
       />
 
       {(view === 'week' || view === 'month') && (
         <div className={styles.phoneNav}>
-          <button type="button" className={styles.stepButton} aria-label={`Previous ${view}`} onClick={() => go(view, stepAnchor(view, anchor, -1))}>
+          <button type="button" className={styles.stepButton} aria-label={tc.previous[view]} onClick={() => go(view, stepAnchor(view, anchor, -1))}>
             <Icon name="chevronLeft" size={16} />
           </button>
           <span className={styles.phoneNavLabel}>{view === 'week' ? rangeLabel(week[0]!, week[6]!) : monthTitle(anchor)}</span>
-          <button type="button" className={styles.stepButton} aria-label={`Next ${view}`} onClick={() => go(view, stepAnchor(view, anchor, 1))}>
+          <button type="button" className={styles.stepButton} aria-label={tc.next[view]} onClick={() => go(view, stepAnchor(view, anchor, 1))}>
             <Icon name="chevronRight" size={16} />
           </button>
         </div>
       )}
 
       {view !== 'month' && range && (
-        <div className={styles.strip} role="group" aria-label="Days this week">
+        <div className={styles.strip} role="group" aria-label={t.daysThisWeek}>
           {week.map((day) => {
             const { timed, allDay } = itemsForDay(range, day, layers, areas);
             const count = Math.min(3, timed.length + allDay.length);
@@ -67,10 +64,10 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
                 className={cx(styles.stripDay, day === anchor && styles.stripDaySelected)}
                 aria-pressed={day === anchor}
                 aria-current={day === today ? 'date' : undefined}
-                aria-label={`${formatDayShort(day)}${count ? `, ${timed.length + allDay.length} on` : ''}`}
+                aria-label={t.dayCount(formatDayShort(day), count ? timed.length + allDay.length : 0)}
                 onClick={() => go('day', day)}
               >
-                <span className={styles.stripInitial}>{INITIALS[new Date(`${day}T12:00:00`).getDay()]}</span>
+                <span className={styles.stripInitial}>{t.initials[new Date(`${day}T12:00:00`).getDay()]}</span>
                 <span className={styles.stripNumber}>{dayOfMonth(day)}</span>
                 <span className={styles.stripDots} aria-hidden="true">
                   {Array.from({ length: count }, (_, i) => (
@@ -87,10 +84,10 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
         <div className={styles.phoneMeta}>
           {layers.habits && habits && (
             <span className={styles.metaChip}>
-              Habits {habits.done} / {habits.due}
+              {t.habits(habits.done, habits.due)}
             </span>
           )}
-          <span className={styles.metaText}>{imported.length ? `${imported[0]!.name} ${latest ? `read ${timeAgo(latest)}` : 'imported'}, read-only` : 'Saved on this device'}</span>
+          <span className={styles.metaText}>{imported.length ? t.importedNote(imported[0]!.name, latest ? timeAgo(latest) : null) : t.saved}</span>
         </div>
       )}
 
@@ -99,7 +96,7 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
           {itemsForDay(range, anchor, layers, areas).allDay.map((item) => (
             <button key={item.key} type="button" className={styles.phoneAllDay} onClick={() => openAllDay(item.eventId)} style={{ background: `var(--${item.tone}-soft)`, color: `var(--${item.tone}-ink)` }}>
               {item.title}
-              <span className={styles.itemMeta}>, all day</span>
+              <span className={styles.itemMeta}>{t.allDaySuffix}</span>
             </button>
           ))}
           <TimeGrid days={[anchor]} today={today} range={range} layers={layers} areas={areas} hourHeight={hourHeight} phone onSlot={(day, startMin) => newEvent({ day, startMin })} onItem={openItem} onAllDay={openAllDay} />
@@ -114,17 +111,17 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
               <li key={day} className={styles.weekDay}>
                 <h2 className={cx(styles.weekDayTitle, day === today && styles.weekDayToday)}>
                   <button type="button" onClick={() => go('day', day)}>
-                    {day === today ? `Today, ${formatDayShort(day)}` : formatDayShort(day)}
+                    {day === today ? t.todayDate(formatDayShort(day)) : formatDayShort(day)}
                   </button>
                 </h2>
                 {timed.length + allDay.length === 0 ? (
-                  <p className={styles.weekEmpty}>Nothing planned</p>
+                  <p className={styles.weekEmpty}>{t.nothing}</p>
                 ) : (
                   <ul className={styles.weekItems}>
                     {allDay.map((a) => (
                       <li key={a.key}>
                         <button type="button" className={styles.weekItem} onClick={() => openAllDay(a.eventId)}>
-                          <span className={styles.weekTime}>all day</span>
+                          <span className={styles.weekTime}>{t.allDay}</span>
                           <span className={styles.weekBar} style={{ background: `var(--${a.tone})` }} aria-hidden="true" />
                           {a.title}
                         </button>

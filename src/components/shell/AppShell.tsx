@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { mobileChrome } from '@/app/mobileChrome';
+import { useT } from '@/i18n';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { Icon } from '../icons/Icon';
 import styles from './AppShell.module.css';
@@ -27,6 +28,7 @@ function Shell() {
   const [overlay, setOverlay] = useState<Overlay>(null);
   const { pathname, search } = useLocation();
   const isMobile = useIsMobile();
+  const t = useT();
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -56,11 +58,11 @@ function Shell() {
     return (
       <div className={chrome.hideTabBar ? styles.mobile : `${styles.mobile} ${styles.withTabBar}`}>
         <a href="#main" className={styles.skip}>
-          Skip to content
+          {t.shell.skipToContent}
         </a>
         <main id="main" className={styles.mobileMain} tabIndex={-1}>
           {chrome.back && (
-            <Link to={chrome.back.to} className={styles.back} aria-label={`Back to ${chrome.back.label}`}>
+            <Link to={chrome.back.to} className={styles.back} aria-label={t.shell.backTo(chrome.back.label)}>
               <Icon name="chevronLeft" size={20} strokeWidth={2.2} />
               {chrome.back.label}
             </Link>
@@ -77,7 +79,7 @@ function Shell() {
   return (
     <div className={styles.shell}>
       <a href="#main" className={styles.skip}>
-        Skip to content
+        {t.shell.skipToContent}
       </a>
       <Sidebar onSearch={() => setOverlay('search')} onCapture={() => setOverlay('capture')} />
       <main id="main" className={styles.main} tabIndex={-1}>

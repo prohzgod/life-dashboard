@@ -1,19 +1,21 @@
 import { Link } from 'react-router-dom';
 import { EmptyState } from '@/components/shell/EmptyState';
 import { PageHeader } from '@/components/shell/PageHeader';
+import { useT } from '@/i18n';
 import styles from './NotFoundPage.module.css';
 
 export function NotFoundPage() {
+  const t = useT().shell.notFound;
   return (
     <>
-      <PageHeader title="Page not found" />
+      <PageHeader title={t.title} />
       <EmptyState
         icon="search"
-        heading="Nothing lives at this address"
-        body="It may have moved, or the link has a typo. Your data is safe."
+        heading={t.heading}
+        body={t.body}
         action={
           <Link to="/" className={styles.link}>
-            Back to Today
+            {t.back}
           </Link>
         }
       />

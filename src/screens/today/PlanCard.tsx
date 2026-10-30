@@ -7,11 +7,13 @@ import { QuickAddField } from '@/components/tasks/QuickAddField';
 import { TaskItem } from '@/components/tasks/TaskItem';
 import { useTaskLookups } from '@/components/tasks/useTaskLookups';
 import { Button, Card } from '@/components/ui';
-import { formatMinutes, plural } from '@/lib/format';
+import { useT } from '@/i18n';
+import { formatMinutes } from '@/lib/format';
 import { withCompletedOn } from '@/lib/taskView';
 import styles from './Today.module.css';
 
 export function PlanCard({ today }: { today: Day }) {
+  const t = useT().today.plan;
   const navigate = useNavigate();
   const lookups = useTaskLookups();
   const tasks = useLiveQuery(async () => {
@@ -24,45 +26,45 @@ export function PlanCard({ today }: { today: Day }) {
   const minutesLeft = open.reduce((sum, t) => sum + (t.estimateMin ?? 0), 0);
   const rolled = open.filter((t) => rolledOverDays(t, today) > 0).length;
   const meta = tasks?.length
-    ? `${done} of ${tasks.length} done${minutesLeft ? `, about ${formatMinutes(minutesLeft)} left` : ''}`
+    ? `${t.meta(done, tasks.length)}${minutesLeft ? t.left(formatMinutes(minutesLeft)) : ''}`
     : undefined;
 
   const open_ = (task: Task) => navigate(`/tasks?view=today&task=${task.id}`);
 
   return (
     <Card
-      title="Today’s plan"
+      title={t.title}
       meta={meta}
       className={styles.card}
       action={
         <Link to="/tasks?view=today" className={styles.cardLink}>
-          All tasks
+          {t.allTasks}
         </Link>
       }
     >
       <QuickAddField
-        label="Add a task"
-        placeholder="Add a task, e.g. “Pay rent every 1st #finance !high”"
+        label={t.addLabel}
+        placeholder={t.addPlaceholder}
         today={today}
         areas={lookups.areas}
         onSubmit={(text) => captureTask(text, { today, status: 'open', defaultDoOn: today })}
       />
       {rolled > 0 && (
         <div className={styles.rolledNotice}>
-          <span>{plural(rolled, 'task')} rolled over from earlier. No harm done.</span>
+          <span>{t.rolled(rolled)}</span>
           <Button variant="quiet" size="sm" onClick={() => void moveRolledOverToToday(today)}>
-            Plan {rolled === 1 ? 'it' : 'them'} for today
+            {t.planForToday(rolled)}
           </Button>
         </div>
       )}
       {tasks && tasks.length > 0 ? (
-        <ul className={styles.taskList} aria-label="Today’s tasks">
+        <ul className={styles.taskList} aria-label={t.list}>
           {tasks.map((task) => (
             <TaskItem key={task.id} task={task} today={today} lookups={lookups} variant="plan" onOpen={open_} />
           ))}
         </ul>
       ) : (
-        tasks && <p className={styles.quietEmpty}>Nothing planned yet. Add something above, or pick from Anytime.</p>
+        tasks && <p className={styles.quietEmpty}>{t.empty}</p>
       )}
     </Card>
   );

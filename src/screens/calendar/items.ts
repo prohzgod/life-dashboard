@@ -1,8 +1,9 @@
 import type { Area } from '@design/tokens';
-import { addDays, month, startOfWeek, toDay, type Day } from '@/domain/days';
+import { addDays, dayToDate, startOfWeek, toDay, type Day } from '@/domain/days';
 import type { CSSProperties } from 'react';
-import { addMonths, blockSpan, clockLabel, coversDay, firstOfMonth, layoutColumns, MONTH_NAMES, monthGrid, spanOnDay } from '@/domain/calendar';
+import { addMonths, blockSpan, clockLabel, coversDay, firstOfMonth, layoutColumns, monthGrid, spanOnDay } from '@/domain/calendar';
 import type { CalendarRange, LifeArea } from '@/data';
+import { messages } from '@/i18n';
 
 export type CalendarView = 'day' | 'week' | 'month' | 'year';
 
@@ -103,8 +104,8 @@ export function itemsForDay(range: CalendarRange, day: Day, layers: Layers, area
         done: task.status === 'done',
         readOnly: false,
         time: timeText(span.startMin, span.endMin),
-        detail: areas.find((a) => a.id === task.areaId)?.name ?? 'Time block',
-        calendarName: 'Time blocks',
+        detail: areas.find((a) => a.id === task.areaId)?.name ?? messages().calendar.timeBlock,
+        calendarName: messages().calendar.timeBlocks,
         taskId: task.id,
       });
     }
@@ -145,7 +146,7 @@ export function writeLayers(layers: Layers): void {
 
 /** "September 2026" */
 export function monthTitle(day: Day): string {
-  return `${MONTH_NAMES[month(day) - 1]} ${day.slice(0, 4)}`;
+  return messages().format.monthYear(dayToDate(day));
 }
 
 /** An event's colors from its calendar's area token. */

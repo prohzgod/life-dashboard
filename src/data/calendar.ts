@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import type { Area } from '@design/tokens';
 import { habitsOnDay } from '@/domain/calendar';
 import { addDays, dayToDate, type Day } from '@/domain/days';
@@ -10,8 +11,7 @@ import type { Calendar, CalendarEvent, Task } from './types';
 
 export { IcsError };
 
-const PERSONAL: Omit<Calendar, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'> = {
-  name: 'Personal',
+const PERSONAL: Omit<Calendar, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'name'> = {
   color: 'growth',
   source: 'local',
   url: null,
@@ -20,10 +20,10 @@ const PERSONAL: Omit<Calendar, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'> =
   lastSyncedAt: null,
 };
 
-/** Every space has a local Personal calendar. Runs at startup and after an import. */
+/** There is always a local Personal calendar, named in your language when it's made. Runs at startup and after an import. */
 export async function ensureCalendars(): Promise<void> {
   await db.transaction('rw', db.calendars, async () => {
-    if (!(await calendarsRepo.list((c) => c.source === 'local')).length) await calendarsRepo.create(PERSONAL);
+    if (!(await calendarsRepo.list((c) => c.source === 'local')).length) await calendarsRepo.create({ ...PERSONAL, name: messages().calendar.personal });
   });
 }
 
@@ -71,7 +71,7 @@ export function normalizeCalendarUrl(url: string): string {
 export async function importIcs(text: string, { name, fallbackName, color, url = null }: { name?: string; fallbackName?: string; color: Area; url?: string | null }): Promise<ImportResult> {
   const parsed = parseIcs(text);
   const calendar = await calendarsRepo.create({
-    name: name?.trim() || parsed.name || fallbackName?.trim() || 'Imported calendar',
+    name: name?.trim() || parsed.name || fallbackName?.trim() || messages().calendar.imported,
     color,
     source: 'ics',
     url,
@@ -99,11 +99,11 @@ export async function fetchCalendarText(url: string): Promise<string> {
   } catch {
     throw new IcsError(
       navigator.onLine === false
-        ? 'You’re offline. The calendar will refresh when you’re back online.'
-        : 'That calendar didn’t let this app read it. Download its .ics file and import that instead.',
+        ? messages().calendar.errors.offline
+        : messages().calendar.errors.blocked,
     );
   }
-  if (!response.ok) throw new IcsError(`That link answered with an error (${response.status}). Check it’s the calendar’s public or secret address.`);
+  if (!response.ok) throw new IcsError(messages().calendar.errors.status(response.status));
   return response.text();
 }
 
@@ -114,7 +114,7 @@ export async function subscribeToCalendar(url: string, options: { name?: string;
 
 export async function refreshFromUrl(calendarId: string): Promise<ImportResult> {
   const calendar = await calendarsRepo.get(calendarId);
-  if (!calendar?.url) throw new IcsError('This calendar came from a file. Import the file again to update it.');
+  if (!calendar?.url) throw new IcsError(messages().calendar.errors.fromFile);
   return refreshIcs(calendarId, await fetchCalendarText(calendar.url));
 }
 
@@ -168,13 +168,13 @@ async function replaceEvents(calendarId: string, parsed: readonly IcsEvent[]): P
 export type EventInput = Pick<CalendarEvent, 'title' | 'start' | 'end' | 'allDay' | 'location' | 'notes'> & { calendarId: string };
 
 export async function createEvent(input: EventInput): Promise<CalendarEvent> {
-  return eventsRepo.create({ ...input, title: input.title.trim() || 'Untitled event', source: 'local', uid: null, recurrenceId: null, readOnly: false });
+  return eventsRepo.create({ ...input, title: input.title.trim() || messages().calendar.untitled, source: 'local', uid: null, recurrenceId: null, readOnly: false });
 }
 
 export async function updateEvent(id: string, patch: Partial<EventInput>): Promise<void> {
   const event = await eventsRepo.get(id);
   if (!event || event.readOnly) return;
-  await eventsRepo.update(id, patch.title === undefined ? patch : { ...patch, title: patch.title.trim() || 'Untitled event' });
+  await eventsRepo.update(id, patch.title === undefined ? patch : { ...patch, title: patch.title.trim() || messages().calendar.untitled });
 }
 
 export async function deleteEvent(id: string): Promise<void> {

@@ -1,4 +1,5 @@
 import type { IconName } from '@/components/icons/Icon';
+import { messages } from '@/i18n';
 
 export type ScreenKey =
   | 'today'
@@ -33,150 +34,49 @@ export type Screen = {
 
 export type NavGroup = { label: string; hint?: string; screens: Screen[] };
 
-const screen = (s: Screen) => s;
+/** Labels are read when used, so they follow the language you picked. */
+const screen = (key: ScreenKey, path: string, icon: IconName, hasBadge: boolean, extra: Pick<Screen, 'activeFor' | 'countKey'> = {}): Screen => ({
+  key,
+  path,
+  icon,
+  ...extra,
+  get navLabel() {
+    return messages().screens[key].navLabel;
+  },
+  get title() {
+    return messages().screens[key].title;
+  },
+  get badge() {
+    const s = messages().screens[key];
+    return hasBadge && 'badge' in s ? s.badge : undefined;
+  },
+  get empty() {
+    const s = messages().screens[key];
+    return { heading: s.emptyHeading, body: s.emptyBody };
+  },
+});
 
 export const screens = {
-  today: screen({
-    key: 'today',
-    navLabel: 'Today',
-    title: 'Today',
-    path: '/',
-    icon: 'today',
-    countKey: 'today',
-    empty: {
-      heading: 'Your day will gather here',
-      body: 'Tasks for today, your habits, a short check-in and this week’s focus, all on one page.',
-    },
-  }),
-  inbox: screen({
-    key: 'inbox',
-    navLabel: 'Inbox',
-    title: 'Inbox',
-    path: '/inbox',
-    icon: 'inbox',
-    countKey: 'inbox',
-    empty: {
-      heading: 'Nothing waiting',
-      body: 'Anything you capture lands here first. Sort it when you have a minute.',
-    },
-  }),
-  tasks: screen({
-    key: 'tasks',
-    navLabel: 'Tasks',
-    title: 'Tasks',
-    path: '/tasks',
-    icon: 'tasks',
-    empty: {
-      heading: 'No tasks yet',
-      body: 'Tasks can stand alone or move a goal forward. Upcoming, Anytime and Someday views will live here.',
-    },
-  }),
-  calendar: screen({
-    key: 'calendar',
-    navLabel: 'Calendar',
-    title: 'Calendar',
-    path: '/calendar',
-    icon: 'calendar',
-    empty: {
-      heading: 'Your week at a glance',
-      body: 'Events from your calendars and time blocks for your tasks will show on a week grid.',
-    },
-  }),
-  goals: screen({
-    key: 'goals',
-    navLabel: 'Goals',
-    title: 'Goals',
-    path: '/goals',
-    icon: 'goals',
-    empty: {
-      heading: 'Start with what matters this year',
-      body: 'Break a year goal into quarters and weeks, and see where you should be today.',
-    },
-  }),
-  progress: screen({
-    key: 'progress',
-    navLabel: 'Progress',
-    title: 'Progress',
-    path: '/progress',
-    icon: 'progress',
-    empty: {
-      heading: 'Patterns take a few days',
-      body: 'Once you check in and tick off habits, your year in pixels and habit heatmap fill in here.',
-    },
-  }),
-  review: screen({
-    key: 'review',
-    navLabel: 'Reviews',
-    title: 'Reviews',
-    path: '/reviews',
-    activeFor: '/review',
-    icon: 'review',
-    badge: 'Sun',
-    empty: {
-      heading: 'Your first review is on Sunday',
-      body: 'Five calm steps: get clear, get current, reflect, plan next week, done.',
-    },
-  }),
-  library: screen({
-    key: 'library',
-    navLabel: 'Library & journal',
-    title: 'Library & journal',
-    path: '/library',
-    icon: 'library',
-    empty: {
-      heading: 'A home for notes and photos',
-      body: 'Journal pages, reading notes and images, in folders you can rearrange.',
-    },
-  }),
-  vision: screen({
-    key: 'vision',
-    navLabel: 'Vision board',
-    title: 'Vision board',
-    path: '/vision',
-    icon: 'vision',
-    empty: {
-      heading: 'Pictures of where you’re headed',
-      body: 'Pin images and quotes for each life area, and link them to the goals they stand for.',
-    },
-  }),
-  finance: screen({
-    key: 'finance',
-    navLabel: 'Finance',
-    title: 'Finance',
-    path: '/finance',
-    icon: 'finance',
-    empty: {
-      heading: 'Money, kept private',
-      body: 'Budgets, savings goals and spending. Amounts stay hidden until you choose to show them.',
-    },
-  }),
-  health: screen({
-    key: 'health',
-    navLabel: 'Health',
-    title: 'Health',
-    path: '/health',
-    icon: 'health',
-    empty: {
-      heading: 'Sleep, steps and how you feel',
-      body: 'Log what you like by hand, or connect a phone later. Only you can see it.',
-    },
-  }),
-  assistant: screen({
-    key: 'assistant',
-    navLabel: 'Assistant',
-    title: 'Assistant',
-    path: '/assistant',
-    icon: 'assistant',
-    empty: {
-      heading: 'Ask about your own data',
-      body: 'Runs on this device by default. It only reads the areas you allow and changes nothing until you tap.',
-    },
-  }),
+  today: screen('today', '/', 'today', false, { countKey: 'today' }),
+  inbox: screen('inbox', '/inbox', 'inbox', false, { countKey: 'inbox' }),
+  tasks: screen('tasks', '/tasks', 'tasks', false),
+  calendar: screen('calendar', '/calendar', 'calendar', false),
+  goals: screen('goals', '/goals', 'goals', false),
+  progress: screen('progress', '/progress', 'progress', false),
+  review: screen('review', '/reviews', 'review', true, { activeFor: '/review' }),
+  library: screen('library', '/library', 'library', false),
+  vision: screen('vision', '/vision', 'vision', false),
+  finance: screen('finance', '/finance', 'finance', false),
+  health: screen('health', '/health', 'health', false),
+  assistant: screen('assistant', '/assistant', 'assistant', false),
 } satisfies Record<ScreenKey, Screen>;
 
-export const navGroups: NavGroup[] = [
-  { label: 'Plan', screens: [screens.today, screens.inbox, screens.tasks, screens.calendar] },
-  { label: 'Grow', screens: [screens.goals, screens.progress, screens.review] },
-  { label: 'Remember', screens: [screens.library, screens.vision] },
-  { label: 'Modules', hint: 'optional', screens: [screens.finance, screens.health, screens.assistant] },
-];
+export function navGroups(): NavGroup[] {
+  const g = messages().screens.groups;
+  return [
+    { label: g.plan, screens: [screens.today, screens.inbox, screens.tasks, screens.calendar] },
+    { label: g.grow, screens: [screens.goals, screens.progress, screens.review] },
+    { label: g.remember, screens: [screens.library, screens.vision] },
+    { label: g.modules, hint: g.optional, screens: [screens.finance, screens.health, screens.assistant] },
+  ];
+}

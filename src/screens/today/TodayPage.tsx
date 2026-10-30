@@ -5,6 +5,7 @@ import { tasksRepo } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { ButtonLink } from '@/components/ui';
 import { formatDayLong, numberWord } from '@/lib/format';
+import { useT, type Messages } from '@/i18n';
 import { useToday } from '@/lib/useToday';
 import { AgendaCard } from './AgendaCard';
 import { CheckInCard } from './CheckInCard';
@@ -16,18 +17,18 @@ import { useIsMobile } from '@/lib/useMediaQuery';
 import { MobileToday } from './MobileToday';
 import styles from './Today.module.css';
 
-function greeting(hour: number) {
-  if (hour < 5) return 'Good evening.';
-  if (hour < 12) return 'Good morning.';
-  if (hour < 18) return 'Good afternoon.';
-  return 'Good evening.';
+function greeting(t: Messages['today'], hour: number) {
+  if (hour < 5) return t.greeting.night;
+  if (hour < 12) return t.greeting.morning;
+  if (hour < 18) return t.greeting.afternoon;
+  return t.greeting.evening;
 }
 
-function headline(open: number | undefined) {
+function headline(t: Messages['today'], open: number | undefined) {
   if (open === undefined) return '';
-  if (open === 0) return 'A clear day.';
-  if (open === 1) return 'One thing matters today.';
-  return `${numberWord(open)} things matter today.`;
+  if (open === 0) return t.headline.clear;
+  if (open === 1) return t.headline.one;
+  return t.headline.many(numberWord(open));
 }
 
 export function TodayPage() {
@@ -35,6 +36,7 @@ export function TodayPage() {
 }
 
 function DesktopToday() {
+  const t = useT().today;
   const today = useToday();
   const open = useLiveQuery(async () => (await tasksRepo.list((t) => isDueToday(t, today))).length, [today]);
   const day = dayOfYear(today);
@@ -46,7 +48,7 @@ function DesktopToday() {
         <div className={styles.heading}>
           <span className={styles.eyebrow}>{formatDayLong(today)}</span>
           <h1 className={styles.title}>
-            {greeting(new Date().getHours())} {headline(open)}
+            {greeting(t, new Date().getHours())} {headline(t, open)}
           </h1>
         </div>
         <div className={styles.headerSide}>
@@ -54,15 +56,13 @@ function DesktopToday() {
           <div className={styles.year}>
             <span className={styles.yearFigure}>{percent}%</span>
             <span className={styles.yearText}>
-              <span>of {year(today)} gone</span>
-              <span>
-                Day {day}, week {isoWeek(today)}
-              </span>
+              <span>{t.yearGone(year(today))}</span>
+              <span>{t.dayWeek(day, isoWeek(today))}</span>
             </span>
             <div
               className={styles.yearTrack}
               role="progressbar"
-              aria-label="Year so far"
+              aria-label={t.yearSoFar}
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={percent}
@@ -71,7 +71,7 @@ function DesktopToday() {
             </div>
           </div>
           <ButtonLink to="/tasks?view=anytime" icon={<Icon name="calendar" size={16} />}>
-            Plan my day
+            {t.planMyDay}
           </ButtonLink>
         </div>
       </header>

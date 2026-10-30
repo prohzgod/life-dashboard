@@ -17,18 +17,19 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useRef, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { clockLabel, rangeLabel, snapMinutes } from '@/domain/calendar';
-import { dayOfMonth, isDay, isoWeek, type Day } from '@/domain/days';
+import { dayToDate, isDay, isoWeek, type Day } from '@/domain/days';
 import { areasRepo, eventsRepo, loadCalendarRange, scheduleTask, tasksRepo, updateEvent, type Calendar, type CalendarEvent, type CalendarRange, type Task } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { Button, Segmented } from '@/components/ui';
 import { Toast } from '@/components/ui/Toast';
 import { cx } from '@/components/ui/cx';
-import { formatDayLong } from '@/lib/format';
+import { messages, useT } from '@/i18n';
+import { formatDate, weekdayName } from '@/lib/format';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { useToday } from '@/lib/useToday';
 import { AddCalendarDialog, BlockDialog, CalendarSettingsDialog, EventDialog, type EventDraft } from './CalendarDialogs';
 import { CalendarSidebar } from './CalendarSidebar';
-import { monthTitle, readLayers, stepAnchor, viewRange, writeLayers, type CalendarView, type GridItem, type Layers } from './items';
+import { readLayers, stepAnchor, viewRange, writeLayers, type CalendarView, type GridItem, type Layers } from './items';
 import { MonthGrid, YearGrid } from './MonthViews';
 import { MobileCalendar } from './MobileCalendar';
 import { TimeGrid } from './TimeGrid';
@@ -154,7 +155,7 @@ export function CalendarPage() {
       <AddCalendarDialog
         open={open?.kind === 'add'}
         onClose={() => setOpen(null)}
-        onAdded={(r) => setMessage(`Added ${r.calendar.name} with ${r.added} ${r.added === 1 ? 'event' : 'events'}.`)}
+        onAdded={(r) => setMessage(messages().calendar.added(r.calendar.name, r.added))}
       />
       <CalendarSettingsDialog calendar={open?.kind === 'settings' ? open.calendar : null} onClose={() => setOpen(null)} onMessage={setMessage} />
       {message && <Toast onDone={() => setMessage('')}>{message}</Toast>}
@@ -163,15 +164,15 @@ export function CalendarPage() {
 }
 
 function Header({ view, anchor, days, today, go, onNewEvent }: { view: CalendarView; anchor: Day; days: Day[]; today: Day; go: CalendarScreen['go']; onNewEvent: () => void }) {
+  const t = useT().calendar;
   const [title, sub] =
     view === 'week'
-      ? [`Week ${isoWeek(days[0]!)}`, rangeLabel(days[0]!, days[6]!)]
+      ? [t.week(isoWeek(days[0]!)), rangeLabel(days[0]!, days[6]!)]
       : view === 'day'
-        ? [formatDayLong(anchor).split(', ')[0]!, `${dayOfMonth(anchor)} ${monthTitle(anchor)}`]
+        ? [weekdayName(anchor), formatDate(anchor)]
         : view === 'month'
-          ? [monthTitle(anchor).split(' ')[0]!, anchor.slice(0, 4)]
+          ? [t.monthName(dayToDate(anchor)), anchor.slice(0, 4)]
           : [anchor.slice(0, 4), ''];
-  const unit = view === 'day' ? 'day' : view === 'week' ? 'week' : view === 'month' ? 'month' : 'year';
   return (
     <header className={styles.header}>
       <div className={styles.heading}>
@@ -180,27 +181,22 @@ function Header({ view, anchor, days, today, go, onNewEvent }: { view: CalendarV
       </div>
       <div className={styles.headerActions}>
         <Button size="sm" icon={<Icon name="plus" size={14} />} onClick={onNewEvent}>
-          New event
+          {t.newEvent}
         </Button>
         <Button size="sm" onClick={() => go(view, today)}>
-          Today
+          {t.today}
         </Button>
-        <button type="button" className={styles.stepButton} aria-label={`Previous ${unit}`} onClick={() => go(view, stepAnchor(view, anchor, -1))}>
+        <button type="button" className={styles.stepButton} aria-label={t.previous[view]} onClick={() => go(view, stepAnchor(view, anchor, -1))}>
           <Icon name="chevronLeft" size={16} />
         </button>
-        <button type="button" className={styles.stepButton} aria-label={`Next ${unit}`} onClick={() => go(view, stepAnchor(view, anchor, 1))}>
+        <button type="button" className={styles.stepButton} aria-label={t.next[view]} onClick={() => go(view, stepAnchor(view, anchor, 1))}>
           <Icon name="chevronRight" size={16} />
         </button>
         <Segmented
-          label="Calendar view"
+          label={t.viewLabel}
           value={view}
           onChange={(v) => go(v, anchor)}
-          options={[
-            { value: 'day', label: 'Day' },
-            { value: 'week', label: 'Week' },
-            { value: 'month', label: 'Month' },
-            { value: 'year', label: 'Year' },
-          ]}
+          options={VIEWS.map((v) => ({ value: v, label: t.views[v] }))}
         />
       </div>
     </header>
@@ -208,12 +204,13 @@ function Header({ view, anchor, days, today, go, onNewEvent }: { view: CalendarV
 }
 
 function Legend({ calendars, layers }: { calendars: Calendar[]; layers: Layers }) {
+  const t = useT().calendar;
   return (
     <div className={styles.legend}>
       {layers.blocks && (
         <span className={styles.legendItem}>
           <span className={cx(styles.swatch, styles.swatchBlock)} aria-hidden="true" />
-          Time block from a task
+          {t.legendBlock}
         </span>
       )}
       {calendars
@@ -222,7 +219,7 @@ function Legend({ calendars, layers }: { calendars: Calendar[]; layers: Layers }
           <span key={c.id} className={styles.legendItem}>
             <span className={styles.swatch} style={{ background: `var(--${c.color}-soft)` }} aria-hidden="true" />
             {c.name}
-            {c.readOnly ? ' (read-only)' : ''}
+            {c.readOnly ? t.readOnlySuffix : ''}
           </span>
         ))}
     </div>

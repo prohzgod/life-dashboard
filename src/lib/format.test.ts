@@ -1,3 +1,4 @@
+import { setLocale } from '@/i18n';
 import { singular, formatDayLong, formatDayRelative, formatDayShort, formatMinutes, numberWord, timeAgo } from './format';
 
 describe('format', () => {
@@ -31,4 +32,16 @@ it('makes habit units singular', () => {
   expect(singular('pages')).toBe('page');
   expect(singular('boxes')).toBe('box');
   expect(singular('km')).toBe('km');
+});
+
+describe('format in Vietnamese', () => {
+  beforeEach(() => setLocale('vi'));
+
+  it('formats days and durations', () => {
+    expect(formatDayShort('2026-10-01')).toBe('T5, 1/10');
+    expect(formatDayLong('2026-09-29')).toBe('Thứ Ba, ngày 29 tháng 9 năm 2026');
+    expect(formatDayRelative('2026-10-27', '2026-10-26')).toBe('Ngày mai');
+    expect(formatMinutes(95)).toBe('1 giờ 35 phút');
+    expect(timeAgo('2026-10-22T12:00:00Z', new Date('2026-10-26T12:00:00Z'))).toBe('4 ngày trước');
+  });
 });

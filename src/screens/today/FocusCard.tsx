@@ -4,10 +4,12 @@ import type { Day } from '@/domain/days';
 import { metricProgress } from '@/domain/progress';
 import { areasRepo, goalsRepo, listFocusGoals } from '@/data';
 import { Card, PaceBar } from '@/components/ui';
+import { useT } from '@/i18n';
 import { readPace } from '@/lib/paceText';
 import styles from './Today.module.css';
 
 export function FocusCard({ today }: { today: Day }) {
+  const t = useT().today.focus;
   const data = useLiveQuery(async () => {
     const [focus, areas, allGoals] = await Promise.all([listFocusGoals(today), areasRepo.list(), goalsRepo.list()]);
     return { ...focus, areas, allGoals };
@@ -15,15 +17,15 @@ export function FocusCard({ today }: { today: Day }) {
 
   return (
     <Card
-      title="This week’s focus"
+      title={t.title}
       className={styles.card}
       action={
         <Link to="/goals" className={styles.cardLink}>
-          Goals
+          {t.goals}
         </Link>
       }
     >
-      {data && data.goals.length === 0 && <p className={styles.quietEmpty}>No active goals right now. Pick up to three in your weekly review.</p>}
+      {data && data.goals.length === 0 && <p className={styles.quietEmpty}>{t.empty}</p>}
       {data?.goals.map((goal) => {
         const progress = metricProgress(goal) ?? 0;
         const pace = readPace(progress, goal.startDate, goal.endDate, today);
@@ -46,7 +48,7 @@ export function FocusCard({ today }: { today: Day }) {
         );
       })}
       {data && data.goals.length > 0 && !data.fromReview && (
-        <p className={styles.focusHint}>Showing your nearest goals. Your weekly review picks this week’s focus.</p>
+        <p className={styles.focusHint}>{t.hint}</p>
       )}
     </Card>
   );

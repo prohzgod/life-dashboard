@@ -3,61 +3,60 @@ import { Icon } from '@/components/icons/Icon';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { EmptyState } from '@/components/shell/EmptyState';
 import { PageHeader } from '@/components/shell/PageHeader';
+import { useT } from '@/i18n';
 import { AppearanceSettings } from './AppearanceSettings';
+import { GeneralSettings } from './GeneralSettings';
 import { NotificationSettings } from './NotificationSettings';
 import { PrivacySettings } from './PrivacySettings';
 import styles from './SettingsPage.module.css';
 
-const settingsTabs = [
-  { slug: 'general', label: 'General', empty: 'Your name, week start and language.' },
-  { slug: 'privacy', label: 'Privacy & data', empty: 'Storage on this device, sync, encryption, backups, and export and import.' },
-  { slug: 'notifications', label: 'Notifications', empty: '' },
-  { slug: 'modules', label: 'Modules', empty: 'Turn Calendar, Finance, Health, Assistant and Vision board on or off. Nothing is deleted.' },
-  { slug: 'appearance', label: 'Appearance', empty: '' },
-] as const;
+const settingsTabs = ['general', 'privacy', 'notifications', 'modules', 'appearance'] as const;
 
-type TabSlug = (typeof settingsTabs)[number]['slug'];
+type TabSlug = (typeof settingsTabs)[number];
 
 export function SettingsPage() {
+  const t = useT().settings;
   const { tab } = useParams();
-  const current = settingsTabs.find((t) => t.slug === tab);
+  const slug = settingsTabs.find((s) => s === tab);
   const phone = useIsMobile();
-  if (!current) return <Navigate to="/settings/privacy" replace />;
+  if (!slug) return <Navigate to="/settings/privacy" replace />;
 
   // Phones reach each section from Profile, so it reads as its own screen.
   if (phone) {
     return (
       <>
         <header className={styles.phoneHeader}>
-          <Link to="/profile" className={styles.phoneBack} aria-label="Back to Profile">
+          <Link to="/profile" className={styles.phoneBack} aria-label={t.backToProfile}>
             <Icon name="chevronLeft" size={18} />
-            Profile
+            {t.profile}
           </Link>
-          <h1 className={styles.phoneTitle}>{current.label}</h1>
+          <h1 className={styles.phoneTitle}>{t.tabs[slug]}</h1>
         </header>
-        <TabContent slug={current.slug} empty={current.empty} />
+        <TabContent slug={slug} />
       </>
     );
   }
 
   return (
     <>
-      <PageHeader title="Settings" />
-      <nav aria-label="Settings sections" className={styles.tabs}>
-        {settingsTabs.map((t) => (
-          <NavLink key={t.slug} to={`/settings/${t.slug}`} className={({ isActive }) => (isActive ? `${styles.tab} ${styles.active}` : styles.tab)}>
-            {t.label}
+      <PageHeader title={t.title} />
+      <nav aria-label={t.sections} className={styles.tabs}>
+        {settingsTabs.map((s) => (
+          <NavLink key={s} to={`/settings/${s}`} className={({ isActive }) => (isActive ? `${styles.tab} ${styles.active}` : styles.tab)}>
+            {t.tabs[s]}
           </NavLink>
         ))}
       </nav>
-      <TabContent slug={current.slug} empty={current.empty} />
+      <TabContent slug={slug} />
     </>
   );
 }
 
-function TabContent({ slug, empty }: { slug: TabSlug; empty: string }) {
+function TabContent({ slug }: { slug: TabSlug }) {
+  const t = useT().settings;
+  if (slug === 'general') return <GeneralSettings />;
   if (slug === 'appearance') return <AppearanceSettings />;
   if (slug === 'privacy') return <PrivacySettings />;
   if (slug === 'notifications') return <NotificationSettings />;
-  return <EmptyState icon="settings" heading="Arrives with your data" body={empty} />;
+  return <EmptyState icon="settings" heading={t.placeholderHeading} body={t.modulesEmpty} />;
 }

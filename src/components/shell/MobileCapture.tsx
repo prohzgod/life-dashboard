@@ -5,34 +5,28 @@ import { appendToJournal, areasRepo, captureTask, createNoteFromText } from '@/d
 import { CaptureChips } from '../tasks/CaptureChips';
 import { Icon } from '../icons/Icon';
 import { Button, Chip, Segmented, Sheet } from '../ui';
+import { useT } from '@/i18n';
 import { useToday } from '@/lib/useToday';
 import { useOnlineStatus } from './useOnlineStatus';
 import styles from './MobileCapture.module.css';
 
 type Kind = 'task' | 'note' | 'journal';
 
-const KINDS = [
-  { value: 'task', label: 'Task' },
-  { value: 'note', label: 'Note' },
-  { value: 'journal', label: 'Journal' },
-] as const;
-
-const PLACEHOLDERS: Record<Kind, string> = {
-  task: 'Pay rent every 1st #finance !high',
-  note: 'First line is the title…',
-  journal: 'Something worth remembering about today…',
-};
+const KINDS: Kind[] = ['task', 'note', 'journal'];
 
 /** The + button on phones: a task, a note or a journal line, saved on this phone first. */
 export function MobileCapture({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useT();
   return (
-    <Sheet open={open} onClose={onClose} title="Quick capture">
+    <Sheet open={open} onClose={onClose} title={t.shell.quickCapture}>
       {open && <CaptureBody onClose={onClose} />}
     </Sheet>
   );
 }
 
 function CaptureBody({ onClose }: { onClose: () => void }) {
+  const t = useT();
+  const c = t.shell.capture;
   const today = useToday();
   const online = useOnlineStatus();
   const loaded = useLiveQuery(() => areasRepo.listOrdered());
@@ -46,27 +40,27 @@ function CaptureBody({ onClose }: { onClose: () => void }) {
     if (!text.trim()) return;
     if (kind === 'task') {
       const task = await captureTask(text.trim(), { today, status: 'inbox' });
-      setSaved(`“${task.title}” is in your Inbox.`);
+      setSaved(c.taskSaved(task.title));
     } else if (kind === 'note') {
       const node = await createNoteFromText(text);
-      setSaved(`“${node.title}” is in your Library.`);
+      setSaved(c.noteSaved(node.title));
     } else {
       await appendToJournal(today, text);
-      setSaved('Added to today’s journal page.');
+      setSaved(c.journalSaved);
     }
     setText('');
   }
 
   return (
     <div className={styles.body}>
-      <button type="button" className={styles.close} aria-label="Close" onClick={onClose}>
+      <button type="button" className={styles.close} aria-label={t.shell.close} onClick={onClose}>
         <Icon name="close" size={18} />
       </button>
-      <Segmented label="What are you capturing?" options={KINDS} value={kind} onChange={(k) => setKind(k)} className={styles.kinds} />
+      <Segmented label={c.whatKind} options={KINDS.map((k) => ({ value: k, label: c.kinds[k] }))} value={kind} onChange={(k) => setKind(k)} className={styles.kinds} />
       <textarea
         className={styles.text}
-        aria-label={`New ${kind}`}
-        placeholder={PLACEHOLDERS[kind]}
+        aria-label={c.newKind[kind]}
+        placeholder={c.placeholders[kind]}
         value={text}
         rows={3}
         data-autofocus
@@ -83,15 +77,15 @@ function CaptureBody({ onClose }: { onClose: () => void }) {
       />
       {parsed && (
         <div className={styles.understood}>
-          <span className={styles.label}>Understood as</span>
+          <span className={styles.label}>{c.understoodAs}</span>
           <div className={styles.chips}>
-            <Chip>Task</Chip>
+            <Chip>{c.kinds.task}</Chip>
             <CaptureChips parsed={parsed} today={today} areas={areas} />
           </div>
         </div>
       )}
       <Button variant="primary" className={styles.save} onClick={() => void save()} disabled={!text.trim()}>
-        Save
+        {c.save}
       </Button>
       <p className={styles.status} role="status">
         {saved}
@@ -99,7 +93,7 @@ function CaptureBody({ onClose }: { onClose: () => void }) {
       {!online && (
         <p className={styles.offline}>
           <Icon name="offline" size={16} />
-          You’re offline. It’s saved on this phone either way.
+          {c.offline}
         </p>
       )}
     </div>

@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { shouldLock } from '@/domain/privacy';
 import { checkUnlock, getPrivacyState, runAutomaticBackup } from '@/data';
+import { useT } from '@/i18n';
 import { confirmBiometric } from '@/lib/biometric';
 import { Icon } from '../icons/Icon';
 import { Button } from '../ui';
@@ -60,6 +61,7 @@ const MAX_TRIES = 5;
 const WAIT_MS = 30_000;
 
 function LockScreen({ credentialId }: { credentialId: string | null }) {
+  const t = useT().shell.lock;
   const [passcode, setPasscode] = useState('');
   const [error, setError] = useState('');
   const [tries, setTries] = useState(0);
@@ -88,8 +90,8 @@ function LockScreen({ credentialId }: { credentialId: string | null }) {
       setNow(at);
       setWaitUntil(at + WAIT_MS);
       setTries(0);
-      setError('That passcode isn’t right. Wait 30 seconds, then try again.');
-    } else setError('That passcode isn’t right.');
+      setError(t.wrongWait);
+    } else setError(t.wrong);
   }
 
   return (
@@ -99,31 +101,31 @@ function LockScreen({ credentialId }: { credentialId: string | null }) {
           <Icon name="lock" size={22} />
         </span>
         <h1 id="lock-title" className={styles.title}>
-          Life Dashboard is locked
+          {t.title}
         </h1>
         <label className={styles.field}>
-          <span>Passcode</span>
+          <span>{t.passcode}</span>
           <input type="password" autoComplete="current-password" autoFocus value={passcode} onChange={(e) => setPasscode(e.target.value)} disabled={waiting} />
         </label>
         <p className={styles.error} role="alert">
-          {waiting ? `Try again in ${Math.ceil((waitUntil - now) / 1000)} seconds.` : error}
+          {waiting ? t.tryAgainIn(Math.ceil((waitUntil - now) / 1000)) : error}
         </p>
         <Button type="submit" variant="primary" disabled={waiting || !passcode}>
-          Open
+          {t.open}
         </Button>
         {credentialId && (
           <Button
             icon={<Icon name="lock" size={16} />}
             onClick={async () => {
               if (await confirmBiometric(credentialId)) unlock();
-              else setError('Your device didn’t confirm it. Use your passcode instead.');
+              else setError(t.biometricFailed);
             }}
           >
-            Use Touch ID or Face ID
+            {t.useBiometric}
           </Button>
         )}
         <p className={styles.hint}>
-          The lock hides your screen. Forgot the passcode? Clearing this site’s data in your browser removes the lock and everything stored here; restore from a backup afterwards.
+          {t.hint}
         </p>
       </form>
     </main>

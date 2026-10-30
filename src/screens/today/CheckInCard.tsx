@@ -5,14 +5,13 @@ import { getAttachment, getDailyEntry, saveDailyEntry, savePhotoOfTheDay, type D
 import { Icon } from '@/components/icons/Icon';
 import { Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
+import { useT } from '@/i18n';
 import { prepareImage } from '@/lib/images';
 import { useObjectUrl } from '@/lib/useObjectUrl';
 import styles from './Today.module.css';
 
-const MOODS = ['Awful', 'Low', 'Okay', 'Good', 'Great'];
-const ENERGIES = ['Drained', 'Low', 'Okay', 'Good', 'Charged'];
-
 export function CheckInCard({ today }: { today: Day }) {
+  const t = useT().today.checkIn;
   const entry = useLiveQuery(async () => (await getDailyEntry(today)) ?? null, [today]);
   const photo = useLiveQuery(async () => (entry?.photoId ? ((await getAttachment(entry.photoId)) ?? null) : null), [entry?.photoId]);
   const photoUrl = useObjectUrl(photo?.thumbBlob ?? photo?.blob);
@@ -21,16 +20,16 @@ export function CheckInCard({ today }: { today: Day }) {
   const save = (fields: Parameters<typeof saveDailyEntry>[1]) => void saveDailyEntry(today, fields);
 
   return (
-    <Card title="Daily check-in" meta="about 30 seconds" className={cx(styles.card, styles.checkIn)}>
-      <Scale label="Mood" options={MOODS} value={entry?.mood ?? null} onChange={(mood) => save({ mood })} />
-      <Scale label="Energy" options={ENERGIES} value={entry?.energy ?? null} onChange={(energy) => save({ energy })} />
+    <Card title={t.title} meta={t.meta} className={cx(styles.card, styles.checkIn)}>
+      <Scale label={t.mood} options={t.moods} value={entry?.mood ?? null} onChange={(mood) => save({ mood })} />
+      <Scale label={t.energy} options={t.energies} value={entry?.energy ?? null} onChange={(energy) => save({ energy })} />
       {entry !== undefined && <SleepRow key={`${today}-${entry?.sleepMinutes ?? 'none'}`} minutes={entry?.sleepMinutes ?? null} onSave={(sleepMinutes) => save({ sleepMinutes })} />}
       <div className={styles.lineRow}>
         {entry !== undefined && <LineField key={`${today}-${entry?.id ?? 'new'}`} entry={entry} onSave={(line) => save({ line })} />}
         <button
           type="button"
           className={styles.photoButton}
-          aria-label={photoUrl ? 'Change photo of the day' : 'Add photo of the day'}
+          aria-label={photoUrl ? t.changePhoto : t.addPhoto}
           onClick={() => fileRef.current?.click()}
         >
           {photoUrl ? <img src={photoUrl} alt="" className={styles.photoThumb} /> : <Icon name="camera" size={18} />}
@@ -41,7 +40,7 @@ export function CheckInCard({ today }: { today: Day }) {
           accept="image/*"
           className="visually-hidden"
           tabIndex={-1}
-          aria-label="Choose a photo of the day"
+          aria-label={t.choosePhoto}
           onChange={async (event) => {
             const file = event.target.files?.[0];
             event.target.value = '';
@@ -78,6 +77,7 @@ function Scale({ label, options, value, onChange }: { label: string; options: st
 }
 
 function SleepRow({ minutes, onSave }: { minutes: number | null; onSave: (minutes: number | null) => void }) {
+  const t = useT().today.checkIn;
   const [editing, setEditing] = useState(false);
   const [hours, setHours] = useState(minutes === null ? '' : String(Math.floor(minutes / 60)));
   const [mins, setMins] = useState(minutes === null ? '' : String(minutes % 60));
@@ -95,13 +95,15 @@ function SleepRow({ minutes, onSave }: { minutes: number | null; onSave: (minute
       <form className={styles.sleep} onSubmit={submit}>
         <span className={styles.sleepLabel}>
           <Icon name="moon" size={16} />
-          Sleep
+          {t.sleep}
         </span>
         <span className={styles.sleepInputs}>
-          <input aria-label="Hours slept" type="number" min={0} max={24} value={hours} onChange={(e) => setHours(e.target.value)} autoFocus />h
-          <input aria-label="Minutes" type="number" min={0} max={59} step={5} value={mins} onChange={(e) => setMins(e.target.value)} />m
+          <input aria-label={t.hoursSlept} type="number" min={0} max={24} value={hours} onChange={(e) => setHours(e.target.value)} autoFocus />
+          {t.h}
+          <input aria-label={t.minutes} type="number" min={0} max={59} step={5} value={mins} onChange={(e) => setMins(e.target.value)} />
+          {t.m}
           <button type="submit" className={styles.sleepSave}>
-            Save
+            {t.save}
           </button>
         </span>
       </form>
@@ -111,10 +113,10 @@ function SleepRow({ minutes, onSave }: { minutes: number | null; onSave: (minute
     <div className={styles.sleep}>
       <span className={styles.sleepLabel}>
         <Icon name="moon" size={16} />
-        Sleep {minutes !== null ? <strong className={styles.sleepValue}>{`${Math.floor(minutes / 60)}h ${String(minutes % 60).padStart(2, '0')}m`}</strong> : <span className={styles.sleepNone}>not logged</span>}
+        {t.sleep} {minutes !== null ? <strong className={styles.sleepValue}>{`${Math.floor(minutes / 60)}${t.h} ${String(minutes % 60).padStart(2, '0')}${t.m}`}</strong> : <span className={styles.sleepNone}>{t.notLogged}</span>}
       </span>
       <button type="button" className={styles.sleepEdit} onClick={() => setEditing(true)}>
-        {minutes === null ? 'add' : 'edit'}
+        {minutes === null ? t.add : t.edit}
       </button>
     </div>
   );
@@ -122,6 +124,7 @@ function SleepRow({ minutes, onSave }: { minutes: number | null; onSave: (minute
 
 /** Saves as you go (half a second after you stop typing), and on Enter or leaving the field. */
 function LineField({ entry, onSave }: { entry: DailyEntry | null; onSave: (line: string) => void }) {
+  const t = useT().today.checkIn;
   const [value, setValue] = useState(entry?.line ?? '');
   const saved = useRef(entry?.line ?? '');
   const timer = useRef<number | undefined>(undefined);
@@ -138,8 +141,8 @@ function LineField({ entry, onSave }: { entry: DailyEntry | null; onSave: (line:
   return (
     <input
       className={styles.lineInput}
-      aria-label="One line about today"
-      placeholder="One line worth remembering…"
+      aria-label={t.lineLabel}
+      placeholder={t.linePlaceholder}
       value={value}
       maxLength={280}
       onChange={(e) => {

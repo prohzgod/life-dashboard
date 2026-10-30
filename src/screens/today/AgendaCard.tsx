@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import type { Day } from '@/domain/days';
 import { Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
+import { useT } from '@/i18n';
 import { useAgenda } from './useAgenda';
 import styles from './Today.module.css';
 
 export function AgendaCard({ today }: { today: Day }) {
+  const t = useT().today.agenda;
   const agenda = useAgenda(today);
   const next = agenda?.entries.find((e) => !e.done && !e.allDay && e.soon);
   const shown = agenda?.entries.slice(0, 4) ?? [];
@@ -14,16 +16,16 @@ export function AgendaCard({ today }: { today: Day }) {
 
   return (
     <Card
-      title="Agenda"
+      title={t.title}
       meta={agenda?.calendars.join(', ')}
       className={styles.card}
       action={
         <Link to="/calendar" className={styles.cardLink}>
-          {more > 0 ? `${more} more in Calendar` : 'Open calendar'}
+          {more > 0 ? t.moreInCalendar(more) : t.open}
         </Link>
       }
     >
-      {agenda && shown.length === 0 && <p className={styles.agendaEmpty}>Nothing on your calendar today. Put a task on the calendar to give it a time.</p>}
+      {agenda && shown.length === 0 && <p className={styles.agendaEmpty}>{t.empty}</p>}
       {shown.length > 0 && (
         <ol className={styles.agenda}>
           {shown.map((e) => (
@@ -34,7 +36,7 @@ export function AgendaCard({ today }: { today: Day }) {
             >
               <span className={styles.agendaTime}>
                 {e.time}
-                {e.done && !e.allDay ? ', done' : ''}
+                {e.done && !e.allDay ? t.done : ''}
               </span>
               <span className={styles.agendaTitle}>{e.title}</span>
               <span className={styles.agendaSource}>

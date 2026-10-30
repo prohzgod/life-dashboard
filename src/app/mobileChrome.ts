@@ -1,3 +1,5 @@
+import { messages } from '@/i18n';
+
 export type Tab = 'home' | 'today' | 'tasks' | 'library';
 
 export type MobileChrome = {
@@ -8,8 +10,6 @@ export type MobileChrome = {
   /** Full-screen flows (review, editor, edit forms) hide the tab bar. */
   hideTabBar: boolean;
 };
-
-const home = { label: 'Home', to: '/' };
 
 /** How the phone layout frames each route: tab, back link, tab bar. */
 export function mobileChrome(pathname: string, search = ''): MobileChrome {
@@ -36,6 +36,6 @@ export function mobileChrome(pathname: string, search = ''): MobileChrome {
   // These draw their own "‹ Home" header with a button beside it.
   if (p === '/vision' || p === '/finance' || p === '/health') return { tab: 'home', back: null, hideTabBar: false };
   if (p === '/review' || p.startsWith('/review/')) return { tab: 'home', back: null, hideTabBar: true };
-  if (/^\/goals\/[^/]+$/.test(p)) return { tab: 'home', back: { label: 'Goals', to: '/goals' }, hideTabBar: false };
-  return { tab: 'home', back: home, hideTabBar: false };
+  if (/^\/goals\/[^/]+$/.test(p)) return { tab: 'home', back: { label: messages().screens.goals.title, to: '/goals' }, hideTabBar: false };
+  return { tab: 'home', back: { label: messages().shell.home, to: '/' }, hideTabBar: false };
 }

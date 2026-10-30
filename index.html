@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -14,6 +14,8 @@
       try {
         var t = localStorage.getItem('life-dashboard:theme');
         if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+        // Same for the language (src/i18n/locale.ts); Vietnamese is the default.
+        if (localStorage.getItem('life-dashboard:locale') === 'en') document.documentElement.setAttribute('lang', 'en');
       } catch (e) {}
     </script>
   </head>

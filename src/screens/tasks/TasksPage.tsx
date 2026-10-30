@@ -10,26 +10,19 @@ import { PageHeader } from '@/components/shell/PageHeader';
 import { QuickAddField } from '@/components/tasks/QuickAddField';
 import { TaskItem } from '@/components/tasks/TaskItem';
 import { useTaskLookups, type TaskLookups } from '@/components/tasks/useTaskLookups';
-import { formatDayRelative, formatDayShort, plural } from '@/lib/format';
+import { useT } from '@/i18n';
+import { formatDayRelative, formatDayShort } from '@/lib/format';
 import { withCompletedOn } from '@/lib/taskView';
 import { useToday } from '@/lib/useToday';
 import { InboxList } from './InboxList';
 import { TaskDetail } from './TaskDetail';
 import { TaskViewsNav } from './TaskViewsNav';
-import { VIEW_LABELS } from './viewLabels';
 import styles from './Tasks.module.css';
 
 const VIEWS: TaskView[] = ['inbox', 'today', 'upcoming', 'anytime', 'someday', 'logbook'];
 
-const SUBTITLES: Record<Exclude<TaskView, 'inbox'>, string> = {
-  today: 'Planned for today, plus anything that rolled over.',
-  upcoming: 'What’s planned for the days ahead.',
-  anytime: 'No date yet. Pick from here when you plan your day.',
-  someday: 'Ideas worth keeping, without the pressure.',
-  logbook: 'Everything you’ve finished, newest first.',
-};
-
 export function TasksPage() {
+  const { tasks: t, shell } = useT();
   const today = useToday();
   const { pathname } = useLocation();
   const [params, setParams] = useSearchParams();
@@ -49,7 +42,7 @@ export function TasksPage() {
   const tasks = data?.tasks ?? [];
   const counts = countViews(tasks, today);
   const area = areaId ? lookups.areaById.get(areaId) : undefined;
-  const tag = tagId ? data?.tags.find((t) => t.id === tagId) : undefined;
+  const tag = tagId ? data?.tags.find((g) => g.id === tagId) : undefined;
 
   const openTask = (task: Task) => {
     const next = new URLSearchParams(params);
@@ -67,10 +60,8 @@ export function TasksPage() {
   let body: React.ReactNode;
 
   if (view === 'inbox') {
-    title = 'Inbox';
-    subtitle = counts.inbox
-      ? `${counts.inbox} to triage. Clear it in 2 minutes, or during your weekly review.`
-      : 'Inbox zero. Anything you capture lands here first.';
+    title = t.views.inbox;
+    subtitle = counts.inbox ? t.inboxToTriage(counts.inbox) : t.inboxZero;
     const upcoming = tasks.filter((t) => inView(t, 'upcoming', today) && t.doOn! <= addDays(today, 7));
     body = (
       <>
@@ -78,8 +69,8 @@ export function TasksPage() {
         {!isMobile && (
           <QuickAddField
             variant="box"
-            label="Capture anything"
-            placeholder="Capture anything. Natural language works."
+            label={shell.capture.label}
+            placeholder={shell.capture.placeholder}
             today={today}
             areas={lookups.areas}
             onSubmit={(text) => captureTask(text, { today, status: 'inbox' })}
@@ -89,7 +80,7 @@ export function TasksPage() {
         {upcoming.length > 0 && (
           <section className={styles.section} aria-labelledby="upcoming-heading">
             <h2 id="upcoming-heading" className={styles.sectionTitle}>
-              Upcoming
+              {t.upcoming}
             </h2>
             <DayGroups tasks={upcoming} today={today} lookups={lookups} selectedId={selectedId} onOpen={openTask} />
           </section>
@@ -97,38 +88,38 @@ export function TasksPage() {
       </>
     );
   } else if (view) {
-    title = VIEW_LABELS[view];
+    title = t.views[view];
     const list = sortForView(tasks.filter((t) => inView(t, view, today)), view);
-    const rolled = view === 'today' ? list.filter((t) => rolledOverDays(t, today) > 0).length : 0;
-    subtitle = rolled ? `${SUBTITLES.today} ${plural(rolled, 'task')} rolled over.` : SUBTITLES[view];
+    const rolled = view === 'today' ? list.filter((task) => rolledOverDays(task, today) > 0).length : 0;
+    subtitle = rolled ? `${t.subtitles.today} ${t.rolledOver(rolled)}` : t.subtitles[view];
     body = (
       <>
         {(view === 'today' || view === 'anytime') && (
           <QuickAddField
-            label="Add a task"
-            placeholder={view === 'today' ? 'Add a task for today' : 'Add a task, no date needed'}
+            label={t.addLabel}
+            placeholder={view === 'today' ? t.addForToday : t.addNoDate}
             today={today}
             areas={lookups.areas}
             onSubmit={(text) => captureTask(text, { today, status: 'open', defaultDoOn: view === 'today' ? today : null })}
           />
         )}
         {view === 'upcoming' ? (
-          <DayGroups tasks={list} today={today} lookups={lookups} selectedId={selectedId} onOpen={openTask} empty="Nothing planned ahead yet." />
+          <DayGroups tasks={list} today={today} lookups={lookups} selectedId={selectedId} onOpen={openTask} empty={t.empty.upcoming} />
         ) : (
-          <TaskList tasks={list} today={today} lookups={lookups} selectedId={selectedId} onOpen={openTask} empty={EMPTY[view]} />
+          <TaskList tasks={list} today={today} lookups={lookups} selectedId={selectedId} onOpen={openTask} empty={t.empty[view]} />
         )}
       </>
     );
   } else {
-    title = area ? area.name : tag ? `#${tag.name}` : 'Tasks';
-    subtitle = area ? `Open tasks in ${area.name}, by date.` : 'Open tasks with this tag, by date.';
+    title = area ? area.name : tag ? `#${tag.name}` : t.tasks;
+    subtitle = area ? t.inArea(area.name) : t.withTag;
     const list = tasks.filter(
-      (t) =>
-        !t.parentTaskId &&
-        t.status !== 'done' &&
-        (area ? t.areaId === area.id : !!tag && (lookups.tagsByTask.get(t.id) ?? []).includes(tag.name)),
+      (task) =>
+        !task.parentTaskId &&
+        task.status !== 'done' &&
+        (area ? task.areaId === area.id : !!tag && (lookups.tagsByTask.get(task.id) ?? []).includes(tag.name)),
     );
-    body = <TaskList tasks={sortForView(list, 'upcoming')} today={today} lookups={lookups} selectedId={selectedId} onOpen={openTask} empty="Nothing open here." showDay />;
+    body = <TaskList tasks={sortForView(list, 'upcoming')} today={today} lookups={lookups} selectedId={selectedId} onOpen={openTask} empty={t.empty.filtered} showDay />;
   }
 
   if (isMobile) {
@@ -137,22 +128,22 @@ export function TasksPage() {
     return (
       <div className={styles.mobilePage}>
         <header className={styles.mobileHeader}>
-          <h1 className={styles.mobileTitle}>Tasks</h1>
+          <h1 className={styles.mobileTitle}>{t.tasks}</h1>
           <ProfileAvatar />
         </header>
         <Segmented
-          label="Task lists"
+          label={t.lists}
           className={styles.mobileTabs}
           options={[
-            { value: 'inbox', label: counts.inbox ? `Inbox ${counts.inbox}` : 'Inbox' },
-            { value: 'today', label: 'Today' },
-            { value: 'upcoming', label: 'Upcoming' },
-            { value: 'someday', label: 'Someday' },
+            { value: 'inbox', label: counts.inbox ? t.inboxCount(counts.inbox) : t.views.inbox },
+            { value: 'today', label: t.views.today },
+            { value: 'upcoming', label: t.views.upcoming },
+            { value: 'someday', label: t.someday },
           ]}
           value={tab}
           onChange={(v) => navigate(v === 'inbox' ? '/inbox' : `/tasks?view=${v}`)}
         />
-        <p className={styles.mobileSub}>{view === 'inbox' && counts.inbox ? `${counts.inbox} to sort. Accept, or open one for more.` : subtitle}</p>
+        <p className={styles.mobileSub}>{view === 'inbox' && counts.inbox ? t.toSort(counts.inbox) : subtitle}</p>
         {data && body}
       </div>
     );
@@ -169,13 +160,6 @@ export function TasksPage() {
     </div>
   );
 }
-
-const EMPTY: Record<Exclude<TaskView, 'inbox' | 'upcoming'>, string> = {
-  today: 'Nothing planned for today.',
-  anytime: 'Nothing waiting without a date.',
-  someday: 'No someday ideas yet.',
-  logbook: 'Finished tasks will collect here.',
-};
 
 type ListProps = {
   tasks: Array<Task & { completedOn?: string | null }>;
@@ -199,6 +183,7 @@ function TaskList({ tasks, today, lookups, selectedId, onOpen, empty, showDay }:
 }
 
 function DayGroups({ tasks, today, lookups, selectedId, onOpen, empty }: ListProps) {
+  const t = useT().tasks;
   const groups = groupByDay(tasks);
   if (!groups.length) return <p className={styles.empty}>{empty}</p>;
   return (
@@ -206,7 +191,7 @@ function DayGroups({ tasks, today, lookups, selectedId, onOpen, empty }: ListPro
       {groups.map((group) => (
         <section key={group.day} className={styles.dayGroup} aria-label={formatDayShort(group.day)}>
           <h3 className={styles.dayHeading}>
-            {group.day === addDays(today, 1) ? `Tomorrow, ${formatDayShort(group.day)}` : formatDayRelative(group.day, today)}
+            {group.day === addDays(today, 1) ? t.tomorrowDate(formatDayShort(group.day)) : formatDayRelative(group.day, today)}
           </h3>
           <ul className={styles.plainList}>
             {group.tasks.map((task) => (

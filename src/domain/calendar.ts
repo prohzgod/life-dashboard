@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { addDays, dayOfMonth, dayToDate, diffDays, makeDay, month, startOfWeek, year, type Day } from './days';
 import { dayState, type HabitInput, type HabitLogInput } from './habits';
 
@@ -113,16 +114,9 @@ export function addMonths(day: Day, n: number): Day {
   return makeDay(y, m, Math.min(dayOfMonth(day), new Date(Date.UTC(y, m, 0)).getUTCDate()));
 }
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-export const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
 /** "28 Sep – 4 Oct 2026", "5 – 11 Oct 2026", "29 Dec 2025 – 4 Jan 2026". */
 export function rangeLabel(from: Day, to: Day): string {
-  const d = (day: Day) => dayOfMonth(day);
-  const m = (day: Day) => MONTHS[month(day) - 1];
-  if (year(from) !== year(to)) return `${d(from)} ${m(from)} ${year(from)} – ${d(to)} ${m(to)} ${year(to)}`;
-  if (month(from) !== month(to)) return `${d(from)} ${m(from)} – ${d(to)} ${m(to)} ${year(to)}`;
-  return `${d(from)} – ${d(to)} ${m(to)} ${year(to)}`;
+  return messages().calendar.range(dayToDate(from), dayToDate(to));
 }
 
 /** Habits done and due on a day ("habits 5/6"), or null when none are due. */
@@ -141,11 +135,11 @@ export function habitsOnDay(habits: ReadonlyArray<{ input: HabitInput; logs: rea
 /** "in 40 min", "in 2 hours", "now", or null once it has started more than its length ago. */
 export function startsIn(startMs: number, endMs: number, now: number): string | null {
   if (endMs <= now) return null;
-  if (startMs <= now) return 'now';
+  const t = messages().calendar;
+  if (startMs <= now) return t.startsNow;
   const minutes = Math.round((startMs - now) / 60_000);
-  if (minutes < 60) return `in ${Math.max(1, minutes)} min`;
-  const hours = Math.round(minutes / 60);
-  return hours === 1 ? 'in an hour' : `in ${hours} hours`;
+  if (minutes < 60) return t.startsInMin(Math.max(1, minutes));
+  return t.startsInHours(Math.round(minutes / 60));
 }
 
 /** Local days from one day to another, inclusive. */
