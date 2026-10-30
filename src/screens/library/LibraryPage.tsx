@@ -11,6 +11,7 @@ import { LibraryTree } from './LibraryTree';
 import { PageView } from './PageView';
 import { PhotosView } from './PhotosView';
 import { TrashView } from './TrashView';
+import { useT } from '@/i18n';
 import styles from './Library.module.css';
 
 type Mode = 'home' | 'day' | 'node' | 'trash' | 'photos';
@@ -68,10 +69,11 @@ function NodeView({ id }: { id: string }) {
 }
 
 function Missing() {
+  const t = useT().library;
   return (
     <main className={styles.main}>
       <div className={styles.missing}>
-        <EmptyState icon="library" heading="This page isn’t here" body="It may be in Trash, or it was deleted on another device. Pick a page on the left." />
+        <EmptyState icon="library" heading={t.missingHeading} body={t.missingBody} />
       </div>
     </main>
   );

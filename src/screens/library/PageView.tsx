@@ -8,16 +8,17 @@ import { useIsMobile } from '@/lib/useMediaQuery';
 import { PageOptionsSheet } from './PageOptionsSheet';
 import { Icon } from '@/components/icons/Icon';
 import { Menu } from '@/components/ui';
-import { dayToDate } from '@/domain/days';
 import { PageEditor } from './editor/PageEditor';
 import { JournalCheckIn } from './JournalCheckIn';
 import { PageProperties } from './PageProperties';
 import { PageRail } from './PageRail';
+import { LOCALES, messages, useT } from '@/i18n';
+import { formatDayLong } from '@/lib/format';
 import styles from './Library.module.css';
 
-const LONG_DATE = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
 export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] }) {
+  const { library } = useT();
+  const t = library.page;
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -32,7 +33,7 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
   async function setPinned(pin: boolean) {
     if (pin) await pinToHome('node', node.id);
     else await unpinFromHome('node', node.id);
-    setToast(pin ? 'Pinned to Home' : 'Removed from Home');
+    setToast(pin ? t.pinned : t.unpinned);
   }
 
   async function trash() {
@@ -40,7 +41,7 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
       await trashNode(node.id);
       navigate(node.parentId ? `/library/${node.parentId}` : '/library');
     } catch (e) {
-      setError(e instanceof LibraryError ? e.message : 'That didn’t work.');
+      setError(e instanceof LibraryError ? e.message : library.failed);
     }
   }
 
@@ -49,12 +50,12 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
       <main className={styles.main}>
         <div className={styles.topBar}>
           {isMobile ? (
-            <Link to={trail.at(-1) ? `/library/${trail.at(-1)!.id}` : '/library'} className={styles.mobileBack} aria-label={`Back to ${trail.at(-1)?.title ?? 'Library'}`}>
+            <Link to={trail.at(-1) ? `/library/${trail.at(-1)!.id}` : '/library'} className={styles.mobileBack} aria-label={t.backTo(trail.at(-1)?.title ?? t.library)}>
               <Icon name="chevronLeft" size={20} strokeWidth={2.2} />
-              {trail.at(-1)?.title ?? 'Library'}
+              {trail.at(-1)?.title ?? t.library}
             </Link>
           ) : (
-          <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
+          <nav aria-label={library.breadcrumb} className={styles.breadcrumb}>
             {trail.map((a) => (
               <span key={a.id}>
                 <Link to={`/library/${a.id}`}>{a.title}</Link>
@@ -69,20 +70,20 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
           <div className={styles.topActions}>
             <span className={styles.saved} role="status">
               <span className={saving ? styles.savingDot : styles.savedDot} aria-hidden="true" />
-              {saving ? 'Saving…' : 'Saved on this device'}
+              {saving ? t.saving : t.saved}
             </span>
             {isMobile ? (
-              <button type="button" className={styles.optionsButton} aria-label="Page options" onClick={() => setSheet(true)}>
+              <button type="button" className={styles.optionsButton} aria-label={t.options} onClick={() => setSheet(true)}>
                 <Icon name="more" size={18} strokeWidth={3} />
               </button>
             ) : (
               <Menu
-                label="Page options"
+                label={t.options}
                 trigger={<Icon name="more" size={18} strokeWidth={3} />}
                 items={[
-                  { label: pinned ? 'Unpin from Home' : 'Pin to Home', onSelect: () => void setPinned(!pinned) },
-                  { label: node.favoritedAt ? 'Remove from favourites' : 'Add to favourites', onSelect: () => void toggleFavorite(node.id) },
-                  { label: 'Move to Trash', danger: true, disabled: node.isSystem, onSelect: () => void trash() },
+                  { label: pinned ? library.options.unpin : library.options.pin, onSelect: () => void setPinned(!pinned) },
+                  { label: node.favoritedAt ? library.options.removeFavourite : library.options.addFavourite, onSelect: () => void toggleFavorite(node.id) },
+                  { label: library.moveToTrash, danger: true, disabled: node.isSystem, onSelect: () => void trash() },
                 ]}
               />
             )}
@@ -90,7 +91,7 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
         </div>
         <article className={styles.article}>
           {day ? (
-            <h1 className={styles.pageTitle}>{LONG_DATE.format(dayToDate(day))}</h1>
+            <h1 className={styles.pageTitle}>{formatDayLong(day)}</h1>
           ) : (
             <TitleInput key={node.title} node={node} />
           )}
@@ -120,10 +121,10 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
         <Toast onDone={clearToast}>
           <Icon name="pin" size={15} />
           {toast}
-          {toast === 'Pinned to Home' && (
+          {toast === t.pinned && (
             <>
               {', '}
-              <Link to="/">View</Link>
+              <Link to="/">{t.view}</Link>
             </>
           )}
         </Toast>
@@ -133,16 +134,19 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
 }
 
 function TitleInput({ node }: { node: LibraryNode }) {
-  const [value, setValue] = useState(node.title === 'Untitled' ? '' : node.title);
+  const { library, seed } = useT();
+  // New pages are named "Untitled" in the language they were made in.
+  const untitled = LOCALES.some((locale) => messages(locale).seed.untitled === node.title);
+  const [value, setValue] = useState(untitled ? '' : node.title);
   return (
     <input
       className={styles.pageTitle}
-      aria-label="Page title"
-      placeholder="Untitled"
+      aria-label={library.page.title}
+      placeholder={seed.untitled}
       value={value}
-      autoFocus={node.title === 'Untitled'}
+      autoFocus={untitled}
       onChange={(e) => setValue(e.target.value)}
-      onBlur={() => void renameNode(node.id, value || 'Untitled')}
+      onBlur={() => void renameNode(node.id, value || seed.untitled)}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           e.preventDefault();

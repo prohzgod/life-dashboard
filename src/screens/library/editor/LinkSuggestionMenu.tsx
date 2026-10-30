@@ -1,14 +1,16 @@
 import type { SuggestionMenuProps } from '@blocknote/react';
 import { cx } from '@/components/ui/cx';
+import { useT } from '@/i18n';
 import styles from './Editor.module.css';
 
 export type LinkItem = { key: string; label: string; hint: string; run: () => void };
 
 /** The [[ and @ menus. Renders nothing when there's nothing to offer. */
 export function LinkSuggestionMenu({ items, selectedIndex, onItemClick }: SuggestionMenuProps<LinkItem>) {
+  const t = useT().library.editor;
   if (!items.length) return null;
   return (
-    <div className={styles.suggest} role="listbox" aria-label="Suggestions">
+    <div className={styles.suggest} role="listbox" aria-label={t.suggestions}>
       {items.map((item, i) => (
         <button
           key={item.key}

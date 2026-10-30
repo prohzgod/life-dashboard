@@ -15,6 +15,7 @@ export const format: Messages['format'] = {
   monthsLong,
   dayShort: (d) => `${weekdaysShort[d.getDay()]}, ${dm(d)}`,
   dayLong: (d) => `${weekdaysLong[d.getDay()]}, ngày ${d.getDate()} tháng ${d.getMonth() + 1} năm ${d.getFullYear()}`,
+  weekdayDate: (d) => `${weekdaysLong[d.getDay()]}, ${d.getDate()} tháng ${d.getMonth() + 1}`,
   date: (d) => `${d.getDate()} tháng ${d.getMonth() + 1}, ${d.getFullYear()}`,
   dayMonth: dm,
   monthYear: (d) => `Tháng ${d.getMonth() + 1}, ${d.getFullYear()}`,

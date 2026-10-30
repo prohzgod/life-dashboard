@@ -7,9 +7,10 @@ import { createNode, journalDayOf, LibraryError, listLibraryNodes, listPhotos, m
 import { Icon } from '@/components/icons/Icon';
 import { cx } from '@/components/ui/cx';
 import { useToday } from '@/lib/useToday';
-import { plural, timeAgo } from '@/lib/format';
+import { timeAgo } from '@/lib/format';
 import { Segmented } from '@/components/ui';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
+import { intlLocale, useT } from '@/i18n';
 import styles from './Library.module.css';
 
 type Row = { id: string; name: string; node: LibraryNode; children: Row[] };
@@ -36,6 +37,8 @@ function useElementSize<T extends HTMLElement>() {
 type Props = { currentId: string | null; section: 'trash' | 'photos' | null; /** The Library tab on phones: full width, with Tree / Recent / Photos. */ mobile?: boolean };
 
 export function LibraryTree({ currentId, section, mobile }: Props) {
+  const { library } = useT();
+  const t = library.tree;
   const navigate = useNavigate();
   const today = useToday();
   const [query, setQuery] = useState('');
@@ -81,19 +84,19 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
       const node = await createNode({ parentId, kind });
       navigate(`/library/${node.id}`);
     } catch (error) {
-      setMessage(error instanceof LibraryError ? error.message : 'That didn’t work. Try again.');
+      setMessage(error instanceof LibraryError ? error.message : library.failedRetry);
     }
   }
 
   return (
-    <aside className={mobile ? `${styles.tree} ${styles.treeMobile}` : styles.tree} aria-label="Library tree">
+    <aside className={mobile ? `${styles.tree} ${styles.treeMobile}` : styles.tree} aria-label={t.label}>
       <div className={styles.treeHeader}>
-        <h1 className={styles.treeTitle}>Library</h1>
+        <h1 className={styles.treeTitle}>{t.title}</h1>
         <div className={styles.treeActions}>
-          <button type="button" className={styles.iconButton} aria-label="New page" title="New page" onClick={() => void create('page')}>
+          <button type="button" className={styles.iconButton} aria-label={t.newPage} title={t.newPage} onClick={() => void create('page')}>
             <Icon name="newPage" size={18} />
           </button>
-          <button type="button" className={styles.iconButton} aria-label="New folder" title="New folder" onClick={() => void create('folder')}>
+          <button type="button" className={styles.iconButton} aria-label={t.newFolder} title={t.newFolder} onClick={() => void create('folder')}>
             <Icon name="newFolder" size={18} />
           </button>
           {mobile && <ProfileAvatar />}
@@ -102,17 +105,13 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
 
       <label className={styles.filter}>
         <Icon name="search" size={15} />
-        <input type="search" aria-label="Search pages" placeholder="Search pages and notes" value={query} onChange={(e) => setQuery(e.target.value)} />
+        <input type="search" aria-label={t.search} placeholder={t.searchPlaceholder} value={query} onChange={(e) => setQuery(e.target.value)} />
       </label>
 
       {mobile && !results && (
         <Segmented
-          label="Show"
-          options={[
-            { value: 'tree', label: 'Tree' },
-            { value: 'recent', label: 'Recent' },
-            { value: 'photos', label: 'Photos' },
-          ]}
+          label={t.show}
+          options={(['tree', 'recent', 'photos'] as const).map((v) => ({ value: v, label: t.panels[v] }))}
           value={panel}
           onChange={(v) => (v === 'photos' ? navigate('/library/photos') : setPanel(v))}
           className={styles.panels}
@@ -120,7 +119,7 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
       )}
 
       {mobile && panel === 'recent' && !results ? (
-        <ul className={`${styles.plainList} ${styles.recent}`} aria-label="Recently edited">
+        <ul className={`${styles.plainList} ${styles.recent}`} aria-label={t.recent}>
           {[...(nodes ?? [])]
             .filter((n) => n.kind === 'page')
             .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
@@ -129,14 +128,14 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
               <li key={n.id}>
                 <Link to={`/library/${n.id}`} className={styles.result}>
                   <span className={styles.resultTitle}>{n.title}</span>
-                  <span className={styles.resultSnippet}>Edited {timeAgo(n.updatedAt)}</span>
+                  <span className={styles.resultSnippet}>{library.edited(timeAgo(n.updatedAt))}</span>
                 </Link>
               </li>
             ))}
         </ul>
       ) : results ? (
-        <div className={styles.results} role="region" aria-label="Search results">
-          {results.length === 0 && <p className={styles.treeNote}>No pages match “{query.trim()}”.</p>}
+        <div className={styles.results} role="region" aria-label={t.results}>
+          {results.length === 0 && <p className={styles.treeNote}>{t.noResults(query.trim())}</p>}
           <ul className={styles.plainList}>
             {results.map((hit) => (
               <li key={hit.id}>
@@ -153,7 +152,7 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
           {favourites.length > 0 && (
             <nav aria-labelledby="favourites-label" className={styles.favourites}>
               <h2 id="favourites-label" className={styles.sectionLabel}>
-                Favourites
+                {t.favourites}
               </h2>
               {favourites.map((n) => (
                 <Link key={n.id} to={`/library/${n.id}`} className={cx(styles.favourite, n.id === currentId && styles.rowActive)} aria-current={n.id === currentId ? 'page' : undefined}>
@@ -163,7 +162,7 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
               ))}
             </nav>
           )}
-          <h2 className={styles.sectionLabel}>Personal space</h2>
+          <h2 className={styles.sectionLabel}>{t.pages}</h2>
           <div ref={boxRef} className={styles.treeBox}>
             {nodes && (
               <Tree<Row>
@@ -192,7 +191,7 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
                     await moveNode(id, parentId, dropIndexWithoutSelf(siblings, id, index));
                     setMessage('');
                   } catch (error) {
-                    setMessage(error instanceof LibraryError ? error.message : 'That move didn’t work.');
+                    setMessage(error instanceof LibraryError ? error.message : library.moveFailed);
                   }
                 }}
               >
@@ -200,28 +199,29 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
               </Tree>
             )}
           </div>
-          <nav className={styles.specials} aria-label="More">
+          <nav className={styles.specials} aria-label={t.more}>
             <Link to="/library/photos" className={cx(styles.special, section === 'photos' && styles.rowActive)} aria-current={section === 'photos' ? 'page' : undefined}>
               <Icon name="image" size={16} />
-              <span className={styles.grow}>All photos</span>
-              {!!photoCount && <span className={styles.count}>{photoCount.toLocaleString()}</span>}
+              <span className={styles.grow}>{t.allPhotos}</span>
+              {!!photoCount && <span className={styles.count}>{photoCount.toLocaleString(intlLocale())}</span>}
             </Link>
             <Link to="/library/trash" className={cx(styles.special, section === 'trash' && styles.rowActive)} aria-current={section === 'trash' ? 'page' : undefined}>
               <Icon name="trash" size={16} />
-              Trash
+              {t.trash}
             </Link>
           </nav>
         </>
       )}
 
       <p className={styles.treeNote} role="status">
-        {message || `${mobile ? 'All pages are available offline' : 'Drag to move or nest'}. On this device: ${plural((nodes ?? []).filter((n) => n.kind === 'page').length, 'page')}${photoCount ? `, ${plural(photoCount, 'image')}` : ''}.`}
+        {message || t.note(!!mobile, (nodes ?? []).filter((n) => n.kind === 'page').length, photoCount ?? 0)}
       </p>
     </aside>
   );
 }
 
 function TreeRow({ node, style, dragHandle, today }: NodeRendererProps<Row> & { today: string }) {
+  const t = useT().library.tree;
   const data = node.data.node;
   const day = journalDayOf(data);
   const hasChildren = node.children !== null && node.children.length > 0;
@@ -236,7 +236,7 @@ function TreeRow({ node, style, dragHandle, today }: NodeRendererProps<Row> & { 
         <button
           type="button"
           className={styles.chevron}
-          aria-label={node.isOpen ? `Collapse ${data.title}` : `Expand ${data.title}`}
+          aria-label={node.isOpen ? t.collapse(data.title) : t.expand(data.title)}
           tabIndex={-1}
           onClick={(e) => {
             e.stopPropagation();
@@ -249,7 +249,7 @@ function TreeRow({ node, style, dragHandle, today }: NodeRendererProps<Row> & { 
         <span className={styles.chevronSpacer} />
       )}
       {(top || !day) && <Icon name={data.kind === 'folder' ? 'folder' : 'page'} size={15} className={styles.rowIcon} />}
-      <span className={styles.rowLabel}>{day === today ? `${data.title.split(' ').slice(0, 2).join(' ')}, today` : data.title}</span>
+      <span className={styles.rowLabel}>{day === today ? t.todayRow(data.title) : data.title}</span>
       {day === today && <span className={styles.todayDot} aria-hidden="true" />}
     </div>
   );

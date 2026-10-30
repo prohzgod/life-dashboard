@@ -3,6 +3,7 @@ import { pinnedWidget, toggleFavorite, type LibraryNode } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { Button, Sheet, Switch } from '@/components/ui';
 import { timeAgo } from '@/lib/format';
+import { useT } from '@/i18n';
 import styles from './PageOptionsSheet.module.css';
 
 type Props = {
@@ -16,9 +17,11 @@ type Props = {
 
 /** Phones: the page's "…" sheet, with Pin to Home at the top. */
 export function PageOptionsSheet({ open, onClose, node, parentTitle, onPin, onTrash }: Props) {
+  const { library } = useT();
+  const t = library.options;
   const pinned = useLiveQuery(async () => !!(await pinnedWidget('node', node.id)), [node.id]);
   return (
-    <Sheet open={open} onClose={onClose} title={`Options for ${node.title}`} hideTitle className={styles.sheet}>
+    <Sheet open={open} onClose={onClose} title={t.title(node.title)} hideTitle className={styles.sheet}>
       <div className={styles.card}>
         <div className={styles.head}>
           <span className={styles.icon}>
@@ -27,7 +30,7 @@ export function PageOptionsSheet({ open, onClose, node, parentTitle, onPin, onTr
           <span className={styles.headText}>
             <span className={styles.title}>{node.title}</span>
             <span className={styles.sub}>
-              {parentTitle ? `${parentTitle}, ` : ''}edited {timeAgo(node.updatedAt)}
+              {t.edited(parentTitle, timeAgo(node.updatedAt))}
             </span>
           </span>
         </div>
@@ -35,9 +38,9 @@ export function PageOptionsSheet({ open, onClose, node, parentTitle, onPin, onTr
           <Icon name="pin" size={18} />
           <span className={styles.headText}>
             <span id="pin-label" className={styles.pinTitle}>
-              Pin to Home
+              {t.pin}
             </span>
-            <span className={styles.sub}>Shows as a Medium tile with checklist progress</span>
+            <span className={styles.sub}>{t.pinHint}</span>
           </span>
           <Switch checked={!!pinned} onChange={onPin} labelledBy="pin-label" />
         </div>
@@ -45,21 +48,21 @@ export function PageOptionsSheet({ open, onClose, node, parentTitle, onPin, onTr
           <li>
             <button type="button" className={styles.row} onClick={() => void toggleFavorite(node.id).then(onClose)}>
               <Icon name="star" size={18} />
-              {node.favoritedAt ? 'Remove from favourites' : 'Add to favourites'}
+              {node.favoritedAt ? t.removeFavourite : t.addFavourite}
             </button>
           </li>
           {!node.isSystem && (
             <li>
               <button type="button" className={`${styles.row} ${styles.danger}`} onClick={onTrash}>
                 <Icon name="trash" size={18} />
-                Move to Trash
+                {library.moveToTrash}
               </button>
             </li>
           )}
         </ul>
       </div>
       <Button className={styles.cancel} onClick={onClose}>
-        Cancel
+        {t.cancel}
       </Button>
     </Sheet>
   );

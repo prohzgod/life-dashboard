@@ -1,9 +1,10 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
-import { WIDGET_INFO, type WidgetKind } from '@/domain/home';
+import type { WidgetKind } from '@/domain/home';
 import { goalsRepo, habitsRepo, listLibraryNodes, pinToHome, setWidgetHidden, unpinFromHome, type HomeData, type LinkTarget } from '@/data';
 import { Icon, type IconName } from '@/components/icons/Icon';
 import { Segmented, Sheet } from '@/components/ui';
+import { useT } from '@/i18n';
 import styles from './EditHome.module.css';
 
 const ICONS: Record<Exclude<WidgetKind, 'pinned'>, IconName> = {
@@ -19,15 +20,13 @@ const ICONS: Record<Exclude<WidgetKind, 'pinned'>, IconName> = {
   steps: 'health',
 };
 
-const TABS = [
-  { value: 'widgets', label: 'Widgets' },
-  { value: 'library', label: 'From Library' },
-  { value: 'goals', label: 'Goals & habits' },
-] as const;
+const TABS = ['widgets', 'library', 'goals'] as const;
 
 /** Bring hidden widgets back, or pin a page, goal or habit. */
 export function AddToHomeSheet({ open, onClose, data }: { open: boolean; onClose: () => void; data: HomeData }) {
-  const [tab, setTab] = useState<(typeof TABS)[number]['value']>('widgets');
+  const { home, goals } = useT();
+  const t = home.add;
+  const [tab, setTab] = useState<(typeof TABS)[number]>('widgets');
   const hidden = data.widgets.filter((w) => w.hidden).length;
   const pinned = (type: LinkTarget, id: string) => data.widgets.some((w) => w.kind === 'pinned' && w.refType === type && w.refId === id);
   const sources = useLiveQuery(async () => {
@@ -36,9 +35,9 @@ export function AddToHomeSheet({ open, onClose, data }: { open: boolean; onClose
   }, [open]);
 
   return (
-    <Sheet open={open} onClose={onClose} title="Add to Home" className={styles.sheet}>
-      <span className={styles.sheetMeta}>{hidden} hidden</span>
-      <Segmented label="Add from" options={TABS} value={tab} onChange={setTab} className={styles.tabs} />
+    <Sheet open={open} onClose={onClose} title={home.edit.add} className={styles.sheet}>
+      <span className={styles.sheetMeta}>{home.edit.hidden(hidden)}</span>
+      <Segmented label={t.from} options={TABS.map((v) => ({ value: v, label: t.tabs[v] }))} value={tab} onChange={setTab} className={styles.tabs} />
       <ul className={styles.list}>
         {tab === 'widgets' &&
           data.widgets
@@ -49,8 +48,8 @@ export function AddToHomeSheet({ open, onClose, data }: { open: boolean; onClose
                 <Row
                   key={w.id}
                   icon={ICONS[kind]}
-                  title={WIDGET_INFO[kind].title}
-                  sub={w.hidden ? `Hidden, ${WIDGET_INFO[kind].description.toLowerCase()}` : WIDGET_INFO[kind].description}
+                  title={home.widgets[kind].title}
+                  sub={w.hidden ? t.hiddenDescription(home.widgets[kind].description) : home.widgets[kind].description}
                   on={!w.hidden}
                   onAdd={() => setWidgetHidden(w.id, false)}
                 />
@@ -59,18 +58,18 @@ export function AddToHomeSheet({ open, onClose, data }: { open: boolean; onClose
         {tab === 'library' &&
           (sources?.pages.length ? (
             sources.pages.map((p) => (
-              <Row key={p.id} icon="page" title={p.title} sub="Page" on={pinned('node', p.id)} onAdd={() => pinToHome('node', p.id)} onRemove={() => unpinFromHome('node', p.id)} />
+              <Row key={p.id} icon="page" title={p.title} sub={t.page} on={pinned('node', p.id)} onAdd={() => pinToHome('node', p.id)} onRemove={() => unpinFromHome('node', p.id)} />
             ))
           ) : (
-            <li className={styles.empty}>Pages you write in the Library can be pinned here.</li>
+            <li className={styles.empty}>{t.pagesEmpty}</li>
           ))}
         {tab === 'goals' && (
           <>
             {sources?.goals.map((g) => (
-              <Row key={g.id} icon="goals" title={g.title} sub={`${g.horizon[0]!.toUpperCase()}${g.horizon.slice(1)} goal`} on={pinned('goal', g.id)} onAdd={() => pinToHome('goal', g.id)} onRemove={() => unpinFromHome('goal', g.id)} />
+              <Row key={g.id} icon="goals" title={g.title} sub={t.goalOf(goals.horizons[g.horizon])} on={pinned('goal', g.id)} onAdd={() => pinToHome('goal', g.id)} onRemove={() => unpinFromHome('goal', g.id)} />
             ))}
             {sources?.habits.map((h) => (
-              <Row key={h.id} icon="review" title={h.title} sub="Habit" on={pinned('habit', h.id)} onAdd={() => pinToHome('habit', h.id)} onRemove={() => unpinFromHome('habit', h.id)} />
+              <Row key={h.id} icon="review" title={h.title} sub={t.habit} on={pinned('habit', h.id)} onAdd={() => pinToHome('habit', h.id)} onRemove={() => unpinFromHome('habit', h.id)} />
             ))}
           </>
         )}
@@ -80,6 +79,7 @@ export function AddToHomeSheet({ open, onClose, data }: { open: boolean; onClose
 }
 
 function Row({ icon, title, sub, on, onAdd, onRemove }: { icon: IconName; title: string; sub: string; on: boolean; onAdd: () => Promise<unknown>; onRemove?: () => Promise<unknown> }) {
+  const t = useT().home.add;
   return (
     <li className={styles.row}>
       <span className={styles.rowIcon}>
@@ -91,14 +91,14 @@ function Row({ icon, title, sub, on, onAdd, onRemove }: { icon: IconName; title:
       </span>
       {on ? (
         onRemove ? (
-          <button type="button" className={styles.onHome} onClick={() => void onRemove()} aria-label={`Remove ${title} from Home`}>
-            On Home
+          <button type="button" className={styles.onHome} onClick={() => void onRemove()} aria-label={t.removeFrom(title)}>
+            {t.onHome}
           </button>
         ) : (
-          <span className={styles.onHome}>On Home</span>
+          <span className={styles.onHome}>{t.onHome}</span>
         )
       ) : (
-        <button type="button" className={styles.add} aria-label={`Add ${title} to Home`} onClick={() => void onAdd()}>
+        <button type="button" className={styles.add} aria-label={t.addTo(title)} onClick={() => void onAdd()}>
           <Icon name="plus" size={18} strokeWidth={2.2} />
         </button>
       )}

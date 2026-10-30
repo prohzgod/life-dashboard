@@ -13,6 +13,11 @@ export function formatDayLong(day: Day): string {
   return f().dayLong(dayToDate(day));
 }
 
+/** "Tuesday, 29 September" */
+export function formatWeekdayDate(day: Day): string {
+  return f().weekdayDate(dayToDate(day));
+}
+
 /** "29 September 2026" */
 export function formatDate(day: Day): string {
   return f().date(dayToDate(day));

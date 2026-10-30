@@ -4,17 +4,19 @@ import { CSS } from '@dnd-kit/utilities';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SIZE_SPAN, WIDGET_INFO, WIDGET_SIZES } from '@/domain/home';
+import { SIZE_SPAN, WIDGET_SIZES } from '@/domain/home';
 import { loadHomeData, moveWidget, resetHome, setWidgetHidden, setWidgetSize, type HomeData, type HomeWidget } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { Button } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
 import { useToday } from '@/lib/useToday';
 import { AddToHomeSheet } from './AddToHomeSheet';
+import { useT } from '@/i18n';
 import styles from './EditHome.module.css';
 
 /** Edit Home: drag to reorder, S, M, L to resize, − to hide. Hidden widgets keep their data. */
 export function EditHomePage() {
+  const t = useT().home.edit;
   const today = useToday();
   const navigate = useNavigate();
   const data = useLiveQuery(() => loadHomeData(today), [today]);
@@ -43,19 +45,19 @@ export function EditHomePage() {
     <div className={styles.page}>
       <header className={styles.top}>
         <Button variant="quiet" onClick={() => void resetHome()}>
-          Reset
+          {t.reset}
         </Button>
-        <h1 className={styles.title}>Edit Home</h1>
+        <h1 className={styles.title}>{t.title}</h1>
         <Button variant="primary" className={styles.done} onClick={() => navigate('/')}>
-          Done
+          {t.done}
         </Button>
       </header>
-      <p className={styles.intro}>Drag to reorder. Tap a size to resize, or the minus to hide. Hidden widgets keep their data.</p>
+      <p className={styles.intro}>{t.intro}</p>
 
       {data && (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
           <SortableContext items={ids} strategy={rectSortingStrategy}>
-            <ul className={styles.grid} aria-label="Widgets on Home">
+            <ul className={styles.grid} aria-label={t.label}>
               {ids
                 .map((id) => byId.get(id))
                 .filter((w): w is HomeWidget => !!w)
@@ -69,8 +71,8 @@ export function EditHomePage() {
 
       <button type="button" className={styles.addButton} onClick={() => setAdding(true)}>
         <Icon name="plus" size={18} />
-        <span className={styles.addText}>Add to Home</span>
-        <span className={styles.hiddenCount}>{hiddenCount ? `${hiddenCount} hidden` : 'pages, goals, habits'}</span>
+        <span className={styles.addText}>{t.add}</span>
+        <span className={styles.hiddenCount}>{hiddenCount ? t.hidden(hiddenCount) : t.sources}</span>
       </button>
       {data && <AddToHomeSheet open={adding} onClose={() => setAdding(false)} data={data} />}
     </div>
@@ -79,9 +81,11 @@ export function EditHomePage() {
 
 function EditTile({ widget, data }: { widget: HomeWidget; data: HomeData }) {
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: widget.id });
+  const { home } = useT();
+  const t = home.edit;
   const pin = data.pins.get(widget.id);
-  const title = widget.kind === 'pinned' && pin && pin.kind !== 'missing' ? pin.title : WIDGET_INFO[widget.kind].title;
-  const subtitle = widget.kind === 'pinned' ? (pin?.kind === 'goal' ? 'Goal' : pin?.kind === 'habit' ? 'Habit' : 'From Library') : WIDGET_INFO[widget.kind].description;
+  const title = widget.kind === 'pinned' && pin && pin.kind !== 'missing' ? pin.title : home.widgets[widget.kind].title;
+  const subtitle = widget.kind === 'pinned' ? (pin?.kind === 'goal' ? t.goal : pin?.kind === 'habit' ? t.habit : t.fromLibrary) : home.widgets[widget.kind].description;
   const span = SIZE_SPAN[widget.size];
   const inverse = widget.kind === 'review';
 
@@ -91,7 +95,7 @@ function EditTile({ widget, data }: { widget: HomeWidget; data: HomeData }) {
       className={cx(styles.tile, styles[`size${widget.size}`], inverse && styles.inverse, isDragging && styles.dragging)}
       style={{ gridColumn: `span ${span.cols}`, gridRow: `span ${span.rows}`, transform: CSS.Transform.toString(transform), transition }}
     >
-      <button type="button" className={styles.remove} aria-label={`Hide ${title}`} onClick={() => void setWidgetHidden(widget.id, true)}>
+      <button type="button" className={styles.remove} aria-label={t.hide(title)} onClick={() => void setWidgetHidden(widget.id, true)}>
         <Icon name="minus" size={14} strokeWidth={2.6} />
       </button>
       <span className={styles.text}>
@@ -102,14 +106,14 @@ function EditTile({ widget, data }: { widget: HomeWidget; data: HomeData }) {
         {widget.size !== 'S' && <span className={styles.tileSub}>{subtitle}</span>}
       </span>
       <span className={styles.controls}>
-        <span className={styles.sizes} role="radiogroup" aria-label={`${title} size`}>
+        <span className={styles.sizes} role="radiogroup" aria-label={t.size(title)}>
           {WIDGET_SIZES[widget.kind].map((size) => (
             <button
               key={size}
               type="button"
               role="radio"
               aria-checked={widget.size === size}
-              aria-label={`${{ S: 'Small', M: 'Medium', L: 'Large' }[size]}`}
+              aria-label={t.sizes[size]}
               className={cx(styles.size, widget.size === size && styles.sizeOn)}
               onClick={() => void setWidgetSize(widget.id, size)}
             >
@@ -117,7 +121,7 @@ function EditTile({ widget, data }: { widget: HomeWidget; data: HomeData }) {
             </button>
           ))}
         </span>
-        <button type="button" ref={setActivatorNodeRef} className={styles.handle} aria-label={`Move ${title}`} {...attributes} {...listeners}>
+        <button type="button" ref={setActivatorNodeRef} className={styles.handle} aria-label={t.move(title)} {...attributes} {...listeners}>
           <Icon name="grip" size={18} strokeWidth={2.6} />
         </button>
       </span>

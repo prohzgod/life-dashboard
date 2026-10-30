@@ -16,6 +16,8 @@ export const format = {
   dayShort: (d: Date) => `${weekdaysShort[d.getDay()]} ${d.getDate()} ${monthsShort[d.getMonth()]}`,
   /** "Tuesday, 29 September 2026" */
   dayLong: (d: Date) => `${weekdaysLong[d.getDay()]}, ${d.getDate()} ${monthsLong[d.getMonth()]} ${d.getFullYear()}`,
+  /** "Tuesday, 29 September" */
+  weekdayDate: (d: Date) => `${weekdaysLong[d.getDay()]}, ${d.getDate()} ${monthsLong[d.getMonth()]}`,
   /** "29 September 2026" */
   date: (d: Date) => `${d.getDate()} ${monthsLong[d.getMonth()]} ${d.getFullYear()}`,
   /** "1 Oct" */

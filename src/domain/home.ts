@@ -22,20 +22,6 @@ export const SIZE_SPAN: Record<WidgetSize, { cols: number; rows: number }> = {
   L: { cols: 4, rows: 1 },
 };
 
-export const WIDGET_INFO: Record<WidgetKind, { title: string; description: string }> = {
-  today: { title: 'Today', description: 'Next up and what’s done' },
-  goals: { title: 'Goals', description: 'Top goal ring' },
-  calendar: { title: 'Calendar', description: 'Today’s date and what’s left' },
-  review: { title: 'Weekly review', description: 'Shows on Sundays' },
-  progress: { title: 'Progress', description: 'Habits, last 12 weeks' },
-  sleep: { title: 'Sleep', description: 'Last night and the week' },
-  finance: { title: 'Finance', description: 'Spending, hidden until tapped' },
-  vision: { title: 'Vision board', description: 'Word of the year + collage' },
-  assistant: { title: 'Ask AI', description: 'Ask about your week' },
-  steps: { title: 'Steps', description: 'Steps today and this week' },
-  pinned: { title: 'Pinned', description: 'From Library' },
-};
-
 /** What a new Home looks like: the design's layout, with Ask AI and Steps waiting in the sheet. */
 export const DEFAULT_WIDGETS: ReadonlyArray<{ kind: Exclude<WidgetKind, 'pinned'>; size: WidgetSize; hidden: boolean }> = [
   { kind: 'today', size: 'L', hidden: false },

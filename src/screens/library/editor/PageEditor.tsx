@@ -6,7 +6,9 @@ import { useEffect, useMemo, useRef } from 'react';
 import { attachmentBlob, createNode, goalsRepo, listLibraryNodes, saveUpload, type LibraryNode } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { prepareImage } from '@/lib/images';
+import { messages, useLocale } from '@/i18n';
 import { useResolvedTheme } from '@/theme/useResolvedTheme';
+import { en as editorEn, vi as editorVi } from '@blocknote/core/locales';
 import { LinkSuggestionMenu, type LinkItem } from './LinkSuggestionMenu';
 import { schema, type LifeEditor } from './schema';
 import styles from './Editor.module.css';
@@ -36,6 +38,8 @@ async function resolveFileUrl(url: string): Promise<string> {
 
 export function PageEditor({ node, onSave, onSaving }: Props) {
   const theme = useResolvedTheme();
+  const [locale] = useLocale();
+  const t = messages(locale).library.editor;
   const initialContent = useMemo(
     () => (Array.isArray(node.contentJson) && node.contentJson.length ? node.contentJson : undefined),
     // The editor owns the document after it opens; only a different page reloads it.
@@ -53,9 +57,10 @@ export function PageEditor({ node, onSave, onSaving }: Props) {
         return `attachment://${attachment.id}`;
       },
       resolveFileUrl,
-      placeholders: { emptyDocument: 'Type / for blocks, [[ to link a page, @ to mention a goal…', default: 'Type / for blocks' },
+      dictionary: locale === 'vi' ? editorVi : editorEn,
+      placeholders: { emptyDocument: t.emptyDocument, default: t.placeholder },
     },
-    [node.id],
+    [node.id, locale],
   );
 
   const timer = useRef<number | undefined>(undefined);
@@ -118,13 +123,15 @@ export function PageEditor({ node, onSave, onSaving }: Props) {
 }
 
 function slashItems(editor: LifeEditor): DefaultReactSuggestionItem[] {
+  const t = messages().library.editor;
   return [
     ...getDefaultReactSlashMenuItems(editor),
     {
-      title: 'Gallery',
-      subtext: 'A grid of images. Drop, paste or pick them.',
-      aliases: ['images', 'photos', 'grid'],
-      group: 'Media',
+      title: t.gallery,
+      subtext: t.gallerySub,
+      aliases: ['images', 'photos', 'grid', 'ảnh'],
+      // Beside the built-in image and video items, in their group.
+      group: editor.dictionary.slash_menu.image.group,
       icon: <Icon name="image" size={18} />,
       onItemClick: () => insertOrUpdateBlockForSlashMenu(editor, { type: 'gallery' }),
     },
@@ -143,13 +150,13 @@ async function pageItems(editor: LifeEditor, current: LibraryNode, query: string
     .filter((n) => n.id !== current.id && (n.kind === 'page' || n.kind === 'folder') && n.title.toLowerCase().includes(term))
     .sort((a, b) => Number(!a.title.toLowerCase().startsWith(term)) - Number(!b.title.toLowerCase().startsWith(term)) || a.title.localeCompare(b.title))
     .slice(0, 8)
-    .map<LinkItem>((n) => ({ key: n.id, label: n.title, hint: n.kind === 'folder' ? 'Folder' : 'Page', run: () => insert(n) }));
+    .map<LinkItem>((n) => ({ key: n.id, label: n.title, hint: n.kind === 'folder' ? messages().library.editor.folder : messages().library.editor.page, run: () => insert(n) }));
   const exact = nodes.some((n) => n.title.toLowerCase() === term);
   if (term && !exact) {
     matches.push({
       key: 'new',
-      label: `New page “${name}”`,
-      hint: 'Create',
+      label: messages().library.editor.newPage(name),
+      hint: messages().library.editor.create,
       run: async () => {
         const created = await createNode({ parentId: current.parentId && !current.isSystem ? current.parentId : null, kind: 'page', title: name });
         insert(created);
@@ -168,7 +175,7 @@ async function goalItems(editor: LifeEditor, query: string): Promise<LinkItem[]>
     .map((g) => ({
       key: g.id,
       label: g.title,
-      hint: `${g.horizon[0]!.toUpperCase()}${g.horizon.slice(1)} goal`,
+      hint: messages().library.editor.goalOf(messages().goals.horizons[g.horizon]),
       run: () => editor.insertInlineContent([{ type: 'goalMention', props: { id: g.id, title: g.title } }, ' ']),
     }));
 }
