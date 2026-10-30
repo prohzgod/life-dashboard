@@ -124,7 +124,7 @@ test('⌘K finds pages by their words, and the Library works offline', async ({ 
   await waitForSave(page);
 
   await page.goto('/');
-  await page.getByRole('button', { name: /Search or jump to/ }).click();
+  await page.getByRole('button', { name: 'Search (⌘K)' }).click();
   await page.getByRole('combobox', { name: 'Search screens and pages' }).fill('miso');
   await page.getByRole('option', { name: /Recipes/ }).click();
   await expect(page.getByRole('textbox', { name: 'Page title' })).toHaveValue('Recipes');

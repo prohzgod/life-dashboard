@@ -47,6 +47,7 @@ export const calendar = {
     shortMinutes: (m: number) => `${m}m`,
   },
   grid: {
+    hoursLabel: 'Hours of the day',
     day: 'Day',
     week: 'Week grid',
     todaySuffix: ', today',

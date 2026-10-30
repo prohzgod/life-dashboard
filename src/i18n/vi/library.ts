@@ -103,6 +103,7 @@ export const library: Messages['library'] = {
   },
   editor: {
     emptyDocument: 'Gõ / để chèn khối, [[ để liên kết trang, @ để nhắc đến mục tiêu…',
+    contentLabel: 'Nội dung trang',
     placeholder: 'Gõ / để chèn khối',
     gallery: 'Bộ sưu tập',
     gallerySub: 'Lưới ảnh. Thả, dán hoặc chọn ảnh.',

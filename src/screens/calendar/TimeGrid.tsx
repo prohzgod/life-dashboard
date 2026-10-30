@@ -85,7 +85,8 @@ export function TimeGrid({ days, today, range, layers, areas, hourHeight, firstH
           ))}
         </div>
       )}
-      <div ref={scrollRef} className={styles.gridScroll}>
+      {/* Scrolls by keyboard too. */}
+      <div ref={scrollRef} className={styles.gridScroll} tabIndex={0} role="region" aria-label={t.hoursLabel}>
         <div className={styles.gridBody} style={{ height: 24 * hourHeight }}>
           <div className={styles.hours} aria-hidden="true">
             {HOURS.map((h) => (

@@ -104,6 +104,7 @@ export const library = {
   },
   editor: {
     emptyDocument: 'Type / for blocks, [[ to link a page, @ to mention a goal…',
+    contentLabel: 'Page content',
     placeholder: 'Type / for blocks',
     gallery: 'Gallery',
     gallerySub: 'A grid of images. Drop, paste or pick them.',

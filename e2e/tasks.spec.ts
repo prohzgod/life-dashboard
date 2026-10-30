@@ -10,7 +10,7 @@ test('plan the day: add, check off, and it survives a reload', async ({ page }) 
   const list = page.getByRole('list', { name: 'Today’s tasks' });
   await expect(list.getByRole('button', { name: 'Water the plants' })).toBeVisible();
   await list.getByRole('checkbox', { name: 'Mark “Water the plants” as done' }).click();
-  await expect(page.getByText('1 of 1 done')).toBeVisible();
+  await expect(page.getByText('1 / 1 done')).toBeVisible();
 
   // The repeat's next occurrence is waiting in Upcoming.
   await page.goto('/tasks?view=upcoming');

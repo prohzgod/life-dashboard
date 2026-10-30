@@ -1073,3 +1073,16 @@
   font-size: var(--text-label-size);
   letter-spacing: 0;
 }
+
+.offline {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--space-1h);
+  padding: var(--space-1h) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  font-size: var(--text-label-size);
+  font-weight: 500;
+}

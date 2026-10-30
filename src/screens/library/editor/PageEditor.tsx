@@ -59,6 +59,7 @@ export function PageEditor({ node, onSave, onSaving }: Props) {
       resolveFileUrl,
       dictionary: locale === 'vi' ? editorVi : editorEn,
       placeholders: { emptyDocument: t.emptyDocument, default: t.placeholder },
+      domAttributes: { editor: { 'aria-label': t.contentLabel } },
     },
     [node.id, locale],
   );

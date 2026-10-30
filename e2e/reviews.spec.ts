@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 test('a monthly review from the Reviews page: look back, reflect, plan, finish into the journal', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: /Reviews/ }).click();
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'More screens' }).click();
+  await page.getByRole('menuitem', { name: /Reviews/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Reviews' })).toBeVisible();
   const slots = page.getByRole('list', { name: 'Your reviews' });
   for (const kind of ['Weekly review', 'Monthly review', 'Quarterly review', 'Yearly review']) await expect(slots.getByRole('heading', { name: kind })).toBeVisible();

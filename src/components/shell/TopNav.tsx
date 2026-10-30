@@ -13,6 +13,7 @@ import { Menu } from '../ui';
 import { cx } from '../ui/cx';
 import { ProfileAvatar } from './ProfileAvatar';
 import styles from './TopNav.module.css';
+import { useOnlineStatus } from './useOnlineStatus';
 
 /** The pill row of screens; the rest sit under More. */
 const MAIN: Screen[] = [screens.today, screens.inbox, screens.tasks, screens.calendar, screens.goals, screens.progress, screens.library];
@@ -32,6 +33,7 @@ export function TopNav({ onSearch }: { onSearch: () => void }) {
   const [, setMode] = useThemePreference();
   const theme = useResolvedTheme();
   const moreOn = MORE.some((s) => isOn(s, pathname));
+  const online = useOnlineStatus();
 
   return (
     <header className={styles.header}>
@@ -79,6 +81,12 @@ export function TopNav({ onSearch }: { onSearch: () => void }) {
       </nav>
 
       <div className={styles.actions}>
+        {!online && (
+          <span className={styles.offline} role="status">
+            <Icon name="offline" size={16} />
+            <span className={styles.offlineText}>{t.shell.offlineWorks}</span>
+          </span>
+        )}
         <button type="button" className={styles.round} aria-label={t.shell.search} onClick={onSearch}>
           <Icon name="search" size={20} />
         </button>

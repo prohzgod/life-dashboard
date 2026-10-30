@@ -45,6 +45,7 @@ export const calendar: Messages['calendar'] = {
     shortMinutes: (m) => `${m}p`,
   },
   grid: {
+    hoursLabel: 'Các giờ trong ngày',
     day: 'Ngày',
     week: 'Lưới tuần',
     todaySuffix: ', hôm nay',

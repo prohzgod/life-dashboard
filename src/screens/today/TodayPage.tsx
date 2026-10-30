@@ -5,6 +5,7 @@ import { tasksRepo } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
 import { useShellActions } from '@/components/shell/shellActions';
+import { useOnlineStatus } from '@/components/shell/useOnlineStatus';
 import { ButtonLink, HatchBar, IconButton, ProgressCapsule } from '@/components/ui';
 import { formatDayLong, formatWeekdayDate, numberWord } from '@/lib/format';
 import { messages, useT, type Messages } from '@/i18n';
@@ -142,6 +143,7 @@ function PhoneToday() {
   const today = useToday();
   const counts = useTodayCounts(today);
   const { openSearch } = useShellActions();
+  const online = useOnlineStatus();
   const r = rhythmOf(today);
   const yearPct = Math.round((r.yearDay / r.yearDays) * 100);
   const [weekday, ...rest] = formatWeekdayDate(today).split(', ');
@@ -159,6 +161,12 @@ function PhoneToday() {
           <Icon name="bell" size={20} />
         </Link>
       </header>
+      {!online && (
+        <p className={styles.offline} role="status">
+          <Icon name="offline" size={16} />
+          {t.today.mobile.offline}
+        </p>
+      )}
       <h1 className={styles.phoneDisplay}>
         {greeting(t.today, new Date().getHours())}
         <span className={styles.displayQuiet}> {headline(t.today, counts?.open)}</span>
