@@ -250,3 +250,13 @@ test('Reviews on a phone: the hub with a back link, and a monthly review full-sc
   await page.getByRole('link', { name: 'Close and finish later' }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Reviews' })).toBeVisible();
 });
+
+test('a Library page and its folders always have a way back and a way home', async ({ page }) => {
+  await page.goto('/library/day/2026-10-27');
+  await page.getByRole('link', { name: /^Back to / }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  // Folders open full-screen without the tab bar: Home is in the top bar.
+  await page.getByRole('link', { name: 'Home', exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});

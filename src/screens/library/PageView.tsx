@@ -12,6 +12,7 @@ import { PageEditor } from './editor/PageEditor';
 import { JournalCheckIn } from './JournalCheckIn';
 import { PageProperties } from './PageProperties';
 import { PageRail } from './PageRail';
+import { MobileTopBar } from './MobileTopBar';
 import { LOCALES, messages, useT } from '@/i18n';
 import { formatDayLong } from '@/lib/format';
 import styles from './Library.module.css';
@@ -48,13 +49,14 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
   return (
     <>
       <main className={styles.main}>
+        {isMobile ? (
+          <MobileTopBar parent={trail.at(-1)}>
+            <button type="button" className={styles.optionsButton} aria-label={t.options} onClick={() => setSheet(true)}>
+              <Icon name="more" size={18} strokeWidth={3} />
+            </button>
+          </MobileTopBar>
+        ) : (
         <div className={styles.topBar}>
-          {isMobile ? (
-            <Link to={trail.at(-1) ? `/library/${trail.at(-1)!.id}` : '/library'} className={styles.mobileBack} aria-label={t.backTo(trail.at(-1)?.title ?? t.library)}>
-              <Icon name="chevronLeft" size={20} strokeWidth={2.2} />
-              {trail.at(-1)?.title ?? t.library}
-            </Link>
-          ) : (
           <nav aria-label={library.breadcrumb} className={styles.breadcrumb}>
             {trail.map((a) => (
               <span key={a.id}>
@@ -66,18 +68,12 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
               {node.title}
             </span>
           </nav>
-          )}
           <div className={styles.topActions}>
             <span className={styles.saved} role="status">
               <span className={saving ? styles.savingDot : styles.savedDot} aria-hidden="true" />
               {saving ? t.saving : t.saved}
             </span>
-            {isMobile ? (
-              <button type="button" className={styles.optionsButton} aria-label={t.options} onClick={() => setSheet(true)}>
-                <Icon name="more" size={18} strokeWidth={3} />
-              </button>
-            ) : (
-              <Menu
+            <Menu
                 label={t.options}
                 trigger={<Icon name="more" size={18} strokeWidth={3} />}
                 items={[
@@ -86,9 +82,9 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
                   { label: library.moveToTrash, danger: true, disabled: node.isSystem, onSelect: () => void trash() },
                 ]}
               />
-            )}
           </div>
         </div>
+        )}
         <article className={styles.article}>
           {day ? (
             <h1 className={styles.pageTitle}>{formatDayLong(day)}</h1>

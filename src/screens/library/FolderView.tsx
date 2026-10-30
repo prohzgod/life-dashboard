@@ -6,6 +6,8 @@ import { Icon } from '@/components/icons/Icon';
 import { Button, Menu } from '@/components/ui';
 import { timeAgo } from '@/lib/format';
 import { useT } from '@/i18n';
+import { useIsMobile } from '@/lib/useMediaQuery';
+import { MobileTopBar } from './MobileTopBar';
 import styles from './Library.module.css';
 
 export function FolderView({ node, all }: { node: LibraryNode; all: LibraryNode[] }) {
@@ -15,6 +17,7 @@ export function FolderView({ node, all }: { node: LibraryNode; all: LibraryNode[
   const children = all.filter((n) => n.parentId === node.id).sort((a, b) => (a.sortKey < b.sortKey ? -1 : 1));
   const journalFolder = isJournalManaged(node);
   const trail = ancestors(all, node.id);
+  const isMobile = useIsMobile();
 
   async function add(kind: 'page' | 'folder') {
     try {
@@ -27,6 +30,26 @@ export function FolderView({ node, all }: { node: LibraryNode; all: LibraryNode[
 
   return (
     <main className={styles.main}>
+      {isMobile ? (
+        <MobileTopBar parent={trail.at(-1)}>
+        {!node.isSystem && (
+          <Menu
+            label={t.folderOptions}
+            trigger={<Icon name="more" size={18} strokeWidth={3} />}
+            items={[
+              {
+                label: t.moveToTrash,
+                danger: true,
+                onSelect: async () => {
+                  await trashNode(node.id);
+                  navigate('/library');
+                },
+              },
+            ]}
+          />
+        )}
+        </MobileTopBar>
+      ) : (
       <div className={styles.topBar}>
         <nav aria-label={t.breadcrumb} className={styles.breadcrumb}>
           {trail.map((a) => (
@@ -56,6 +79,7 @@ export function FolderView({ node, all }: { node: LibraryNode; all: LibraryNode[
           />
         )}
       </div>
+      )}
       <article className={styles.article}>
         {node.isSystem ? (
           <h1 className={styles.pageTitle}>{node.title}</h1>

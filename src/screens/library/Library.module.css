@@ -513,6 +513,7 @@
 .folderList {
   display: flex;
   flex-direction: column;
+  gap: var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -521,16 +522,19 @@
 .folderItem {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 0 var(--space-2);
-  border-bottom: 1px solid var(--line-soft);
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-row);
+  background: var(--glass-2);
   color: var(--ink);
+  font-weight: 500;
   text-decoration: none;
 }
 
 a.folderItem:hover {
-  background: var(--subtle);
+  background: var(--glass);
 }
 
 .photoGrid {
@@ -661,27 +665,46 @@ a.folderItem:hover {
 
 .optionsButton {
   display: flex;
+  flex: none;
   align-items: center;
   justify-content: center;
   width: var(--touch-min);
   height: var(--touch-min);
   padding: 0;
-  border: 0;
+  border: 1px solid var(--line);
   border-radius: var(--radius-pill);
-  background: var(--surface);
-  color: var(--ink-2);
+  background: var(--glass-2);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  color: var(--ink);
 }
 
 .mobileBack {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  min-height: var(--touch-min);
-  margin-left: -8px;
-  color: var(--link);
-  font-size: 15px;
-  font-weight: 600;
+  gap: var(--space-1);
+  min-width: 0;
+  height: var(--touch-min);
+  padding: 0 var(--space-4) 0 var(--space-2h);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--glass-2);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  color: var(--ink);
+  font-size: var(--text-body-size);
+  font-weight: 500;
   text-decoration: none;
+}
+
+.mobileBack svg {
+  flex: none;
+}
+
+.mobileBackText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Phones */
@@ -739,35 +762,59 @@ a.folderItem:hover {
   background: var(--surface);
 }
 
+/* Phones: the page sits on the background under a floating bar, no panel around it. */
+.mobileBar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+}
+
+.mobileBarActions {
+  display: flex;
+  flex: none;
+  gap: var(--space-2);
+}
+
 @media (max-width: 767px) {
   .page {
+    gap: 0;
+    height: auto;
     min-height: 0;
-    margin: 0;
+    overflow: visible;
   }
 
   .main {
-    margin: -20px calc(-1 * var(--mobile-gutter)) 0;
-    background: var(--bg);
-  }
-
-  .topBar {
-    height: 56px;
-    padding: 0 var(--mobile-gutter);
+    overflow: visible;
     border: 0;
-    background: var(--bg);
-  }
-
-  .topBar .saved {
-    display: none;
+    border-radius: 0;
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
   .article {
     max-width: none;
-    padding: 0 var(--mobile-gutter) var(--space-12);
+    padding: var(--space-3) 0 var(--space-12);
   }
 
   .pageTitle {
     font-size: var(--text-mobile-title-size);
     line-height: var(--text-mobile-title-line);
+  }
+}
+
+/* Tablets: the tree takes room, so the page keeps narrower margins. */
+@media (min-width: 768px) and (max-width: 1099px) {
+  .article {
+    padding: var(--space-6) var(--space-6) 96px;
+  }
+
+  .tree {
+    width: 240px;
   }
 }
