@@ -79,7 +79,7 @@ export const library = {
     allPhotos: 'All photos',
     trash: 'Trash',
     note: (mobile: boolean, pages: number, images: number) =>
-      `${mobile ? 'All pages are available offline' : 'Drag to move or nest'}. On this device: ${pages === 1 ? '1 page' : `${pages} pages`}${images ? `, ${images === 1 ? '1 image' : `${images} images`}` : ''}.`,
+      `${mobile ? 'Press and hold, then drag to move or nest' : 'Drag to move or nest'}. On this device: ${pages === 1 ? '1 page' : `${pages} pages`}${images ? `, ${images === 1 ? '1 image' : `${images} images`}` : ''}.`,
     collapse: (title: string) => `Collapse ${title}`,
     expand: (title: string) => `Expand ${title}`,
     /** A journal day in the tree: "Tue 27, today". */

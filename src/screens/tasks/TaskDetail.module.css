@@ -205,15 +205,19 @@
 }
 
 .notes {
-  min-height: 88px;
-  padding: var(--space-2);
-  border: 1px solid transparent;
-  border-radius: var(--radius-pill);
-  background: var(--sunken);
-  color: var(--ink-2);
-  font-size: 14px;
+  min-height: 112px;
+  padding: var(--space-3h) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+  background: var(--glass-2);
+  color: var(--ink);
+  font-size: var(--text-body-size);
   line-height: 1.5;
   resize: vertical;
+}
+
+.notes::placeholder {
+  color: var(--ink-3);
 }
 
 .footer {

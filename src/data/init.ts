@@ -3,7 +3,7 @@ import { ensureBudgets } from './finance';
 import { ensureHealthMetrics } from './health';
 import { db } from './db';
 import { ensureHomeWidgets } from './homeWidgets';
-import { localizeSystemNodes } from './library';
+import { localizeSeedContent } from './localize';
 import { ensureProfile } from './profile';
 import { seedIfNeeded } from './seed';
 
@@ -20,8 +20,8 @@ export function initData(): Promise<void> {
     await ensureCalendars();
     await ensureBudgets();
     await ensureHealthMetrics();
-    // Folders made in another language follow the one you use now.
-    await localizeSystemNodes();
+    // Starter content made in another language follows the one you use now.
+    await localizeSeedContent();
   })().catch((error: unknown) => {
     ready = null;
     throw error;

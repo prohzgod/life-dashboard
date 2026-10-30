@@ -79,7 +79,7 @@ export const library: Messages['library'] = {
     more: 'Thêm',
     allPhotos: 'Tất cả ảnh',
     trash: 'Thùng rác',
-    note: (mobile, pages, images) => `${mobile ? 'Mọi trang đều dùng được khi ngoại tuyến' : 'Kéo để di chuyển hoặc lồng vào nhau'}. Trên thiết bị này: ${pages} trang${images ? `, ${images} ảnh` : ''}.`,
+    note: (mobile, pages, images) => `${mobile ? 'Nhấn giữ rồi kéo để di chuyển hoặc lồng vào nhau' : 'Kéo để di chuyển hoặc lồng vào nhau'}. Trên thiết bị này: ${pages} trang${images ? `, ${images} ảnh` : ''}.`,
     collapse: (title) => `Thu gọn ${title}`,
     expand: (title) => `Mở rộng ${title}`,
     todayRow: (title) => `${title}, hôm nay`,

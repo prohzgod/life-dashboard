@@ -176,8 +176,55 @@
 }
 
 .rowDrop {
-  outline: 2px solid var(--primary);
+  background: var(--primary-soft);
+  color: var(--ink);
+  outline: 2px solid var(--inverse);
   outline-offset: -2px;
+}
+
+.rowDragging {
+  opacity: 0.4;
+}
+
+/* Drag and drop: the line between rows, and the pill you carry. */
+.dropLine {
+  position: absolute;
+  z-index: 1;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--glass-2);
+  pointer-events: none;
+}
+
+.dragLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.dragPreview {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 260px;
+  height: var(--touch-min);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--float);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  box-shadow: var(--shadow-tabbar);
+  color: var(--ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dragPreview span {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chevron {
@@ -736,12 +783,31 @@ a.folderItem:hover {
 
 .treeMobile .treeBox {
   padding: var(--space-2);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
+  border-radius: var(--radius-card);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
 }
 
 .treeMobile .row {
   height: 44px;
+  padding-left: var(--space-1);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-size);
+  /* Press and hold starts a drag: no text selection or callout menu in the way. */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.treeMobile .chevron {
+  width: 32px;
+  height: 32px;
+}
+
+.treeMobile .treeBox {
+  border: 1px solid var(--line);
 }
 
 .panels {

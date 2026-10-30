@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useRef, type ReactNode } from 'react';
-import { localizeSystemNodes } from '@/data';
+import { localizeSeedContent } from '@/data';
 import { useLocale } from '@/i18n';
 
 /**
  * Re-mounts the app when you change language, so copy read outside components
  * (formatters, screen labels, memoised text) is read again in the new language.
- * The folders the app made (Journal and its years, months and days) are renamed to match.
+ * Starter content the app made (Journal folders, the sample goal and habits…) is renamed to match.
  */
 export function LocaleRoot({ children }: { children: ReactNode }) {
   const [locale] = useLocale();
@@ -13,7 +13,7 @@ export function LocaleRoot({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (locale === shown.current) return;
     shown.current = locale;
-    void localizeSystemNodes();
+    void localizeSeedContent();
   }, [locale]);
   return <Fragment key={locale}>{children}</Fragment>;
 }

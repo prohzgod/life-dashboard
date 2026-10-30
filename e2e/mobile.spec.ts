@@ -260,3 +260,29 @@ test('a Library page and its folders always have a way back and a way home', asy
   await expect(page).toHaveURL(/\/$/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test('press and hold a page in the Library tree, then drag it into a folder', async ({ page, context }) => {
+  await page.goto('/library');
+  await page.getByRole('button', { name: 'New page' }).click();
+  const title = page.getByRole('textbox', { name: 'Page title' });
+  await title.fill('Trip notes');
+  await title.press('Enter');
+  await page.getByRole('link', { name: 'Back to Library' }).click();
+  await expect(page.getByText('Trip notes', { exact: true })).toBeVisible();
+
+  // Real touch events: the tree's drag starts only after a press and hold.
+  const cdp = await context.newCDPSession(page);
+  const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', x = 0, y = 0) =>
+    cdp.send('Input.dispatchTouchEvent', { type, touchPoints: type === 'touchEnd' ? [] : [{ x, y }] });
+  const from = (await page.getByText('Trip notes', { exact: true }).boundingBox())!;
+  const to = (await page.getByText('Projects', { exact: true }).boundingBox())!;
+  const [sx, sy, dy] = [from.x + 20, from.y + from.height / 2, to.y + to.height / 2];
+  await touch('touchStart', sx, sy);
+  await page.waitForTimeout(500);
+  for (let i = 1; i <= 12; i++) await touch('touchMove', sx, sy + ((dy - sy) * i) / 12);
+  await touch('touchEnd');
+
+  await expect(page.getByRole('button', { name: 'Collapse Projects' })).toBeAttached();
+  await page.getByText('Trip notes', { exact: true }).click();
+  await expect(page.getByRole('link', { name: 'Back to Projects' })).toBeVisible();
+});

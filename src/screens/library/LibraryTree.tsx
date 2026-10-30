@@ -1,6 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Tree, type NodeRendererProps, type TreeApi } from 'react-arborist';
+import { longPressBackend, TreeLookup } from './treeDnd';
+import { TreeCursor, TreeDragPreview } from './TreeDragLayer';
 import { Link, useNavigate } from 'react-router-dom';
 import { ancestors, buildTree, canMove, dropIndexWithoutSelf, isJournalManaged, type TreeItem } from '@/domain/library';
 import { createNode, journalDayOf, LibraryError, listLibraryNodes, listPhotos, moveNode, searchLibrary, type LibraryNode } from '@/data';
@@ -53,6 +55,7 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
   const rows = useMemo(() => toRows(buildTree(nodes ?? [])), [nodes]);
   const favourites = (nodes ?? []).filter((n) => n.favoritedAt).sort((a, b) => a.title.localeCompare(b.title));
   const current = nodes?.find((n) => n.id === currentId);
+  const lookup = useMemo(() => new Map((nodes ?? []).map((n) => [n.id, { title: n.title, kind: n.kind }])), [nodes]);
 
   // Open the way to the current page, and the Journal down to this month.
   const loaded = !!nodes;
@@ -165,6 +168,7 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
           <h2 className={styles.sectionLabel}>{t.pages}</h2>
           <div ref={boxRef} className={styles.treeBox}>
             {nodes && (
+              <TreeLookup.Provider value={lookup}>
               <Tree<Row>
                 ref={treeRef}
                 data={rows}
@@ -178,6 +182,10 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
                 selection={currentId ?? undefined}
                 disableEdit
                 disableMultiSelection
+                // Phones drag by press and hold; desktops keep the mouse backend.
+                dndBackend={mobile ? longPressBackend : undefined}
+                renderDragPreview={TreeDragPreview}
+                renderCursor={TreeCursor}
                 disableDrag={(row) => row.node.isSystem}
                 disableDrop={({ parentNode, dragNodes }) =>
                   dragNodes.some((d) => !canMove(nodes, d.data.node, parentNode.isRoot ? null : parentNode.id).ok)
@@ -197,6 +205,7 @@ export function LibraryTree({ currentId, section, mobile }: Props) {
               >
                 {(props) => <TreeRow {...props} today={today} />}
               </Tree>
+              </TreeLookup.Provider>
             )}
           </div>
           <nav className={styles.specials} aria-label={t.more}>
@@ -230,7 +239,7 @@ function TreeRow({ node, style, dragHandle, today }: NodeRendererProps<Row> & { 
     <div
       ref={dragHandle}
       style={style}
-      className={cx(styles.row, node.isSelected && styles.rowActive, node.willReceiveDrop && styles.rowDrop, top && styles.rowTop)}
+      className={cx(styles.row, node.isSelected && styles.rowActive, node.willReceiveDrop && styles.rowDrop, node.isDragging && styles.rowDragging, top && styles.rowTop)}
     >
       {hasChildren ? (
         <button
