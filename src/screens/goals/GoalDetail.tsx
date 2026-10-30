@@ -22,14 +22,15 @@ import { chartFont } from '@/components/charts/chartTheme';
 import { Icon } from '@/components/icons/Icon';
 import { Button, Menu } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
-import { formatDayShort } from '@/lib/format';
-import { goalTypeChip, METHOD_LABELS } from '@/lib/goalText';
+import { formatDayMonth, formatDayShort } from '@/lib/format';
+import { goalTypeChip } from '@/lib/goalText';
 import { GoalForm } from './GoalForm';
+import { messages, useT } from '@/i18n';
 import styles from './Goals.module.css';
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
 export function GoalDetail({ view, board, today }: { view: GoalView; board: GoalBoard; today: Day }) {
+  const { goals } = useT();
+  const t = goals.detail;
   const navigate = useNavigate();
   const { goal, progress, pace } = view;
   const [editing, setEditing] = useState(false);
@@ -44,7 +45,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
   const color = area ? `var(--${area.color})` : 'var(--primary)';
 
   return (
-    <aside className={styles.detail} aria-label="Goal details">
+    <aside className={styles.detail} aria-label={goals.page.details}>
       <div className={styles.detailTop}>
         <div className={styles.chips}>
           {area && (
@@ -54,18 +55,18 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
           )}
           <span className={styles.chip}>{goalTypeChip(goal)}</span>
           <span className={styles.chip}>
-            {formatDayShort(goal.startDate)} to {formatDayShort(goal.endDate)}
+            {t.range(formatDayShort(goal.startDate), formatDayShort(goal.endDate))}
           </span>
         </div>
         <Menu
-          label="Goal options"
+          label={t.options}
           trigger={<Icon name="more" size={18} strokeWidth={3} />}
           items={[
-            { label: 'Edit goal', onSelect: () => setEditing(true) },
-            { label: goal.status === 'paused' ? 'Resume' : 'Pause', onSelect: () => void setGoalStatus(goal.id, goal.status === 'paused' ? 'active' : 'paused') },
-            { label: 'Mark as done', onSelect: () => void setGoalStatus(goal.id, 'done') },
+            { label: t.edit, onSelect: () => setEditing(true) },
+            { label: goal.status === 'paused' ? t.resume : t.pause, onSelect: () => void setGoalStatus(goal.id, goal.status === 'paused' ? 'active' : 'paused') },
+            { label: t.markDone, onSelect: () => void setGoalStatus(goal.id, 'done') },
             {
-              label: 'Drop this goal',
+              label: t.drop,
               danger: true,
               onSelect: async () => {
                 await setGoalStatus(goal.id, 'dropped');
@@ -80,7 +81,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
         <h2 className={styles.detailTitle}>{goal.title}</h2>
         {goal.why && (
           <p className={styles.why}>
-            <span className={styles.quietInline}>Why it matters:</span> {goal.why}
+            <span className={styles.quietInline}>{t.why}</span> {goal.why}
           </p>
         )}
       </div>
@@ -90,12 +91,12 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
           <span className={styles.big}>{goal.progressMethod === 'keyResultAverage' && progress.score !== undefined ? progress.score.toFixed(2) : percent === null ? '–' : `${Math.round(percent)}%`}</span>
           <span className={styles.quiet}>
             {pace.expected !== null && (pace.state === 'on-pace' || pace.state === 'behind')
-              ? `Expected by today: ${Math.round(pace.expected)}%${goal.commitment === 'aspirational' ? ' (stretch line)' : ''}`
-              : METHOD_LABELS[goal.progressMethod]}
+              ? t.expected(Math.round(pace.expected), goal.commitment === 'aspirational')
+              : goals.methods[goal.progressMethod]}
           </span>
         </div>
         <span className={cx(styles.pill, pace.state === 'behind' ? styles.pillWarning : pace.state === 'on-pace' || pace.state === 'done' ? styles.pillSuccess : styles.pillQuiet)}>
-          {pace.state === 'behind' ? pace.sentence.replace('Behind by about ', 'Behind ~') : pace.sentence}
+          {pace.state === 'behind' ? goals.pace.pill(pace.sentence) : pace.sentence}
         </span>
       </div>
 
@@ -105,7 +106,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
 
       {suggestion && (
         <div className={styles.catchUp}>
-          <p>{added ? 'Added to today’s plan.' : suggestion.text}</p>
+          <p>{added ? t.added : suggestion.text}</p>
           {!added && (
             <Button
               size="sm"
@@ -115,7 +116,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
                 setAdded(true);
               }}
             >
-              Add to plan
+              {t.addToPlan}
             </Button>
           )}
         </div>
@@ -124,7 +125,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
       {(goal.progressMethod === 'milestones' || milestones.length > 0) && (
         <section className={styles.section} aria-labelledby="milestones">
           <h3 id="milestones" className={styles.sectionTitle}>
-            Milestones
+            {t.milestones}
           </h3>
           <ul className={styles.plainList}>
             {milestones.map((m) => (
@@ -133,21 +134,21 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
                   type="button"
                   role="checkbox"
                   aria-checked={!!m.doneAt}
-                  aria-label={`${m.title}${m.doneAt ? ', done' : ''}`}
+                  aria-label={`${m.title}${m.doneAt ? t.doneSuffix : ''}`}
                   className={cx(styles.milestoneDot, m.doneAt && styles.milestoneDone)}
                   style={m.doneAt ? { background: color } : undefined}
                   onClick={() => void toggleMilestone(m.id)}
                 />
                 <span className={styles.grow}>{m.title}</span>
-                <span className={styles.quiet}>{m.doneAt ? formatDayShort(m.doneAt.slice(0, 10)).slice(4) : m.dueDate ? `by ${formatDayShort(m.dueDate).slice(4)}` : ''}</span>
-                <button type="button" className={styles.remove} aria-label={`Remove ${m.title}`} onClick={() => void deleteMilestone(m.id)}>
+                <span className={styles.quiet}>{m.doneAt ? formatDayMonth(m.doneAt.slice(0, 10)) : m.dueDate ? t.by(formatDayMonth(m.dueDate)) : ''}</span>
+                <button type="button" className={styles.remove} aria-label={t.remove(m.title)} onClick={() => void deleteMilestone(m.id)}>
                   <Icon name="close" size={12} />
                 </button>
               </li>
             ))}
           </ul>
           <AddRow
-            label="Add a milestone"
+            label={t.addMilestone}
             withDate
             onAdd={(title, date) => addMilestone(goal.id, title, date)}
           />
@@ -157,7 +158,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
       {goal.progressMethod === 'keyResultAverage' && (
         <section className={styles.section} aria-labelledby="krs">
           <h3 id="krs" className={styles.sectionTitle}>
-            Key results
+            {t.keyResults}
           </h3>
           <ul className={styles.plainList}>
             {keyResults.map((k) => (
@@ -166,7 +167,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
                 <input
                   className={styles.krInput}
                   type="number"
-                  aria-label={`${k.title} now`}
+                  aria-label={t.krNow(k.title)}
                   defaultValue={k.current}
                   onBlur={(e) => Number(e.target.value) !== k.current && void updateKeyResult(k.id, Number(e.target.value))}
                 />
@@ -174,7 +175,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
               </li>
             ))}
           </ul>
-          <AddRow label="Add a key result (target number at the end, e.g. “Paying users 100”)" onAdd={(text) => {
+          <AddRow label={t.addKr} onAdd={(text) => {
             const m = /^(.*?)\s+(\d+(?:\.\d+)?)$/.exec(text.trim());
             return addKeyResult(goal.id, m ? m[1]! : text, m ? Number(m[2]) : 1);
           }} />
@@ -184,17 +185,15 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
       {links && (
         <div className={styles.tiles}>
           <div className={styles.tile}>
-            <span className={styles.tileLabel}>Habits</span>
-            <span className={styles.tileValue}>{links.habits.length ? links.habits.join(', ') : 'None linked'}</span>
+            <span className={styles.tileLabel}>{t.habits}</span>
+            <span className={styles.tileValue}>{links.habits.length ? links.habits.join(', ') : t.noneLinked}</span>
           </div>
           <Link to="/tasks?view=anytime" className={styles.tile}>
-            <span className={styles.tileLabel}>Tasks</span>
-            <span className={styles.tileValue}>
-              {links.openTasks} open, {links.doneTasks} done
-            </span>
+            <span className={styles.tileLabel}>{t.tasks}</span>
+            <span className={styles.tileValue}>{t.taskCounts(links.openTasks, links.doneTasks)}</span>
           </Link>
           <div className={styles.tile}>
-            <span className={styles.tileLabel}>Notes</span>
+            <span className={styles.tileLabel}>{t.notes}</span>
             <span className={styles.tileValue}>
               {links.notes.length
                 ? links.notes.slice(0, 2).map((n, i) => (
@@ -203,12 +202,12 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
                       <Link to={`/library/${n.id}`}>{n.title}</Link>
                     </span>
                   ))
-                : 'Mention it with @ in a page'}
+                : t.mention}
             </span>
           </div>
           <div className={styles.tile}>
-            <span className={styles.tileLabel}>Journal</span>
-            <span className={styles.tileValue}>{links.journalMentions ? `${links.journalMentions} ${links.journalMentions === 1 ? 'mention' : 'mentions'}` : 'No mentions yet'}</span>
+            <span className={styles.tileLabel}>{t.journal}</span>
+            <span className={styles.tileValue}>{links.journalMentions ? t.mentions(links.journalMentions) : t.noMentions}</span>
           </div>
         </div>
       )}
@@ -225,10 +224,12 @@ function ProgressChart({ goalStart, goalEnd, history, today, color, stretch, tit
   const end = dayToDate(addDays(goalEnd, 1)).getTime();
   const now = dayToDate(today).getTime();
   const last = history.at(-1)?.percent ?? 0;
+  const { format, goals } = messages();
+  const t = goals.detail;
   return (
     <Chart
       height={150}
-      label={`${title}: progress over time against the pace line. Now ${Math.round(last)}%.`}
+      label={t.chartLabel(title, Math.round(last))}
       option={(c) => ({
         textStyle: { fontFamily: chartFont },
         animation: false,
@@ -240,13 +241,13 @@ function ProgressChart({ goalStart, goalEnd, history, today, color, stretch, tit
           splitNumber: 4,
           axisLine: { lineStyle: { color: c.line } },
           axisTick: { show: false },
-          axisLabel: { color: c['ink-3'], fontSize: 11, showMaxLabel: false, formatter: (v: number) => MONTHS[new Date(v).getMonth()]! },
+          axisLabel: { color: c['ink-3'], fontSize: 11, showMaxLabel: false, formatter: (v: number) => format.monthsShort[new Date(v).getMonth()]! },
         },
         yAxis: { type: 'value', min: 0, max: 100, show: true, splitNumber: 4, axisLabel: { show: false }, splitLine: { lineStyle: { color: c['line-soft'] } } },
         tooltip: { trigger: 'axis', valueFormatter: (v: number) => `${Math.round(v)}%` },
         series: [
           {
-            name: 'Pace',
+            name: t.paceSeries,
             type: 'line',
             symbol: 'none',
             data: [[start, 0], [end, stretch ? STRETCH_WIN * 100 : 100]],
@@ -254,13 +255,13 @@ function ProgressChart({ goalStart, goalEnd, history, today, color, stretch, tit
             markLine: {
               symbol: 'none',
               silent: true,
-              label: { formatter: 'Today', color: c['ink-3'], fontSize: 11, position: 'end' },
+              label: { formatter: t.today, color: c['ink-3'], fontSize: 11, position: 'end' },
               lineStyle: { type: 'dotted', color: c['ink-3'] },
               data: [{ xAxis: now }],
             },
           },
           {
-            name: 'Progress',
+            name: t.progressSeries,
             type: 'line',
             step: false,
             symbol: 'none',
@@ -281,6 +282,7 @@ function ProgressChart({ goalStart, goalEnd, history, today, color, stretch, tit
 }
 
 function LogValue({ goalId, value, unit, target }: { goalId: string; value: number | null; unit: string | null; target: number | null }) {
+  const t = useT().goals.detail;
   const [text, setText] = useState(value === null ? '' : String(value));
   return (
     <form
@@ -291,18 +293,19 @@ function LogValue({ goalId, value, unit, target }: { goalId: string; value: numb
       }}
     >
       <label htmlFor="goal-value" className={styles.quiet}>
-        Now
+        {t.now}
       </label>
       <input id="goal-value" type="number" step="any" inputMode="decimal" value={text} onChange={(e) => setText(e.target.value)} className={styles.valueInput} />
-      <span className={styles.quiet}>{target !== null ? `of ${formatAmount(target, unit)}` : unit}</span>
+      <span className={styles.quiet}>{target !== null ? t.of(formatAmount(target, unit)) : unit}</span>
       <Button size="sm" type="submit" disabled={text.trim() === '' || Number(text) === value}>
-        Update
+        {t.update}
       </Button>
     </form>
   );
 }
 
 function AddRow({ label, onAdd, withDate }: { label: string; onAdd: (title: string, date: Day | null) => Promise<unknown>; withDate?: boolean }) {
+  const t = useT().goals.detail;
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   return (
@@ -318,7 +321,7 @@ function AddRow({ label, onAdd, withDate }: { label: string; onAdd: (title: stri
     >
       <Icon name="plus" size={14} />
       <input aria-label={label} placeholder={label} value={title} onChange={(e) => setTitle(e.target.value)} />
-      {withDate && <input type="date" aria-label="Due date" value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />}
+      {withDate && <input type="date" aria-label={t.dueDate} value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />}
     </form>
   );
 }

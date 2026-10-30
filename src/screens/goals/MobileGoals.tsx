@@ -5,10 +5,12 @@ import type { GoalBoard } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { cx } from '@/components/ui/cx';
 import { goalNow, goalStatusLine } from '@/lib/goalText';
+import { useT } from '@/i18n';
 import styles from './MobileGoals.module.css';
 
 /** Goals on phones: the year's vision, then one card per top-level goal. */
 export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; today: Day; onCreate: () => void }) {
+  const { goals: t, screens } = useT();
   const [areaId, setAreaId] = useState<string | null>(null);
   const live = board.views.filter((v) => (v.goal.status === 'active' || v.goal.status === 'paused') && v.goal.horizon !== 'week');
   const top = live.filter((v) => !v.goal.parentGoalId || !live.some((p) => p.goal.id === v.goal.parentGoalId));
@@ -20,14 +22,14 @@ export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; toda
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Goals</h1>
-        <button type="button" className={styles.add} aria-label="New goal" onClick={onCreate}>
+        <h1 className={styles.title}>{screens.goals.title}</h1>
+        <button type="button" className={styles.add} aria-label={t.page.newGoal} onClick={onCreate}>
           <Icon name="plus" size={20} />
         </button>
       </header>
 
       {board.vision?.title && (
-        <section className={styles.vision} aria-label={`${year(today)} vision`}>
+        <section className={styles.vision} aria-label={t.vision.label(year(today))}>
           <span className={styles.eyebrow}>
             {year(today)}
             {board.vision.wordOfYear ? `, ${board.vision.wordOfYear}` : ''}
@@ -37,9 +39,9 @@ export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; toda
       )}
 
       {areasInUse.length > 1 && (
-        <div className={styles.chips} role="group" aria-label="Filter by area">
+        <div className={styles.chips} role="group" aria-label={t.page.filter}>
           <button type="button" aria-pressed={!areaId} className={cx(styles.chip, !areaId && styles.chipOn)} onClick={() => setAreaId(null)}>
-            All
+            {t.page.all}
           </button>
           {areasInUse.map((a) => (
             <button key={a.id} type="button" aria-pressed={areaId === a.id} className={cx(styles.chip, areaId === a.id && styles.chipOn)} onClick={() => setAreaId(areaId === a.id ? null : a.id)}>
@@ -50,7 +52,7 @@ export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; toda
         </div>
       )}
 
-      {shown.length === 0 && <p className={styles.empty}>No goals yet. Tap + to set one for this year.</p>}
+      {shown.length === 0 && <p className={styles.empty}>{t.page.mobileEmpty}</p>}
       <ul className={styles.list}>
         {shown.map(({ goal, progress, pace }) => {
           const area = board.areas.find((a) => a.id === goal.areaId);
@@ -62,7 +64,7 @@ export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; toda
                   <span className={styles.areaLine}>
                     {area && <span className={styles.dot} style={{ background: `var(--${area.color})` }} aria-hidden="true" />}
                     {area ? `${area.name}, ` : ''}
-                    {goal.horizon}
+                    {t.horizonLower[goal.horizon]}
                   </span>
                   <span className={styles.now}>{goalNow(goal, progress)}</span>
                 </span>
@@ -79,9 +81,9 @@ export function MobileGoals({ board, today, onCreate }: { board: GoalBoard; toda
       </ul>
       {(nested > 0 || completed > 0) && (
         <p className={styles.foot}>
-          {nested > 0 ? `${nested} more inside these` : ''}
+          {nested > 0 ? t.page.nested(nested) : ''}
           {nested > 0 && completed > 0 ? ', ' : ''}
-          {completed > 0 ? `${completed} completed this year` : ''}
+          {completed > 0 ? t.page.completed(completed) : ''}
         </p>
       )}
     </div>

@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import type { Area } from '@design/tokens';
 import { generateKeyBetween } from 'fractional-indexing';
 import type { Day } from '@/domain/days';
@@ -27,7 +28,7 @@ type NewCard = Partial<Pick<VisionCard, 'areaId' | 'goalId' | 'size' | 'bold' | 
 /** A quote or intention, set large. */
 export async function addWordsCard(input: NewCard & { text: string }): Promise<VisionCard> {
   const text = input.text.trim();
-  if (!text) throw new VisionError('Write a few words first.');
+  if (!text) throw new VisionError(messages().errors.vision.words);
   return visionCardsRepo.create({
     kind: 'words',
     text,
@@ -82,18 +83,18 @@ export async function fetchImage(url: string): Promise<Blob> {
     response = await fetch(url.trim());
   } catch {
     throw new VisionError(
-      navigator.onLine === false ? 'You’re offline. Save the picture to this device and drop it here instead.' : 'That site didn’t let this app copy the picture. Save it to this device and drop it here instead.',
+      navigator.onLine === false ? messages().errors.vision.offline : messages().errors.vision.blocked,
     );
   }
   const blob = await response.blob();
-  if (!response.ok || !blob.type.startsWith('image/')) throw new VisionError('That link isn’t a picture. Try the link to the image itself.');
+  if (!response.ok || !blob.type.startsWith('image/')) throw new VisionError(messages().errors.vision.notPicture);
   return blob;
 }
 
 export async function updateVisionCard(id: string, patch: Partial<Pick<VisionCard, 'text' | 'areaId' | 'goalId' | 'size' | 'bold'>>): Promise<void> {
   const card = await visionCardsRepo.get(id);
   if (!card) return;
-  if (patch.text !== undefined && card.kind === 'words' && !patch.text.trim()) throw new VisionError('A words card needs some words.');
+  if (patch.text !== undefined && card.kind === 'words' && !patch.text.trim()) throw new VisionError(messages().errors.vision.needsWords);
   await visionCardsRepo.update(id, patch.text === undefined ? patch : { ...patch, text: patch.text.trim() });
 }
 

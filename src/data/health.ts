@@ -1,3 +1,4 @@
+import { LOCALES, messages } from '@/i18n/locale';
 import { generateKeyBetween } from 'fractional-indexing';
 import { addDays, toDay, type Day } from '@/domain/days';
 import {
@@ -21,10 +22,10 @@ export class HealthError extends Error {}
 
 type SystemKey = NonNullable<Metric['systemKey']>;
 
-const SYSTEM: Record<SystemKey, Pick<Metric, 'name' | 'unit' | 'aggregation'>> = {
-  steps: { name: 'Steps', unit: 'steps', aggregation: 'sum' },
-  restingHr: { name: 'Resting heart rate', unit: 'bpm', aggregation: 'last' },
-  weight: { name: 'Weight', unit: 'kg', aggregation: 'last' },
+const SYSTEM: Record<SystemKey, Pick<Metric, 'aggregation'>> = {
+  steps: { aggregation: 'sum' },
+  restingHr: { aggregation: 'last' },
+  weight: { aggregation: 'last' },
 };
 
 /** Steps, resting heart rate and weight exist from the start, so entries have somewhere to go. */
@@ -33,7 +34,7 @@ export async function ensureHealthMetrics(): Promise<void> {
     const existing = await metricsRepo.list((m) => m.systemKey !== null);
     for (const key of Object.keys(SYSTEM) as SystemKey[]) {
       if (existing.some((m) => m.systemKey === key)) continue;
-      await metricsRepo.create({ ...SYSTEM[key], valueType: 'number', target: null, systemKey: key, step: 1, sortKey: 'a0' });
+      await metricsRepo.create({ ...SYSTEM[key], ...messages().seed.metrics[key], valueType: 'number', target: null, systemKey: key, step: 1, sortKey: 'a0' });
     }
   });
 }
@@ -48,14 +49,14 @@ export type MetricInput = Pick<Metric, 'name' | 'unit' | 'valueType' | 'aggregat
 
 export async function addMetric(input: MetricInput): Promise<Metric> {
   const name = input.name.trim();
-  if (!name) throw new HealthError('Give the metric a name.');
-  if (input.step <= 0) throw new HealthError('Each tap needs to add more than zero.');
+  if (!name) throw new HealthError(messages().errors.health.name);
+  if (input.step <= 0) throw new HealthError(messages().errors.health.step);
   const last = (await listCustomMetrics()).at(-1)?.sortKey ?? null;
   return metricsRepo.create({ ...input, name, unit: input.unit?.trim() || null, systemKey: null, sortKey: generateKeyBetween(last, null) });
 }
 
 export async function updateMetric(id: string, patch: Partial<MetricInput>): Promise<void> {
-  if (patch.name !== undefined && !patch.name.trim()) throw new HealthError('Give the metric a name.');
+  if (patch.name !== undefined && !patch.name.trim()) throw new HealthError(messages().errors.health.name);
   await metricsRepo.update(id, patch.name === undefined ? patch : { ...patch, name: patch.name.trim() });
 }
 
@@ -67,7 +68,7 @@ export async function removeMetric(id: string): Promise<void> {
 
 /** Logs a reading now (or at noon of a past day). */
 export async function logMetric(metricId: string, value: number, day?: Day): Promise<MetricEntry> {
-  if (!Number.isFinite(value)) throw new HealthError('Enter a number.');
+  if (!Number.isFinite(value)) throw new HealthError(messages().errors.health.number);
   const today = toDay(new Date());
   const at = !day || day === today ? new Date().toISOString() : new Date(`${day}T12:00:00`).toISOString();
   return metricEntriesRepo.create({ metricId, at, value, source: 'manual' });
@@ -82,14 +83,14 @@ export async function undoLastToday(metricId: string): Promise<void> {
 
 export async function logSystem(key: SystemKey, value: number, day?: Day): Promise<void> {
   const metric = (await metricsRepo.list((m) => m.systemKey === key))[0];
-  if (!metric) throw new HealthError('That metric isn’t set up yet.');
-  if (value <= 0) throw new HealthError('Enter a number above zero.');
+  if (!metric) throw new HealthError(messages().errors.health.noMetric);
+  if (value <= 0) throw new HealthError(messages().errors.health.positive);
   await logMetric(metric.id, value, day);
 }
 
 /** Sleep lives in the daily check-in, on the day you woke up. */
 export async function logSleep(day: Day, minutes: number): Promise<void> {
-  if (!Number.isFinite(minutes) || minutes <= 0 || minutes > 24 * 60) throw new HealthError('Enter hours between 0 and 24.');
+  if (!Number.isFinite(minutes) || minutes <= 0 || minutes > 24 * 60) throw new HealthError(messages().errors.health.hours);
   await saveDailyEntry(day, { sleepMinutes: Math.round(minutes) });
 }
 
@@ -105,9 +106,9 @@ async function countTowardGoal(w: Pick<Workout, 'goalId' | 'distanceKm'>): Promi
 }
 
 function check(input: Partial<WorkoutInput>) {
-  if (input.title !== undefined && !input.title.trim()) throw new HealthError('Name the workout, like “Easy run”.');
-  if (input.durationSec !== undefined && (!Number.isFinite(input.durationSec) || input.durationSec <= 0)) throw new HealthError('Enter how long it took, like 28:40.');
-  if (input.distanceKm !== undefined && input.distanceKm !== null && input.distanceKm <= 0) throw new HealthError('Distance needs to be above zero, or left empty.');
+  if (input.title !== undefined && !input.title.trim()) throw new HealthError(messages().errors.health.workout);
+  if (input.durationSec !== undefined && (!Number.isFinite(input.durationSec) || input.durationSec <= 0)) throw new HealthError(messages().errors.health.duration);
+  if (input.distanceKm !== undefined && input.distanceKm !== null && input.distanceKm <= 0) throw new HealthError(messages().errors.health.distance);
 }
 
 export async function addWorkout(input: WorkoutInput): Promise<Workout> {
@@ -129,10 +130,12 @@ export async function deleteWorkout(id: string): Promise<void> {
 
 /** The habit the sleep pattern suggests. */
 export async function addBedtimeHabit(): Promise<Habit> {
-  const existing = (await habitsRepo.list((h) => h.archivedAt === null)).find((h) => /in bed by/i.test(h.title));
+  const titles = LOCALES.map((locale) => messages(locale).seed.bedtime.title);
+  const existing = (await habitsRepo.list((h) => h.archivedAt === null)).find((h) => titles.includes(h.title));
   if (existing) return existing;
-  const health = (await areasRepo.list()).find((a) => a.name.toLowerCase() === 'health');
-  return habitsRepo.create({ areaId: health?.id ?? null, goalId: null, title: 'In bed by 23:00', kind: 'yesno', target: 1, unit: null, schedule: { type: 'daily' }, cue: 'When the 22:30 reminder goes', archivedAt: null });
+  const health = (await areasRepo.list()).find((a) => a.color === 'health');
+  const t = messages().seed.bedtime;
+  return habitsRepo.create({ areaId: health?.id ?? null, goalId: null, title: t.title, kind: 'yesno', target: 1, unit: null, schedule: { type: 'daily' }, cue: t.cue, archivedAt: null });
 }
 
 // ---- The Health screen ----

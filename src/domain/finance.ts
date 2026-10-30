@@ -1,3 +1,4 @@
+import { LOCALES, messages, type Messages } from '@/i18n/locale';
 import { daysInMonth, makeDay, type Day } from './days';
 
 /**
@@ -155,15 +156,15 @@ export function trendSentence(trend: readonly TrendMonth[], money: (cents: numbe
 }
 
 /** Words that point to a category, for transactions nobody has categorised before. */
-const HINTS: Array<[RegExp, string]> = [
-  [/salary|payroll|paycheck|wage|invoice paid|dividend|interest earned/i, 'Income'],
-  [/rent|mortgage|landlord|strata|council tax|property/i, 'Housing'],
-  [/grocer|supermarket|market|bakery|cafe|coffee|restaurant|food|pizza|sushi|lunch|dinner/i, 'Food'],
-  [/metro|train|bus|uber|lyft|taxi|fuel|petrol|gas station|parking|toll|transit|top-up/i, 'Transport'],
-  [/netflix|spotify|subscription|icloud|apple\.com|youtube|disney|prime|patreon|membership/i, 'Subscriptions'],
-  [/pharmac|doctor|dentist|clinic|hospital|gym|yoga|physio/i, 'Health'],
-  [/cinema|concert|ticket|game|gift|bar |pub|bowling|museum/i, 'Fun'],
-  [/savings|emergency fund|to goal/i, 'Savings'],
+const HINTS: Array<[RegExp, keyof Messages['seed']['budgets']]> = [
+  [/salary|payroll|paycheck|wage|invoice paid|dividend|interest earned|lương|thưởng|cổ tức/i, 'income'],
+  [/rent|mortgage|landlord|strata|council tax|property|tiền nhà|thuê nhà|tiền điện|tiền nước/i, 'housing'],
+  [/grocer|supermarket|market|bakery|cafe|coffee|restaurant|food|pizza|sushi|lunch|dinner|siêu thị|chợ|cà phê|ăn|cơm|phở|bún/i, 'food'],
+  [/metro|train|bus|uber|lyft|taxi|fuel|petrol|gas station|parking|toll|transit|top-up|grab|be |xăng|gửi xe|xe buýt|vé tàu/i, 'transport'],
+  [/netflix|spotify|subscription|icloud|apple\.com|youtube|disney|prime|patreon|membership/i, 'subscriptions'],
+  [/pharmac|doctor|dentist|clinic|hospital|gym|yoga|physio|nhà thuốc|bác sĩ|bệnh viện|phòng khám/i, 'health'],
+  [/cinema|concert|ticket|game|gift|bar |pub|bowling|museum|rạp phim|quà|du lịch/i, 'fun'],
+  [/savings|emergency fund|to goal|tiết kiệm/i, 'savings'],
 ];
 
 /** The category your past transactions with the same description used, else a guess from its words. */
@@ -171,8 +172,11 @@ export function guessCategory(description: string, history: ReadonlyArray<{ desc
   const key = normalizeDescription(description);
   const past = [...history].reverse().find((h) => h.categoryId && normalizeDescription(h.description) === key);
   if (past) return past.categoryId;
-  for (const [pattern, name] of HINTS) {
-    if (pattern.test(description)) return categories.find((c) => c.name.toLowerCase() === name.toLowerCase())?.id ?? null;
+  for (const [pattern, key] of HINTS) {
+    if (!pattern.test(description)) continue;
+    // The starter categories are named in the language they were made in; match either.
+    const names = LOCALES.map((locale) => messages(locale).seed.budgets[key].toLowerCase());
+    return categories.find((c) => names.includes(c.name.toLowerCase()))?.id ?? null;
   }
   return null;
 }

@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { fromBase64, toBase64 } from './crypto';
 
 /**
@@ -19,7 +20,7 @@ export async function registerBiometric(): Promise<string> {
     publicKey: {
       challenge: crypto.getRandomValues(new Uint8Array(32)),
       rp: { name: 'Life Dashboard' },
-      user: { id: crypto.getRandomValues(new Uint8Array(16)), name: 'Life Dashboard', displayName: 'You' },
+      user: { id: crypto.getRandomValues(new Uint8Array(16)), name: 'Life Dashboard', displayName: messages().seed.you },
       pubKeyCredParams: [
         { type: 'public-key', alg: -7 },
         { type: 'public-key', alg: -257 },

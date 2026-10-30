@@ -6,6 +6,8 @@
  * your recovery key, so either one opens any backup. Neither ever leaves the device.
  */
 
+import { messages } from '@/i18n/locale';
+
 export const BACKUP_FORMAT = 'life-dashboard-backup';
 export const BACKUP_VERSION = 1;
 export const KDF_ITERATIONS = 310_000;
@@ -85,7 +87,7 @@ export async function unwrapDataKey(envelope: KeyEnvelope, secret: string): Prom
   try {
     return await crypto.subtle.unwrapKey('raw', fromBase64(envelope.wrapped), kek, { name: 'AES-GCM', iv: fromBase64(envelope.iv) }, { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
   } catch {
-    throw new CryptoError('That passphrase or recovery key doesn’t open this backup.');
+    throw new CryptoError(messages().errors.privacy.wrongKey);
   }
 }
 
@@ -114,11 +116,11 @@ export function parseBackup(text: string): BackupFile {
   try {
     file = JSON.parse(text);
   } catch {
-    throw new CryptoError('That file isn’t a Life Dashboard backup.');
+    throw new CryptoError(messages().errors.privacy.notBackup);
   }
   const f = file as Partial<BackupFile>;
-  if (f?.format !== BACKUP_FORMAT || !f.keys?.passphrase || !f.keys.recovery || !f.payload?.data) throw new CryptoError('That file isn’t a Life Dashboard backup.');
-  if ((f.version ?? 0) > BACKUP_VERSION) throw new CryptoError('That backup comes from a newer version of Life Dashboard. Update this app, then try again.');
+  if (f?.format !== BACKUP_FORMAT || !f.keys?.passphrase || !f.keys.recovery || !f.payload?.data) throw new CryptoError(messages().errors.privacy.notBackup);
+  if ((f.version ?? 0) > BACKUP_VERSION) throw new CryptoError(messages().errors.privacy.newer);
   return f as BackupFile;
 }
 
@@ -135,7 +137,7 @@ export async function decryptWith(dataKey: CryptoKey, file: BackupFile): Promise
     const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromBase64(file.payload.iv) }, dataKey, fromBase64(file.payload.data));
     return dec.decode(plain);
   } catch {
-    throw new CryptoError('That backup is damaged and can’t be opened.');
+    throw new CryptoError(messages().errors.privacy.damaged);
   }
 }
 

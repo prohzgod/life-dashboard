@@ -4,36 +4,38 @@ import { Link } from 'react-router-dom';
 import { addDays, type Day } from '@/domain/days';
 import { completeWeeklyReview, goalsRepo, readAnswers, type Review } from '@/data';
 import { Button, Card } from '@/components/ui';
-import { formatDayShort } from '@/lib/format';
+import { formatDayMonth } from '@/lib/format';
+import { useT } from '@/i18n';
 import styles from './Review.module.css';
 
 /** Step 5: look it over, then save it to the week's Sunday journal page. */
 export function StepDone({ review, today }: { review: Review; today: Day }) {
+  const t = useT().reviews.done;
   const answers = readAnswers(review);
   const focus = useLiveQuery(async () => (await Promise.all(answers.focusGoalIds.map((id) => goalsRepo.get(id)))).filter((g) => !!g), [answers.focusGoalIds.join()]);
   const [busy, setBusy] = useState(false);
   const sunday = addDays(review.periodStart, 6);
 
   const rows = [
-    ['Summary', answers.summary],
-    ['What went well', answers.wentWell],
-    ['What drained you', answers.drained],
-    ['Next week you’ll', answers.differently],
+    [t.summary, answers.summary],
+    [t.wentWell, answers.wentWell],
+    [t.drained, answers.drained],
+    [t.nextWeek, answers.differently],
   ].filter(([, v]) => v);
 
   return (
-    <Card title={review.completedAt ? 'Review saved' : 'Wrap up'} className={styles.card}>
+    <Card title={review.completedAt ? t.saved : t.wrap} className={styles.card}>
       {review.completedAt ? (
         <p className={styles.lead}>
-          Saved to your journal for Sunday {formatDayShort(sunday).slice(4)}. Have a good week.{' '}
+          {t.savedSunday(formatDayMonth(sunday))}{' '}
           <Link to={`/library/day/${sunday}`} className={styles.headerLink}>
-            Open journal page
+            {t.open}
           </Link>
         </p>
       ) : (
-        <p className={styles.lead}>Here’s what goes into your journal for Sunday {formatDayShort(sunday).slice(4)}.</p>
+        <p className={styles.lead}>{t.willGoSunday(formatDayMonth(sunday))}</p>
       )}
-      {rows.length === 0 && !focus?.length && <p className={styles.quiet}>Nothing written this time, and that’s fine. Finishing still counts the week as reviewed.</p>}
+      {rows.length === 0 && !focus?.length && <p className={styles.quiet}>{t.nothing}</p>}
       <dl className={styles.recap}>
         {rows.map(([k, v]) => (
           <div key={k}>
@@ -43,7 +45,7 @@ export function StepDone({ review, today }: { review: Review; today: Day }) {
         ))}
         {!!focus?.length && (
           <div>
-            <dt>Focus</dt>
+            <dt>{t.focus}</dt>
             <dd>{focus.map((g) => g.title).join(', ')}</dd>
           </div>
         )}
@@ -59,7 +61,7 @@ export function StepDone({ review, today }: { review: Review; today: Day }) {
               await completeWeeklyReview(review.id, today);
             }}
           >
-            Finish review
+            {t.finish}
           </Button>
         </div>
       )}

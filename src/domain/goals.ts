@@ -1,3 +1,4 @@
+import { intlLocale, messages } from '@/i18n/locale';
 import { addDays, dayToDate, daysInMonth, diffDays, makeDay, month, startOfWeek, year, type Day } from './days';
 import { expectedPercent, paceStatus, PACE_TOLERANCE } from './pace';
 import { metricProgress } from './progress';
@@ -127,39 +128,40 @@ export type GoalPace =
 const CURRENCIES = ['$', '€', '£', '¥', '₫'];
 
 export function formatAmount(value: number, unit: string | null): string {
-  const n = Math.abs(value) >= 100 ? Math.round(value).toLocaleString('en-US') : String(Math.round(value * 10) / 10);
+  const n = Math.abs(value) >= 100 ? Math.round(value).toLocaleString(intlLocale()) : String(Math.round(value * 10) / 10);
   if (unit && CURRENCIES.includes(unit)) return `${unit}${n}`;
   return unit ? `${n} ${unit}` : n;
 }
 
 /** Where the goal should be today, and a plain sentence about it. */
 export function goalPace(goal: GoalLike, percent: number | null, today: Day): GoalPace {
-  if (goal.status === 'done') return { state: 'done', expected: null, sentence: 'Done' };
-  if (goal.status === 'dropped') return { state: 'dropped', expected: null, sentence: 'Dropped' };
-  if (goal.status === 'paused') return { state: 'paused', expected: null, sentence: 'Paused' };
+  const t = messages().goals.pace;
+  if (goal.status === 'done') return { state: 'done', expected: null, sentence: t.done };
+  if (goal.status === 'dropped') return { state: 'dropped', expected: null, sentence: t.dropped };
+  if (goal.status === 'paused') return { state: 'paused', expected: null, sentence: t.paused };
   if (today < goal.startDate) {
     const days = diffDays(today, goal.startDate);
-    return { state: 'upcoming', expected: 0, sentence: days === 1 ? 'Starts tomorrow' : days < 7 ? `Starts ${weekdayName(goal.startDate)}` : `Starts ${shortDate(goal.startDate)}` };
+    return { state: 'upcoming', expected: 0, sentence: days === 1 ? t.startsTomorrow : t.starts(days < 7 ? weekdayName(goal.startDate) : shortDate(goal.startDate)) };
   }
-  if (percent === null) return { state: 'no-data', expected: null, sentence: 'Nothing to measure yet' };
-  if (today > goal.endDate) return { state: 'ended', expected: 100, sentence: percent >= 100 ? 'Reached' : `Ended ${shortDate(goal.endDate)}` };
+  if (percent === null) return { state: 'no-data', expected: null, sentence: t.noData };
+  if (today > goal.endDate) return { state: 'ended', expected: 100, sentence: percent >= 100 ? t.reached : t.ended(shortDate(goal.endDate)) };
 
   const raw = expectedPercent(dayToDate(goal.startDate), addDayDate(goal.endDate), dayToDate(today));
   const expected = goal.commitment === 'aspirational' ? raw * STRETCH_WIN : raw;
   const totalDays = diffDays(goal.startDate, goal.endDate) + 1;
-  if (paceStatus(percent, expected) === 'on-pace') return { state: 'on-pace', expected, sentence: 'On pace', behindDays: 0 };
+  if (paceStatus(percent, expected) === 'on-pace') return { state: 'on-pace', expected, sentence: messages().goals.onPace, behindDays: 0 };
 
   const behindDays = Math.max(1, Math.round(((expected - percent) / 100) * totalDays));
   const span = goal.startValue !== null && goal.targetValue !== null ? goal.targetValue - goal.startValue : null;
   let sentence: string;
   if (goal.progressMethod === 'metric' && span && goal.unit && CURRENCIES.includes(goal.unit)) {
-    sentence = `${formatAmount(((expected - percent) / 100) * Math.abs(span), goal.unit)} behind pace`;
+    sentence = t.amountBehind(formatAmount(((expected - percent) / 100) * Math.abs(span), goal.unit));
   } else if (behindDays >= 14) {
-    sentence = `Behind by about ${Math.round(behindDays / 7)} weeks`;
+    sentence = t.weeksBehind(Math.round(behindDays / 7));
   } else if (behindDays >= 2) {
-    sentence = `Behind by about ${behindDays} days`;
+    sentence = t.daysBehind(behindDays);
   } else {
-    sentence = 'A little behind';
+    sentence = t.littleBehind;
   }
   return { state: 'behind', expected, sentence, behindDays };
 }
@@ -167,25 +169,26 @@ export function goalPace(goal: GoalLike, percent: number | null, today: Day): Go
 /** A kind, concrete way back to pace, or null when on pace. */
 export function catchUp(goal: GoalLike, progress: GoalProgress, pace: GoalPace, today: Day): { text: string; taskTitle: string } | null {
   if (pace.state !== 'behind') return null;
+  const t = messages().goals.catchUp;
   const weeksLeft = Math.max(1, Math.ceil((diffDays(today, goal.endDate) + 1) / 7));
   if (goal.progressMethod === 'metric' && goal.targetValue !== null && goal.currentValue !== null) {
     const perWeek = (goal.targetValue - goal.currentValue) / weeksLeft;
     if (perWeek > 0) {
       const amount = formatAmount(perWeek, goal.unit);
       return {
-        text: `Catch up: about ${amount} a week for the next ${weeksLeft === 1 ? 'week' : `${weeksLeft} weeks`} gets you there by ${shortDate(goal.endDate)}.`,
-        taskTitle: `${goal.title}: ${amount} this week`,
+        text: t.metric(amount, weeksLeft, shortDate(goal.endDate)),
+        taskTitle: t.metricTask(goal.title, amount),
       };
     }
   }
   if ((goal.progressMethod === 'taskCount' || goal.progressMethod === 'weightedTasks') && progress.total !== undefined && progress.done !== undefined) {
     const perWeek = Math.ceil((progress.total - progress.done) / weeksLeft);
-    return { text: `Catch up: finish about ${perWeek} linked ${perWeek === 1 ? 'task' : 'tasks'} a week until ${shortDate(goal.endDate)}.`, taskTitle: `${goal.title}: next step` };
+    return { text: t.tasks(perWeek, shortDate(goal.endDate)), taskTitle: t.tasksTask(goal.title) };
   }
   if (goal.progressMethod === 'milestones') {
-    return { text: 'Catch up: block an hour this week for the next milestone.', taskTitle: `${goal.title}: work on the next milestone` };
+    return { text: t.milestones, taskTitle: t.milestonesTask(goal.title) };
   }
-  return { text: 'Catch up: plan one small step for this goal this week.', taskTitle: `${goal.title}: one small step` };
+  return { text: t.other, taskTitle: t.otherTask(goal.title) };
 }
 
 /** The tolerance in points, re-exported for screens that explain the tick. */
@@ -196,16 +199,12 @@ function addDayDate(day: Day): Date {
   return dayToDate(addDays(day, 1));
 }
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
 function shortDate(day: Day): string {
-  const d = dayToDate(day);
-  return `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+  return messages().format.dayMonth(dayToDate(day));
 }
 
 function weekdayName(day: Day): string {
-  return WEEKDAYS[dayToDate(day).getDay()]!;
+  return messages().format.weekdaysLong[dayToDate(day).getDay()]!;
 }
 
 /** The natural dates for a horizon around today. */

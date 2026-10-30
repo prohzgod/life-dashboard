@@ -8,30 +8,32 @@ import { useTaskLookups } from '@/components/tasks/useTaskLookups';
 import { Card } from '@/components/ui';
 import { InboxList } from '@/screens/tasks/InboxList';
 import { withCompletedOn } from '@/lib/taskView';
-import { plural } from '@/lib/format';
+import { useT } from '@/i18n';
 import styles from './Review.module.css';
 
 /** Step 1: empty the Inbox. Anything still on your mind goes in first. */
 export function StepClear({ today }: { today: Day }) {
+  const { reviews, shell } = useT();
+  const t = reviews.clear;
   const lookups = useTaskLookups();
   const navigate = useNavigate();
   const inbox = useLiveQuery(async () => sortForView(withCompletedOn(await tasksRepo.list()).filter((t) => inView(t, 'inbox', today)), 'inbox'), [today]);
   if (!inbox) return null;
   return (
-    <Card title="Get clear" meta={inbox.length ? `${plural(inbox.length, 'item')} to triage` : 'Inbox zero'} className={styles.card}>
-      <p className={styles.lead}>Write down anything still on your mind, then accept or move each Inbox item. Two minutes is plenty.</p>
+    <Card title={t.title} meta={inbox.length ? t.toTriage(inbox.length) : t.zero} className={styles.card}>
+      <p className={styles.lead}>{t.lead}</p>
       <QuickAddField
         variant="box"
-        label="Capture anything"
-        placeholder="Anything else on your mind?"
+        label={shell.capture.label}
+        placeholder={t.placeholder}
         today={today}
         areas={lookups.areas}
         onSubmit={(text) => captureTask(text, { today, status: 'inbox' })}
       />
       {inbox.length ? (
-        <InboxList tasks={inbox} today={today} lookups={lookups} onOpen={(t) => navigate(`/inbox?task=${t.id}`)} />
+        <InboxList tasks={inbox} today={today} lookups={lookups} onOpen={(task) => navigate(`/inbox?task=${task.id}`)} />
       ) : (
-        <p className={styles.zero}>Inbox zero. Nicely done.</p>
+        <p className={styles.zero}>{t.zeroDone}</p>
       )}
     </Card>
   );

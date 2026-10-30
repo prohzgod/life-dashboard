@@ -6,7 +6,8 @@ import { loadProgressData, loadWheelOfLife } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { Segmented, StatTile } from '@/components/ui';
 import { PageHeader } from '@/components/shell/PageHeader';
-import { formatMinutes, plural } from '@/lib/format';
+import { intlLocale, useT } from '@/i18n';
+import { formatMinutes } from '@/lib/format';
 import { useToday } from '@/lib/useToday';
 import { HabitHeatmapCard } from './HabitHeatmapCard';
 import { PatternsCard } from './PatternsCard';
@@ -14,14 +15,10 @@ import { WheelCard } from './WheelCard';
 import { YearInPixels } from './YearInPixels';
 import styles from './Progress.module.css';
 
-const PERIODS = [
-  { value: 'day', label: 'Day' },
-  { value: 'week', label: 'Week' },
-  { value: 'month', label: 'Month' },
-  { value: 'year', label: 'Year' },
-] as const;
+const PERIODS = ['day', 'week', 'month', 'year'] as const;
 
 export function ProgressPage() {
+  const { progress: t, screens } = useT();
   const today = useToday();
   const [period, setPeriod] = useState<Period>('year');
   const [anchor, setAnchor] = useState<Day>(today);
@@ -35,19 +32,19 @@ export function ProgressPage() {
   return (
     <div className={styles.page}>
       <PageHeader
-        title="Progress"
-        subtitle={`${periodLabel(period, anchor)}${isCurrent && period !== 'day' ? ' so far' : ''}, ${plural(logged, 'day')} logged, computed on this device`}
+        title={screens.progress.title}
+        subtitle={t.subtitle(periodLabel(period, anchor), isCurrent && period !== 'day', logged)}
         actions={
           <>
-            <Segmented label="Period" options={PERIODS} value={period} onChange={(p) => setPeriod(p)} />
+            <Segmented label={t.periodLabel} options={PERIODS.map((p) => ({ value: p, label: t.periods[p] }))} value={period} onChange={(p) => setPeriod(p)} />
             <div className={styles.stepper}>
-              <button type="button" className={styles.stepButton} aria-label={`Previous ${period}`} onClick={() => setAnchor(shiftPeriod(period, anchor, -1))}>
+              <button type="button" className={styles.stepButton} aria-label={t.previous[period]} onClick={() => setAnchor(shiftPeriod(period, anchor, -1))}>
                 <Icon name="chevronLeft" size={16} />
               </button>
               <span className={styles.stepLabel} aria-live="polite">
-                {period === 'year' ? year(anchor) : periodLabel(period, anchor).replace(/^Week \d+, /, '')}
+                {period === 'year' ? year(anchor) : periodLabel(period, anchor, true)}
               </span>
-              <button type="button" className={styles.stepButton} aria-label={`Next ${period}`} disabled={isCurrent} onClick={() => setAnchor(shiftPeriod(period, anchor, 1))}>
+              <button type="button" className={styles.stepButton} aria-label={t.next[period]} disabled={isCurrent} onClick={() => setAnchor(shiftPeriod(period, anchor, 1))}>
                 <Icon name="chevronRight" size={16} />
               </button>
             </div>
@@ -57,28 +54,28 @@ export function ProgressPage() {
 
       {stats && (
         <div className={styles.tiles}>
-          <StatTile label="Tasks completed" value={stats.tasksDone.toLocaleString()} caption={period === 'day' ? 'today' : `about ${stats.tasksPerDay.toFixed(1)} per day`} />
+          <StatTile label={t.tiles.tasks} value={stats.tasksDone.toLocaleString(intlLocale())} caption={period === 'day' ? t.tiles.today : t.tiles.perDay(stats.tasksPerDay.toLocaleString(intlLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 }))} />
           <StatTile
-            label="Habit consistency"
+            label={t.tiles.habits}
             value={stats.habitConsistency === null ? '–' : `${Math.round(stats.habitConsistency * 100)}%`}
-            caption={stats.bestHabit ? `best: ${stats.bestHabit.title.toLowerCase()}, ${Math.round(stats.bestHabit.consistency * 100)}%` : 'no habit days yet'}
+            caption={stats.bestHabit ? t.tiles.best(stats.bestHabit.title, Math.round(stats.bestHabit.consistency * 100)) : t.tiles.noHabits}
           />
           <StatTile
-            label="Average mood"
-            value={stats.avgMood === null ? '–' : stats.avgMood.toFixed(1)}
+            label={t.tiles.mood}
+            value={stats.avgMood === null ? '–' : stats.avgMood.toLocaleString(intlLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 })}
             unit={stats.avgMood === null ? undefined : '/ 5'}
-            caption={stats.bestMonth ? `best month: ${stats.bestMonth}` : stats.avgMood === null ? 'check in on Today' : 'keep checking in'}
+            caption={stats.bestMonth ? t.tiles.bestMonth(stats.bestMonth) : stats.avgMood === null ? t.tiles.checkInToday : t.tiles.keepCheckingIn}
           />
           <StatTile
-            label="Average sleep"
+            label={t.tiles.sleep}
             value={stats.avgSleepMinutes === null ? '–' : formatMinutes(Math.round(stats.avgSleepMinutes)).replace(/(\d+)h (\d)m$/, '$1h 0$2m')}
-            caption={stats.nightsOver7h === null ? 'log sleep in your check-in' : `target 7h, met ${Math.round(stats.nightsOver7h * 100)}% of nights`}
+            caption={stats.nightsOver7h === null ? t.tiles.logSleep : t.tiles.sleepTarget(Math.round(stats.nightsOver7h * 100))}
           />
           <StatTile
-            label="Weekly reviews"
+            label={t.tiles.reviews}
             value={stats.reviewsDone}
             unit={`/ ${stats.reviewWeeks}`}
-            caption={!stats.reviewWeeks ? 'your first is on Sunday' : stats.reviewsDone === stats.reviewWeeks ? 'none missed' : 'every one counts'}
+            caption={!stats.reviewWeeks ? t.tiles.firstSunday : stats.reviewsDone === stats.reviewWeeks ? t.tiles.noneMissed : t.tiles.everyOne}
           />
         </div>
       )}

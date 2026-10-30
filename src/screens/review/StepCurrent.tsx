@@ -6,12 +6,14 @@ import { listHabitsWithSummaries, loadCalendarRange, loadGoalBoard, moveRolledOv
 import { TaskItem } from '@/components/tasks/TaskItem';
 import { useTaskLookups } from '@/components/tasks/useTaskLookups';
 import { Button, Card, PaceBar } from '@/components/ui';
-import { formatDayRelative, plural } from '@/lib/format';
+import { formatDayRelative } from '@/lib/format';
 import { withCompletedOn } from '@/lib/taskView';
+import { useT } from '@/i18n';
 import styles from './Review.module.css';
 
 /** Step 2: what's coming up, where your goals stand, and how habits went. */
 export function StepCurrent({ today }: { today: Day }) {
+  const t = useT().reviews.current;
   const lookups = useTaskLookups();
   const data = useLiveQuery(async () => {
     const [tasks, board, habits, calendar] = await Promise.all([tasksRepo.list(), loadGoalBoard(today), listHabitsWithSummaries(today), loadCalendarRange(today, addDays(today, 8), today)]);
@@ -32,7 +34,7 @@ export function StepCurrent({ today }: { today: Day }) {
   const eventsOn = (day: Day) =>
     data.events
       .flatMap((e) => {
-        if (e.allDay) return coversDay(e.start, e.end, day) ? [{ key: e.id, at: -1, text: `${e.title}, all day`, calendar: e.calendar.name }] : [];
+        if (e.allDay) return coversDay(e.start, e.end, day) ? [{ key: e.id, at: -1, text: t.allDay(e.title), calendar: e.calendar.name }] : [];
         const span = spanOnDay(e.start, e.end, day);
         return span ? [{ key: e.id, at: span.startMin, text: `${clockLabel(span.startMin)} ${e.title}`, calendar: e.calendar.name }] : [];
       })
@@ -41,16 +43,16 @@ export function StepCurrent({ today }: { today: Day }) {
 
   return (
     <div className={styles.split}>
-      <Card title="Coming up" meta="the next 7 days" className={styles.card}>
+      <Card title={t.comingUp} meta={t.next7} className={styles.card}>
         {data.rolled > 0 && (
           <div className={styles.notice}>
-            <span>{plural(data.rolled, 'task')} rolled over.</span>
+            <span>{t.rolled(data.rolled)}</span>
             <Button variant="quiet" size="sm" onClick={() => void moveRolledOverToToday(today)}>
-              Plan for today
+              {t.planToday}
             </Button>
           </div>
         )}
-        {days.length === 0 && <p className={styles.quiet}>Nothing planned yet. Step 4 is a good moment to add what matters.</p>}
+        {days.length === 0 && <p className={styles.quiet}>{t.empty}</p>}
         {days.map((day) => {
           const tasks = groups.find((g) => g.day === day)?.tasks ?? [];
           const events = eventsOn(day);
@@ -69,8 +71,8 @@ export function StepCurrent({ today }: { today: Day }) {
               )}
               {tasks.length > 0 && (
                 <ul className={styles.plainList}>
-                  {tasks.map((t) => (
-                    <TaskItem key={t.id} task={t} today={today} lookups={lookups} />
+                  {tasks.map((task) => (
+                    <TaskItem key={task.id} task={task} today={today} lookups={lookups} />
                   ))}
                 </ul>
               )}
@@ -79,8 +81,8 @@ export function StepCurrent({ today }: { today: Day }) {
         })}
       </Card>
       <div className={styles.column}>
-        <Card title="Goals" meta="pace as of today" className={styles.card}>
-          {data.goals.length === 0 && <p className={styles.quiet}>No measured goals yet.</p>}
+        <Card title={t.goals} meta={t.paceToday} className={styles.card}>
+          {data.goals.length === 0 && <p className={styles.quiet}>{t.noGoals}</p>}
           {data.goals.map(({ goal, progress, pace }) => (
             <PaceBar
               key={goal.id}
@@ -92,14 +94,14 @@ export function StepCurrent({ today }: { today: Day }) {
             />
           ))}
         </Card>
-        <Card title="Habits" meta="the last 7 days" className={styles.card}>
+        <Card title={t.habits} meta={t.last7} className={styles.card}>
           <ul className={styles.habitList}>
             {data.habits.map(({ habit, summary }) => (
               <li key={habit.id}>
                 <span>{habit.title}</span>
                 <span className={styles.quiet}>
-                  {summary.last7.filter((d) => d.state === 'done').length} of {summary.last7.filter((d) => d.state === 'done' || d.state === 'missed').length || 0} days
-                  {summary.streak > 1 ? `, ${summary.streak}-day streak` : ''}
+                  {t.habitDays(summary.last7.filter((d) => d.state === 'done').length, summary.last7.filter((d) => d.state === 'done' || d.state === 'missed').length || 0)}
+                  {summary.streak > 1 ? t.streak(summary.streak) : ''}
                 </span>
               </li>
             ))}

@@ -1,5 +1,6 @@
+import { messages } from '@/i18n/locale';
 import { sleepMoodPattern } from './health';
-import { addDays, dayOfMonth, daysInMonth, diffDays, isoWeek, makeDay, month, startOfWeek, weekday, year, type Day } from './days';
+import { addDays, dayOfMonth, dayToDate, daysInMonth, diffDays, isoWeek, makeDay, month, startOfWeek, weekday, year, type Day } from './days';
 import { dayState } from './habits';
 import { habitConsistencyBetween, type DayEntryLike, type HabitData } from './review';
 
@@ -38,19 +39,19 @@ export function shiftPeriod(period: Period, anchor: Day, n: number): Day {
   }
 }
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const SHORT_MONTHS = MONTHS.map((m) => m.slice(0, 3));
-const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-export function periodLabel(period: Period, anchor: Day): string {
+/** "Thu 1 Oct", "Week 40, 28 Sep – 4 Oct", "October 2026", "2026". `short` leaves out the week number. */
+export function periodLabel(period: Period, anchor: Day, short = false): string {
+  const { format, progress } = messages();
   const { from, to } = periodRange(period, anchor);
   switch (period) {
     case 'day':
-      return `${WEEKDAYS[weekday(anchor)]!.slice(0, 3)} ${dayOfMonth(anchor)} ${SHORT_MONTHS[month(anchor) - 1]}`;
-    case 'week':
-      return `Week ${isoWeek(from)}, ${dayOfMonth(from)} ${SHORT_MONTHS[month(from) - 1]} – ${dayOfMonth(to)} ${SHORT_MONTHS[month(to) - 1]}`;
+      return format.dayShort(dayToDate(anchor));
+    case 'week': {
+      const range = `${format.dayMonth(dayToDate(from))} – ${format.dayMonth(dayToDate(to))}`;
+      return short ? range : progress.weekLabel(isoWeek(from), range);
+    }
     case 'month':
-      return `${MONTHS[month(anchor) - 1]} ${year(anchor)}`;
+      return format.monthYear(dayToDate(anchor));
     case 'year':
       return String(year(anchor));
   }
@@ -152,7 +153,7 @@ export function periodStats({ from, to, today, completedDays, habits, entries, r
     habitConsistency: all.counted ? all.done / all.counted : null,
     bestHabit: perHabit[0] ?? null,
     avgMood: moods.length ? moods.reduce((a, e) => a + e.mood!, 0) / moods.length : null,
-    bestMonth: best && monthMoods.size > 1 ? MONTHS[best.m - 1]! : null,
+    bestMonth: best && monthMoods.size > 1 ? messages().format.monthsLong[best.m - 1]! : null,
     avgSleepMinutes: sleeps.length ? sleeps.reduce((a, e) => a + e.sleepMinutes!, 0) / sleeps.length : null,
     nightsOver7h: sleeps.length ? sleeps.filter((e) => e.sleepMinutes! >= 420).length / sleeps.length : null,
     reviewsDone: reviewedWeeks.filter((w) => w >= startOfWeek(from) && w <= to).length,
@@ -165,13 +166,15 @@ export type Pattern = { text: string; detail: string; link: { label: string; to:
 /** Plain observations from your own data, only once there's enough of it to mean something. */
 export function findPatterns({ entries, completedDays, habits, reviewedWeeks, today }: Omit<StatsInput, 'from' | 'to' | 'since'>): Pattern[] {
   const out: Pattern[] = [];
+  const t = messages().progress.patterns;
+  const weekdays = messages().format.weekdaysLong;
 
   const sleep = sleepMoodPattern(entries);
   if (sleep && Math.abs(sleep.diff) >= 0.3) {
     out.push({
-      text: `Days after 7h+ sleep are rated ${Math.abs(sleep.diff).toFixed(1)} ${sleep.diff > 0 ? 'higher' : 'lower'} on mood.`,
-      detail: `${sleep.restedDays} rested days vs ${sleep.shortDays} short nights`,
-      link: { label: 'See sleep data', to: '/health' },
+      text: t.sleep(Math.abs(sleep.diff).toFixed(1), sleep.diff > 0),
+      detail: t.sleepDetail(sleep.restedDays, sleep.shortDays),
+      link: { label: t.sleepLink, to: '/health' },
     });
   }
 
@@ -183,9 +186,9 @@ export function findPatterns({ entries, completedDays, habits, reviewedWeeks, to
     const best = byWeekday.indexOf(Math.max(...byWeekday));
     const perDay = byWeekday[best]! / weeks;
     out.push({
-      text: `${WEEKDAYS[best]} is your most productive day, about ${Math.round(perDay)} ${Math.round(perDay) === 1 ? 'task' : 'tasks'} done.`,
-      detail: `${completedDays.length} tasks over ${weeks} weeks`,
-      link: { label: `Plan deep work on ${WEEKDAYS[best]}s`, to: '/tasks?view=upcoming' },
+      text: t.productive(weekdays[best]!, Math.round(perDay)),
+      detail: t.productiveDetail(completedDays.length, weeks),
+      link: { label: t.productiveLink(weekdays[best]!), to: '/tasks?view=upcoming' },
     });
   }
 
@@ -195,18 +198,18 @@ export function findPatterns({ entries, completedDays, habits, reviewedWeeks, to
     const without: number[] = [];
     const firstStart = habits.map((h) => h.input.startDay).reduce((a, b) => (a < b ? a : b));
     for (let w = startOfWeek(firstStart); addDays(w, 6) < today; w = addDays(w, 7)) {
-      const t = habitConsistencyBetween(habits, w, addDays(w, 6), today);
-      if (!t.counted) continue;
-      (reviewed.has(w) ? withReview : without).push(t.done / t.counted);
+      const week = habitConsistencyBetween(habits, w, addDays(w, 6), today);
+      if (!week.counted) continue;
+      (reviewed.has(w) ? withReview : without).push(week.done / week.counted);
     }
     if (withReview.length >= 2 && without.length >= 2) {
       const a = Math.round(avg(withReview) * 100);
       const b = Math.round(avg(without) * 100);
       if (Math.abs(a - b) >= 5) {
         out.push({
-          text: `Habits hold at ${a}% in weeks with a review, ${b}% without.`,
-          detail: `${withReview.length} reviewed weeks vs ${without.length} without`,
-          link: { label: 'Open weekly review', to: '/review' },
+          text: t.reviews(a, b),
+          detail: t.reviewsDetail(withReview.length, without.length),
+          link: { label: t.reviewsLink, to: '/review' },
         });
       }
     }

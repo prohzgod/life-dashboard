@@ -6,26 +6,24 @@ import { ButtonLink, Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
 import { formatDayShort } from '@/lib/format';
 import { useToday } from '@/lib/useToday';
+import { messages, useT } from '@/i18n';
 import styles from './Reviews.module.css';
-
-const KIND: Record<ReviewKind, { title: string; about: string }> = {
-  week: { title: 'Weekly review', about: 'Five calm steps, about 15 minutes' },
-  month: { title: 'Monthly review', about: 'Four steps, about 20 minutes' },
-  quarter: { title: 'Quarterly review', about: 'Four steps and your life areas, about 30 minutes' },
-  year: { title: 'Yearly review', about: 'Four steps, your life areas and a word, about 45 minutes' },
-};
 
 const linkTo = (slot: ReviewSlot) => (slot.kind === 'week' ? '/review' : `/review/${slot.kind}?start=${slot.start}`);
 
 function stateText(slot: ReviewSlot): string {
-  if (slot.state === 'done') return 'Done. The next one opens later.';
-  if (slot.inProgress) return 'Started. Pick up where you left off.';
-  if (slot.state === 'ready') return 'Ready when you are.';
-  return 'Not over yet. You can start early.';
+  const t = messages().reviews.hub;
+  if (slot.state === 'done') return t.done;
+  if (slot.inProgress) return t.started;
+  if (slot.state === 'ready') return t.ready;
+  return t.early;
 }
 
 /** Every review in one place: what's due now, and the ones you've finished. */
 export function ReviewsPage() {
+  const { reviews, screens } = useT();
+  const t = reviews.hub;
+  const KIND: Record<ReviewKind, { title: string; about: string }> = reviews.kinds;
   const today = useToday();
   const hub = useLiveQuery(() => loadReviewsHub(today), [today]);
   if (!hub) return null;
@@ -34,8 +32,8 @@ export function ReviewsPage() {
 
   return (
     <>
-      <PageHeader title="Reviews" subtitle="Look back, notice what mattered, and set up what comes next." />
-      <ul className={styles.slots} aria-label="Your reviews">
+      <PageHeader title={screens.review.title} subtitle={t.subtitle} />
+      <ul className={styles.slots} aria-label={t.label}>
         {hub.slots.map((slot) => {
           const lead = slot === firstReady;
           return (
@@ -47,8 +45,8 @@ export function ReviewsPage() {
               </div>
               <span className={styles.slotAbout}>{KIND[slot.kind].about}</span>
               {slot.state !== 'done' && (
-                <ButtonLink to={linkTo(slot)} variant={lead ? 'primary' : 'secondary'} className={styles.slotAction} aria-label={`${slot.inProgress ? 'Continue' : 'Start'} ${KIND[slot.kind].title.toLowerCase()}, ${slot.name}`}>
-                  {slot.inProgress ? 'Continue' : 'Start'}
+                <ButtonLink to={linkTo(slot)} variant={lead ? 'primary' : 'secondary'} className={styles.slotAction} aria-label={t.action(slot.inProgress, KIND[slot.kind].title, slot.name)}>
+                  {slot.inProgress ? t.continue : t.start}
                 </ButtonLink>
               )}
             </li>
@@ -56,18 +54,18 @@ export function ReviewsPage() {
         })}
       </ul>
 
-      <Card title="Finished reviews" meta={hub.past.length ? `the last ${hub.past.length}` : undefined}>
+      <Card title={t.finished} meta={hub.past.length ? t.lastN(hub.past.length) : undefined}>
         {hub.past.length === 0 ? (
-          <p className={styles.quiet}>Reviews you finish land here, and in your journal.</p>
+          <p className={styles.quiet}>{t.finishedEmpty}</p>
         ) : (
           <ul className={styles.past}>
             {hub.past.map((r) => (
               <li key={r.id} className={styles.pastRow}>
                 <span className={styles.pastKind}>{KIND[r.kind].title}</span>
                 <span className={styles.pastName}>{r.name}</span>
-                <span className={styles.quiet}>Finished {formatDayShort(r.completedAt.slice(0, 10))}</span>
+                <span className={styles.quiet}>{t.finishedOn(formatDayShort(r.completedAt.slice(0, 10)))}</span>
                 <Link to={`/library/day/${r.journalDay}`} className={styles.pastLink}>
-                  Journal page
+                  {t.journalPage}
                 </Link>
               </li>
             ))}

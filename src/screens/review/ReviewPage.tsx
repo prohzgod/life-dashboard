@@ -1,9 +1,10 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useState } from 'react';
-import { addDays, isoWeek, type Day } from '@/domain/days';
+import { addDays, dayToDate, isoWeek, type Day } from '@/domain/days';
 import { minutesLeft } from '@/domain/review';
 import { openWeeklyReview, readAnswers, reviewsRepo, saveReviewAnswers, type Review } from '@/data';
 import { useToday } from '@/lib/useToday';
+import { messages, useT } from '@/i18n';
 import { formatDayShort } from '@/lib/format';
 import { StepClear } from './StepClear';
 import { StepCurrent } from './StepCurrent';
@@ -11,8 +12,6 @@ import { StepDone } from './StepDone';
 import { StepPlan } from './StepPlan';
 import { StepReflect } from './StepReflect';
 import { ReviewFrame } from './ReviewFrame';
-
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 export function ReviewPage() {
   const today = useToday();
@@ -30,35 +29,29 @@ export function ReviewPage() {
 }
 
 function weekRange(weekStart: Day): string {
-  const end = addDays(weekStart, 6);
-  const [sm, em] = [Number(weekStart.slice(5, 7)), Number(end.slice(5, 7))];
-  const startText = sm === em ? String(Number(weekStart.slice(8))) : `${Number(weekStart.slice(8))} ${MONTHS[sm - 1]}`;
-  return `${startText} – ${Number(end.slice(8))} ${MONTHS[em - 1]}`;
+  const { format } = messages();
+  return `${format.dayMonth(dayToDate(weekStart))} – ${format.dayMonth(dayToDate(addDays(weekStart, 6)))}`;
 }
 
 function ReviewFlow({ review, today }: { review: Review; today: Day }) {
   const answers = readAnswers(review);
   const step = review.completedAt ? 5 : answers.step;
+  const { reviews } = useT();
+  const t = reviews.week;
   const nextWeek = isoWeek(addDays(review.periodStart, 7));
-  const steps = [
-    { title: 'Get clear', hint: 'Inbox to zero' },
-    { title: 'Get current', hint: 'Calendar, goals, habits' },
-    { title: 'Reflect', hint: 'Wins, drains, lessons' },
-    { title: `Plan week ${nextWeek}`, hint: 'Pick 1–3 focus items' },
-    { title: 'Done', hint: 'Saved to your journal' },
-  ];
+  const steps = [t.steps.clear, t.steps.current, t.steps.reflect, t.steps.plan(nextWeek), t.steps.done];
 
   return (
     <ReviewFrame
-      title="Weekly review"
-      eyebrow={`Week ${isoWeek(review.periodStart)}, ${weekRange(review.periodStart)}`}
-      shortName={`week ${isoWeek(review.periodStart)}`}
+      title={reviews.kinds.week.title}
+      eyebrow={t.eyebrow(isoWeek(review.periodStart), weekRange(review.periodStart))}
+      shortName={t.short(isoWeek(review.periodStart))}
       steps={steps}
       step={step}
       finished={!!review.completedAt}
       minutesLeft={minutesLeft(step)}
-      nextLabels={['Next: get current', 'Next: reflect', `Next: plan week ${nextWeek}`, 'Next: wrap up']}
-      footerExtra={step === 1 ? undefined : `reviewing ${formatDayShort(review.periodStart)} – ${formatDayShort(addDays(review.periodStart, 6))}`}
+      nextLabels={[t.next.current, t.next.reflect, t.next.plan(nextWeek), t.next.wrap]}
+      footerExtra={step === 1 ? undefined : t.reviewing(formatDayShort(review.periodStart), formatDayShort(addDays(review.periodStart, 6)))}
       onGo={(n) => void saveReviewAnswers(review.id, { step: n })}
     >
       {step === 1 && <StepClear today={today} />}

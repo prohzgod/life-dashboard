@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { makeDay, type Day } from './days';
 import { parseMoney } from './finance';
 
@@ -57,9 +58,9 @@ export function findColumns(header: readonly string[]): Columns {
   const debit = find(NAMES.debit, [amount]);
   const credit = find(NAMES.credit, [amount, debit]);
   const description = find(NAMES.description, [date, amount, debit, credit]);
-  if (date < 0) throw new CsvError('That file has no date column. Check the first row has headings like “Date”.');
-  if (amount < 0 && debit < 0 && credit < 0) throw new CsvError('That file has no amount column. Look for “Amount”, or “Debit” and “Credit”.');
-  if (description < 0) throw new CsvError('That file has no description column. Look for “Description”, “Payee” or “Details”.');
+  if (date < 0) throw new CsvError(messages().errors.finance.noDate);
+  if (amount < 0 && debit < 0 && credit < 0) throw new CsvError(messages().errors.finance.noAmount);
+  if (description < 0) throw new CsvError(messages().errors.finance.noDescription);
   return { date, description, amount: amount >= 0 ? amount : null, debit: debit >= 0 ? debit : null, credit: credit >= 0 ? credit : null };
 }
 
@@ -100,9 +101,9 @@ export type Statement = { rows: StatementRow[]; skipped: number; order: DateOrde
 /** The transactions in a bank CSV. Rows that don't read (totals, notes) are counted, not guessed. */
 export function readStatement(text: string, fallbackOrder: DateOrder = 'dmy'): Statement {
   const table = parseCsv(text);
-  if (table.length < 2) throw new CsvError('That file has no transactions in it.');
+  if (table.length < 2) throw new CsvError(messages().errors.finance.empty);
   const headerAt = table.findIndex((r) => r.some((f) => NAMES.date.test(f)));
-  if (headerAt < 0) throw new CsvError('That file has no date column. Check the first row has headings like “Date”.');
+  if (headerAt < 0) throw new CsvError(messages().errors.finance.noDate);
   const cols = findColumns(table[headerAt]!);
   const body = table.slice(headerAt + 1);
   const order = detectDateOrder(body.map((r) => r[cols.date] ?? ''), fallbackOrder);

@@ -5,12 +5,12 @@ import { habitHeatmap } from '@/domain/stats';
 import { summarizeHabit } from '@/domain/habits';
 import { Card } from '@/components/ui';
 import { formatDayShort } from '@/lib/format';
+import { useT } from '@/i18n';
 import styles from './Progress.module.css';
 
-const ROWS = ['M', '', 'W', '', 'F', '', 'S'];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
 export function HabitHeatmapCard({ year, habits, today }: { year: number; habits: HabitData[]; today: Day }) {
+  const { format, progress } = useT();
+  const t = progress.heatmap;
   const [habitId, setHabitId] = useState('all');
   const chosen = habitId === 'all' ? habits : habits.filter((h) => h.id === habitId);
   const weeks = habitHeatmap(chosen, makeDay(year, 1, 1), makeDay(year, 12, 31), today);
@@ -20,11 +20,11 @@ export function HabitHeatmapCard({ year, habits, today }: { year: number; habits
 
   return (
     <Card
-      title={habitId === 'all' ? `Habits, all ${habits.length} combined` : `Habits, ${chosen[0]?.title ?? ''}`}
+      title={habitId === 'all' ? t.all(habits.length) : t.one(chosen[0]?.title ?? '')}
       className={styles.wide}
       action={
-        <select className={styles.select} aria-label="Which habits" value={habitId} onChange={(e) => setHabitId(e.target.value)}>
-          <option value="all">All habits</option>
+        <select className={styles.select} aria-label={t.which} value={habitId} onChange={(e) => setHabitId(e.target.value)}>
+          <option value="all">{t.allHabits}</option>
           {habits.map((h) => (
             <option key={h.id} value={h.id}>
               {h.title}
@@ -38,12 +38,12 @@ export function HabitHeatmapCard({ year, habits, today }: { year: number; habits
           <span />
           {weeks.map((week, i) => {
             const first = week.find(Boolean);
-            const label = first && Number(first.day.slice(8)) <= 7 ? MONTHS[Number(first.day.slice(5, 7)) - 1] : '';
+            const label = first && Number(first.day.slice(8)) <= 7 ? format.monthsShort[Number(first.day.slice(5, 7)) - 1] : '';
             return <span key={i}>{label}</span>;
           })}
         </div>
-        <div className={styles.heat} role="img" aria-label={`Habit days in ${year}, from none to all done`} style={{ gridTemplateColumns: `20px repeat(${weeks.length}, 12px)` }}>
-          {ROWS.map((r, row) => (
+        <div className={styles.heat} role="img" aria-label={t.label(year)} style={{ gridTemplateColumns: `20px repeat(${weeks.length}, 12px)` }}>
+          {t.rows.map((r, row) => (
             <div key={row} className={styles.heatRowWrap}>
               <span className={styles.heatDay}>{r}</span>
               {weeks.map((week, w) => {
@@ -52,7 +52,7 @@ export function HabitHeatmapCard({ year, habits, today }: { year: number; habits
                   <span
                     key={w}
                     className={`${styles.heatCell} ${cell ? styles[`heat${cell.level}`] : styles.heatEmpty}`}
-                    title={cell ? `${formatDayShort(cell.day)}: ${cell.done} of ${cell.scheduled} done` : undefined}
+                    title={cell ? t.cell(formatDayShort(cell.day), cell.done, cell.scheduled) : undefined}
                   />
                 );
               })}
@@ -62,15 +62,15 @@ export function HabitHeatmapCard({ year, habits, today }: { year: number; habits
       </div>
       <div className={styles.heatFoot}>
         <span className={styles.legend} aria-hidden="true">
-          Fewer
+          {t.fewer}
           {[0, 1, 2, 3, 4].map((l) => (
             <span key={l} className={`${styles.legendSwatch} ${styles[`heat${l}`]}`} />
           ))}
-          All done
+          {t.allDone}
         </span>
         {longest && longest.streak > 1 && (
           <span>
-            Current best streak: {longest.title.toLowerCase()}, {longest.streak} days
+            {t.bestStreak(longest.title, longest.streak)}
           </span>
         )}
       </div>

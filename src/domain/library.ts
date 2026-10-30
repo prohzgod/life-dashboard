@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { generateKeyBetween } from 'fractional-indexing';
 
 export type TreeNodeLike = {
@@ -69,15 +70,15 @@ export type MoveCheck = { ok: true } | { ok: false; reason: string };
 
 /** Whether `node` may be moved under `newParentId` (null = top level). */
 export function canMove(nodes: readonly TreeNodeLike[], node: TreeNodeLike, newParentId: string | null): MoveCheck {
-  if (node.isSystem) return { ok: false, reason: 'Built-in folders stay where they are.' };
+  if (node.isSystem) return { ok: false, reason: messages().errors.library.builtInStay };
   if (newParentId === node.id || (newParentId && descendantIds(nodes, node.id).includes(newParentId))) {
     return { ok: false, reason: 'A page can’t go inside itself.' };
   }
   const parent = newParentId ? nodes.find((n) => n.id === newParentId) : undefined;
-  if (newParentId && !parent) return { ok: false, reason: 'That folder no longer exists.' };
-  if (parent && (parent.kind === 'image' || parent.kind === 'file')) return { ok: false, reason: 'Images and files can’t hold pages.' };
+  if (newParentId && !parent) return { ok: false, reason: messages().errors.library.folderGone };
+  if (parent && (parent.kind === 'image' || parent.kind === 'file')) return { ok: false, reason: messages().errors.library.noChildren };
   if (parent && isJournalManaged(parent) && parent.systemKey !== null && !/^journal:\d{4}-\d{2}-\d{2}$/.test(parent.systemKey)) {
-    return { ok: false, reason: 'The Journal files its days by itself.' };
+    return { ok: false, reason: messages().errors.library.journalItself };
   }
   return { ok: true };
 }

@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { addDays, startOfWeek, weekday, type Day } from './days';
 import { dayState, type HabitInput, type HabitLogInput } from './habits';
 
@@ -109,28 +110,25 @@ export function goalsThatMoved(
     .sort((a, b) => Number(a.stalled) - Number(b.stalled) || b.delta - a.delta);
 }
 
-const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
 /** A short, kind summary of the week, written from its numbers (no AI involved). */
 export function draftSummary(summary: WeekSummary, moves: readonly GoalMove[]): string {
+  const { format, reviews } = messages();
+  const t = reviews.summary;
+  const WEEKDAYS = format.weekdaysLong;
   const parts: string[] = [];
-  const tasks = summary.tasksDone;
-  if (tasks) {
-    const delta = summary.tasksDelta > 0 ? ` (${summary.tasksDelta} more than the week before)` : '';
-    parts.push(`You finished ${tasks} ${tasks === 1 ? 'task' : 'tasks'}${delta}`);
-  }
-  if (summary.habitConsistency !== null) parts.push(`kept your habits at ${Math.round(summary.habitConsistency * 100)}%`);
-  let text = parts.length ? `${parts.join(' and ')}.` : 'A quiet week on paper.';
+  if (summary.tasksDone) parts.push(t.finished(summary.tasksDone, summary.tasksDelta));
+  if (summary.habitConsistency !== null) parts.push(t.habits(Math.round(summary.habitConsistency * 100)));
+  let text = parts.length ? `${parts.join(t.and)}.` : t.quietWeek;
   text = text.charAt(0).toUpperCase() + text.slice(1);
 
-  if (summary.bestDay) text += ` ${WEEKDAYS[weekday(summary.bestDay.day)]} was your best day.`;
+  if (summary.bestDay) text += ` ${t.bestDay(WEEKDAYS[weekday(summary.bestDay.day)]!)}`;
   const low = summary.days.filter((d) => d.mood !== null && d.mood <= 2);
-  if (low.length) text += ` ${low.map((d) => WEEKDAYS[weekday(d.day)]).join(' and ')} ${low.length === 1 ? 'was' : 'were'} harder.`;
+  if (low.length) text += ` ${t.harder(low.map((d) => WEEKDAYS[weekday(d.day)]).join(t.and), low.length > 1)}`;
 
   const moved = moves.filter((m) => !m.stalled).slice(0, 2);
-  if (moved.length) text += ` ${moved.map((m) => m.title).join(' and ')} moved forward.`;
+  if (moved.length) text += ` ${t.moved(moved.map((m) => m.title).join(t.and))}`;
   const stalled = moves.find((m) => m.stalled);
-  if (stalled) text += ` ${stalled.title} hasn’t moved in two weeks: worth one protected block, or a conscious pause.`;
+  if (stalled) text += ` ${t.stalledWeek(stalled.title)}`;
   return text;
 }
 

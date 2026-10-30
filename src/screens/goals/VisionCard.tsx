@@ -3,25 +3,27 @@ import { Link } from 'react-router-dom';
 import { saveVision, type Goal } from '@/data';
 import { year, type Day } from '@/domain/days';
 import { Button } from '@/components/ui';
+import { useT } from '@/i18n';
 import styles from './Goals.module.css';
 
 /** The year's vision statement and word of the year, edited in place. */
 export function VisionCard({ today, vision }: { today: Day; vision: Goal | null }) {
+  const t = useT().goals.vision;
   const [editing, setEditing] = useState(false);
   const statement = vision?.title ?? '';
 
   return (
-    <section className={styles.vision} aria-label={`${year(today)} vision`}>
+    <section className={styles.vision} aria-label={t.label(year(today))}>
       <div className={styles.visionText}>
-        <span className={styles.eyebrow}>{year(today)} vision</span>
+        <span className={styles.eyebrow}>{t.label(year(today))}</span>
         {editing ? (
           <textarea
             className={styles.visionInput}
-            aria-label="Vision statement"
+            aria-label={t.statement}
             defaultValue={statement}
             autoFocus
             rows={2}
-            placeholder="Who do you want to be by the end of this year?"
+            placeholder={t.placeholder}
             onBlur={async (e) => {
               await saveVision(today, { statement: e.target.value });
               setEditing(false);
@@ -34,22 +36,22 @@ export function VisionCard({ today, vision }: { today: Day; vision: Goal | null 
             }}
           />
         ) : statement ? (
-          <button type="button" className={styles.visionStatement} onClick={() => setEditing(true)} aria-label={`Vision: ${statement}. Edit`}>
+          <button type="button" className={styles.visionStatement} onClick={() => setEditing(true)} aria-label={t.edit(statement)}>
             {statement}
           </button>
         ) : (
           <Button size="sm" onClick={() => setEditing(true)}>
-            Write your vision for {year(today)}
+            {t.write(year(today))}
           </Button>
         )}
       </div>
       <label className={styles.word}>
-        <span className={styles.wordLabel}>Word of the year</span>
+        <span className={styles.wordLabel}>{t.word}</span>
         <input
           key={vision?.wordOfYear ?? ''}
           className={styles.wordInput}
-          aria-label="Word of the year"
-          placeholder="One word"
+          aria-label={t.word}
+          placeholder={t.oneWord}
           defaultValue={vision?.wordOfYear ?? ''}
           size={Math.max(6, (vision?.wordOfYear ?? '').length + 1)}
           onBlur={(e) => e.target.value.trim() !== (vision?.wordOfYear ?? '') && void saveVision(today, { word: e.target.value })}
@@ -57,7 +59,7 @@ export function VisionCard({ today, vision }: { today: Day; vision: Goal | null 
         />
       </label>
       <Link to="/vision" className={styles.link}>
-        Vision board
+        {t.board}
       </Link>
     </section>
   );

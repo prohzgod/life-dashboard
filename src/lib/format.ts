@@ -18,6 +18,11 @@ export function formatDate(day: Day): string {
   return f().date(dayToDate(day));
 }
 
+/** "1 Oct" */
+export function formatDayMonth(day: Day): string {
+  return f().dayMonth(dayToDate(day));
+}
+
 /** "Today", "Tomorrow", "Yesterday", or "Thu 1 Oct". */
 export function formatDayRelative(day: Day, today: Day): string {
   if (day === today) return f().today;

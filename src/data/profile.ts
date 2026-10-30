@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { db } from './db';
 import { newId } from './ids';
 import { attachmentsRepo, profileRepo } from './repositories';
@@ -68,7 +69,7 @@ export async function setProfilePhoto(photo: { blob: Blob; thumbBlob: Blob | nul
     width: photo.width,
     height: photo.height,
     takenAt: null,
-    caption: 'Profile photo',
+    caption: messages().seed.profilePhoto,
   });
   await profileRepo.update(profile.id, { photoAttachmentId: attachment.id });
 }

@@ -10,7 +10,7 @@ import {
   loadPeriodData,
   loadWheelOfLife,
   openPeriodReview,
-  PERIOD_QUESTIONS,
+  periodQuestions,
   readAnswers,
   reviewsRepo,
   saveReviewAnswers,
@@ -21,6 +21,7 @@ import {
 import { Icon } from '@/components/icons/Icon';
 import { Button, Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
+import { intlLocale, useT } from '@/i18n';
 import { formatDayShort, formatMinutes } from '@/lib/format';
 import { useToday } from '@/lib/useToday';
 import { WheelCard } from '../progress/WheelCard';
@@ -28,9 +29,6 @@ import { ReviewFrame } from './ReviewFrame';
 import { Planner } from './StepPlan';
 import { Glance, Question } from './StepReflect';
 import styles from './Review.module.css';
-
-const KIND: Record<ReviewPeriod, string> = { month: 'Monthly review', quarter: 'Quarterly review', year: 'Yearly review' };
-const UNIT: Record<ReviewPeriod, string> = { month: 'month', quarter: 'quarter', year: 'year' };
 
 const isPeriod = (value: string | undefined): value is ReviewPeriod => value === 'month' || value === 'quarter' || value === 'year';
 
@@ -63,23 +61,25 @@ function PeriodFlow({ review, period, today }: { review: Review; period: ReviewP
   const step = review.completedAt ? 4 : Math.min(answers.step, 4);
   const name = periodName(review.periodStart, period);
   const next = nextPeriodName(review.periodStart, period);
+  const { reviews } = useT();
+  const t = reviews.period;
   const steps = [
-    { title: 'Look back', hint: 'The numbers, filled in for you' },
-    { title: 'Reflect', hint: period === 'month' ? 'Wins, drains, changes' : 'Wins, lessons, your life areas' },
-    { title: `Plan ${next}`, hint: period === 'year' ? 'Up to 3 goals and a word' : 'Pick up to 3 goals' },
-    { title: 'Done', hint: 'Saved to your journal' },
+    t.steps.look,
+    { title: t.steps.reflect, hint: period === 'month' ? t.steps.reflectMonth : t.steps.reflectLonger },
+    { title: t.steps.plan(next), hint: period === 'year' ? t.steps.planYear : t.steps.planOther },
+    t.steps.done,
   ];
 
   return (
     <ReviewFrame
-      title={KIND[period]}
-      eyebrow={`${name}, ${formatDayShort(review.periodStart)} to ${formatDayShort(periodEnd(review.periodStart, period))}`}
+      title={reviews.kinds[period].title}
+      eyebrow={t.eyebrow(name, formatDayShort(review.periodStart), formatDayShort(periodEnd(review.periodStart, period)))}
       shortName={name}
       steps={steps}
       step={step}
       finished={!!review.completedAt}
       minutesLeft={periodMinutesLeft(period, step)}
-      nextLabels={['Next: reflect', `Next: plan ${next}`, 'Next: wrap up']}
+      nextLabels={[t.next.reflect, t.next.plan(next), t.next.wrap]}
       onGo={(n) => void saveReviewAnswers(review.id, { step: n })}
     >
       {step === 1 && <StepLookBack review={review} period={period} today={today} />}
@@ -92,37 +92,39 @@ function PeriodFlow({ review, period, today }: { review: Review; period: ReviewP
 
 /** Step 1: the period's numbers, mood over time, goals that moved, and a draft summary. */
 function StepLookBack({ review, period, today }: { review: Review; period: ReviewPeriod; today: Day }) {
+  const { reviews } = useT();
   const data = useLiveQuery(() => loadPeriodData(period, review.periodStart, today), [period, review.periodStart, today]);
   const answers = readAnswers(review);
   if (!data) return null;
   const { summary, moves, draft, bestDay } = data;
-  const unit = UNIT[period];
+  const unit = reviews.units[period];
+  const t = reviews.reflect;
 
   return (
     <div className={styles.split}>
-      <Card title={`Your ${unit} at a glance`} meta="filled in automatically" className={styles.card}>
+      <Card title={t.glanceOf(unit)} meta={t.auto} className={styles.card}>
         <div className={styles.glance}>
-          <Glance label="Tasks done" value={summary.tasksDone} extra={summary.tasksDelta > 0 ? `+${summary.tasksDelta}` : undefined} />
-          <Glance label="Habits" value={summary.habitConsistency === null ? '–' : `${Math.round(summary.habitConsistency * 100)}%`} />
-          <Glance label="Mood" value={summary.avgMood === null ? '–' : summary.avgMood.toFixed(1)} />
-          <Glance label="Sleep" value={summary.avgSleepMinutes === null ? '–' : formatMinutes(Math.round(summary.avgSleepMinutes))} />
-          <Glance label="Check-ins" value={`${summary.checkInDays} / ${summary.daysSoFar}`} />
+          <Glance label={t.tasksDone} value={summary.tasksDone} extra={summary.tasksDelta > 0 ? `+${summary.tasksDelta}` : undefined} />
+          <Glance label={t.habits} value={summary.habitConsistency === null ? '–' : `${Math.round(summary.habitConsistency * 100)}%`} />
+          <Glance label={t.mood} value={summary.avgMood === null ? '–' : summary.avgMood.toLocaleString(intlLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 })} />
+          <Glance label={t.sleep} value={summary.avgSleepMinutes === null ? '–' : formatMinutes(Math.round(summary.avgSleepMinutes))} />
+          <Glance label={t.checkIns} value={`${summary.checkInDays} / ${summary.daysSoFar}`} />
         </div>
 
         <div
           className={styles.bars}
           role="img"
-          aria-label={`Average mood by ${period === 'month' ? 'day' : 'month'}: ${summary.buckets.map((b) => `${b.label} ${b.mood === null ? 'none' : b.mood.toFixed(1)}`).join('; ')}`}
+          aria-label={t.periodBars(period === 'month', summary.buckets.map((b) => `${b.label} ${b.mood === null ? t.none : b.mood.toFixed(1)}`).join('; '))}
         >
           <div className={styles.barsLegend} aria-hidden="true">
             <span>
               <span className={cx(styles.swatch, styles.moodSwatch)} />
-              {period === 'month' ? 'Mood by day' : 'Mood'}
+              {period === 'month' ? t.moodByDay : t.mood}
             </span>
             {period !== 'month' && (
               <span>
                 <span className={cx(styles.swatch, styles.energySwatch)} />
-                Energy
+                {t.energy}
               </span>
             )}
           </div>
@@ -140,21 +142,21 @@ function StepLookBack({ review, period, today }: { review: Review; period: Revie
         </div>
         {bestDay && (
           <p className={styles.quiet}>
-            Your best day was {formatDayShort(bestDay.day)}
+            {t.bestWas(formatDayShort(bestDay.day))}
             {bestDay.line ? `: ${bestDay.line}` : '.'}
           </p>
         )}
       </Card>
 
       <div className={styles.column}>
-        <Card title="Goals that moved" className={styles.card}>
-          {moves.length === 0 && <p className={styles.quiet}>No goal changed this {unit}. That’s information too.</p>}
+        <Card title={t.moved} className={styles.card}>
+          {moves.length === 0 && <p className={styles.quiet}>{t.noMovesIn(unit)}</p>}
           <ul className={styles.moves}>
             {moves.map((m) => (
               <li key={m.id}>
                 <span>{m.title}</span>
                 {m.stalled ? (
-                  <span className={styles.stalled}>no progress this {unit}</span>
+                  <span className={styles.stalled}>{t.stalledIn(unit)}</span>
                 ) : (
                   <span className={styles.moved}>
                     +{Math.round(m.delta)}% → {Math.round(m.after ?? 0)}%
@@ -168,23 +170,23 @@ function StepLookBack({ review, period, today }: { review: Review; period: Revie
         <Card
           title={
             <span className={styles.draftTitle}>
-              <Icon name="assistant" size={16} /> Draft summary
+              <Icon name="assistant" size={16} /> {t.draft}
             </span>
           }
-          action={<span className={styles.optional}>Optional</span>}
+          action={<span className={styles.optional}>{t.optional}</span>}
           className={styles.card}
         >
           <p className={styles.draft}>{answers.summary || draft}</p>
           {answers.summary ? (
-            <p className={styles.quiet}>In your review. It goes into your journal when you finish.</p>
+            <p className={styles.quiet}>{t.inReview}</p>
           ) : (
             <div className={styles.draftActions}>
               <Button size="sm" variant="primary" onClick={() => void saveReviewAnswers(review.id, { summary: draft })}>
-                Insert into review
+                {t.insert}
               </Button>
             </div>
           )}
-          <p className={styles.quiet}>Written on this device from this {unit}’s numbers. Nothing leaves this device.</p>
+          <p className={styles.quiet}>{t.privateOf(unit)}</p>
         </Card>
       </div>
     </div>
@@ -193,16 +195,17 @@ function StepLookBack({ review, period, today }: { review: Review; period: Revie
 
 /** Step 2: three questions; quarters and years also rate the life areas. */
 function StepThink({ review, period, today }: { review: Review; period: ReviewPeriod; today: Day }) {
+  const t = useT().reviews.reflect;
   const answers = readAnswers(review);
-  const questions = PERIOD_QUESTIONS[period];
+  const questions = periodQuestions(period);
   const wheel = useLiveQuery(() => (period === 'month' ? Promise.resolve(null) : loadWheelOfLife()), [period]);
 
   return (
     <div className={period === 'month' ? undefined : styles.split}>
-      <Card title="Reflect" meta="a few lines is plenty" className={styles.card}>
-        <Question id="wentWell" label={questions.wentWell} placeholder="A win, however small…" review={review} value={answers.wentWell} />
-        <Question id="drained" label={questions.drained} placeholder={period === 'month' ? 'Nothing to fix yet, just notice it…' : 'What would you tell yourself at the start?'} review={review} value={answers.drained} />
-        <Question id="differently" label={questions.differently} placeholder="One clear change is enough…" review={review} value={answers.differently} />
+      <Card title={t.think} meta={t.fewLines} className={styles.card}>
+        <Question id="wentWell" label={questions.wentWell} placeholder={t.wentWellPlaceholder} review={review} value={answers.wentWell} />
+        <Question id="drained" label={questions.drained} placeholder={period === 'month' ? t.drainedPlaceholder : t.lessonsPlaceholder} review={review} value={answers.drained} />
+        <Question id="differently" label={questions.differently} placeholder={t.changePlaceholder} review={review} value={answers.differently} />
       </Card>
       {wheel && (
         <div className={styles.column}>
@@ -215,6 +218,7 @@ function StepThink({ review, period, today }: { review: Review; period: ReviewPe
 
 /** Step 3: up to three goals for the next period; the year also picks next year's word. */
 function StepPlanNext({ review, period, today }: { review: Review; period: ReviewPeriod; today: Day }) {
+  const { reviews } = useT();
   const data = useLiveQuery(async () => {
     const board = await loadGoalBoard(today);
     const existing = (await Promise.all(readAnswers(review).focusGoalIds.map((id) => goalsRepo.get(id)))).filter((g) => !!g);
@@ -222,6 +226,8 @@ function StepPlanNext({ review, period, today }: { review: Review; period: Revie
   }, [today, review.id]);
   if (!data) return null;
   const next = nextPeriodName(review.periodStart, period);
+  const unit = reviews.units[period];
+  const t = reviews.plan.period;
   // Goals for the next period can follow a bigger one: a month's follow the quarter's and year's.
   const bigger: Record<ReviewPeriod, ReadonlyArray<string>> = { month: ['year', 'quarter'], quarter: ['year'], year: [] };
 
@@ -231,15 +237,12 @@ function StepPlanNext({ review, period, today }: { review: Review; period: Revie
       data={data}
       offer={(h) => bigger[period].includes(h)}
       copy={{
-        title: `Plan ${next}`,
-        lead:
-          period === 'year'
-            ? `Choose up to three goals for ${next}. You can shape them on Goals afterwards.`
-            : `Choose up to three goals for ${next}. Name each as something you can finish within the ${UNIT[period]}.`,
-        nameLabel: (title) => `In ${next} for ${title}`,
-        ownPlaceholder: period === 'year' ? 'A goal for the year, e.g. “Run a marathon”' : 'Or add your own, e.g. “Finish the garden plan”',
-        saved: `Saved. These are your goals for ${next}.`,
-        button: `Set goals for ${next}`,
+        title: t.title(next),
+        lead: period === 'year' ? t.leadYear(next) : t.lead(next, unit),
+        nameLabel: (title) => t.nameLabel(next, title),
+        ownPlaceholder: period === 'year' ? t.ownYear : t.own,
+        saved: t.saved(next),
+        button: t.button(next),
       }}
       onSave={(picks) => setPeriodFocus(review, picks)}
     >
@@ -249,46 +252,49 @@ function StepPlanNext({ review, period, today }: { review: Review; period: Revie
 }
 
 function WordOfYear({ review, next }: { review: Review; next: string }) {
+  const t = useT().reviews.plan;
   const saved = readAnswers(review).word;
   const [word, setWord] = useState(saved);
   return (
     <label className={styles.question}>
-      <span className={styles.questionLabel}>Your word for {next}</span>
-      <input className={styles.wordInput} value={word} placeholder="One word to come back to, e.g. “Steady”" onChange={(e) => setWord(e.target.value)} onBlur={() => word.trim() !== saved && void setNextYearWord(review, word)} />
+      <span className={styles.questionLabel}>{t.word(next)}</span>
+      <input className={styles.wordInput} value={word} placeholder={t.wordPlaceholder} onChange={(e) => setWord(e.target.value)} onBlur={() => word.trim() !== saved && void setNextYearWord(review, word)} />
     </label>
   );
 }
 
 /** Step 4: look it over, then save it to the journal page for the period's last day. */
 function StepFinish({ review, period }: { review: Review; period: ReviewPeriod }) {
+  const { reviews } = useT();
+  const t = reviews.done;
   const answers = readAnswers(review);
-  const questions = PERIOD_QUESTIONS[period];
+  const questions = periodQuestions(period);
   const focus = useLiveQuery(async () => (await Promise.all(answers.focusGoalIds.map((id) => goalsRepo.get(id)))).filter((g) => !!g), [answers.focusGoalIds.join()]);
   const [busy, setBusy] = useState(false);
   const last = periodEnd(review.periodStart, period);
   const next = nextPeriodName(review.periodStart, period);
 
   const rows = [
-    ['Summary', answers.summary],
+    [t.summary, answers.summary],
     [questions.wentWell, answers.wentWell],
     [questions.drained, answers.drained],
     [questions.differently, answers.differently],
-    ['Word of the year', answers.word],
+    [t.word, answers.word],
   ].filter(([, v]) => v);
 
   return (
-    <Card title={review.completedAt ? 'Review saved' : 'Wrap up'} className={styles.card}>
+    <Card title={review.completedAt ? t.saved : t.wrap} className={styles.card}>
       {review.completedAt ? (
         <p className={styles.lead}>
-          Saved to your journal for {formatDayShort(last)}.{' '}
+          {t.savedFor(formatDayShort(last))}{' '}
           <Link to={`/library/day/${last}`} className={styles.headerLink}>
-            Open journal page
+            {t.open}
           </Link>
         </p>
       ) : (
-        <p className={styles.lead}>Here’s what goes into your journal for {formatDayShort(last)}.</p>
+        <p className={styles.lead}>{t.willGo(formatDayShort(last))}</p>
       )}
-      {rows.length === 0 && !focus?.length && <p className={styles.quiet}>Nothing written this time, and that’s fine. Finishing still counts the {UNIT[period]} as reviewed.</p>}
+      {rows.length === 0 && !focus?.length && <p className={styles.quiet}>{t.nothingIn(reviews.units[period])}</p>}
       <dl className={styles.recap}>
         {rows.map(([k, v]) => (
           <div key={k}>
@@ -298,7 +304,7 @@ function StepFinish({ review, period }: { review: Review; period: ReviewPeriod }
         ))}
         {!!focus?.length && (
           <div>
-            <dt>Goals for {next}</dt>
+            <dt>{t.goalsFor(next)}</dt>
             <dd>{focus.map((g) => g.title).join(', ')}</dd>
           </div>
         )}
@@ -314,7 +320,7 @@ function StepFinish({ review, period }: { review: Review; period: ReviewPeriod }
               await completePeriodReview(review.id);
             }}
           >
-            Finish review
+            {t.finish}
           </Button>
         </div>
       )}

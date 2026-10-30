@@ -1,12 +1,9 @@
-import { addDays, dayOfMonth, daysInMonth, diffDays, makeDay, month, year, type Day } from './days';
+import { messages } from '@/i18n/locale';
+import { addDays, dayOfMonth, dayToDate, daysInMonth, diffDays, makeDay, month, year, type Day } from './days';
 import { habitConsistencyBetween, type DayEntryLike, type GoalMove, type HabitData } from './review';
 
 /** The longer reviews. The weekly one lives in review.ts. */
 export type ReviewPeriod = 'month' | 'quarter' | 'year';
-
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const WEEKDAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const MONTHS_IN: Record<ReviewPeriod, number> = { month: 1, quarter: 3, year: 12 };
 /** How many days before a period ends its review opens early. */
@@ -32,8 +29,8 @@ export function periodEnd(start: Day, period: ReviewPeriod): Day {
 
 /** "October 2026", "Q4 2026", "2026". */
 export function periodName(start: Day, period: ReviewPeriod): string {
-  if (period === 'month') return `${MONTHS[month(start) - 1]} ${year(start)}`;
-  if (period === 'quarter') return `Q${Math.floor((month(start) - 1) / 3) + 1} ${year(start)}`;
+  if (period === 'month') return messages().format.monthYear(dayToDate(start));
+  if (period === 'quarter') return messages().reviews.quarter(Math.floor((month(start) - 1) / 3) + 1, year(start));
   return String(year(start));
 }
 
@@ -119,7 +116,7 @@ export function summarizePeriod({ period, start, today, completedDays, habits, e
         })
       : Array.from({ length: MONTHS_IN[period] }, (_, i) => {
           const from = shiftPeriod(start, 'month', i);
-          return bucketOf(from, periodEnd(from, 'month'), MONTHS_SHORT[month(from) - 1]!);
+          return bucketOf(from, periodEnd(from, 'month'), messages().format.monthsShort[month(from) - 1]!);
         });
 
   const bestDay =
@@ -141,27 +138,26 @@ export function summarizePeriod({ period, start, today, completedDays, habits, e
   };
 }
 
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
-
 function shortDay(day: Day): string {
-  const d = new Date(`${day}T12:00:00Z`);
-  return `${WEEKDAYS_SHORT[d.getUTCDay()]} ${d.getUTCDate()} ${MONTHS_SHORT[d.getUTCMonth()]}`;
+  return messages().format.dayShort(dayToDate(day));
 }
 
 /** A short, kind summary of the period, written from its numbers (no AI involved). */
 export function draftPeriodSummary(summary: PeriodSummary, moves: readonly GoalMove[], name: string): string {
+  const { format, reviews } = messages();
+  const t = reviews.summary;
   const parts: string[] = [];
-  if (summary.tasksDone) parts.push(`finished ${plural(summary.tasksDone, 'task', 'tasks')}`);
-  if (summary.habitConsistency !== null) parts.push(`kept your habits at ${Math.round(summary.habitConsistency * 100)}%`);
-  if (summary.checkInDays) parts.push(`checked in on ${plural(summary.checkInDays, 'day', 'days')}`);
-  if (!parts.length && !moves.length) return `${name} was quiet on paper.`;
+  if (summary.tasksDone) parts.push(t.finishedTasks(summary.tasksDone));
+  if (summary.habitConsistency !== null) parts.push(t.habits(Math.round(summary.habitConsistency * 100)));
+  if (summary.checkInDays) parts.push(t.checkedIn(summary.checkInDays));
+  if (!parts.length && !moves.length) return t.quietPeriod(name);
 
-  let text = parts.length ? `In ${name} you ${parts.length > 1 ? `${parts.slice(0, -1).join(', ')} and ${parts.at(-1)}` : parts[0]}.` : '';
-  if (summary.bestDay) text += ` Your best day was ${shortDay(summary.bestDay.day)}.`;
+  let text = parts.length ? t.inPeriod(name, format.list(parts)) : '';
+  if (summary.bestDay) text += ` ${t.bestDayWas(shortDay(summary.bestDay.day))}`;
   const moved = moves.filter((m) => !m.stalled).slice(0, 2);
-  if (moved.length) text += ` ${moved.map((m) => m.title).join(' and ')} moved forward.`;
+  if (moved.length) text += ` ${t.moved(moved.map((m) => m.title).join(t.and))}`;
   const stalled = moves.find((m) => m.stalled);
-  if (stalled) text += ` ${stalled.title} didn’t move: worth a fresh plan, or a conscious pause.`;
+  if (stalled) text += ` ${t.stalledPeriod(stalled.title)}`;
   return text.trim();
 }
 

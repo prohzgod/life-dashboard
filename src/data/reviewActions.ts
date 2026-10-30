@@ -1,3 +1,4 @@
+import { LOCALES, messages } from '@/i18n/locale';
 import { addDays, isoWeek, toDay, type Day } from '@/domain/days';
 import { goalProgress } from '@/domain/goals';
 import { draftSummary, goalsThatMoved, reviewWeekFor, summarizeWeek, type GoalMove, type WeekSummary } from '@/domain/review';
@@ -123,7 +124,7 @@ export async function setFocusGoals(
       const parent = item.parentGoalId ? await goalsRepo.get(item.parentGoalId) : undefined;
       created.push(
         await goalsRepo.create({
-          title: item.title.trim() || parent?.title || 'Focus',
+          title: item.title.trim() || parent?.title || messages().reviews.journal.focusFallback,
           why: '',
           areaId: parent?.areaId ?? null,
           parentGoalId: parent?.id ?? null,
@@ -152,6 +153,11 @@ export async function setFocusGoals(
 export const paragraph = (text: string) => ({ type: 'paragraph', props: {}, content: [{ type: 'text', text, styles: {} }], children: [] });
 export const heading = (text: string, level = 2) => ({ type: 'heading', props: { level }, content: [{ type: 'text', text, styles: {} }], children: [] });
 
+/** The seeded "Weekly review" task, in whichever language it was made. */
+function isWeeklyReviewTask(title: string): boolean {
+  return LOCALES.some((locale) => messages(locale).seed.weeklyReview === title);
+}
+
 /** Finishes the review: saved, written into the week's Sunday journal page, and the review task ticked off. */
 export async function completeWeeklyReview(reviewId: string, today: Day): Promise<void> {
   const review = await reviewsRepo.get(reviewId);
@@ -160,19 +166,20 @@ export async function completeWeeklyReview(reviewId: string, today: Day): Promis
   const sunday = addDays(review.periodStart, 6);
   const focus = (await Promise.all(answers.focusGoalIds.map((id) => goalsRepo.get(id)))).filter((g): g is Goal => !!g);
 
+  const t = messages().reviews.journal;
   const blocks = [
-    heading(`Weekly review, week ${isoWeek(review.periodStart)}`),
+    heading(t.weekly(isoWeek(review.periodStart))),
     ...(answers.summary ? [paragraph(answers.summary)] : []),
-    ...(answers.wentWell ? [heading('What went well', 3), paragraph(answers.wentWell)] : []),
-    ...(answers.drained ? [heading('What drained me', 3), paragraph(answers.drained)] : []),
-    ...(answers.differently ? [heading('Next week I’ll', 3), paragraph(answers.differently)] : []),
-    ...(focus.length ? [heading('Focus', 3), ...focus.map((g) => ({ type: 'bulletListItem', props: {}, content: [{ type: 'text', text: g.title, styles: {} }], children: [] }))] : []),
+    ...(answers.wentWell ? [heading(t.wentWell, 3), paragraph(answers.wentWell)] : []),
+    ...(answers.drained ? [heading(t.drained, 3), paragraph(answers.drained)] : []),
+    ...(answers.differently ? [heading(t.nextWeek, 3), paragraph(answers.differently)] : []),
+    ...(focus.length ? [heading(t.focus, 3), ...focus.map((g) => ({ type: 'bulletListItem', props: {}, content: [{ type: 'text', text: g.title, styles: {} }], children: [] }))] : []),
   ];
   const page = await ensureJournalPage(sunday);
   const existing = Array.isArray(page.contentJson) ? page.contentJson : [];
   await savePageContent(page.id, [...existing, ...blocks]);
   await reviewsRepo.update(reviewId, { completedAt: nowIso(), autoSummary: answers.summary || null });
 
-  const reviewTask = (await tasksRepo.list((t) => t.status === 'open' && t.title === 'Weekly review' && !!t.rrule && !!t.doOn && t.doOn <= addDays(sunday, 6)))[0];
+  const reviewTask = (await tasksRepo.list((t) => t.status === 'open' && isWeeklyReviewTask(t.title) && !!t.rrule && !!t.doOn && t.doOn <= addDays(sunday, 6)))[0];
   if (reviewTask) await completeTask(reviewTask.id, today);
 }

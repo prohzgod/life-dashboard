@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { ensureCalendars } from './calendar';
 import { ensureBudgets } from './finance';
 import { ensureHealthMetrics } from './health';
@@ -49,19 +50,19 @@ export function parseExport(text: string): ExportFile {
   try {
     data = JSON.parse(text);
   } catch {
-    throw new ImportError('That file isn’t valid JSON.');
+    throw new ImportError(messages().errors.backup.json);
   }
-  if (!isObject(data) || data.format !== EXPORT_FORMAT) throw new ImportError('That file isn’t a Life Dashboard export.');
+  if (!isObject(data) || data.format !== EXPORT_FORMAT) throw new ImportError(messages().errors.backup.notExport);
   if (typeof data.version !== 'number' || data.version > EXPORT_VERSION) {
-    throw new ImportError('That export comes from a newer version of Life Dashboard. Update this app, then try again.');
+    throw new ImportError(messages().errors.backup.newer);
   }
-  if (!isObject(data.tables)) throw new ImportError('That export has no data in it.');
+  if (!isObject(data.tables)) throw new ImportError(messages().errors.backup.empty);
 
   for (const [name, rows] of Object.entries(data.tables)) {
     if (LEGACY_TABLES.includes(name)) continue;
-    if (!(dataTableNames as readonly string[]).includes(name)) throw new ImportError(`That export has an unknown table, “${name}”.`);
+    if (!(dataTableNames as readonly string[]).includes(name)) throw new ImportError(messages().errors.backup.unknownTable(name));
     if (!Array.isArray(rows) || !rows.every((row) => isObject(row) && typeof row.id === 'string')) {
-      throw new ImportError(`The “${name}” data in that export is damaged.`);
+      throw new ImportError(messages().errors.backup.damaged(name));
     }
   }
   return data as ExportFile;

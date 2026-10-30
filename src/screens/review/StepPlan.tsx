@@ -5,12 +5,14 @@ import { goalsRepo, loadGoalBoard, readAnswers, setWeekFocus, type Goal, type Re
 import { Icon } from '@/components/icons/Icon';
 import { Button, Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
+import { useT } from '@/i18n';
 import styles from './Review.module.css';
 
 export type Pick = { key: string; parentGoalId: string | null; title: string };
 
 /** Step 4: pick 1–3 things to focus on next week. They become Today's "This week's focus". */
 export function StepPlan({ review, today, nextWeek }: { review: Review; today: Day; nextWeek: number }) {
+  const t = useT().reviews.plan.week;
   const data = useLiveQuery(async () => {
     const board = await loadGoalBoard(today);
     const existing = (await Promise.all(readAnswers(review).focusGoalIds.map((id) => goalsRepo.get(id)))).filter((g) => !!g);
@@ -23,12 +25,12 @@ export function StepPlan({ review, today, nextWeek }: { review: Review; today: D
       data={data}
       offer={(h) => h !== 'week'}
       copy={{
-        title: `Plan week ${nextWeek}`,
-        lead: 'Choose up to three things that would make next week a good one. Name each as something you can do this week.',
-        nameLabel: (title) => `This week for ${title}`,
-        ownPlaceholder: 'Or add your own, e.g. “Draft essay #9”',
-        saved: 'Saved. These show on Today next week.',
-        button: `Set focus for week ${nextWeek}`,
+        title: t.title(nextWeek),
+        lead: t.lead,
+        nameLabel: t.nameLabel,
+        ownPlaceholder: t.ownPlaceholder,
+        saved: t.saved,
+        button: t.button(nextWeek),
       }}
       onSave={(picks) => setWeekFocus(review, picks)}
     />
@@ -40,6 +42,7 @@ export type PlannerCopy = { title: string; lead: string; nameLabel: (goalTitle: 
 
 /** Pick up to three focus items, each following a bigger goal or your own. Nothing is saved until you press the button. */
 export function Planner({ data, offer, copy, onSave, children }: { data: PlannerData; offer: (horizon: Goal['horizon']) => boolean; copy: PlannerCopy; onSave: (picks: Pick[]) => Promise<void>; children?: ReactNode }) {
+  const t = useT().reviews.plan;
   const [picks, setPicks] = useState<Pick[]>(() => data.existing.map((g) => ({ key: g.id, parentGoalId: g.parentGoalId, title: g.title })));
   const [own, setOwn] = useState('');
   const [saved, setSaved] = useState(data.existing.length > 0);
@@ -51,7 +54,7 @@ export function Planner({ data, offer, copy, onSave, children }: { data: Planner
   };
 
   return (
-    <Card title={copy.title} meta={`${picks.length} of 3 picked`} className={styles.card}>
+    <Card title={copy.title} meta={t.picked(picks.length)} className={styles.card}>
       <p className={styles.lead}>{copy.lead}</p>
       {children}
       <ul className={styles.picks}>
@@ -87,7 +90,7 @@ export function Planner({ data, offer, copy, onSave, children }: { data: Planner
               <span className={styles.pickToggle}>
                 <Icon name="flag" size={14} />
                 <span className={styles.pickTitle}>{p.title}</span>
-                <button type="button" className={styles.remove} aria-label={`Remove ${p.title}`} onClick={() => setPicks((all) => all.filter((x) => x.key !== p.key))}>
+                <button type="button" className={styles.remove} aria-label={t.remove(p.title)} onClick={() => setPicks((all) => all.filter((x) => x.key !== p.key))}>
                   <Icon name="close" size={12} />
                 </button>
               </span>
@@ -104,9 +107,9 @@ export function Planner({ data, offer, copy, onSave, children }: { data: Planner
           setOwn('');
         }}
       >
-        <input aria-label="Your own focus item" placeholder={full ? 'Three is plenty' : copy.ownPlaceholder} value={own} disabled={full} onChange={(e) => setOwn(e.target.value)} />
+        <input aria-label={t.own} placeholder={full ? t.plenty : copy.ownPlaceholder} value={own} disabled={full} onChange={(e) => setOwn(e.target.value)} />
         <Button size="sm" type="submit" disabled={full || !own.trim()}>
-          Add
+          {t.add}
         </Button>
       </form>
       <div className={styles.planActions}>

@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { generateKeyBetween } from 'fractional-indexing';
 import { blocksToLinks, blocksToText, type DocLink } from '@/domain/blocks';
 import { dayOfMonth, month, year, type Day } from '@/domain/days';
@@ -8,9 +9,6 @@ import { nowIso } from './ids';
 import { attachmentsRepo, linksRepo, nodesRepo } from './repositories';
 import { setTags, tagsFor } from './tags';
 import type { Attachment, LibraryNode } from './types';
-
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export class LibraryError extends Error {}
 
@@ -41,15 +39,15 @@ export async function createNode(input: { parentId: string | null; kind: 'page' 
 
 async function createNodeNow(input: { parentId: string | null; kind: 'page' | 'folder'; title?: string }): Promise<LibraryNode> {
   const parent = input.parentId ? await nodesRepo.get(input.parentId) : undefined;
-  if (input.parentId && !parent) throw new LibraryError('That folder no longer exists.');
+  if (input.parentId && !parent) throw new LibraryError(messages().errors.library.folderGone);
   if (parent?.systemKey && /^journal(:\d{4}(-\d{2})?)?$/.test(parent.systemKey)) {
-    throw new LibraryError('The Journal files its days by itself. Add pages inside a day instead.');
+    throw new LibraryError(messages().errors.library.journalFiles);
   }
   return nodesRepo.create({
     ...blankNode(),
     parentId: input.parentId,
     kind: input.kind,
-    title: input.title ?? (input.kind === 'folder' ? 'New folder' : 'Untitled'),
+    title: input.title ?? (input.kind === 'folder' ? messages().seed.newFolder : messages().seed.untitled),
     sortKey: generateKeyBetween(await lastSortKeyUnder(input.parentId), null),
   });
 }
@@ -78,7 +76,7 @@ export async function trashNode(id: string): Promise<void> {
     const nodes = await nodesRepo.list();
     const node = nodes.find((n) => n.id === id);
     if (!node) return;
-    if (node.isSystem) throw new LibraryError('Built-in folders can’t be deleted.');
+    if (node.isSystem) throw new LibraryError(messages().errors.library.builtIn);
     const now = nowIso();
     for (const target of [id, ...descendantIds(nodes, id)]) {
       const row = nodes.find((n) => n.id === target)!;
@@ -241,19 +239,18 @@ async function ensureSystemNode(key: string, parentId: string | null, title: str
 
 /** "Tue 27 Oct" */
 export function journalPageTitle(day: Day): string {
-  const d = new Date(year(day), month(day) - 1, dayOfMonth(day));
-  return `${WEEKDAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]!.slice(0, 3)}`;
+  return messages().seed.journalDay(new Date(year(day), month(day) - 1, dayOfMonth(day)));
 }
 
 /** The Journal page for a day, filed under Journal › year › month, created the first time it's needed. */
 export async function ensureJournalPage(day: Day): Promise<LibraryNode> {
   return db.transaction('rw', [db.nodes, db.dailyEntries], async () => {
     const journal = await bySystemKey('journal');
-    if (!journal) throw new LibraryError('The Journal folder is missing.');
+    if (!journal) throw new LibraryError(messages().errors.library.journalMissing);
     const y = String(year(day));
     const m = `${y}-${String(month(day)).padStart(2, '0')}`;
     const yearNode = await ensureSystemNode(`journal:${y}`, journal.id, y, 'folder');
-    const monthNode = await ensureSystemNode(`journal:${m}`, yearNode.id, MONTHS[month(day) - 1]!, 'folder');
+    const monthNode = await ensureSystemNode(`journal:${m}`, yearNode.id, messages().seed.journalMonth(new Date(year(day), month(day) - 1, 1)), 'folder');
     const page = await ensureSystemNode(`journal:${day}`, monthNode.id, journalPageTitle(day), 'page');
     const entry = (await db.dailyEntries.where('day').equals(day).toArray()).find((e) => e.deletedAt === null);
     if (entry && entry.journalNodeId !== page.id) await db.dailyEntries.put({ ...entry, journalNodeId: page.id, updatedAt: nowIso() });
@@ -272,7 +269,7 @@ const textBlock = (text: string) => ({ type: 'paragraph', props: {}, content: [{
 /** A quick note: the first line becomes the page title, the rest its body. Filed at the top level. */
 export async function createNoteFromText(text: string): Promise<LibraryNode> {
   const [first = '', ...rest] = text.trim().split('\n');
-  const title = first.trim().slice(0, 120) || 'Quick note';
+  const title = first.trim().slice(0, 120) || messages().seed.quickNote;
   const node = await createNode({ parentId: null, kind: 'page', title });
   const body = rest.map((l) => l.trim()).filter(Boolean);
   if (body.length) await savePageContent(node.id, body.map(textBlock));

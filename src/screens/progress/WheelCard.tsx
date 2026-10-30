@@ -5,24 +5,26 @@ import { Chart } from '@/components/charts/Chart';
 import { chartFont } from '@/components/charts/chartTheme';
 import { Button, Card } from '@/components/ui';
 import { Dialog } from '@/components/ui/Dialog';
-import { formatDayShort } from '@/lib/format';
+import { formatDayMonth, formatDayShort } from '@/lib/format';
+import { useT } from '@/i18n';
 import styles from './Progress.module.css';
 
 /** How each life area feels, 1–10, now against about a quarter ago. */
 export function WheelCard({ wheel, today }: { wheel: WheelOfLife; today: Day }) {
+  const t = useT().progress.wheel;
   const [rating, setRating] = useState(false);
   const rated = wheel.now.size > 0;
   const label = rated
-    ? `Wheel of life, rated ${formatDayShort(wheel.ratedOn!)}: ${wheel.areas.map((a) => `${a.name} ${wheel.now.get(a.id) ?? 'not rated'}`).join(', ')}.`
-    : 'Wheel of life, not rated yet';
+    ? t.label(formatDayShort(wheel.ratedOn!), wheel.areas.map((a) => `${a.name} ${wheel.now.get(a.id) ?? t.notRated}`).join(', '))
+    : t.notRatedYet;
 
   return (
     <Card
-      title="Wheel of life"
-      meta={rated ? `rated ${formatDayShort(wheel.ratedOn!).slice(4)}` : undefined}
+      title={t.title}
+      meta={rated ? t.rated(formatDayMonth(wheel.ratedOn!)) : undefined}
       action={
         <Button variant="quiet" size="sm" onClick={() => setRating(true)}>
-          {rated ? 'Rate again' : 'Rate your areas'}
+          {rated ? t.rateAgain : t.rate}
         </Button>
       }
     >
@@ -49,9 +51,9 @@ export function WheelCard({ wheel, today }: { wheel: WheelOfLife; today: Day }) 
                   symbol: 'none',
                   data: [
                     ...(wheel.before.size
-                      ? [{ name: 'Before', value: wheel.areas.map((a) => wheel.before.get(a.id) ?? 0), lineStyle: { type: 'dashed', color: c['ink-3'], width: 1.5 } }]
+                      ? [{ name: t.before, value: wheel.areas.map((a) => wheel.before.get(a.id) ?? 0), lineStyle: { type: 'dashed', color: c['ink-3'], width: 1.5 } }]
                       : []),
-                    { name: 'Now', value: wheel.areas.map((a) => wheel.now.get(a.id) ?? 0), lineStyle: { color: c.inverse, width: 2 }, areaStyle: { color: c['viz-soft'], opacity: 0.45 } },
+                    { name: t.now, value: wheel.areas.map((a) => wheel.now.get(a.id) ?? 0), lineStyle: { color: c.inverse, width: 2 }, areaStyle: { color: c['viz-soft'], opacity: 0.45 } },
                   ],
                 },
               ],
@@ -59,19 +61,19 @@ export function WheelCard({ wheel, today }: { wheel: WheelOfLife; today: Day }) 
           />
           <div className={styles.legend}>
             <span className={styles.legendItem}>
-              <span className={styles.lineSolid} /> Now
+              <span className={styles.lineSolid} /> {t.now}
             </span>
             {wheel.beforeOn && (
               <span className={styles.legendItem}>
-                <span className={styles.lineDashed} /> {formatDayShort(wheel.beforeOn).slice(4)}
+                <span className={styles.lineDashed} /> {formatDayMonth(wheel.beforeOn)}
               </span>
             )}
           </div>
         </>
       ) : (
-        <p className={styles.quiet}>Give each area of life a score from 1 to 10. Do it again in a few months to see what shifted.</p>
+        <p className={styles.quiet}>{t.empty}</p>
       )}
-      <Dialog open={rating} onClose={() => setRating(false)} title="How does each area feel right now?">
+      <Dialog open={rating} onClose={() => setRating(false)} title={t.question}>
         {rating && <RateAreas wheel={wheel} today={today} onDone={() => setRating(false)} />}
       </Dialog>
     </Card>
@@ -79,6 +81,7 @@ export function WheelCard({ wheel, today }: { wheel: WheelOfLife; today: Day }) 
 }
 
 function RateAreas({ wheel, today, onDone }: { wheel: WheelOfLife; today: Day; onDone: () => void }) {
+  const t = useT().progress.wheel;
   const [scores, setScores] = useState(() => new Map(wheel.areas.map((a) => [a.id, wheel.now.get(a.id) ?? 5])));
   return (
     <form
@@ -108,9 +111,9 @@ function RateAreas({ wheel, today, onDone }: { wheel: WheelOfLife; today: Day; o
         </label>
       ))}
       <div className={styles.rateActions}>
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          Save ratings
+          {t.save}
         </Button>
       </div>
     </form>

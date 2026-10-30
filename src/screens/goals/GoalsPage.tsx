@@ -14,9 +14,11 @@ import { GoalTree } from './GoalTree';
 import { VisionCard } from './VisionCard';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { MobileGoals } from './MobileGoals';
+import { useT } from '@/i18n';
 import styles from './Goals.module.css';
 
 export function GoalsPage() {
+  const { goals: t, screens } = useT();
   const today = useToday();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -48,17 +50,17 @@ export function GoalsPage() {
     <div className={styles.page}>
       <div className={styles.left}>
         <PageHeader
-          title="Goals"
-          subtitle="Vision → year → quarter → week → today. Progress rolls up automatically."
+          title={screens.goals.title}
+          subtitle={t.page.subtitle}
           actions={
             <Button variant="primary" icon={<Icon name="plus" size={16} strokeWidth={2.2} />} onClick={() => setCreating(true)}>
-              New goal
+              {t.page.newGoal}
             </Button>
           }
         />
-        <div className={styles.filters} role="group" aria-label="Filter by area">
+        <div className={styles.filters} role="group" aria-label={t.page.filter}>
           <button type="button" aria-pressed={areaId === null} className={cx(styles.filter, areaId === null && styles.filterOn)} onClick={() => setAreaId(null)}>
-            All areas
+            {t.page.allAreas}
           </button>
           {board?.areas.map((a) => (
             <button key={a.id} type="button" aria-pressed={areaId === a.id} className={cx(styles.filter, areaId === a.id && styles.filterOn)} onClick={() => setAreaId(areaId === a.id ? null : a.id)}>
@@ -75,7 +77,7 @@ export function GoalsPage() {
             areaId={areaId}
             selectedId={selectedId}
             onSelect={(goalId) => navigate(`/goals/${goalId}`)}
-            footer={`${thisYear.filter((v) => v.goal.status === 'done').length} completed, ${thisYear.filter((v) => v.goal.status === 'dropped').length} dropped this year`}
+            footer={t.page.yearFooter(thisYear.filter((v) => v.goal.status === 'done').length, thisYear.filter((v) => v.goal.status === 'dropped').length)}
           />
         )}
       </div>
@@ -86,10 +88,11 @@ export function GoalsPage() {
 }
 
 function EmptyDetail({ onCreate }: { onCreate: () => void }) {
+  const t = useT().goals.page;
   return (
-    <aside className={styles.detail} aria-label="Goal details">
-      <p className={styles.quiet}>Pick a goal to see its pace, milestones and what’s linked to it.</p>
-      <Button onClick={onCreate}>Set a goal</Button>
+    <aside className={styles.detail} aria-label={t.details}>
+      <p className={styles.quiet}>{t.pick}</p>
+      <Button onClick={onCreate}>{t.setGoal}</Button>
     </aside>
   );
 }

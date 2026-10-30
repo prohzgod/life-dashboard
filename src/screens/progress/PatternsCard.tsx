@@ -3,14 +3,16 @@ import type { Day } from '@/domain/days';
 import { findPatterns } from '@/domain/stats';
 import type { ProgressData } from '@/data';
 import { Card } from '@/components/ui';
+import { useT } from '@/i18n';
 import styles from './Progress.module.css';
 
 export function PatternsCard({ data, today }: { data: ProgressData; today: Day }) {
+  const t = useT().progress.patterns;
   const patterns = findPatterns({ today, ...data });
   return (
-    <Card title="Patterns" meta="found on this device">
+    <Card title={t.title} meta={t.meta}>
       {patterns.length === 0 ? (
-        <p className={styles.quiet}>Patterns show up after a few weeks of check-ins, tasks and habits. Nothing is guessed from too little.</p>
+        <p className={styles.quiet}>{t.empty}</p>
       ) : (
         <ul className={styles.patterns}>
           {patterns.map((p) => (

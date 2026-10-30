@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { backupDue, backupFileName, backupsToPrune, passcodeProblem, passphraseProblem, type LockAfter } from '@/domain/privacy';
 import {
   checkPasscode,
@@ -90,7 +91,7 @@ export async function setPasscode(passcode: string, iterations?: number): Promis
 /** Turning the lock off needs the current passcode, so someone at an unlocked screen can't quietly remove it. */
 export async function removePasscode(current: string): Promise<void> {
   const { passcode } = await read(LOCK_KEY, DEFAULT_LOCK);
-  if (passcode && !(await checkPasscode(current, passcode))) throw new PrivacyError('That passcode isn’t right.');
+  if (passcode && !(await checkPasscode(current, passcode))) throw new PrivacyError(messages().errors.privacy.passcode);
   await write(LOCK_KEY, DEFAULT_LOCK, { passcode: null, credentialId: null });
 }
 
@@ -123,7 +124,7 @@ export async function changePassphrase(current: string, next: string, iterations
   if (problem) throw new PrivacyError(problem);
   const recovery = normalizeRecoveryKey(current);
   const dataKey = await (recovery ? unwrapDataKey(record.keys.recovery, recovery) : unwrapDataKey(record.keys.passphrase, current)).catch(() => {
-    throw new PrivacyError('That isn’t your current passphrase or recovery key.');
+    throw new PrivacyError(messages().errors.privacy.current);
   });
   await db.meta.put({ key: ENCRYPTION_KEY, value: { ...record, keys: { ...record.keys, passphrase: await wrapDataKey(dataKey, next, iterations) } } });
 }
@@ -132,7 +133,7 @@ export async function changePassphrase(current: string, next: string, iterations
 export async function newRecoveryKit(passphrase: string, iterations?: number): Promise<string> {
   const record = await encryption();
   const dataKey = await unwrapDataKey(record.keys.passphrase, passphrase).catch(() => {
-    throw new PrivacyError('That isn’t your passphrase.');
+    throw new PrivacyError(messages().errors.privacy.passphrase);
   });
   const recovery = newRecoveryKey();
   await db.meta.put({ key: ENCRYPTION_KEY, value: { ...record, keys: { ...record.keys, recovery: await wrapDataKey(dataKey, recovery, iterations) } } });
@@ -141,7 +142,7 @@ export async function newRecoveryKit(passphrase: string, iterations?: number): P
 
 async function encryption(): Promise<EncryptionRecord> {
   const entry = await db.meta.get(ENCRYPTION_KEY);
-  if (!entry) throw new PrivacyError('Set a backup passphrase first.');
+  if (!entry) throw new PrivacyError(messages().errors.privacy.setPassphrase);
   return entry.value as EncryptionRecord;
 }
 
@@ -186,7 +187,7 @@ export async function folderAccess(folder: FileSystemDirectoryHandle | null, ask
 /** Writes a backup into the folder, reads it back to check it, then keeps only the newest `keep`. */
 export async function backUpToFolder(now = new Date()): Promise<{ name: string; size: number }> {
   const settings = await read(BACKUP_KEY, DEFAULT_BACKUP);
-  if (!settings.folder) throw new PrivacyError('Choose a folder for backups first.');
+  if (!settings.folder) throw new PrivacyError(messages().errors.privacy.chooseFolder);
   try {
     const { name, text } = await makeBackup(now);
     const file = await settings.folder.getFileHandle(name, { create: true });
@@ -201,7 +202,7 @@ export async function backUpToFolder(now = new Date()): Promise<{ name: string; 
     await noteBackup(text.length, verified, now.toISOString());
     return { name, size: text.length };
   } catch (error) {
-    const message = error instanceof PrivacyError || error instanceof CryptoError ? error.message : 'The backup couldn’t be written to that folder. Check it still exists, then try again.';
+    const message = error instanceof PrivacyError || error instanceof CryptoError ? error.message : messages().errors.privacy.writeFailed;
     await write(BACKUP_KEY, DEFAULT_BACKUP, { lastError: message });
     throw new PrivacyError(message);
   }

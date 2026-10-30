@@ -3,6 +3,7 @@ import type { GoalView, LifeArea } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { cx } from '@/components/ui/cx';
 import { goalNow, goalStatusLine, goalTypeChip } from '@/lib/goalText';
+import { useT } from '@/i18n';
 import styles from './Goals.module.css';
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 const HORIZON_ORDER = ['year', 'quarter', 'month', 'week'];
 
 export function GoalTree({ views, areas, areaId, selectedId, onSelect, footer }: Props) {
+  const t = useT().goals.tree;
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const byId = new Map(views.map((v) => [v.goal.id, v]));
   const shown = views.filter((v) => !areaId || v.goal.areaId === areaId);
@@ -38,14 +40,14 @@ export function GoalTree({ views, areas, areaId, selectedId, onSelect, footer }:
   const toggle = (id: string) => setCollapsed((s) => (s.has(id) ? new Set([...s].filter((x) => x !== id)) : new Set([...s, id])));
 
   return (
-    <section className={styles.tree} aria-label="Goal tree">
+    <section className={styles.tree} aria-label={t.label}>
       <div className={cx(styles.treeRow, styles.treeHead)} aria-hidden="true">
         <span />
-        <span>Goal</span>
-        <span>Progress vs expected</span>
-        <span className={styles.right}>Now</span>
+        <span>{t.goal}</span>
+        <span>{t.progress}</span>
+        <span className={styles.right}>{t.now}</span>
       </div>
-      {rows.length === 0 && <p className={styles.quiet}>{areaId ? 'No goals in this area yet.' : 'No goals yet. Start with one thing that matters this year.'}</p>}
+      {rows.length === 0 && <p className={styles.quiet}>{areaId ? t.emptyArea : t.empty}</p>}
       <ul className={styles.plainList}>
         {rows.map(({ view, depth, hasChildren }) => {
           const { goal, progress, pace } = view;
@@ -60,7 +62,7 @@ export function GoalTree({ views, areas, areaId, selectedId, onSelect, footer }:
               style={{ paddingLeft: 12 + depth * 24 }}
             >
               {hasChildren ? (
-                <button type="button" className={styles.chevron} aria-expanded={!collapsed.has(goal.id)} aria-label={`${collapsed.has(goal.id) ? 'Show' : 'Hide'} goals under ${goal.title}`} onClick={() => toggle(goal.id)}>
+                <button type="button" className={styles.chevron} aria-expanded={!collapsed.has(goal.id)} aria-label={t.toggle(collapsed.has(goal.id), goal.title)} onClick={() => toggle(goal.id)}>
                   <Icon name={collapsed.has(goal.id) ? 'chevronRight' : 'chevronDown'} size={14} strokeWidth={2} />
                 </button>
               ) : (
@@ -79,11 +81,11 @@ export function GoalTree({ views, areas, areaId, selectedId, onSelect, footer }:
               <div
                 className={cx(styles.bar, top && styles.barTop)}
                 role="progressbar"
-                aria-label={`${goal.title} progress`}
+                aria-label={t.progressOf(goal.title)}
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={Math.round(percent)}
-                aria-valuetext={`${Math.round(percent)}%${pace.expected !== null && pace.state !== 'upcoming' ? `, expected ${Math.round(pace.expected)}% by today` : ''}`}
+                aria-valuetext={`${Math.round(percent)}%${pace.expected !== null && pace.state !== 'upcoming' ? t.expected(Math.round(pace.expected)) : ''}`}
               >
                 <div className={styles.fill} style={{ width: `${percent}%`, background: area ? `var(--${area.color})` : undefined }} />
                 {pace.expected !== null && (pace.state === 'on-pace' || pace.state === 'behind') && <div className={styles.tick} style={{ left: `${pace.expected}%` }} />}
@@ -94,7 +96,7 @@ export function GoalTree({ views, areas, areaId, selectedId, onSelect, footer }:
         })}
       </ul>
       <div className={styles.treeFoot}>
-        <span>The tick marks where you should be today</span>
+        <span>{t.tick}</span>
         <span>{footer}</span>
       </div>
     </section>

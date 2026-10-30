@@ -1,4 +1,5 @@
 // @vitest-environment node
+import { setLocale } from '@/i18n/locale';
 import { db } from './db';
 import { initData, resetInitForTests } from './init';
 import { areasRepo, goalsRepo, habitsRepo, nodesRepo, tasksRepo } from './repositories';
@@ -51,5 +52,16 @@ describe('nextSunday', () => {
     expect(nextSunday(new Date(2026, 9, 25)).getDate()).toBe(25); // Sun 25 Oct 2026
     expect(nextSunday(new Date(2026, 9, 26)).getDate()).toBe(1); // Mon → Sun 1 Nov
     expect(nextSunday(new Date(2026, 9, 31)).getDate()).toBe(1); // Sat → Sun 1 Nov
+  });
+});
+
+describe('first launch in Vietnamese', () => {
+  it('names the starter areas, habits, folders and review in Vietnamese', async () => {
+    setLocale('vi');
+    await freshDatabase();
+    expect((await areasRepo.listOrdered()).map((a) => a.name)).toEqual(['Sức khỏe', 'Sự nghiệp', 'Tài chính', 'Gia đình', 'Bạn bè', 'Phát triển', 'Nhà cửa', 'Giải trí']);
+    expect((await habitsRepo.list()).map((h) => h.title)).toEqual(['Thiền', 'Đọc 20 trang', 'Uống nước']);
+    expect((await nodesRepo.listChildren(null)).map((n) => n.systemKey)).toEqual(['journal', 'areas', 'projects']);
+    expect(await tasksRepo.list((t) => t.title === 'Nhìn lại tuần')).toHaveLength(1);
   });
 });

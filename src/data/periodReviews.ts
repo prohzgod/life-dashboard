@@ -1,4 +1,5 @@
-import { addDays, isoWeek, makeDay, toDay, year, type Day } from '@/domain/days';
+import { messages } from '@/i18n/locale';
+import { addDays, dayToDate, isoWeek, makeDay, toDay, year, type Day } from '@/domain/days';
 import { goalProgress } from '@/domain/goals';
 import {
   draftPeriodSummary,
@@ -71,7 +72,7 @@ export async function loadPeriodData(period: ReviewPeriod, start: Day, today: Da
         return { id: g.id, title: g.title, now: goalProgress(g, ctx, after).percent, weekAgo: then, twoWeeksAgo: then, active: g.status === 'active' && g.startDate <= start };
       }),
   );
-  const name = period === 'month' ? periodName(start, period).split(' ')[0]! : periodName(start, period);
+  const name = period === 'month' ? messages().calendar.monthName(dayToDate(start)) : periodName(start, period);
   const bestDay = summary.bestDay ? (entries.find((e) => e.day === summary.bestDay!.day) ?? null) : null;
   return { summary, moves, draft: draftPeriodSummary(summary, moves, name), bestDay };
 }
@@ -90,11 +91,10 @@ export async function setNextYearWord(review: Review, word: string): Promise<voi
   if (latest) await reviewsRepo.update(review.id, { answers: { ...readAnswers(latest), word: word.trim() } });
 }
 
-export const PERIOD_QUESTIONS: Record<ReviewPeriod, { wentWell: string; drained: string; differently: string }> = {
-  month: { wentWell: 'What went well this month?', drained: 'What drained you?', differently: 'What will you change next month?' },
-  quarter: { wentWell: 'Your biggest wins this quarter', drained: 'What did you learn?', differently: 'What will you stop, start or keep?' },
-  year: { wentWell: 'The highlights of your year', drained: 'Your lessons', differently: 'What do you want next year to be about?' },
-};
+/** The three reflection questions for each longer review, in your language. */
+export function periodQuestions(period: ReviewPeriod): { wentWell: string; drained: string; differently: string } {
+  return messages().reviews.period.questions[period];
+}
 
 /** Finishes the review: saved, and written into the journal page for the period's last day. */
 export async function completePeriodReview(reviewId: string): Promise<void> {
@@ -102,19 +102,19 @@ export async function completePeriodReview(reviewId: string): Promise<void> {
   if (!review || review.completedAt) return;
   const period = review.period as ReviewPeriod;
   const answers = readAnswers(review);
-  const questions = PERIOD_QUESTIONS[period];
+  const questions = periodQuestions(period);
+  const t = messages().reviews.journal;
   const focus = (await Promise.all(answers.focusGoalIds.map((id) => goalsRepo.get(id)))).filter((g): g is Goal => !!g);
-  const kind = period === 'month' ? 'Monthly' : period === 'quarter' ? 'Quarterly' : 'Yearly';
 
   const blocks = [
-    heading(`${kind} review, ${periodName(review.periodStart, period)}`),
+    heading(t.period[period](periodName(review.periodStart, period))),
     ...(answers.summary ? [paragraph(answers.summary)] : []),
     ...(answers.wentWell ? [heading(questions.wentWell, 3), paragraph(answers.wentWell)] : []),
     ...(answers.drained ? [heading(questions.drained, 3), paragraph(answers.drained)] : []),
     ...(answers.differently ? [heading(questions.differently, 3), paragraph(answers.differently)] : []),
-    ...(answers.word ? [heading('Word of the year', 3), paragraph(answers.word)] : []),
+    ...(answers.word ? [heading(t.word, 3), paragraph(answers.word)] : []),
     ...(focus.length
-      ? [heading(`Goals for ${nextPeriodName(review.periodStart, period)}`, 3), ...focus.map((g) => ({ type: 'bulletListItem', props: {}, content: [{ type: 'text', text: g.title, styles: {} }], children: [] }))]
+      ? [heading(t.goalsFor(nextPeriodName(review.periodStart, period)), 3), ...focus.map((g) => ({ type: 'bulletListItem', props: {}, content: [{ type: 'text', text: g.title, styles: {} }], children: [] }))]
       : []),
   ];
   const page = await ensureJournalPage(periodEnd(review.periodStart, period));
@@ -140,7 +140,7 @@ export type PastReview = { id: string; kind: ReviewKind; name: string; completed
 export type ReviewsHub = { slots: ReviewSlot[]; past: PastReview[] };
 
 function kindName(kind: ReviewKind, start: Day): string {
-  return kind === 'week' ? `Week ${isoWeek(start)}, ${year(addDays(start, 3))}` : periodName(start, kind);
+  return kind === 'week' ? messages().reviews.weekName(isoWeek(start), year(addDays(start, 3))) : periodName(start, kind);
 }
 
 function journalDayOf(kind: ReviewKind, start: Day): Day {

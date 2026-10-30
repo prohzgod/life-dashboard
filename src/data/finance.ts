@@ -1,3 +1,4 @@
+import { LOCALES, messages, type Messages } from '@/i18n/locale';
 import { generateKeyBetween } from 'fractional-indexing';
 import { importKey, type StatementRow } from '@/domain/csv';
 import type { Day } from '@/domain/days';
@@ -14,16 +15,16 @@ export class FinanceError extends Error {}
 
 const bySortKey = <T extends { sortKey: string }>(a: T, b: T) => (a.sortKey < b.sortKey ? -1 : a.sortKey > b.sortKey ? 1 : 0);
 
-const DEFAULT_BUDGETS: Array<Pick<Budget, 'name' | 'kind'>> = [
-  { name: 'Housing', kind: 'expense' },
-  { name: 'Food', kind: 'expense' },
-  { name: 'Transport', kind: 'expense' },
-  { name: 'Fun', kind: 'expense' },
-  { name: 'Health', kind: 'expense' },
-  { name: 'Subscriptions', kind: 'expense' },
-  { name: 'Other', kind: 'expense' },
-  { name: 'Income', kind: 'income' },
-  { name: 'Savings', kind: 'savings' },
+const DEFAULT_BUDGETS: Array<{ key: keyof Messages['seed']['budgets']; kind: Budget['kind'] }> = [
+  { key: 'housing', kind: 'expense' },
+  { key: 'food', kind: 'expense' },
+  { key: 'transport', kind: 'expense' },
+  { key: 'fun', kind: 'expense' },
+  { key: 'health', kind: 'expense' },
+  { key: 'subscriptions', kind: 'expense' },
+  { key: 'other', kind: 'expense' },
+  { key: 'income', kind: 'income' },
+  { key: 'savings', kind: 'savings' },
 ];
 
 /** The usual categories, once, so the first expense has somewhere to go. Runs at startup and after an import. */
@@ -33,7 +34,7 @@ export async function ensureBudgets(): Promise<void> {
     let key: string | null = null;
     for (const b of DEFAULT_BUDGETS) {
       key = generateKeyBetween(key, null);
-      await budgetsRepo.create({ ...b, amount: null, sortKey: key });
+      await budgetsRepo.create({ name: messages().seed.budgets[b.key], kind: b.kind, amount: null, sortKey: key });
     }
   });
 }
@@ -65,8 +66,8 @@ export async function saveBudgets(rows: ReadonlyArray<{ id: string; name: string
   await db.transaction('rw', db.budgets, async () => {
     for (const r of rows) {
       const name = r.name.trim();
-      if (!name) throw new FinanceError('Every category needs a name.');
-      if (r.amount !== null && r.amount < 0) throw new FinanceError('A budget can’t be below zero.');
+      if (!name) throw new FinanceError(messages().errors.finance.categoryNames);
+      if (r.amount !== null && r.amount < 0) throw new FinanceError(messages().errors.finance.budgetNegative);
       await budgetsRepo.update(r.id, { name, amount: r.amount });
     }
   });
@@ -74,9 +75,9 @@ export async function saveBudgets(rows: ReadonlyArray<{ id: string; name: string
 
 export async function addBudget(name: string, amount: number | null = null): Promise<Budget> {
   const clean = name.trim();
-  if (!clean) throw new FinanceError('Give the category a name.');
+  if (!clean) throw new FinanceError(messages().errors.finance.categoryName);
   const all = await listBudgets();
-  if (all.some((b) => b.name.toLowerCase() === clean.toLowerCase())) throw new FinanceError(`You already have “${clean}”.`);
+  if (all.some((b) => b.name.toLowerCase() === clean.toLowerCase())) throw new FinanceError(messages().errors.finance.duplicate(clean));
   // New spending categories go before Income and Savings.
   const index = all.findIndex((b) => b.kind !== 'expense');
   return budgetsRepo.create({ name: clean, kind: 'expense', amount, sortKey: sortKeyAt(all, index < 0 ? all.length : index) });
@@ -86,7 +87,8 @@ export async function addBudget(name: string, amount: number | null = null): Pro
 export async function removeBudget(id: string): Promise<void> {
   const budget = await budgetsRepo.get(id);
   if (!budget || budget.kind !== 'expense') return;
-  const other = (await listBudgets()).find((b) => b.kind === 'expense' && b.id !== id && b.name.toLowerCase() === 'other');
+  const others = LOCALES.map((locale) => messages(locale).seed.budgets.other.toLowerCase());
+  const other = (await listBudgets()).find((b) => b.kind === 'expense' && b.id !== id && others.includes(b.name.toLowerCase()));
   await db.transaction('rw', db.budgets, db.transactions, async () => {
     for (const t of await transactionsRepo.where('categoryId', id)) await transactionsRepo.update(t.id, { categoryId: other?.id ?? null });
     await budgetsRepo.remove(id);
@@ -115,8 +117,8 @@ async function moveGoal(goalId: string | null, cents: number): Promise<void> {
 
 export async function addTransaction(input: TransactionInput): Promise<Transaction> {
   const description = input.description.trim();
-  if (!description) throw new FinanceError('Say what it was for.');
-  if (!Number.isFinite(input.amount) || input.amount === 0) throw new FinanceError('Enter an amount.');
+  if (!description) throw new FinanceError(messages().errors.finance.description);
+  if (!Number.isFinite(input.amount) || input.amount === 0) throw new FinanceError(messages().errors.finance.amount);
   const attachmentId = input.receipt ? (await saveUpload(null, { ...input.receipt, name: input.receipt.name ?? `Receipt: ${description}` })).id : null;
   const tx = await transactionsRepo.create({
     day: input.day,
@@ -136,8 +138,8 @@ export async function addTransaction(input: TransactionInput): Promise<Transacti
 export async function updateTransaction(id: string, patch: Partial<Omit<TransactionInput, 'receipt'>>): Promise<void> {
   const current = await transactionsRepo.get(id);
   if (!current) return;
-  if (patch.description !== undefined && !patch.description.trim()) throw new FinanceError('Say what it was for.');
-  if (patch.amount !== undefined && (!Number.isFinite(patch.amount) || patch.amount === 0)) throw new FinanceError('Enter an amount.');
+  if (patch.description !== undefined && !patch.description.trim()) throw new FinanceError(messages().errors.finance.description);
+  if (patch.amount !== undefined && (!Number.isFinite(patch.amount) || patch.amount === 0)) throw new FinanceError(messages().errors.finance.amount);
   const next = await transactionsRepo.update(id, { ...patch, ...(patch.description !== undefined ? { description: patch.description.trim() } : {}) });
   // Undo the old move on the goal, then make the new one.
   if (current.goalId !== next.goalId || current.amount !== next.amount) {
@@ -195,8 +197,8 @@ export async function listAccounts(): Promise<Account[]> {
 
 export async function saveAccount(input: { id?: string; name: string; kind: Account['kind']; balance: number }): Promise<void> {
   const name = input.name.trim();
-  if (!name) throw new FinanceError('Name the account.');
-  if (input.balance < 0) throw new FinanceError('Enter the balance as a positive number; choose “I owe” for debts.');
+  if (!name) throw new FinanceError(messages().errors.finance.account);
+  if (input.balance < 0) throw new FinanceError(messages().errors.finance.balance);
   if (input.id) await accountsRepo.update(input.id, { name, kind: input.kind, balance: input.balance });
   else await accountsRepo.create({ name, kind: input.kind, balance: input.balance, sortKey: generateKeyBetween((await listAccounts()).at(-1)?.sortKey ?? null, null) });
 }

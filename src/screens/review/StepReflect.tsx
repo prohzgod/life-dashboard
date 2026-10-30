@@ -7,13 +7,15 @@ import { Button, Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
 import { formatMinutes } from '@/lib/format';
 import { useObjectUrl } from '@/lib/useObjectUrl';
+import { intlLocale, useT } from '@/i18n';
 import styles from './Review.module.css';
-
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const LONG_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 /** Step 3: the week at a glance, three questions, and a draft summary written from the numbers. */
 export function StepReflect({ review, today }: { review: Review; today: Day }) {
+  const { format, reviews } = useT();
+  const t = reviews.reflect;
+  const DAYS = format.weekdaysShort;
+  const LONG_DAYS = format.weekdaysLong;
   const data = useLiveQuery(() => loadWeekData(review.periodStart, today), [review.periodStart, today]);
   const photo = useLiveQuery(async () => (data?.bestDay?.photoId ? ((await getAttachment(data.bestDay.photoId)) ?? null) : null), [data?.bestDay?.photoId]);
   const photoUrl = useObjectUrl(photo?.thumbBlob ?? photo?.blob);
@@ -24,19 +26,19 @@ export function StepReflect({ review, today }: { review: Review; today: Day }) {
 
   return (
     <div className={styles.split}>
-      <Card title="Your week at a glance" meta="filled in automatically" className={styles.card}>
+      <Card title={t.glance} meta={t.auto} className={styles.card}>
         <div className={styles.glance}>
-          <Glance label="Tasks done" value={summary.tasksDone} extra={summary.tasksDelta > 0 ? `+${summary.tasksDelta}` : undefined} />
-          <Glance label="Habits" value={summary.habitConsistency === null ? '–' : `${Math.round(summary.habitConsistency * 100)}%`} />
-          <Glance label="Mood" value={summary.avgMood === null ? '–' : summary.avgMood.toFixed(1)} />
-          <Glance label="Sleep" value={summary.avgSleepMinutes === null ? '–' : formatMinutes(Math.round(summary.avgSleepMinutes))} />
-          <Glance label="Journal" value={`${summary.journalDays} / 7`} />
+          <Glance label={t.tasksDone} value={summary.tasksDone} extra={summary.tasksDelta > 0 ? `+${summary.tasksDelta}` : undefined} />
+          <Glance label={t.habits} value={summary.habitConsistency === null ? '–' : `${Math.round(summary.habitConsistency * 100)}%`} />
+          <Glance label={t.mood} value={summary.avgMood === null ? '–' : summary.avgMood.toLocaleString(intlLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 })} />
+          <Glance label={t.sleep} value={summary.avgSleepMinutes === null ? '–' : formatMinutes(Math.round(summary.avgSleepMinutes))} />
+          <Glance label={t.journal} value={`${summary.journalDays} / 7`} />
         </div>
 
-        <div className={styles.bars} role="img" aria-label={`Mood and energy by day: ${summary.days.map((d) => `${DAYS[weekday(d.day)]} mood ${d.mood ?? 'none'}, energy ${d.energy ?? 'none'}`).join('; ')}`}>
+        <div className={styles.bars} role="img" aria-label={t.barsLabel(summary.days.map((d) => t.barDay(DAYS[weekday(d.day)]!, String(d.mood ?? t.none), String(d.energy ?? t.none))).join('; '))}>
           <div className={styles.barsLegend} aria-hidden="true">
-            <span><span className={cx(styles.swatch, styles.moodSwatch)} />Mood</span>
-            <span><span className={cx(styles.swatch, styles.energySwatch)} />Energy</span>
+            <span><span className={cx(styles.swatch, styles.moodSwatch)} />{t.mood}</span>
+            <span><span className={cx(styles.swatch, styles.energySwatch)} />{t.energy}</span>
           </div>
           <div className={styles.barGrid} aria-hidden="true">
             {summary.days.map((d) => (
@@ -51,44 +53,40 @@ export function StepReflect({ review, today }: { review: Review; today: Day }) {
           </div>
         </div>
 
-        <Question id="wentWell" label="What went well?" placeholder="A win, however small…" review={review} value={answers.wentWell} />
-        <Question id="drained" label="What drained you?" placeholder="Nothing to fix yet, just notice it…" review={review} value={answers.drained} />
-        <Question id="differently" label="What will you do differently next week?" placeholder="One small change is enough…" review={review} value={answers.differently} />
+        <Question id="wentWell" label={t.wentWell} placeholder={t.wentWellPlaceholder} review={review} value={answers.wentWell} />
+        <Question id="drained" label={t.drained} placeholder={t.drainedPlaceholder} review={review} value={answers.drained} />
+        <Question id="differently" label={t.differently} placeholder={t.differentlyPlaceholder} review={review} value={answers.differently} />
       </Card>
 
       <div className={styles.column}>
-        <section className={cx(styles.card, styles.bestDay)} aria-label="Best day">
+        <section className={cx(styles.card, styles.bestDay)} aria-label={t.bestDayLabel}>
           <div className={styles.bestPhoto}>
-            {photoUrl ? <img src={photoUrl} alt="" /> : <><Icon name="image" size={20} /><span>Photo</span></>}
+            {photoUrl ? <img src={photoUrl} alt="" /> : <><Icon name="image" size={20} /><span>{t.photo}</span></>}
           </div>
           <div className={styles.bestText}>
-            <span className={styles.eyebrow}>Best day</span>
+            <span className={styles.eyebrow}>{t.bestDayLabel}</span>
             {bestDay ? (
               <>
                 <p className={styles.bestLine}>
                   {LONG_DAYS[weekday(bestDay.day)]}
                   {bestDay.line ? `: ${bestDay.line}` : '.'}
                 </p>
-                <span className={styles.quiet}>
-                  Mood {bestDay.mood}
-                  {bestDay.energy ? `, energy ${bestDay.energy}` : ''}
-                  {bestDay.sleepMinutes ? `, ${formatMinutes(bestDay.sleepMinutes)} sleep` : ''}
-                </span>
+                <span className={styles.quiet}>{t.bestMeta(bestDay.mood ?? 0, bestDay.energy, bestDay.sleepMinutes ? formatMinutes(bestDay.sleepMinutes) : null)}</span>
               </>
             ) : (
-              <p className={styles.quiet}>Check in on Today, and your best day shows up here.</p>
+              <p className={styles.quiet}>{t.bestEmpty}</p>
             )}
           </div>
         </section>
 
-        <Card title="Goals that moved" className={styles.card}>
-          {moves.length === 0 && <p className={styles.quiet}>No goal changed this week. That’s information too.</p>}
+        <Card title={t.moved} className={styles.card}>
+          {moves.length === 0 && <p className={styles.quiet}>{t.noMoves}</p>}
           <ul className={styles.moves}>
             {moves.map((m) => (
               <li key={m.id}>
                 <span>{m.title}</span>
                 {m.stalled ? (
-                  <span className={styles.stalled}>no progress, 2 weeks</span>
+                  <span className={styles.stalled}>{t.stalled}</span>
                 ) : (
                   <span className={styles.moved}>
                     +{Math.round(m.delta)}% → {Math.round(m.after ?? 0)}%
@@ -102,23 +100,23 @@ export function StepReflect({ review, today }: { review: Review; today: Day }) {
         <Card
           title={
             <span className={styles.draftTitle}>
-              <Icon name="assistant" size={16} /> Draft summary
+              <Icon name="assistant" size={16} /> {t.draft}
             </span>
           }
-          action={<span className={styles.optional}>Optional</span>}
+          action={<span className={styles.optional}>{t.optional}</span>}
           className={styles.card}
         >
           <p className={styles.draft}>{answers.summary || draft}</p>
           {answers.summary ? (
-            <p className={styles.quiet}>In your review. It goes into your journal when you finish.</p>
+            <p className={styles.quiet}>{t.inReview}</p>
           ) : (
             <div className={styles.draftActions}>
               <Button size="sm" variant="primary" onClick={() => void saveReviewAnswers(review.id, { summary: draft })}>
-                Insert into review
+                {t.insert}
               </Button>
             </div>
           )}
-          <p className={styles.quiet}>Written on this device from this week’s numbers. Nothing leaves this device.</p>
+          <p className={styles.quiet}>{t.privateWeek}</p>
         </Card>
       </div>
     </div>
