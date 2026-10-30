@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const port = 4173;
+// E2E_PORT runs the suite beside a preview server that's already on 4173.
+const port = Number(process.env.E2E_PORT ?? 4173);
 
 export default defineConfig({
   testDir: './e2e',
@@ -10,6 +11,8 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: `http://localhost:${port}`,
+    // The app opens in Vietnamese; these flows read the English copy.
+    storageState: { cookies: [], origins: [{ origin: `http://localhost:${port}`, localStorage: [{ name: 'life-dashboard:locale', value: 'en' }] }] },
     viewport: { width: 1440, height: 960 },
     trace: 'on-first-retry',
   },

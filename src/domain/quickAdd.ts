@@ -53,8 +53,74 @@ const DATE_PHRASE = [
   WEEKDAY,
 ].join('|');
 
+const VI_WEEKDAYS: Array<[string, string]> = [
+  ['thứ hai|thứ 2', 'monday'],
+  ['thứ ba|thứ 3', 'tuesday'],
+  ['thứ tư|thứ 4', 'wednesday'],
+  ['thứ năm|thứ 5', 'thursday'],
+  ['thứ sáu|thứ 6', 'friday'],
+  ['thứ bảy|thứ 7', 'saturday'],
+  ['chủ nhật', 'sunday'],
+];
+const VI_WEEKDAY = VI_WEEKDAYS.map(([vi]) => vi).join('|');
+const VI_DATES: Array<[RegExp, string]> = [
+  [/^(?:hôm nay|tối nay)$/, 'today'],
+  [/^ngày mai$/, 'tomorrow'],
+  [/^(?:ngày kia|ngày mốt)$/, 'in 2 days'],
+  [/^(?:tuần sau|tuần tới)$/, 'next week'],
+  [/^(?:tháng sau|tháng tới)$/, 'next month'],
+  [/^cuối tuần này$/, 'this weekend'],
+  ...VI_WEEKDAYS.map(([vi, en]): [RegExp, string] => [new RegExp(`^(?:${vi})(?: (?:tới|này))?$`), en]),
+];
+const VI_DATE = `hôm nay|tối nay|ngày mai|ngày kia|ngày mốt|tuần sau|tuần tới|tháng sau|tháng tới|cuối tuần này|(?:${VI_WEEKDAY})(?:\\s+(?:tới|này))?`;
+const VI_UNITS: Record<string, string> = { ngày: 'day', tuần: 'week', tháng: 'month', năm: 'year' };
+const VI_PRIORITY: Record<string, string> = { cao: 'high', vừa: 'medium', thấp: 'low' };
+
+function viDate(phrase: string): string {
+  const p = phrase.toLowerCase().replace(/\s+/g, ' ').trim();
+  return VI_DATES.find(([pattern]) => pattern.test(p))?.[1] ?? p;
+}
+
+/**
+ * Vietnamese phrases rewritten into the English ones the parser reads ("ngày mai lúc 18:00" →
+ * "tomorrow at 18:00"). Only whole phrases are rewritten, so a stray word stays in the title.
+ */
+function fromVietnamese(text: string): string {
+  // `to` returns null to leave the match as it was.
+  const swap = (pattern: string, to: (...m: string[]) => string | null) => {
+    text = text.replace(new RegExp(pattern, 'giu'), (match: string, ...args) => {
+      const out = to(...(args.slice(0, -2) as string[]));
+      return out === null ? match : ` ${out} `;
+    });
+  };
+  swap(`\\s!(cao|vừa|thấp)(?=\\s)`, (p) => `!${VI_PRIORITY[p!.toLowerCase()]}`);
+  swap(`\\s(?:mỗi|hằng|hàng)\\s+ngày\\s+trong\\s+tuần(?=\\s)`, () => 'every weekday');
+  swap(`\\s(?:mỗi|hằng|hàng)\\s+cuối\\s+tuần(?=\\s)`, () => 'every weekend');
+  swap(`\\s(?:mỗi|hằng|hàng)\\s+(?:ngày|mùng)\\s+(\\d{1,2})(?:\\s+(?:mỗi|hằng|hàng)\\s+tháng)?(?=\\s)`, (d) => `every ${d}th`);
+  swap(`\\s(?:mỗi|hằng|hàng)\\s+(${VI_WEEKDAY})(?=\\s)`, (d) => `every ${viDate(d!)}`);
+  swap(`\\s(?:mỗi|hằng|hàng)\\s+(\\d+)\\s+(ngày|tuần|tháng|năm)(?=\\s)`, (n, u) => `every ${n} ${VI_UNITS[u!.toLowerCase()]}s`);
+  swap(`\\s(?:mỗi|hằng|hàng)\\s+(ngày|tuần|tháng|năm)(?=\\s)`, (u) => `every ${VI_UNITS[u!.toLowerCase()]}`);
+  swap(`\\s(?:trước|hạn)\\s+(${VI_DATE})(?=\\s)`, (d) => `by ${viDate(d!)}`);
+  swap(`\\s(?:lúc\\s+)?(\\d{1,2})\\s?(?:h|giờ)\\s?(\\d{2})?(?:\\s+(sáng|trưa|chiều|tối))?(?=\\s)`, (h, m, part) => {
+    let hours = Number(h);
+    if ((part === 'chiều' || part === 'tối') && hours < 12) hours += 12;
+    if (hours > 23 || Number(m ?? 0) > 59) return null;
+    return `${String(hours).padStart(2, '0')}:${m ?? '00'}`;
+  });
+  swap(`\\slúc\\s+(\\d{1,2}:\\d{2})(?=\\s)`, (t) => `at ${t}`);
+  swap(`\\s(?:vào\\s+)?(${VI_DATE})(?=\\s)`, (d) => viDate(d!));
+  swap(`\\s(?:một ngày nào đó|lúc nào đó|khi nào đó)(?=\\s)`, () => 'someday');
+  return text;
+}
+
+/** "Tài chính", "tài-chính" and "taichinh" all name the same area. */
+function looseName(name: string): string {
+  return name.normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/gi, 'd').replace(/[\s_-]+/g, '').toLowerCase();
+}
+
 /**
  * Reads a quick-add line such as "Pay rent every 1st #finance !high" into task fields.
+ * Vietnamese works too: "Trả tiền nhà mỗi ngày 1 #tàichính !cao".
  * Pure: the caller passes today and the area names, and decides what to do with the result.
  */
 export function parseCapture(input: string, { today, areaNames }: Options): ParsedCapture {
@@ -70,7 +136,7 @@ export function parseCapture(input: string, { today, areaNames }: Options): Pars
     estimateMin: null,
     someday: false,
   };
-  let text = ` ${input} `;
+  let text = fromVietnamese(` ${input} `);
   const take = (pattern: RegExp, apply: (match: RegExpMatchArray) => boolean | void) => {
     text = text.replace(pattern, (...args) => {
       const match = args.slice(0, -2) as unknown as RegExpMatchArray;
@@ -91,9 +157,9 @@ export function parseCapture(input: string, { today, areaNames }: Options): Pars
   });
 
   // #area or #tag. A tag starts with a letter, so "Essay #9" keeps its number.
-  take(/\s#(\p{L}[\p{L}\p{N}_-]*)(?=\s)/giu, (m) => {
+  take(/\s#(\p{L}[\p{L}\p{M}\p{N}_-]*)(?=\s)/giu, (m) => {
     const word = m[1]!;
-    const area = areaNames.find((name) => name.toLowerCase() === word.toLowerCase());
+    const area = areaNames.find((name) => looseName(name) === looseName(word));
     if (area && !result.areaName) result.areaName = area;
     else if (!result.tags.includes(word.toLowerCase())) result.tags.push(word.toLowerCase());
   });
@@ -223,7 +289,7 @@ function tidyTitle(text: string): string {
   return text
     .replace(/\s+/g, ' ')
     .trim()
-    .replace(/\s+(?:on|at|by|before|due|every|and)$/i, '')
-    .replace(/^(?:on|at)\s+/i, '')
+    .replace(/\s+(?:on|at|by|before|due|every|and|lúc|vào|trước|hạn|mỗi)$/iu, '')
+    .replace(/^(?:on|at|lúc|vào)\s+/iu, '')
     .trim();
 }

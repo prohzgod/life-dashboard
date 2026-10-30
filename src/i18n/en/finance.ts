@@ -2,6 +2,7 @@
 export const finance = {
   sources: { manual: 'Manual', receipt: 'Receipt photo', csv: 'CSV import', recurring: 'Recurring', goal: 'Linked to goal' },
   notSorted: 'Not sorted',
+  unnamed: 'Unnamed transaction',
   hideAmounts: 'Hide amounts',
   showAmounts: 'Show amounts',
   backHome: 'Back to Home',

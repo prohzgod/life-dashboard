@@ -37,12 +37,12 @@ export function Sidebar({ onSearch, onCapture }: SidebarProps) {
           <button type="button" className={styles.search} onClick={onSearch}>
             <Icon name="search" size={16} strokeWidth={1.9} />
             <span className={styles.grow}>{t.shell.searchOrJump}</span>
-            <kbd className={styles.kbd} aria-label="Command K">⌘K</kbd>
+            <kbd className={styles.kbd} aria-label={t.shell.commandK}>⌘K</kbd>
           </button>
           <button type="button" className={styles.capture} onClick={onCapture}>
             <Icon name="plus" size={16} strokeWidth={2.2} />
             <span>{t.shell.quickCapture}</span>
-            <kbd className={styles.kbdOnAccent} aria-label="Command N">⌘N</kbd>
+            <kbd className={styles.kbdOnAccent} aria-label={t.shell.commandN}>⌘N</kbd>
           </button>
         </div>
 

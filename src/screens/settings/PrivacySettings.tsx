@@ -9,7 +9,8 @@ import {
 } from "react";
 import {
   formatBytes,
-  LOCK_AFTER_OPTIONS,
+  LOCK_AFTER_VALUES,
+  lockAfterLabel,
   type LockAfter,
 } from "@/domain/privacy";
 import {
@@ -45,17 +46,18 @@ import { formatDayRelative, formatTime } from "@/lib/format";
 import { useIsMobile } from "@/lib/useMediaQuery";
 import { useToday } from "@/lib/useToday";
 import { PrivacyDialogs, type PrivacyDialog } from "./PrivacyDialogs";
+import { useT } from "@/i18n";
 import styles from "./PrivacySettings.module.css";
 
 type Pending = { file: ExportFile; name: string; records: number };
 type Message = { tone: "success" | "error"; text: string };
 
 const storageRows = [
-  { label: "Goals", tables: ["goals", "keyResults", "milestones"] },
-  { label: "Tasks", tables: ["tasks"] },
-  { label: "Habits and logs", tables: ["habits", "habitLogs"] },
-  { label: "Library pages and photos", tables: ["nodes", "attachments"] },
-  { label: "Check-ins and reviews", tables: ["dailyEntries", "reviews"] },
+  { key: "goals", tables: ["goals", "keyResults", "milestones"] },
+  { key: "tasks", tables: ["tasks"] },
+  { key: "habits", tables: ["habits", "habitLogs"] },
+  { key: "library", tables: ["nodes", "attachments"] },
+  { key: "checkIns", tables: ["dailyEntries", "reviews"] },
 ] as const;
 
 const KEEP_OPTIONS = [7, 14, 30, 90];
@@ -92,6 +94,7 @@ const pickDirectory = (
 
 /** Settings › Privacy & data: storage, sync, backup encryption, the app lock, backups, export. */
 export function PrivacySettings() {
+  const t = useT().privacy;
   const phone = useIsMobile();
   const today = useToday();
   const state = useLiveQuery(getPrivacyState) ?? LOADING;
@@ -125,13 +128,10 @@ export function PrivacySettings() {
         `life-dashboard-${toLocalDay(new Date())}.json`,
         await exportAllAsJson(),
       );
-      say("Export saved to your downloads.");
+      say(t.exported);
     } catch (error) {
       console.error(error);
-      say(
-        "The export didn’t work. Your data is unchanged; try again.",
-        "error",
-      );
+      say(t.exportFailed, "error");
     } finally {
       setBusy(false);
     }
@@ -151,9 +151,7 @@ export function PrivacySettings() {
       });
     } catch (error) {
       say(
-        error instanceof ImportError
-          ? error.message
-          : "That file couldn’t be read.",
+        error instanceof ImportError ? error.message : t.unreadable,
         "error",
       );
     }
@@ -164,10 +162,10 @@ export function PrivacySettings() {
     setBusy(true);
     try {
       const { records } = await importReplacingAll(pending.file);
-      say(`Imported ${records} records from ${pending.name}.`);
+      say(t.imported(records, pending.name));
     } catch (error) {
       console.error(error);
-      say("The import didn’t finish, so nothing was changed.", "error");
+      say(t.importFailed, "error");
     } finally {
       setPending(null);
       setBusy(false);
@@ -183,18 +181,16 @@ export function PrivacySettings() {
         (await folderAccess(state.backup.folder, true)) === "granted"
       ) {
         const { name } = await backUpToFolder();
-        say(`Backed up to ${state.backup.folderName}: ${name}.`);
+        say(t.backedUpTo(state.backup.folderName ?? '', name));
       } else {
         const { name, text } = await makeBackup();
         downloadText(name, text);
         await noteBackup(text.length, true);
-        say("Encrypted backup saved to your downloads.");
+        say(t.backedUp);
       }
     } catch (error) {
       say(
-        error instanceof PrivacyError
-          ? error.message
-          : "The backup didn’t work. Try again.",
+        error instanceof PrivacyError ? error.message : t.backupFailed,
         "error",
       );
     } finally {
@@ -212,7 +208,7 @@ export function PrivacySettings() {
       });
       await setBackupFolder(folder);
       setAccess(await folderAccess(folder));
-      say(`Backups will go to ${folder.name}.`);
+      say(t.folderSet(folder.name));
     } catch {
       // Closing the picker isn't an error.
     }
@@ -229,12 +225,9 @@ export function PrivacySettings() {
     if (!state.lock.passcode) return setDialog("passcode");
     try {
       await setLockOptions({ credentialId: await registerBiometric() });
-      say("Touch ID or Face ID can now unlock the app on this device.");
+      say(t.biometricOn);
     } catch {
-      say(
-        "Your device didn’t set that up. You can still use your passcode.",
-        "error",
-      );
+      say(t.biometricFailed, "error");
     }
   }
 
@@ -242,8 +235,8 @@ export function PrivacySettings() {
     ? `${formatDayRelative(toLocalDay(new Date(state.backup.lastAt)), today)} ${formatTime(state.backup.lastAt)}`
     : null;
   const lastLine = last
-    ? `${last}${state.backup.lastSize ? `, ${formatBytes(state.backup.lastSize)}` : ""}${state.backup.lastVerified ? ", verified" : ""}`
-    : "No backups yet";
+    ? `${last}${state.backup.lastSize ? `, ${formatBytes(state.backup.lastSize)}` : ""}${state.backup.lastVerified ? t.verified : ""}`
+    : t.noBackups;
   const status = (
     <div
       role="status"
@@ -263,28 +256,28 @@ export function PrivacySettings() {
       <Dialog
         open={!!pending}
         onClose={() => !busy && setPending(null)}
-        title="Replace everything on this device?"
+        title={t.replaceTitle}
       >
         {pending && (
           <div className={styles.confirm}>
             <p>
-              The {totalRecords} records here will be replaced by the{" "}
-              {pending.records} in <strong>{pending.name}</strong>. This can’t
-              be undone, so export first if you want a copy of what’s here now.
+              {t.replaceBody(totalRecords, pending.records)}{" "}
+              <strong>{pending.name}</strong>
+              {t.replaceAfter}
             </p>
             <div className={styles.confirmActions}>
               <Button onClick={() => setPending(null)} disabled={busy}>
-                Cancel
+                {t.cancel}
               </Button>
               <Button onClick={onExport} disabled={busy}>
-                Export first
+                {t.exportFirst}
               </Button>
               <Button
                 variant="primary"
                 onClick={onConfirmImport}
                 disabled={busy}
               >
-                Replace everything
+                {t.replace}
               </Button>
             </div>
           </div>
@@ -296,7 +289,7 @@ export function PrivacySettings() {
         accept="application/json,.json"
         className="visually-hidden"
         tabIndex={-1}
-        aria-label="Choose an export file"
+        aria-label={t.chooseExport}
         onChange={onFileChosen}
       />
     </>
@@ -325,30 +318,24 @@ export function PrivacySettings() {
   return (
     <div className={styles.columns}>
       <div className={styles.column}>
-        <Card title="Storage on this device">
-          <p className={styles.lead}>
-            Everything lives here first, so the app works fully offline.
-          </p>
+        <Card title={t.storage}>
+          <p className={styles.lead}>{t.storageLead}</p>
           <StorageBar storage={storage} />
           <dl className={styles.counts}>
             {storageRows.map((row) => (
-              <div key={row.label} className={styles.countRow}>
-                <dt>{row.label}</dt>
+              <div key={row.key} className={styles.countRow}>
+                <dt>{t.rows[row.key]}</dt>
                 <dd>
                   {counts
-                    ? row.tables.reduce((sum, t) => sum + counts[t], 0)
+                    ? row.tables.reduce((sum, table) => sum + counts[table], 0)
                     : "…"}
                 </dd>
               </div>
             ))}
           </dl>
           <SettingRow
-            title="Keep data if space runs low"
-            sub={
-              storage?.persisted
-                ? "The browser won’t clear it to save space"
-                : "Browsers may clear sites to free space"
-            }
+            title={t.keepData}
+            sub={storage?.persisted ? t.persisted : t.mayClear}
           >
             {(id) => (
               <Switch
@@ -357,9 +344,7 @@ export function PrivacySettings() {
                 disabled={storage?.persisted}
                 onChange={async () =>
                   say(
-                    (await keepDataOnDevice())
-                      ? "This browser will keep your data."
-                      : "This browser didn’t agree. Installing the app usually helps.",
+                    (await keepDataOnDevice()) ? t.kept : t.notKept,
                     "success",
                   )
                 }
@@ -368,28 +353,28 @@ export function PrivacySettings() {
           </SettingRow>
         </Card>
 
-        <Card title="Sync between devices">
+        <Card title={t.sync}>
           <fieldset className={styles.options}>
-            <legend className="visually-hidden">Where your data lives</legend>
+            <legend className="visually-hidden">{t.whereLives}</legend>
             <label className={cx(styles.option, styles.optionOn)}>
               <input type="radio" name="sync" defaultChecked />
               <span>
-                <strong>This device only</strong>
-                <span>No sync at all</span>
+                <strong>{t.deviceOnly}</strong>
+                <span>{t.noSync}</span>
               </span>
             </label>
             <label className={cx(styles.option, styles.optionOff)}>
               <input type="radio" name="sync" disabled />
               <span>
-                <strong>My devices, end-to-end encrypted</strong>
-                <span>Comes with sync</span>
+                <strong>{t.myDevices}</strong>
+                <span>{t.comesWithSync}</span>
               </span>
             </label>
             <label className={cx(styles.option, styles.optionOff)}>
               <input type="radio" name="sync" disabled />
               <span>
-                <strong>My own server</strong>
-                <span>Comes with sync</span>
+                <strong>{t.ownServer}</strong>
+                <span>{t.comesWithSync}</span>
               </span>
             </label>
           </fieldset>
@@ -397,15 +382,12 @@ export function PrivacySettings() {
       </div>
 
       <div className={styles.column}>
-        <Card title="Encryption">
-          <SettingRow
-            title="Encrypted backups"
-            sub="Your passphrase never leaves this device"
-          >
+        <Card title={t.encryption}>
+          <SettingRow title={t.encryptedBackups} sub={t.passphraseStays}>
             {(id) =>
               state.encryption.on ? (
                 <span className={styles.onTag} id={id}>
-                  On
+                  {t.on}
                 </span>
               ) : (
                 <Switch
@@ -416,34 +398,22 @@ export function PrivacySettings() {
               )
             }
           </SettingRow>
-          <p className={styles.warning}>
-            If you lose both your passphrase and your recovery kit, nobody can
-            recover your backups. Not even us.
-          </p>
+          <p className={styles.warning}>{t.loseBoth}</p>
           {state.encryption.on && (
             <div className={styles.buttonRow}>
-              <Button onClick={() => setDialog("recovery")}>
-                New recovery kit
-              </Button>
+              <Button onClick={() => setDialog("recovery")}>{t.newKit}</Button>
               <Button onClick={() => setDialog("passphrase")}>
-                Change passphrase
+                {t.changePassphrase}
               </Button>
             </div>
           )}
-          <p className={styles.hint}>
-            Data on this device itself isn’t encrypted; keep the device locked
-            with its own passcode.
-          </p>
+          <p className={styles.hint}>{t.deviceNotEncrypted}</p>
         </Card>
 
-        <Card title="App lock & screen privacy">
+        <Card title={t.lock}>
           <SettingRow
-            title="Passcode"
-            sub={
-              state.lock.passcode
-                ? "Needed each time the app opens"
-                : "Hide the app behind a passcode"
-            }
+            title={t.passcode}
+            sub={state.lock.passcode ? t.passcodeOn : t.passcodeOff}
           >
             {(id) => (
               <Switch
@@ -454,8 +424,8 @@ export function PrivacySettings() {
             )}
           </SettingRow>
           <SettingRow
-            title="Unlock with Touch ID / Face ID"
-            sub={canBiometric ? undefined : "Not available in this browser"}
+            title={t.biometric}
+            sub={canBiometric ? undefined : t.noBiometric}
           >
             {(id) => (
               <Switch
@@ -470,10 +440,7 @@ export function PrivacySettings() {
             value={state.lock.after}
             disabled={!state.lock.passcode}
           />
-          <SettingRow
-            title="Hide money amounts by default"
-            sub="Finance shows •••• until you tap"
-          >
+          <SettingRow title={t.hideMoney} sub={t.hideMoneySub}>
             {(id) => (
               <Switch
                 labelledBy={id}
@@ -482,7 +449,7 @@ export function PrivacySettings() {
               />
             )}
           </SettingRow>
-          <SettingRow title="Blur app in the app switcher">
+          <SettingRow title={t.blur}>
             {(id) => (
               <Switch
                 labelledBy={id}
@@ -493,15 +460,15 @@ export function PrivacySettings() {
           </SettingRow>
           {state.lock.passcode && (
             <Button icon={<Icon name="lock" size={16} />} onClick={lockNow}>
-              Lock app now
+              {t.lockNow}
             </Button>
           )}
         </Card>
       </div>
 
       <div className={styles.column}>
-        <Card title="Backups">
-          <SettingRow title="Automatic encrypted backups">
+        <Card title={t.backups}>
+          <SettingRow title={t.automatic}>
             {(id) => (
               <Switch
                 labelledBy={id}
@@ -512,32 +479,28 @@ export function PrivacySettings() {
           </SettingRow>
           <dl className={styles.facts}>
             <div>
-              <dt>When</dt>
-              <dd>
-                {pickDirectory
-                  ? "Daily after 03:00, while the app is open"
-                  : "Daily reminder to download one"}
-              </dd>
+              <dt>{t.when}</dt>
+              <dd>{pickDirectory ? t.daily : t.dailyReminder}</dd>
             </div>
             <div>
-              <dt>Where</dt>
+              <dt>{t.where}</dt>
               <dd>
                 {state.backup.folderName ??
-                  (pickDirectory ? "No folder yet" : "Your downloads")}{" "}
+                  (pickDirectory ? t.noFolder : t.downloads)}{" "}
                 {pickDirectory && (
                   <button
                     type="button"
                     className={styles.inlineButton}
                     onClick={chooseFolder}
                   >
-                    {state.backup.folderName ? "Change" : "Choose a folder"}
+                    {state.backup.folderName ? t.change : t.chooseFolder}
                   </button>
                 )}
               </dd>
             </div>
             <div>
               <dt>
-                <label htmlFor="keep-backups">Keep</label>
+                <label htmlFor="keep-backups">{t.keep}</label>
               </dt>
               <dd>
                 <select
@@ -550,20 +513,20 @@ export function PrivacySettings() {
                 >
                   {KEEP_OPTIONS.map((n) => (
                     <option key={n} value={n}>
-                      Last {n} backups
+                      {t.lastN(n)}
                     </option>
                   ))}
                 </select>
               </dd>
             </div>
             <div>
-              <dt>Last</dt>
+              <dt>{t.last}</dt>
               <dd className={styles.strong}>{lastLine}</dd>
             </div>
           </dl>
           {access === "prompt" && state.backup.enabled && (
             <p className={styles.notice}>
-              Your browser asks again after a restart.{" "}
+              {t.asksAgain}{" "}
               <button
                 type="button"
                 className={styles.inlineButton}
@@ -571,7 +534,7 @@ export function PrivacySettings() {
                   setAccess(await folderAccess(state.backup.folder, true))
                 }
               >
-                Allow backups to {state.backup.folderName}
+                {t.allow(state.backup.folderName)}
               </button>
             </p>
           )}
@@ -580,16 +543,14 @@ export function PrivacySettings() {
           )}
           <div className={styles.buttonRow}>
             <Button variant="primary" onClick={backUpNow} disabled={busy}>
-              Back up now
+              {t.backUpNow}
             </Button>
-            <Button onClick={() => setDialog("restore")}>Restore…</Button>
+            <Button onClick={() => setDialog("restore")}>{t.restore}</Button>
           </div>
         </Card>
 
-        <Card title="Export & import">
-          <p className={styles.lead}>
-            Your data is yours. Take all of it, any time, in open formats.
-          </p>
+        <Card title={t.export}>
+          <p className={styles.lead}>{t.exportLead}</p>
           <div className={styles.rows}>
             <button
               type="button"
@@ -597,7 +558,7 @@ export function PrivacySettings() {
               onClick={onExport}
               disabled={busy}
             >
-              <span className={styles.fileLabel}>Everything, structured</span>
+              <span className={styles.fileLabel}>{t.structured}</span>
               <span className={styles.fileExt}>.json</span>
             </button>
             <button
@@ -606,13 +567,11 @@ export function PrivacySettings() {
               onClick={() => inputRef.current?.click()}
               disabled={busy}
             >
-              <span className={styles.fileLabel}>Restore from an export</span>
+              <span className={styles.fileLabel}>{t.restoreExport}</span>
               <span className={styles.fileExt}>.json</span>
             </button>
           </div>
-          <p className={styles.hint}>
-            Markdown with images, CSV, and imports from other apps come later.
-          </p>
+          <p className={styles.hint}>{t.later}</p>
           {status}
         </Card>
       </div>
@@ -651,11 +610,12 @@ function LockAfterRow({
   value: LockAfter;
   disabled: boolean;
 }) {
+  const t = useT().privacy;
   const id = useId();
   return (
     <div className={styles.setting}>
       <label htmlFor={id} className={styles.settingTitle}>
-        Lock after
+        {t.lockAfterLabel}
       </label>
       <select
         id={id}
@@ -671,12 +631,9 @@ function LockAfterRow({
           })
         }
       >
-        {LOCK_AFTER_OPTIONS.map((o) => (
-          <option
-            key={o.label}
-            value={o.value === null ? "never" : String(o.value)}
-          >
-            {o.label}
+        {LOCK_AFTER_VALUES.map((v) => (
+          <option key={String(v)} value={v === null ? "never" : String(v)}>
+            {lockAfterLabel(v)}
           </option>
         ))}
       </select>
@@ -691,6 +648,7 @@ function StorageBar({
   storage: Awaited<ReturnType<typeof storageUse>> | undefined;
   compact?: boolean;
 }) {
+  const t = useT().privacy;
   if (!storage) return null;
   const total = Math.max(storage.used ?? 0, storage.images + storage.files);
   const database = Math.max(0, total - storage.images - storage.files);
@@ -699,16 +657,16 @@ function StorageBar({
       ? Math.min(storage.quota, total * 4 || 1)
       : total || 1;
   const parts = [
-    { label: "Database", bytes: database, className: styles.partDatabase },
-    { label: "Images", bytes: storage.images, className: styles.partImages },
-    { label: "Attachments", bytes: storage.files, className: styles.partFiles },
+    { label: t.parts.database, bytes: database, className: styles.partDatabase },
+    { label: t.parts.images, bytes: storage.images, className: styles.partImages },
+    { label: t.parts.files, bytes: storage.files, className: styles.partFiles },
   ];
   return (
     <div className={styles.storage}>
       <div
         className={styles.bar}
         role="img"
-        aria-label={`${formatBytes(total)} used on this device`}
+        aria-label={t.used(formatBytes(total))}
       >
         {parts.map((p) => (
           <span
@@ -720,8 +678,7 @@ function StorageBar({
       </div>
       {compact ? (
         <p className={styles.settingSub}>
-          Works fully offline. Database {formatBytes(database)}, photos{" "}
-          {formatBytes(storage.images)}
+          {t.compact(formatBytes(database), formatBytes(storage.images))}
         </p>
       ) : (
         <ul className={styles.legend}>
@@ -731,7 +688,7 @@ function StorageBar({
                 className={cx(styles.swatch, p.className)}
                 aria-hidden="true"
               />
-              {p.label}, {formatBytes(p.bytes)}
+              {t.part(p.label, formatBytes(p.bytes))}
             </li>
           ))}
         </ul>
@@ -770,42 +727,36 @@ function PhonePrivacy({
   status,
   children,
 }: PhoneProps) {
+  const all = useT().privacy;
+  const t = all.phone;
   const total = storage
     ? Math.max(storage.used ?? 0, storage.images + storage.files)
     : 0;
-  const after =
-    LOCK_AFTER_OPTIONS.find((o) => o.value === state.lock.after)?.label.replace(
-      " away",
-      "",
-    ) ?? "";
+  const after = lockAfterLabel(state.lock.after, true);
   return (
     <div className={styles.phone}>
-      <section className={styles.group} aria-label="On this phone">
+      <section className={styles.group} aria-label={t.onPhone}>
         <div className={styles.phoneStorage}>
           <div className={styles.phoneStorageHead}>
-            <strong>On this phone</strong>
+            <strong>{t.onPhone}</strong>
             <span>{formatBytes(total)}</span>
           </div>
           <StorageBar storage={storage} compact />
         </div>
       </section>
 
-      <h2 className={styles.groupLabel}>Sync</h2>
+      <h2 className={styles.groupLabel}>{t.sync}</h2>
       <section className={styles.group}>
-        <PhoneRow title="My devices" sub="Sync comes later">
-          <span className={styles.rowValue}>This one only</span>
+        <PhoneRow title={t.myDevices} sub={t.later}>
+          <span className={styles.rowValue}>{t.thisOne}</span>
         </PhoneRow>
       </section>
 
-      <h2 className={styles.groupLabel}>Security</h2>
+      <h2 className={styles.groupLabel}>{t.security}</h2>
       <section className={styles.group}>
         <PhoneRow
-          title="Encrypted backups"
-          sub={
-            state.encryption.on
-              ? "Passphrase set"
-              : "Seal backups with a passphrase"
-          }
+          title={all.encryptedBackups}
+          sub={state.encryption.on ? t.passphraseSet : t.seal}
         >
           {(id) =>
             state.encryption.on ? (
@@ -815,7 +766,7 @@ function PhonePrivacy({
                 onClick={() => onDialog("passphrase")}
                 aria-describedby={id}
               >
-                Change
+                {t.change}
               </button>
             ) : (
               <Switch
@@ -827,13 +778,13 @@ function PhonePrivacy({
           }
         </PhoneRow>
         <PhoneRow
-          title="Passcode lock"
+          title={t.passcodeLock}
           sub={
             state.lock.passcode
               ? state.lock.after === null
-                ? "Locks when you lock it"
-                : `Lock after ${after}`
-              : "Off"
+                ? t.whenYouLock
+                : t.lockAfter(after)
+              : t.off
           }
         >
           {(id) => (
@@ -845,7 +796,7 @@ function PhonePrivacy({
           )}
         </PhoneRow>
         {canBiometric && (
-          <PhoneRow title="Face ID unlock">
+          <PhoneRow title={t.faceId}>
             {(id) => (
               <Switch
                 labelledBy={id}
@@ -860,10 +811,7 @@ function PhonePrivacy({
           <LockAfterRow value={state.lock.after} disabled={false} />
         )}
         {state.encryption.on && (
-          <PhoneRow
-            title="Recovery kit"
-            sub="Needed if you forget your passphrase"
-          >
+          <PhoneRow title={t.recovery} sub={t.recoverySub}>
             {(id) => (
               <button
                 type="button"
@@ -871,16 +819,16 @@ function PhonePrivacy({
                 onClick={() => onDialog("recovery")}
                 aria-describedby={id}
               >
-                New kit
+                {t.newKit}
               </button>
             )}
           </PhoneRow>
         )}
       </section>
 
-      <h2 className={styles.groupLabel}>Backup & export</h2>
+      <h2 className={styles.groupLabel}>{t.backup}</h2>
       <section className={styles.group}>
-        <PhoneRow title="Daily backup" sub={lastLine}>
+        <PhoneRow title={t.daily} sub={lastLine}>
           {(id) => (
             <Switch
               labelledBy={id}
@@ -890,25 +838,25 @@ function PhonePrivacy({
           )}
         </PhoneRow>
         <PhoneButton
-          title="Back up now"
-          sub="An encrypted file to your downloads"
+          title={t.backUpNow}
+          sub={t.backUpSub}
           onClick={onBackUp}
           disabled={busy}
         />
         <PhoneButton
-          title="Restore from a backup"
+          title={t.restore}
           onClick={() => onDialog("restore")}
         />
         <PhoneButton
-          title="Export everything"
-          sub="JSON, readable anywhere"
+          title={t.exportAll}
+          sub={t.exportSub}
           onClick={onExport}
           disabled={busy}
         />
       </section>
       {state.lock.passcode && (
         <Button icon={<Icon name="lock" size={16} />} onClick={lockNow}>
-          Lock app now
+          {all.lockNow}
         </Button>
       )}
       {status}

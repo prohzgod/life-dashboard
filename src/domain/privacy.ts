@@ -1,15 +1,16 @@
+import { messages } from '@/i18n/locale';
+
 /** Rules for the app lock and automatic backups. Pure: times come in, decisions come out. */
 
 /** Minutes away before the app locks; 0 locks as soon as you leave, null never (until you lock it yourself or reopen). */
 export type LockAfter = 0 | 1 | 5 | 15 | 60 | null;
-export const LOCK_AFTER_OPTIONS: ReadonlyArray<{ value: LockAfter; label: string }> = [
-  { value: 0, label: 'Right away' },
-  { value: 1, label: '1 minute away' },
-  { value: 5, label: '5 minutes away' },
-  { value: 15, label: '15 minutes away' },
-  { value: 60, label: '1 hour away' },
-  { value: null, label: 'Only when I lock it' },
-];
+export const LOCK_AFTER_VALUES: readonly LockAfter[] = [0, 1, 5, 15, 60, null];
+
+/** "5 minutes away", or with `short`, "5 minutes". */
+export function lockAfterLabel(value: LockAfter, short = false): string {
+  const t = messages().privacy;
+  return (short ? t.lockAfterShort : t.lockAfter)[value ?? 'never'];
+}
 
 /** Whether the app should be locked on coming back, after being hidden since `hiddenAt`. */
 export function shouldLock(hiddenAt: number | null, now: number, after: LockAfter): boolean {
@@ -21,8 +22,8 @@ export const PASSCODE_MIN = 4;
 
 /** A plain reason the passcode won't do, or null when it's fine. */
 export function passcodeProblem(passcode: string): string | null {
-  if (passcode.length < PASSCODE_MIN) return `Use at least ${PASSCODE_MIN} characters.`;
-  if (/^(\d)\1+$/.test(passcode)) return 'Pick something less easy to guess than one digit repeated.';
+  if (passcode.length < PASSCODE_MIN) return messages().privacy.passcodeShort(PASSCODE_MIN);
+  if (/^(\d)\1+$/.test(passcode)) return messages().privacy.passcodeEasy;
   return null;
 }
 
@@ -30,7 +31,7 @@ export const PASSPHRASE_MIN = 10;
 
 /** Backup passphrases protect files that may sit in a cloud folder, so they need more length than a passcode. */
 export function passphraseProblem(passphrase: string): string | null {
-  if (passphrase.trim().length < PASSPHRASE_MIN) return `Use at least ${PASSPHRASE_MIN} characters. A few unrelated words works well.`;
+  if (passphrase.trim().length < PASSPHRASE_MIN) return messages().privacy.passphraseShort(PASSPHRASE_MIN);
   return null;
 }
 

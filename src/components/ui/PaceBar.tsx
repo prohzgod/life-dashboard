@@ -1,5 +1,6 @@
 import type { Area } from '@design/tokens';
 import { paceStatus } from '@/domain/pace';
+import { messages } from '@/i18n';
 import styles from './PaceBar.module.css';
 import { cx } from './cx';
 
@@ -22,7 +23,7 @@ export function PaceBar({ label, progress, expected, area, statusText, valueText
   const fill = clampPercent(progress);
   const tick = clampPercent(expected);
   const value = valueText ?? `${Math.round(progress)}%`;
-  const sentence = statusText ?? (status === 'on-pace' ? 'On pace' : 'Behind pace');
+  const sentence = statusText ?? (status === 'on-pace' ? messages().shell.onPace : messages().shell.behindPace);
 
   return (
     <div className={cx(styles.pace, className)}>

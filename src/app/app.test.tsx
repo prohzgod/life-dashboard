@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { freshDatabase } from '@/data/testing';
-import { LOCALE_STORAGE_KEY } from '@/i18n';
+import { LOCALE_STORAGE_KEY, setLocale } from '@/i18n';
 import { THEME_STORAGE_KEY } from '@/theme/theme';
 import { LocaleRoot } from './LocaleRoot';
 import { routes } from './router';
@@ -103,6 +103,31 @@ describe('language setting', () => {
 
     await userEvent.click(within(screen.getByRole('radiogroup', { name: 'Ngôn ngữ' })).getByRole('radio', { name: 'English' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument();
+  });
+});
+
+describe('in Vietnamese', () => {
+  beforeEach(() => setLocale('vi'));
+
+  it.each([
+    ['/', /^Chào buổi/],
+    ['/inbox', 'Hộp thư'],
+    ['/tasks?view=upcoming', 'Sắp tới'],
+    ['/calendar', /Tuần \d+/],
+    ['/goals', 'Mục tiêu'],
+    ['/progress', 'Tiến độ'],
+    ['/reviews', 'Nhìn lại'],
+    ['/review', 'Nhìn lại tuần'],
+    ['/review/month', 'Nhìn lại tháng'],
+    ['/vision', 'Bảng tầm nhìn'],
+    ['/finance', 'Tài chính'],
+    ['/health', 'Sức khỏe'],
+    ['/profile', 'Hồ sơ'],
+    ['/settings/privacy', 'Cài đặt'],
+    ['/library/trash', 'Thùng rác'],
+  ])('%s opens with its Vietnamese title', async (path, title) => {
+    renderAt(path);
+    expect(await screen.findByRole('heading', { level: 1, name: title }, { timeout: 4000 })).toBeInTheDocument();
   });
 });
 

@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { addDays, startOfWeek, toDay, weekday, type Day } from './days';
 
 /** Notification settings belong to this device. Times are local "HH:MM"; weekday 0 is Sunday. */
@@ -56,7 +57,8 @@ export function dueReminders({ now, prefs, tasks, checkedInToday, reviewDone, fi
   const out: Reminder[] = [];
   const today = toDay(now);
   const minuteNow = now.getHours() * 60 + now.getMinutes();
-  const hidden = (r: Reminder): Reminder => (hideDetails ? { ...r, title: 'Life Dashboard', body: 'You have a reminder.' } : r);
+  const t = messages().shell.reminders;
+  const hidden = (r: Reminder): Reminder => (hideDetails ? { ...r, title: 'Life Dashboard', body: t.hiddenBody } : r);
 
   if (prefs.tasks) {
     for (const task of tasks) {
@@ -65,18 +67,18 @@ export function dueReminders({ now, prefs, tasks, checkedInToday, reviewDone, fi
       if (when > now.getTime() || now.getTime() - when > LATE_LIMIT_MS) continue;
       const key = `task:${task.id}:${task.reminderAt}`;
       if (fired[key]) continue;
-      out.push(hidden({ key, kind: 'task', title: 'Reminder', body: task.title, url: `/tasks/${task.id}` }));
+      out.push(hidden({ key, kind: 'task', title: t.task, body: task.title, url: `/tasks/${task.id}` }));
     }
   }
 
   if (prefs.checkIn.on && !checkedInToday && minuteNow >= minutesOf(prefs.checkIn.time)) {
     const key = `check-in:${today}`;
-    if (!fired[key]) out.push(hidden({ key, kind: 'check-in', title: 'Time for your check-in', body: 'About 30 seconds: mood, energy and one line.', url: '/today' }));
+    if (!fired[key]) out.push(hidden({ key, kind: 'check-in', title: t.checkIn, body: t.checkInBody, url: '/today' }));
   }
 
   if (prefs.review.on && !reviewDone && weekday(today) === prefs.review.weekday && minuteNow >= minutesOf(prefs.review.time)) {
     const key = `review:${today}`;
-    if (!fired[key]) out.push(hidden({ key, kind: 'review', title: 'Your weekly review', body: "About 15 minutes. Start when you're ready.", url: '/review' }));
+    if (!fired[key]) out.push(hidden({ key, kind: 'review', title: t.review, body: t.reviewBody, url: '/review' }));
   }
 
   return out;

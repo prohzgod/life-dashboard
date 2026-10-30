@@ -3,6 +3,7 @@ import type { Messages } from '../locale';
 export const finance: Messages['finance'] = {
   sources: { manual: 'Nhập tay', receipt: 'Ảnh hóa đơn', csv: 'Nhập CSV', recurring: 'Định kỳ', goal: 'Gắn với mục tiêu' },
   notSorted: 'Chưa phân loại',
+  unnamed: 'Giao dịch không tên',
   hideAmounts: 'Ẩn số tiền',
   showAmounts: 'Hiện số tiền',
   backHome: 'Quay lại Trang chủ',

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui';
 import { Dialog } from '@/components/ui/Dialog';
 import { rememberLockIsOn, unlock } from '@/components/shell/lock';
 import { downloadRecoveryKit } from '@/lib/recoveryKit';
+import { messages, useT } from '@/i18n';
 import styles from './PrivacySettings.module.css';
 
 export type PrivacyDialog = 'encryption' | 'passphrase' | 'recovery' | 'passcode' | 'passcode-off' | 'restore' | null;
@@ -24,24 +25,25 @@ type Props = { open: PrivacyDialog; onClose: () => void; onMessage: (text: strin
 
 /** Every dialog the Privacy screen opens, desktop and phone. */
 export function PrivacyDialogs({ open, onClose, onMessage }: Props) {
+  const t = useT().privacy.dialogs;
   return (
     <>
-      <Dialog open={open === 'encryption'} onClose={onClose} title="Encrypt your backups">
+      <Dialog open={open === 'encryption'} onClose={onClose} title={t.encryption}>
         {open === 'encryption' && <EncryptionSetup onDone={onClose} />}
       </Dialog>
-      <Dialog open={open === 'passphrase'} onClose={onClose} title="Change backup passphrase">
+      <Dialog open={open === 'passphrase'} onClose={onClose} title={t.passphrase}>
         {open === 'passphrase' && <ChangePassphrase onDone={onClose} onMessage={onMessage} />}
       </Dialog>
-      <Dialog open={open === 'recovery'} onClose={onClose} title="New recovery kit">
+      <Dialog open={open === 'recovery'} onClose={onClose} title={t.recovery}>
         {open === 'recovery' && <NewRecovery onDone={onClose} />}
       </Dialog>
-      <Dialog open={open === 'passcode'} onClose={onClose} title="Set a passcode">
+      <Dialog open={open === 'passcode'} onClose={onClose} title={t.passcode}>
         {open === 'passcode' && <SetPasscode onDone={onClose} onMessage={onMessage} />}
       </Dialog>
-      <Dialog open={open === 'passcode-off'} onClose={onClose} title="Turn off the app lock">
+      <Dialog open={open === 'passcode-off'} onClose={onClose} title={t.passcodeOff}>
         {open === 'passcode-off' && <PasscodeOff onDone={onClose} onMessage={onMessage} />}
       </Dialog>
-      <Dialog open={open === 'restore'} onClose={onClose} title="Restore from a backup">
+      <Dialog open={open === 'restore'} onClose={onClose} title={t.restore}>
         {open === 'restore' && <Restore onDone={onClose} onMessage={onMessage} />}
       </Dialog>
     </>
@@ -66,24 +68,25 @@ function ErrorLine({ text }: { text: string }) {
   ) : null;
 }
 
-const message = (error: unknown) => (error instanceof PrivacyError ? error.message : 'That didn’t work. Nothing was changed; try again.');
+const message = (error: unknown) => (error instanceof PrivacyError ? error.message : messages().privacy.dialogs.failed);
 
 function RecoveryKey({ value, onDone }: { value: string; onDone: () => void }) {
+  const t = useT().privacy.dialogs;
   const [saved, setSaved] = useState(false);
   return (
     <div className={styles.form}>
-      <p>This is your recovery key. It opens your backups if you forget your passphrase. It’s shown once, so save it now.</p>
-      <output className={styles.recoveryKey} aria-label="Recovery key">
+      <p>{t.keyLead}</p>
+      <output className={styles.recoveryKey} aria-label={t.key}>
         {value}
       </output>
-      <Button onClick={() => downloadRecoveryKit(value)}>Download recovery kit</Button>
+      <Button onClick={() => downloadRecoveryKit(value)}>{t.downloadKit}</Button>
       <label className={styles.check}>
         <input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)} />
-        I’ve saved my recovery key somewhere safe
+        {t.savedKey}
       </label>
       <div className={styles.formActions}>
         <Button variant="primary" disabled={!saved} onClick={onDone}>
-          Done
+          {t.done}
         </Button>
       </div>
     </div>
@@ -91,6 +94,7 @@ function RecoveryKey({ value, onDone }: { value: string; onDone: () => void }) {
 }
 
 function EncryptionSetup({ onDone }: { onDone: () => void }) {
+  const t = useT().privacy.dialogs;
   const [passphrase, setPassphrase] = useState('');
   const [again, setAgain] = useState('');
   const [error, setError] = useState('');
@@ -101,7 +105,7 @@ function EncryptionSetup({ onDone }: { onDone: () => void }) {
     e.preventDefault();
     const problem = passphraseProblem(passphrase);
     if (problem) return setError(problem);
-    if (passphrase !== again) return setError('The two passphrases don’t match.');
+    if (passphrase !== again) return setError(t.noMatchPassphrase);
     setBusy(true);
     try {
       setRecovery(await setUpEncryption(passphrase));
@@ -115,15 +119,15 @@ function EncryptionSetup({ onDone }: { onDone: () => void }) {
   if (recovery) return <RecoveryKey value={recovery} onDone={onDone} />;
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
-      <p className={styles.lead}>Backups are sealed with this passphrase before they leave the app, so they’re safe in a cloud folder. It never leaves this device.</p>
-      <Field label="Passphrase">{(id) => <input id={id} data-autofocus type="password" autoComplete="new-password" value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />}</Field>
-      <Field label="Type it again">{(id) => <input id={id} type="password" autoComplete="new-password" value={again} onChange={(e) => setAgain(e.target.value)} />}</Field>
-      <p className={styles.warning}>If you lose both your passphrase and your recovery kit, nobody can open your backups. Not even us.</p>
+      <p className={styles.lead}>{t.sealLead}</p>
+      <Field label={t.passphraseLabel}>{(id) => <input id={id} data-autofocus type="password" autoComplete="new-password" value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />}</Field>
+      <Field label={t.again}>{(id) => <input id={id} type="password" autoComplete="new-password" value={again} onChange={(e) => setAgain(e.target.value)} />}</Field>
+      <p className={styles.warning}>{t.loseBoth}</p>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary" disabled={busy}>
-          {busy ? 'Setting up…' : 'Continue'}
+          {busy ? t.settingUp : t.continue}
         </Button>
       </div>
     </form>
@@ -131,6 +135,7 @@ function EncryptionSetup({ onDone }: { onDone: () => void }) {
 }
 
 function ChangePassphrase({ onDone, onMessage }: { onDone: () => void; onMessage: (t: string) => void }) {
+  const t = useT().privacy.dialogs;
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
   const [error, setError] = useState('');
@@ -144,7 +149,7 @@ function ChangePassphrase({ onDone, onMessage }: { onDone: () => void; onMessage
         setBusy(true);
         try {
           await changePassphrase(current, next);
-          onMessage('Passphrase changed. New backups use it; older ones open with either.');
+          onMessage(t.changed);
           onDone();
         } catch (err) {
           setError(message(err));
@@ -153,13 +158,13 @@ function ChangePassphrase({ onDone, onMessage }: { onDone: () => void; onMessage
         }
       }}
     >
-      <Field label="Current passphrase or recovery key">{(id) => <input id={id} data-autofocus type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} />}</Field>
-      <Field label="New passphrase">{(id) => <input id={id} type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} />}</Field>
+      <Field label={t.current}>{(id) => <input id={id} data-autofocus type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} />}</Field>
+      <Field label={t.newPassphrase}>{(id) => <input id={id} type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} />}</Field>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary" disabled={busy}>
-          Change passphrase
+          {t.change}
         </Button>
       </div>
     </form>
@@ -167,6 +172,7 @@ function ChangePassphrase({ onDone, onMessage }: { onDone: () => void; onMessage
 }
 
 function NewRecovery({ onDone }: { onDone: () => void }) {
+  const t = useT().privacy.dialogs;
   const [passphrase, setPassphrase] = useState('');
   const [error, setError] = useState('');
   const [recovery, setRecovery] = useState<string | null>(null);
@@ -184,13 +190,13 @@ function NewRecovery({ onDone }: { onDone: () => void }) {
         }
       }}
     >
-      <p className={styles.lead}>A new key replaces the old one for backups made from now on. Backups you already have still open with the old key.</p>
-      <Field label="Backup passphrase">{(id) => <input id={id} data-autofocus type="password" autoComplete="current-password" value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />}</Field>
+      <p className={styles.lead}>{t.newKeyLead}</p>
+      <Field label={t.backupPassphrase}>{(id) => <input id={id} data-autofocus type="password" autoComplete="current-password" value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />}</Field>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          Make a new key
+          {t.makeKey}
         </Button>
       </div>
     </form>
@@ -198,6 +204,7 @@ function NewRecovery({ onDone }: { onDone: () => void }) {
 }
 
 function SetPasscode({ onDone, onMessage }: { onDone: () => void; onMessage: (t: string) => void }) {
+  const t = useT().privacy.dialogs;
   const [passcode, setValue] = useState('');
   const [again, setAgain] = useState('');
   const [error, setError] = useState('');
@@ -209,26 +216,26 @@ function SetPasscode({ onDone, onMessage }: { onDone: () => void; onMessage: (t:
         e.preventDefault();
         const problem = passcodeProblem(passcode);
         if (problem) return setError(problem);
-        if (passcode !== again) return setError('The two passcodes don’t match.');
+        if (passcode !== again) return setError(t.noMatchPasscode);
         try {
           await setPasscode(passcode);
           rememberLockIsOn(true);
           unlock();
-          onMessage('App lock is on. You’ll need the passcode each time the app opens.');
+          onMessage(t.lockOn);
           onDone();
         } catch (err) {
           setError(message(err));
         }
       }}
     >
-      <p className={styles.lead}>The lock hides your screen from anyone picking up this device. Your data here isn’t encrypted by it, so keep the device itself locked too.</p>
-      <Field label="Passcode">{(id) => <input id={id} data-autofocus type="password" autoComplete="new-password" inputMode="numeric" value={passcode} onChange={(e) => setValue(e.target.value)} />}</Field>
-      <Field label="Type it again">{(id) => <input id={id} type="password" autoComplete="new-password" inputMode="numeric" value={again} onChange={(e) => setAgain(e.target.value)} />}</Field>
+      <p className={styles.lead}>{t.lockLead}</p>
+      <Field label={t.passcodeLabel}>{(id) => <input id={id} data-autofocus type="password" autoComplete="new-password" inputMode="numeric" value={passcode} onChange={(e) => setValue(e.target.value)} />}</Field>
+      <Field label={t.again}>{(id) => <input id={id} type="password" autoComplete="new-password" inputMode="numeric" value={again} onChange={(e) => setAgain(e.target.value)} />}</Field>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          Turn on lock
+          {t.turnOn}
         </Button>
       </div>
     </form>
@@ -236,6 +243,7 @@ function SetPasscode({ onDone, onMessage }: { onDone: () => void; onMessage: (t:
 }
 
 function PasscodeOff({ onDone, onMessage }: { onDone: () => void; onMessage: (t: string) => void }) {
+  const t = useT().privacy.dialogs;
   const [current, setCurrent] = useState('');
   const [error, setError] = useState('');
   return (
@@ -247,19 +255,19 @@ function PasscodeOff({ onDone, onMessage }: { onDone: () => void; onMessage: (t:
         try {
           await removePasscode(current);
           rememberLockIsOn(false);
-          onMessage('App lock is off.');
+          onMessage(t.lockOff);
           onDone();
         } catch (err) {
           setError(message(err));
         }
       }}
     >
-      <Field label="Current passcode">{(id) => <input id={id} data-autofocus type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} />}</Field>
+      <Field label={t.currentPasscode}>{(id) => <input id={id} data-autofocus type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} />}</Field>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          Turn off lock
+          {t.turnOff}
         </Button>
       </div>
     </form>
@@ -267,6 +275,7 @@ function PasscodeOff({ onDone, onMessage }: { onDone: () => void; onMessage: (t:
 }
 
 function Restore({ onDone, onMessage }: { onDone: () => void; onMessage: (t: string) => void }) {
+  const t = useT().privacy.dialogs;
   const [text, setText] = useState<{ name: string; body: string } | null>(null);
   const [secret, setSecret] = useState('');
   const [opened, setOpened] = useState<ExportFile | null>(null);
@@ -277,12 +286,13 @@ function Restore({ onDone, onMessage }: { onDone: () => void; onMessage: (t: str
     return (
       <div className={styles.form}>
         <p>
-          <strong>{text.name}</strong> holds {countExportRecords(opened)} records. Restoring replaces everything on this device with them. Your lock and backup settings stay as they are.
+          <strong>{text.name}</strong>
+          {t.holds(countExportRecords(opened))}
         </p>
         <ErrorLine text={error} />
         <div className={styles.formActions}>
           <Button onClick={onDone} disabled={busy}>
-            Cancel
+            {t.cancel}
           </Button>
           <Button
             variant="primary"
@@ -291,16 +301,16 @@ function Restore({ onDone, onMessage }: { onDone: () => void; onMessage: (t: str
               setBusy(true);
               try {
                 const { records } = await importReplacingAll(opened);
-                onMessage(`Restored ${records} records from ${text.name}.`);
+                onMessage(t.restored(records, text.name));
                 onDone();
               } catch {
-                setError('The restore didn’t finish, so nothing was changed.');
+                setError(t.restoreFailed);
               } finally {
                 setBusy(false);
               }
             }}
           >
-            Replace everything
+            {t.replace}
           </Button>
         </div>
       </div>
@@ -313,7 +323,7 @@ function Restore({ onDone, onMessage }: { onDone: () => void; onMessage: (t: str
       noValidate
       onSubmit={async (e) => {
         e.preventDefault();
-        if (!text) return setError('Choose a backup file first.');
+        if (!text) return setError(t.chooseBackup);
         setBusy(true);
         try {
           setOpened(await openBackupFile(text.body, secret));
@@ -325,7 +335,7 @@ function Restore({ onDone, onMessage }: { onDone: () => void; onMessage: (t: str
         }
       }}
     >
-      <Field label="Backup file">
+      <Field label={t.backupFile}>
         {(id) => (
           <input
             id={id}
@@ -339,12 +349,12 @@ function Restore({ onDone, onMessage }: { onDone: () => void; onMessage: (t: str
           />
         )}
       </Field>
-      <Field label="Passphrase or recovery key">{(id) => <input id={id} type="password" autoComplete="current-password" value={secret} onChange={(e) => setSecret(e.target.value)} />}</Field>
+      <Field label={t.secret}>{(id) => <input id={id} type="password" autoComplete="current-password" value={secret} onChange={(e) => setSecret(e.target.value)} />}</Field>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary" disabled={busy}>
-          {busy ? 'Opening…' : 'Open backup'}
+          {busy ? t.opening : t.open}
         </Button>
       </div>
     </form>

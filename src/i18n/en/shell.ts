@@ -20,6 +20,18 @@ export const shell = {
   tabLibrary: 'Library',
   profileAndSettings: 'Profile and settings',
   close: 'Close',
+  onPace: 'On pace',
+  behindPace: 'Behind pace',
+  commandK: 'Command K',
+  commandN: 'Command N',
+  reminders: {
+    hiddenBody: 'You have a reminder.',
+    task: 'Reminder',
+    checkIn: 'Time for your check-in',
+    checkInBody: 'About 30 seconds: mood, energy and one line.',
+    review: 'Your weekly review',
+    reviewBody: 'About 15 minutes. Start when you’re ready.',
+  },
   palette: {
     title: 'Search or jump to',
     placeholder: 'Type a screen or page…',

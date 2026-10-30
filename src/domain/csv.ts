@@ -123,7 +123,7 @@ export function readStatement(text: string, fallbackOrder: DateOrder = 'dmy'): S
       skipped++;
       continue;
     }
-    rows.push({ day, description: description || 'Unnamed transaction', amount });
+    rows.push({ day, description: description || messages().finance.unnamed, amount });
   }
   return { rows, skipped, order };
 }

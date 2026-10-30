@@ -29,7 +29,7 @@ export const today: Messages['today'] = {
     left: (time) => `, còn khoảng ${time}`,
     allTasks: 'Tất cả việc',
     addLabel: 'Thêm việc',
-    addPlaceholder: 'Thêm việc, ví dụ “Gọi mẹ ngày mai 18:00”',
+    addPlaceholder: 'Thêm việc, ví dụ “Trả tiền nhà mỗi ngày 1 #tàichính !cao”',
     rolled: (n) => `${n} việc được dời từ trước. Không sao cả.`,
     planForToday: () => 'Chuyển sang hôm nay',
     list: 'Việc hôm nay',

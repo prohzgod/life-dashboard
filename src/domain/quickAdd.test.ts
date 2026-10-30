@@ -157,3 +157,28 @@ describe('parseCapture', () => {
     expect(parse('#finance').title).toBe('#finance');
   });
 });
+
+describe('parseCapture in Vietnamese', () => {
+  const today = '2026-10-29'; // a Thursday
+  const areaNames = ['Sức khỏe', 'Tài chính', 'Gia đình'];
+  const parse = (text: string) => parseCapture(text, { today, areaNames });
+
+  it('reads days, times, areas and priority', () => {
+    expect(parse('Gọi mẹ ngày mai lúc 18:00 #giađình !cao')).toMatchObject({ title: 'Gọi mẹ', doOn: '2026-10-30', time: '18:00', areaName: 'Gia đình', priority: 1 });
+    expect(parse('Họp nhóm thứ hai 9h30')).toMatchObject({ title: 'Họp nhóm', doOn: '2026-11-02', time: '09:30' });
+    expect(parse('Ăn tối 7 giờ tối hôm nay')).toMatchObject({ title: 'Ăn tối', doOn: today, time: '19:00' });
+  });
+
+  it('reads repeats and deadlines', () => {
+    expect(parse('Trả tiền nhà mỗi ngày 1 #tàichính')).toMatchObject({ title: 'Trả tiền nhà', rrule: 'FREQ=MONTHLY;BYMONTHDAY=1', areaName: 'Tài chính', doOn: '2026-11-01' });
+    expect(parse('Thiền mỗi ngày').rrule).toBe('FREQ=DAILY');
+    expect(parse('Chạy bộ mỗi thứ bảy').rrule).toBe('FREQ=WEEKLY;BYDAY=SA');
+    expect(parse('Nộp báo cáo trước thứ sáu')).toMatchObject({ title: 'Nộp báo cáo', dueOn: '2026-10-30' });
+  });
+
+  it('leaves words alone when they aren’t a whole phrase', () => {
+    expect(parse('Mua 50g đường').title).toBe('Mua 50g đường');
+    expect(parse('Đọc sách trước khi ngủ').title).toBe('Đọc sách trước khi ngủ');
+    expect(parse('Học tiếng Anh một ngày nào đó').someday).toBe(true);
+  });
+});

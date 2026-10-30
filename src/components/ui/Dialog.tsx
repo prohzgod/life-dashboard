@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { Icon } from '../icons/Icon';
+import { messages } from '@/i18n';
 import styles from './Dialog.module.css';
 
 type DialogProps = {
@@ -52,7 +53,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
             <h2 id={titleId} className={styles.title}>
               {title}
             </h2>
-            <button type="button" className={styles.close} onClick={onClose} aria-label="Close">
+            <button type="button" className={styles.close} onClick={onClose} aria-label={messages().shell.close}>
               <Icon name="close" size={18} />
             </button>
           </header>
