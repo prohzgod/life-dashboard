@@ -242,6 +242,35 @@ export function journalPageTitle(day: Day): string {
   return messages().seed.journalDay(new Date(year(day), month(day) - 1, dayOfMonth(day)));
 }
 
+/** The title the app gives a system node in the current language, or null if it names none. */
+export function systemTitle(systemKey: string): string | null {
+  const { seed } = messages();
+  if (systemKey === 'journal' || systemKey === 'areas' || systemKey === 'projects') return seed.folders[systemKey];
+  const m = /^journal:(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?$/.exec(systemKey);
+  if (!m) return null;
+  const [, y, mo, d] = m;
+  if (d) return journalPageTitle(`${y}-${mo}-${d}`);
+  if (mo) return seed.journalMonth(new Date(Number(y), Number(mo) - 1, 1));
+  return y!;
+}
+
+/**
+ * Renames the folders and journal pages the app made (Journal › 2026 › October › Tue 27 Oct) into
+ * the current language. You can't rename these yourself, so nothing of yours is overwritten. Their
+ * edit time stays as it was: only the language changed.
+ */
+export async function localizeSystemNodes(): Promise<number> {
+  return db.transaction('rw', db.nodes, async () => {
+    const nodes = await db.nodes.filter((n) => !!n.systemKey).toArray();
+    const renamed = nodes.flatMap((n) => {
+      const title = systemTitle(n.systemKey!);
+      return title && title !== n.title ? [{ ...n, title }] : [];
+    });
+    if (renamed.length) await db.nodes.bulkPut(renamed);
+    return renamed.length;
+  });
+}
+
 /** The Journal page for a day, filed under Journal › year › month, created the first time it's needed. */
 export async function ensureJournalPage(day: Day): Promise<LibraryNode> {
   return db.transaction('rw', [db.nodes, db.dailyEntries], async () => {

@@ -7,9 +7,11 @@ import {
   createNode,
   ensureJournalPage,
   journalDayOf,
+  journalPageTitle as journalPageTitleNow,
   LibraryError,
   listBacklinks,
   listLibraryNodes,
+  localizeSystemNodes,
   listTrash,
   moveNode,
   renameNode,
@@ -25,6 +27,7 @@ import {
 import { goalsRepo, linksRepo, nodesRepo } from './repositories';
 import { getDailyEntry } from './checkIns';
 import { freshDatabase } from './testing';
+import { setLocale } from '@/i18n/locale';
 
 beforeEach(freshDatabase);
 
@@ -177,6 +180,29 @@ describe('journal', () => {
     expect((await nodesRepo.listChildren(y.id)).map((n) => n.title)).toEqual(['October', 'November']);
   });
 
+  it('renames the folders and days it made into the current language, and nothing else', async () => {
+    const page = await ensureJournalPage('2026-10-27');
+    const mine = await createNode({ parentId: null, kind: 'folder', title: 'October plans' });
+    const before = (await nodesRepo.get(page.id))!.updatedAt;
+    try {
+      setLocale('vi');
+      expect(await localizeSystemNodes()).toBeGreaterThan(0);
+      const titles = new Map((await listLibraryNodes()).map((n) => [n.systemKey ?? n.id, n.title]));
+      expect(titles.get('journal')).toBe('Nhật ký');
+      expect(titles.get('journal:2026-10')).toBe('Tháng 10');
+      expect(titles.get('journal:2026')).toBe('2026');
+      expect(titles.get('journal:2026-10-27')).toBe(messagesTitle());
+      expect(titles.get(mine.id)).toBe('October plans');
+      expect((await nodesRepo.get(page.id))!.updatedAt).toBe(before);
+      // A second run has nothing left to do.
+      expect(await localizeSystemNodes()).toBe(0);
+    } finally {
+      setLocale('en');
+    }
+    await localizeSystemNodes();
+    expect((await folder('journal:2026-10')).title).toBe('October');
+  });
+
   it('survives two calls at once (StrictMode runs effects twice)', async () => {
     const [a, b] = await Promise.all([ensureJournalPage('2026-10-27'), ensureJournalPage('2026-10-27')]);
     expect(a.id).toBe(b.id);
@@ -202,3 +228,8 @@ describe('schema v2 → v3', () => {
     await Dexie.delete(name);
   });
 });
+
+/** Today's journal title in the language now set, as the app writes it. */
+function messagesTitle(): string {
+  return journalPageTitleNow('2026-10-27');
+}
