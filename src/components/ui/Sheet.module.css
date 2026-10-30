@@ -1,14 +1,16 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .sheet {
   width: 100%;
   max-width: 560px;
   max-height: 88vh;
   margin: auto auto 0;
   padding: 0;
-  border: 0;
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  background: var(--surface);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  border: 1px solid var(--line);
+  background: var(--float);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  border-bottom: 0;
+  box-shadow: var(--shadow-tabbar);
   color: var(--ink);
 }
 
@@ -45,12 +47,12 @@
   width: 40px;
   height: 5px;
   border-radius: var(--radius-pill);
-  background: var(--line-strong);
+  background: var(--well-line);
 }
 
 .title {
-  font-family: var(--font-display);
   font-size: var(--text-title-size);
-  font-weight: 700;
+  font-weight: var(--text-title-weight);
   line-height: var(--text-title-line);
+  letter-spacing: var(--text-title-tracking);
 }

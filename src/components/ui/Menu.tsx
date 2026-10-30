@@ -10,10 +10,12 @@ type MenuProps = {
   trigger: ReactNode;
   items: MenuItem[];
   className?: string;
+  /** Replaces the round icon trigger's look, e.g. the "More" item in the top nav. */
+  triggerClassName?: string;
 };
 
 /** A button that opens a short list of actions. Arrow keys move, Escape closes. */
-export function Menu({ label, trigger, items, className }: MenuProps) {
+export function Menu({ label, trigger, items, className, triggerClassName }: MenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -40,7 +42,7 @@ export function Menu({ label, trigger, items, className }: MenuProps) {
       <button
         ref={buttonRef}
         type="button"
-        className={styles.trigger}
+        className={triggerClassName ?? styles.trigger}
         aria-label={label}
         aria-haspopup="menu"
         aria-expanded={open}

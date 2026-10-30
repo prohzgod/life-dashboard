@@ -1,13 +1,13 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .check {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 1.5px solid var(--control);
-  background: var(--surface);
-  color: var(--on-primary);
+  border: 2px solid var(--ink-3);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--on-inverse);
   font-size: 11px;
   font-weight: 700;
   transition:
@@ -16,32 +16,29 @@
 }
 
 .check:hover:not(.checked) {
-  border-color: var(--primary);
+  border-color: var(--ink);
 }
 
 .sm {
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-xs);
+  width: 24px;
+  height: 24px;
 }
 
 .md {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-sm);
+  width: 28px;
+  height: 28px;
 }
 
 .lg {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-md);
+  width: var(--check);
+  height: var(--check);
   color: var(--ink-2);
 }
 
 .checked {
-  border-color: var(--primary);
-  background: var(--primary);
-  color: var(--on-primary);
+  border-color: var(--inverse);
+  background: var(--inverse);
+  color: var(--on-inverse);
 }
 
 /* A larger hit area than the box itself, for touch. */

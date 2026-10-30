@@ -1,15 +1,14 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  height: 40px;
-  padding: 0 var(--space-4);
+  height: var(--touch-min);
+  padding: 0 var(--space-5);
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--text-body-size);
+  font-weight: 500;
   line-height: 1;
   white-space: nowrap;
   transition:
@@ -20,9 +19,14 @@
 }
 
 .sm {
-  height: 32px;
-  padding: 0 var(--space-3);
-  font-size: 13px;
+  height: var(--control-h-sm);
+  padding: 0 var(--space-4);
+  font-size: var(--text-label-size);
+}
+
+.lg {
+  height: var(--control-h);
+  padding: 0 22px;
 }
 
 .primary {
@@ -37,18 +41,32 @@
 }
 
 .secondary {
-  background: var(--sunken);
+  border-color: var(--line);
+  background: var(--glass-2);
   color: var(--ink);
 }
 
 .secondary:hover:not(:disabled) {
-  background: var(--sunken-2);
+  background: var(--glass);
+}
+
+.accent {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.accent:hover:not(:disabled) {
+  filter: brightness(1.04);
 }
 
 .quiet {
   padding: 0 12px;
   background: transparent;
-  color: var(--link);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--well-line);
+  text-underline-offset: 3px;
 }
 
 .quiet.sm {
@@ -56,8 +74,7 @@
 }
 
 .quiet:hover:not(:disabled) {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration-color: currentColor;
 }
 
 .button:active:not(:disabled) {
@@ -67,8 +84,8 @@
 /* Disabled reads on three channels, not just fading: a flat fill, quiet ink, and the cursor. */
 .button:disabled {
   border-color: transparent;
-  background: var(--track);
-  color: var(--ink-4);
+  background: var(--well);
+  color: var(--ink-3);
   cursor: not-allowed;
 }
 

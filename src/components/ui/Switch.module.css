@@ -1,37 +1,39 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .switch {
   position: relative;
   flex-shrink: 0;
-  width: 42px;
-  height: 24px;
+  width: 48px;
+  height: 28px;
   padding: 0;
   border: 0;
   border-radius: var(--radius-pill);
-  background: var(--control);
+  background: var(--well-line);
+  box-shadow: inset 0 0 0 1px var(--well-line);
   transition: background-color var(--dur) var(--ease);
 }
 
 .on {
-  background: var(--primary);
+  background: var(--inverse);
+  box-shadow: none;
 }
 
 .knob {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: var(--radius-pill);
-  background: var(--surface);
+  background: var(--on-inverse);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
   transition: transform var(--dur) var(--ease);
 }
 
 .on .knob {
-  transform: translateX(18px);
+  transform: translateX(20px);
 }
 
 .switch:disabled {
-  background: var(--track);
-  color: var(--ink-4);
+  background: var(--well);
+  color: var(--ink-3);
   cursor: not-allowed;
 }

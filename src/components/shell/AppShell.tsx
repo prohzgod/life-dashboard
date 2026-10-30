@@ -9,8 +9,8 @@ import { CommandPalette } from './CommandPalette';
 import { LockGate } from './LockGate';
 import { MobileCapture } from './MobileCapture';
 import { QuickCapture } from './QuickCapture';
-import { Sidebar } from './Sidebar';
 import { TabBar } from './TabBar';
+import { TopNav } from './TopNav';
 import { useReminders } from './useReminders';
 
 type Overlay = 'search' | 'capture' | null;
@@ -81,7 +81,7 @@ function Shell() {
       <a href="#main" className={styles.skip}>
         {t.shell.skipToContent}
       </a>
-      <Sidebar onSearch={() => setOverlay('search')} onCapture={() => setOverlay('capture')} />
+      <TopNav onSearch={() => setOverlay('search')} />
       <main id="main" className={styles.main} tabIndex={-1}>
         <Outlet />
       </main>

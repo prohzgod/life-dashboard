@@ -1,0 +1,53 @@
+.week {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-1);
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1h);
+  color: var(--ink-3);
+  font-size: var(--text-micro-size);
+  font-weight: 500;
+}
+
+.isToday {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.dot {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+}
+
+.done {
+  background: var(--inverse);
+}
+
+.missed {
+  border: 2px dashed var(--warn-ink);
+}
+
+.today {
+  border: 2px solid var(--ink);
+  background: var(--accent);
+}
+
+.todayDone {
+  border: 2px solid var(--ink);
+  background: var(--inverse);
+}
+
+.future,
+.open {
+  background: var(--well);
+}
+
+.open {
+  box-shadow: inset 0 0 0 1px var(--well-line);
+}

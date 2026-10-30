@@ -17,7 +17,7 @@ export function TabBar({ active, onCapture }: { active: Tab; onCapture: () => vo
   const { shell } = useT();
   const link = (t: (typeof TABS)[number]) => (
     <Link key={t.tab} to={t.to} className={cx(styles.tab, active === t.tab && styles.active)} aria-current={active === t.tab ? 'page' : undefined}>
-      <Icon name={t.icon} size={22} strokeWidth={active === t.tab ? 2 : 1.7} />
+      <Icon name={t.icon} size={21} strokeWidth={1.8} />
       {t.label(shell)}
     </Link>
   );

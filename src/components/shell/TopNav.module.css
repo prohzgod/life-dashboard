@@ -1,0 +1,184 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logo {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: var(--space-2h);
+  min-width: 58px;
+  height: var(--control-h);
+  padding: 0 var(--space-5) 0 var(--space-2);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  color: var(--ink);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.wordmark {
+  font-size: var(--text-heading-size);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.navWrap {
+  display: flex;
+  flex: 1 1 0;
+  justify-content: center;
+  min-width: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 2px;
+  max-width: 100%;
+  margin: 0;
+  padding: var(--space-1h);
+  overflow-x: auto;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  scrollbar-width: none;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.nav > li {
+  flex: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--nav-item-h);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    background-color var(--dur-base) var(--ease),
+    color var(--dur-base) var(--ease);
+}
+
+.item:hover {
+  color: var(--ink);
+}
+
+.active,
+.active:hover {
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+.more {
+  padding: 0 var(--space-3h) 0 var(--space-4);
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--space-1h);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: var(--text-micro-size);
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.round {
+  display: grid;
+  place-items: center;
+  width: var(--icon-btn);
+  height: var(--icon-btn);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+  color: var(--ink);
+}
+
+.round:hover {
+  background: var(--glass-2);
+}
+
+.toggle {
+  display: flex;
+  gap: 2px;
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+}
+
+.toggleOption {
+  display: grid;
+  place-items: center;
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-2);
+}
+
+.toggleOption[aria-pressed='true'] {
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+/* Tablets: the logo shrinks to its mark; the nav pill scrolls inside itself. */
+@media (max-width: 1199px) {
+  .logo {
+    flex: none;
+    padding: 0 var(--space-2);
+  }
+
+  .wordmark {
+    display: none;
+  }
+
+}

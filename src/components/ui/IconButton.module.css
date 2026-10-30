@@ -1,0 +1,62 @@
+.button {
+  display: grid;
+  flex: none;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    background-color var(--dur-base) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.md {
+  width: var(--icon-btn);
+  height: var(--icon-btn);
+}
+
+.sm {
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+}
+
+/* Small round buttons still get a 44px target. */
+.sm {
+  position: relative;
+}
+
+.sm::after {
+  position: absolute;
+  inset: -2px;
+  content: '';
+}
+
+.glass {
+  border-color: var(--line);
+  background: var(--glass-2);
+}
+
+.glass:hover {
+  background: var(--glass);
+}
+
+.inverse {
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+.accent {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.button:disabled {
+  background: var(--well);
+  color: var(--ink-3);
+}

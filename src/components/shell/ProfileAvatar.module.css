@@ -1,16 +1,14 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .avatar {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1.5px solid var(--accent);
+  border: 2px solid var(--line);
   border-radius: var(--radius-pill);
-  background: var(--surface);
-  color: var(--accent-ink);
-  font-family: var(--font-display);
-  font-weight: 700;
+  background: var(--inverse);
+  color: var(--on-inverse);
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -23,15 +21,19 @@
 .sm {
   width: var(--touch-min);
   height: var(--touch-min);
-  font-size: 18px;
+  font-size: 17px;
+}
+
+.md {
+  width: var(--icon-btn);
+  height: var(--icon-btn);
+  font-size: 17px;
 }
 
 .lg {
   width: 96px;
   height: 96px;
   border-width: 3px;
-  background: var(--inverse);
-  color: var(--inverse-accent);
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--accent);
-  font-size: 44px;
+  font-size: 40px;
+  box-shadow: var(--shadow-card);
 }

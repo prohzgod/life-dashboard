@@ -8,12 +8,14 @@ type CardProps = Omit<HTMLAttributes<HTMLElement>, 'title'> & {
   meta?: ReactNode;
   /** Right-aligned action in the header, usually a quiet button or link. */
   action?: ReactNode;
+  /** `panel`: the one dark feature card a screen may have (Today's check-in). */
+  variant?: 'glass' | 'panel';
 };
 
-export function Card({ title, meta, action, className, children, ...rest }: CardProps) {
+export function Card({ title, meta, action, variant = 'glass', className, children, ...rest }: CardProps) {
   const hasHeader = title || meta || action;
   return (
-    <section className={cx(styles.card, className)} {...rest}>
+    <section className={cx(styles.card, variant === 'panel' && styles.panel, className)} {...rest}>
       {hasHeader && (
         <header className={styles.header}>
           <div className={styles.titleRow}>

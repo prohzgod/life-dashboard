@@ -1,4 +1,3 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .pace {
   display: flex;
   flex-direction: column;
@@ -19,24 +18,26 @@
 
 .track {
   position: relative;
-  height: 8px;
-  border-radius: 6px;
-  background: var(--track);
+  height: 14px;
+  border: 1px solid var(--well-line);
+  border-radius: var(--radius-pill);
+  background: repeating-linear-gradient(-45deg, var(--hatch) 0 2px, transparent 2px 9px);
 }
 
 .fill {
   height: 100%;
-  border-radius: 6px;
-  background: var(--primary);
+  border-radius: var(--radius-pill);
+  background: var(--inverse);
 }
 
 .tick {
   position: absolute;
-  top: -4px;
-  width: 2px;
-  height: 16px;
-  margin-left: -1px;
-  background: var(--inverse);
+  top: -5px;
+  width: 3px;
+  height: 22px;
+  margin-left: -1.5px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
 }
 
 .status {
@@ -46,9 +47,9 @@
 }
 
 .onPace {
-  color: var(--success);
+  color: var(--good);
 }
 
 .behind {
-  color: var(--warning);
+  color: var(--warn-ink);
 }

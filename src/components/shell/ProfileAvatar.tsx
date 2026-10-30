@@ -9,7 +9,7 @@ import { cx } from '../ui/cx';
 import styles from './ProfileAvatar.module.css';
 
 /** The profile photo or initial. As a link (top-right of every tab root) it opens Profile. */
-export function ProfileAvatar({ size = 'sm', asLink = true }: { size?: 'sm' | 'lg'; asLink?: boolean }) {
+export function ProfileAvatar({ size = 'sm', asLink = true }: { size?: 'sm' | 'md' | 'lg'; asLink?: boolean }) {
   const data = useLiveQuery(async () => {
     const profile = await getProfile();
     const photo = profile.photoAttachmentId ? await getAttachment(profile.photoAttachmentId) : undefined;

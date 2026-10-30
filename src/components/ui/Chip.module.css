@@ -1,13 +1,12 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .chip {
-  --chip-bg: var(--sunken-2);
+  --chip-bg: var(--well);
   --chip-ink: var(--ink-2);
   --chip-dot: var(--ink-3);
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 24px;
-  padding: 0 var(--space-2);
+  height: 26px;
+  padding: 0 var(--space-2h);
   border-radius: var(--radius-pill);
   background: var(--chip-bg);
   color: var(--chip-ink);
@@ -27,9 +26,9 @@
 
 .primary { --chip-bg: var(--primary-soft); --chip-ink: var(--primary-ink); --chip-dot: var(--primary); }
 .success { --chip-bg: var(--success-soft); --chip-ink: var(--success); --chip-dot: var(--success); }
-.warning { --chip-bg: var(--warning-soft); --chip-ink: var(--warning-ink); --chip-dot: var(--warning); }
+.warning { --chip-bg: var(--warn-bg); --chip-ink: var(--warn-ink); --chip-dot: var(--warn-ink); }
 .danger { --chip-bg: var(--danger-soft); --chip-ink: var(--danger-ink); --chip-dot: var(--danger); }
-.accent { --chip-bg: var(--accent-soft); --chip-ink: var(--accent-ink); --chip-dot: var(--accent); }
+.accent { --chip-bg: var(--accent); --chip-ink: var(--on-accent); --chip-dot: var(--on-accent); }
 
 .health { --chip-bg: var(--health-soft); --chip-ink: var(--health-ink); --chip-dot: var(--health); }
 .career { --chip-bg: var(--career-soft); --chip-ink: var(--career-ink); --chip-dot: var(--career); }

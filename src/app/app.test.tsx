@@ -49,16 +49,20 @@ describe('app shell', () => {
     },
   );
 
-  it('marks the current screen in the sidebar', () => {
+  it('marks the current screen in the top nav', () => {
     renderAt('/goals');
     const nav = screen.getByRole('navigation', { name: 'Main navigation' });
     expect(within(nav).getByRole('link', { name: 'Goals' })).toHaveAttribute('aria-current', 'page');
     expect(within(nav).getByRole('link', { name: 'Today' })).not.toHaveAttribute('aria-current');
   });
 
-  it('navigates from the sidebar', async () => {
+  it('navigates from the top nav, and from its More menu', async () => {
     const router = renderAt('/');
-    await userEvent.click(screen.getByRole('link', { name: 'Vision board' }));
+    const nav = screen.getByRole('navigation', { name: 'Main navigation' });
+    await userEvent.click(within(nav).getByRole('link', { name: 'Goals' }));
+    expect(router.state.location.pathname).toBe('/goals');
+    await userEvent.click(within(nav).getByRole('button', { name: 'More screens' }));
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Vision board' }));
     expect(router.state.location.pathname).toBe('/vision');
     expect(screen.getByRole('heading', { level: 1, name: 'Vision board' })).toBeInTheDocument();
   });
@@ -127,7 +131,7 @@ describe('language setting', () => {
     expect(document.documentElement.lang).toBe('vi');
     expect(localStorage.getItem(LOCALE_STORAGE_KEY)).toBe('vi');
     expect(await screen.findByRole('heading', { level: 1, name: 'Cài đặt' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Hôm nay/ })).toBeInTheDocument();
+    expect(within(screen.getByRole('navigation', { name: 'Điều hướng chính' })).getByRole('link', { name: 'Hôm nay' })).toBeInTheDocument();
 
     await userEvent.click(within(screen.getByRole('radiogroup', { name: 'Ngôn ngữ' })).getByRole('radio', { name: 'English' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument();

@@ -1,19 +1,22 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
-/* A pill that floats above the bottom edge, inset from the sides; --tabbar-height still reserves its room. */
+/* A glass pill floating above the bottom edge; the active tab is the strong fill, + is the accent. */
 .bar {
   position: fixed;
-  right: var(--float-inset);
-  bottom: calc(var(--float-inset) + env(safe-area-inset-bottom, 0px));
-  left: var(--float-inset);
+  right: var(--tabbar-inset);
+  bottom: calc(var(--tabbar-bottom) + env(safe-area-inset-bottom, 0px));
+  left: var(--tabbar-inset);
   z-index: 10;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   align-items: center;
-  height: calc(var(--tabbar-height) - var(--space-5));
+  gap: 2px;
+  height: var(--tabbar-h);
   padding: 0 var(--space-2);
+  border: 1px solid var(--line);
   border-radius: var(--radius-pill);
-  background: var(--surface);
-  box-shadow: var(--shadow-md);
+  background: var(--glass-2);
+  -webkit-backdrop-filter: blur(26px) saturate(var(--saturate));
+  backdrop-filter: blur(26px) saturate(var(--saturate));
+  box-shadow: var(--shadow-tabbar);
 }
 
 .tab {
@@ -21,30 +24,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  min-height: var(--touch-min);
+  gap: 3px;
+  height: 60px;
+  min-width: 0;
+  border-radius: var(--radius-pill);
   color: var(--ink-2);
-  font-size: var(--text-tab-label-size);
-  line-height: var(--text-tab-label-line);
+  font-size: var(--text-micro-size);
+  font-weight: 500;
+  line-height: var(--text-micro-line);
+  white-space: nowrap;
   text-decoration: none;
 }
 
 .active {
-  color: var(--link);
-  font-weight: 700;
+  background: var(--inverse);
+  color: var(--on-inverse);
+  font-weight: 600;
 }
 
 .capture {
-  display: flex;
+  display: grid;
   justify-self: center;
-  align-items: center;
-  justify-content: center;
-  width: var(--fab-size);
-  height: var(--fab-size);
+  place-items: center;
+  width: var(--fab);
+  height: var(--fab);
   padding: 0;
   border: 0;
   border-radius: var(--radius-pill);
-  background: var(--primary);
-  box-shadow: var(--shadow-primary);
-  color: var(--on-primary);
+  background: var(--accent);
+  box-shadow: var(--shadow-fab);
+  color: var(--on-accent);
 }

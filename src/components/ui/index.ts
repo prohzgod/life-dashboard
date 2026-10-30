@@ -9,3 +9,7 @@ export { Segmented, type SegmentedOption } from './Segmented';
 export { Sheet } from './Sheet';
 export { StatTile } from './StatTile';
 export { Switch } from './Switch';
+export { ArrowLink, IconButton } from './IconButton';
+export { HatchBar, ProgressCapsule, type ProgressTone } from './Progress';
+export { WarnNote } from './WarnNote';
+export { WeekDots, type DotState } from './WeekDots';

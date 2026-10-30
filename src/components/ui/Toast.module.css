@@ -1,4 +1,3 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .toast {
   position: fixed;
   top: calc(var(--space-4) + env(safe-area-inset-top, 0px));
@@ -10,18 +9,19 @@
   padding: 12px var(--space-5);
   border-radius: var(--radius-pill);
   background: var(--inverse);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-tabbar);
   color: var(--on-inverse);
-  font-size: var(--text-body-s-size);
-  font-weight: 600;
+  font-size: var(--text-label-size);
+  font-weight: 500;
   white-space: nowrap;
   transform: translateX(-50%);
   animation: drop var(--dur-slow) var(--ease);
 }
 
 .toast a {
-  color: var(--inverse-accent);
-  text-decoration: none;
+  color: var(--on-inverse);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 @keyframes drop {

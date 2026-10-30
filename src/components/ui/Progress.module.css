@@ -1,0 +1,99 @@
+.capsule {
+  min-width: 0;
+}
+
+.capsuleHead {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-1h);
+  margin-bottom: var(--space-2);
+  font-size: var(--text-label-size);
+  white-space: nowrap;
+}
+
+.capsuleLabel {
+  font-weight: 500;
+}
+
+.capsuleMeta {
+  overflow: hidden;
+  color: var(--ink-2);
+  text-overflow: ellipsis;
+}
+
+.track,
+.bar {
+  position: relative;
+  border: 1px solid var(--well-line);
+  border-radius: var(--radius-pill);
+  background: repeating-linear-gradient(-45deg, var(--hatch) 0 2px, transparent 2px 9px);
+}
+
+.track {
+  height: var(--touch-min);
+  overflow: hidden;
+}
+
+.fill {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-width: 0;
+  padding-left: var(--space-3h);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-label-size);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.short {
+  overflow: visible;
+}
+
+.short .value {
+  margin-left: calc(100% + var(--space-1));
+  color: var(--ink);
+}
+
+.accent {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.inverse {
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+.glass {
+  background: var(--glass-2);
+  color: var(--ink);
+}
+
+/* The year: an outline, its figure at the end. */
+.outline {
+  justify-content: flex-end;
+  padding-right: var(--space-3h);
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+}
+
+.bar {
+  height: 16px;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+}
+
+.tick {
+  position: absolute;
+  top: -6px;
+  width: 3px;
+  height: 26px;
+  margin-left: -1.5px;
+  border-radius: 3px;
+  background: var(--accent);
+}
