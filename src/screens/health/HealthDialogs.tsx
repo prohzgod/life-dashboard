@@ -17,6 +17,7 @@ import {
 } from '@/data';
 import { Button, Segmented } from '@/components/ui';
 import { Dialog } from '@/components/ui/Dialog';
+import { messages, useT } from '@/i18n';
 import styles from './Health.module.css';
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: (id: string) => ReactNode }) {
@@ -38,17 +39,15 @@ function ErrorLine({ text }: { text: string }) {
   ) : null;
 }
 
-const problem = (e: unknown) => (e instanceof HealthError ? e.message : 'That didn’t save. Try again.');
+const problem = (e: unknown) => (e instanceof HealthError ? e.message : messages().health.dialog.saveFailed);
 
 // ---- Log a reading ----
 
 export type LogKind = 'sleep' | 'steps' | 'weight' | 'restingHr';
 
-const LOG_LABEL: Record<LogKind, string> = { sleep: 'Sleep', steps: 'Steps', weight: 'Weight', restingHr: 'Resting heart rate' };
-
 export function LogDialog({ open, onClose, kind, today, onSaved }: { open: boolean; onClose: () => void; kind: LogKind; today: string; onSaved: (t: string) => void }) {
   return (
-    <Dialog open={open} onClose={onClose} title="Log a reading">
+    <Dialog open={open} onClose={onClose} title={messages().health.dialog.logReading}>
       {open && <LogForm key={kind} initial={kind} today={today} onClose={onClose} onSaved={onSaved} />}
     </Dialog>
   );
@@ -64,26 +63,28 @@ function parseSleep(text: string): number | null {
 }
 
 function LogForm({ initial, today, onClose, onSaved }: { initial: LogKind; today: string; onClose: () => void; onSaved: (t: string) => void }) {
+  const t = useT().health.dialog;
+  const LOG_LABEL = t.labels;
   const [kind, setKind] = useState<LogKind>(initial);
   const [day, setDay] = useState(today);
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
-  const unit = { sleep: 'hours', steps: 'steps', weight: 'kg', restingHr: 'bpm' }[kind];
+  const unit = t.units[kind];
 
   async function submit(e: FormEvent) {
     e.preventDefault();
     try {
       if (kind === 'sleep') {
         const minutes = parseSleep(value);
-        if (minutes === null) return setError('Write it like 7h 30m, 7:30 or 7.5.');
+        if (minutes === null) return setError(t.sleepFormat);
         await logSleep(day, minutes);
       } else {
         // Steps may be typed with thousands separators (8,420); weights with a decimal comma (68,4).
         const n = Number(kind === 'steps' ? value.replace(/[,.\s]/g, '') : value.trim().replace(',', '.'));
-        if (!Number.isFinite(n) || !value.trim()) return setError('Enter a number.');
+        if (!Number.isFinite(n) || !value.trim()) return setError(t.number);
         await logSystem(kind, n, day);
       }
-      onSaved(`${LOG_LABEL[kind]} saved.`);
+      onSaved(t.saved(LOG_LABEL[kind]));
       onClose();
     } catch (err) {
       setError(problem(err));
@@ -92,7 +93,7 @@ function LogForm({ initial, today, onClose, onSaved }: { initial: LogKind; today
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
-      <Field label="What">
+      <Field label={t.what}>
         {(id) => (
           <select id={id} value={kind} onChange={(e) => setKind(e.target.value as LogKind)}>
             {(Object.keys(LOG_LABEL) as LogKind[]).map((k) => (
@@ -104,10 +105,10 @@ function LogForm({ initial, today, onClose, onSaved }: { initial: LogKind; today
         )}
       </Field>
       <div className={styles.fieldRow}>
-        <Field label={kind === 'sleep' ? 'Night before' : 'Day'} hint={kind === 'sleep' ? 'The day you woke up.' : undefined}>
+        <Field label={kind === 'sleep' ? t.nightBefore : t.day} hint={kind === 'sleep' ? t.wokeUp : undefined}>
           {(id) => <input id={id} type="date" value={day} max={today} onChange={(e) => setDay(e.target.value)} />}
         </Field>
-        <Field label={`Value (${unit})`}>
+        <Field label={t.value(unit)}>
           {(id) => (
             <input
               id={id}
@@ -120,13 +121,13 @@ function LogForm({ initial, today, onClose, onSaved }: { initial: LogKind; today
           )}
         </Field>
       </div>
-      <p className={styles.hint}>Sleep is also part of your daily check-in on Today.</p>
+      <p className={styles.hint}>{t.alsoCheckIn}</p>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
         <span className={styles.spacer} />
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          Save
+          {t.save}
         </Button>
       </div>
     </form>
@@ -135,25 +136,18 @@ function LogForm({ initial, today, onClose, onSaved }: { initial: LogKind; today
 
 // ---- Workouts ----
 
-const KINDS: Array<{ value: Workout['kind']; label: string; title: string }> = [
-  { value: 'run', label: 'Run', title: 'Easy run' },
-  { value: 'walk', label: 'Walk', title: 'Walk' },
-  { value: 'ride', label: 'Ride', title: 'Ride' },
-  { value: 'swim', label: 'Swim', title: 'Swim' },
-  { value: 'yoga', label: 'Yoga', title: 'Yoga' },
-  { value: 'strength', label: 'Strength', title: 'Strength' },
-  { value: 'other', label: 'Other', title: 'Workout' },
-];
+const KINDS: Array<Workout['kind']> = ['run', 'walk', 'ride', 'swim', 'yoga', 'strength', 'other'];
 
 export function WorkoutDialog({ open, onClose, workout, today, goal, onSaved }: { open: boolean; onClose: () => void; workout?: Workout; today: string; goal: Goal | null; onSaved: (t: string) => void }) {
   return (
-    <Dialog open={open} onClose={onClose} title={workout ? 'Edit workout' : 'Add workout'}>
+    <Dialog open={open} onClose={onClose} title={workout ? messages().health.dialog.editWorkout : messages().health.dialog.addWorkout}>
       {open && <WorkoutForm key={workout?.id ?? 'new'} workout={workout} today={today} goal={goal} onClose={onClose} onSaved={onSaved} />}
     </Dialog>
   );
 }
 
 function WorkoutForm({ workout, today, goal, onClose, onSaved }: { workout?: Workout; today: string; goal: Goal | null; onClose: () => void; onSaved: (t: string) => void }) {
+  const t = useT().health.dialog;
   const [form, setForm] = useState({
     kind: workout?.kind ?? ('run' as Workout['kind']),
     title: workout?.title ?? '',
@@ -166,15 +160,15 @@ function WorkoutForm({ workout, today, goal, onClose, onSaved }: { workout?: Wor
   });
   const [error, setError] = useState('');
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) => setForm((f) => ({ ...f, [k]: v }));
-  const kindInfo = KINDS.find((k) => k.value === form.kind)!;
+  const kindInfo = t.kinds[form.kind];
   const distanceKinds = ['run', 'walk', 'ride', 'swim', 'other'];
 
   async function submit(e: FormEvent) {
     e.preventDefault();
     const durationSec = parseDuration(form.duration);
-    if (durationSec === null) return setError('Enter how long it took, like 28:40 or 45 (minutes).');
+    if (durationSec === null) return setError(t.duration);
     const distanceKm = form.distance.trim() ? Number(form.distance.replace(',', '.')) : null;
-    if (distanceKm !== null && !Number.isFinite(distanceKm)) return setError('Distance is a number of km, like 5.2.');
+    if (distanceKm !== null && !Number.isFinite(distanceKm)) return setError(t.distance);
     const avgHr = form.avgHr.trim() ? Math.round(Number(form.avgHr)) : null;
     const input = {
       day: form.day,
@@ -189,7 +183,7 @@ function WorkoutForm({ workout, today, goal, onClose, onSaved }: { workout?: Wor
     try {
       if (workout) await updateWorkout(workout.id, input);
       else await addWorkout(input);
-      onSaved(workout ? 'Workout saved.' : `${input.title} added.`);
+      onSaved(workout ? t.workoutSaved : t.added(input.title));
       onClose();
     } catch (err) {
       setError(problem(err));
@@ -199,32 +193,32 @@ function WorkoutForm({ workout, today, goal, onClose, onSaved }: { workout?: Wor
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
       <div className={styles.fieldRow}>
-        <Field label="Kind">
+        <Field label={t.kind}>
           {(id) => (
             <select id={id} value={form.kind} onChange={(e) => set('kind', e.target.value as Workout['kind'])}>
               {KINDS.map((k) => (
-                <option key={k.value} value={k.value}>
-                  {k.label}
+                <option key={k} value={k}>
+                  {t.kinds[k].label}
                 </option>
               ))}
             </select>
           )}
         </Field>
-        <Field label="Day">{(id) => <input id={id} type="date" value={form.day} max={today} onChange={(e) => set('day', e.target.value)} />}</Field>
+        <Field label={t.day}>{(id) => <input id={id} type="date" value={form.day} max={today} onChange={(e) => set('day', e.target.value)} />}</Field>
       </div>
-      <Field label="Name">{(id) => <input id={id} data-autofocus value={form.title} onChange={(e) => set('title', e.target.value)} placeholder={kindInfo.title} />}</Field>
+      <Field label={t.name}>{(id) => <input id={id} data-autofocus value={form.title} onChange={(e) => set('title', e.target.value)} placeholder={kindInfo.title} />}</Field>
       <div className={styles.fieldRow}>
-        {distanceKinds.includes(form.kind) && <Field label="Distance (km)">{(id) => <input id={id} inputMode="decimal" value={form.distance} onChange={(e) => set('distance', e.target.value)} placeholder="5.2" />}</Field>}
-        <Field label="Time">{(id) => <input id={id} value={form.duration} onChange={(e) => set('duration', e.target.value)} placeholder="28:40" />}</Field>
-        <Field label="Avg heart rate">{(id) => <input id={id} inputMode="numeric" value={form.avgHr} onChange={(e) => set('avgHr', e.target.value)} placeholder="Optional" />}</Field>
+        {distanceKinds.includes(form.kind) && <Field label={t.distanceKm}>{(id) => <input id={id} inputMode="decimal" value={form.distance} onChange={(e) => set('distance', e.target.value)} placeholder="5.2" />}</Field>}
+        <Field label={t.time}>{(id) => <input id={id} value={form.duration} onChange={(e) => set('duration', e.target.value)} placeholder="28:40" />}</Field>
+        <Field label={t.avgHr}>{(id) => <input id={id} inputMode="numeric" value={form.avgHr} onChange={(e) => set('avgHr', e.target.value)} placeholder={t.optional} />}</Field>
       </div>
       {goal && form.kind === 'run' && (
         <label className={styles.check}>
           <input type="checkbox" checked={form.counts} onChange={(e) => set('counts', e.target.checked)} />
-          Counts toward “{goal.title}” (your longest run is its progress)
+          {t.counts(goal.title)}
         </label>
       )}
-      <Field label="Notes">{(id) => <input id={id} value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder="Optional" />}</Field>
+      <Field label={t.notes}>{(id) => <input id={id} value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder={t.optional} />}</Field>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
         {workout && (
@@ -233,17 +227,17 @@ function WorkoutForm({ workout, today, goal, onClose, onSaved }: { workout?: Wor
             className={styles.dangerButton}
             onClick={async () => {
               await deleteWorkout(workout.id);
-              onSaved('Workout deleted.');
+              onSaved(t.workoutDeleted);
               onClose();
             }}
           >
-            Delete
+            {t.delete}
           </Button>
         )}
         <span className={styles.spacer} />
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          {workout ? 'Save' : 'Add workout'}
+          {workout ? t.save : t.addWorkout}
         </Button>
       </div>
     </form>
@@ -254,13 +248,14 @@ function WorkoutForm({ workout, today, goal, onClose, onSaved }: { workout?: Wor
 
 export function MetricDialog({ open, onClose, metric, onSaved }: { open: boolean; onClose: () => void; metric?: Metric; onSaved: (t: string) => void }) {
   return (
-    <Dialog open={open} onClose={onClose} title={metric ? `Edit ${metric.name}` : 'Add a metric'}>
+    <Dialog open={open} onClose={onClose} title={metric ? messages().health.dialog.editMetric(metric.name) : messages().health.dialog.addMetricTitle}>
       {open && <MetricForm key={metric?.id ?? 'new'} metric={metric} onClose={onClose} onSaved={onSaved} />}
     </Dialog>
   );
 }
 
 function MetricForm({ metric, onClose, onSaved }: { metric?: Metric; onClose: () => void; onSaved: (t: string) => void }) {
+  const t = useT().health.dialog;
   const [form, setForm] = useState({
     name: metric?.name ?? '',
     valueType: metric?.valueType ?? ('number' as Metric['valueType']),
@@ -276,7 +271,7 @@ function MetricForm({ metric, onClose, onSaved }: { metric?: Metric; onClose: ()
     e.preventDefault();
     const target = form.target.trim() ? Number(form.target) : null;
     const step = Number(form.step || 1);
-    if (target !== null && !Number.isFinite(target)) return setError('The daily target is a number.');
+    if (target !== null && !Number.isFinite(target)) return setError(t.targetNumber);
     const input = {
       name: form.name,
       valueType: form.valueType,
@@ -288,7 +283,7 @@ function MetricForm({ metric, onClose, onSaved }: { metric?: Metric; onClose: ()
     try {
       if (metric) await updateMetric(metric.id, input);
       else await addMetric(input);
-      onSaved(metric ? 'Saved.' : `${form.name.trim()} added. Tap + to log it.`);
+      onSaved(metric ? t.savedShort : t.metricAdded(form.name.trim()));
       onClose();
     } catch (err) {
       setError(problem(err));
@@ -297,40 +292,36 @@ function MetricForm({ metric, onClose, onSaved }: { metric?: Metric; onClose: ()
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
-      <Field label="Name">{(id) => <input id={id} data-autofocus value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="Water" />}</Field>
+      <Field label={t.name}>{(id) => <input id={id} data-autofocus value={form.name} onChange={(e) => set('name', e.target.value)} placeholder={t.metricPlaceholder} />}</Field>
       <div className={styles.field}>
-        <span className={styles.fieldLabel}>Kind</span>
+        <span className={styles.fieldLabel}>{t.kind}</span>
         <Segmented
-          label="Kind"
+          label={t.kind}
           value={form.valueType}
           onChange={(v) => set('valueType', v)}
-          options={[
-            { value: 'number', label: 'A number' },
-            { value: 'scale', label: 'A 1–5 scale' },
-            { value: 'yesno', label: 'Yes or no' },
-          ]}
+          options={(['number', 'scale', 'yesno'] as const).map((v) => ({ value: v, label: t.valueTypes[v] }))}
         />
       </div>
       {form.valueType === 'number' && (
         <>
           <div className={styles.fieldRow}>
-            <Field label="Unit">{(id) => <input id={id} value={form.unit} onChange={(e) => set('unit', e.target.value)} placeholder="glasses" />}</Field>
-            <Field label="Each tap adds">{(id) => <input id={id} inputMode="decimal" value={form.step} onChange={(e) => set('step', e.target.value)} />}</Field>
-            <Field label="Daily target">{(id) => <input id={id} inputMode="decimal" value={form.target} onChange={(e) => set('target', e.target.value)} placeholder="Optional" />}</Field>
+            <Field label={t.unit}>{(id) => <input id={id} value={form.unit} onChange={(e) => set('unit', e.target.value)} placeholder={t.unitPlaceholder} />}</Field>
+            <Field label={t.step}>{(id) => <input id={id} inputMode="decimal" value={form.step} onChange={(e) => set('step', e.target.value)} />}</Field>
+            <Field label={t.dailyTarget}>{(id) => <input id={id} inputMode="decimal" value={form.target} onChange={(e) => set('target', e.target.value)} placeholder={t.optional} />}</Field>
           </div>
-          <Field label="A day counts">
+          <Field label={t.dayCounts}>
             {(id) => (
               <select id={id} value={form.aggregation} onChange={(e) => set('aggregation', e.target.value as Metric['aggregation'])}>
-                <option value="sum">The total of the day</option>
-                <option value="average">The average of the day</option>
-                <option value="last">The last reading</option>
+                <option value="sum">{t.aggregations.sum}</option>
+                <option value="average">{t.aggregations.average}</option>
+                <option value="last">{t.aggregations.last}</option>
               </select>
             )}
           </Field>
         </>
       )}
       {form.valueType === 'scale' && (
-        <Field label="Daily target">{(id) => <input id={id} inputMode="numeric" value={form.target} onChange={(e) => set('target', e.target.value)} placeholder="Optional, 1 to 5" />}</Field>
+        <Field label={t.dailyTarget}>{(id) => <input id={id} inputMode="numeric" value={form.target} onChange={(e) => set('target', e.target.value)} placeholder={t.scaleTarget} />}</Field>
       )}
       <ErrorLine text={error} />
       <div className={styles.formActions}>
@@ -340,17 +331,17 @@ function MetricForm({ metric, onClose, onSaved }: { metric?: Metric; onClose: ()
             className={styles.dangerButton}
             onClick={async () => {
               await removeMetric(metric.id);
-              onSaved(`${metric.name} removed. Its entries are kept.`);
+              onSaved(t.metricRemoved(metric.name));
               onClose();
             }}
           >
-            Remove metric
+            {t.removeMetric}
           </Button>
         )}
         <span className={styles.spacer} />
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          {metric ? 'Save' : 'Add metric'}
+          {metric ? t.save : t.addMetric}
         </Button>
       </div>
     </form>
@@ -359,16 +350,17 @@ function MetricForm({ metric, onClose, onSaved }: { metric?: Metric; onClose: ()
 
 /** For a 1–5 metric: pick today's value. */
 export function ScaleDialog({ metric, onClose, onSaved }: { metric: Metric | null; onClose: () => void; onSaved: (t: string) => void }) {
+  const t = useT().health.dialog;
   return (
-    <Dialog open={Boolean(metric)} onClose={onClose} title={metric ? metric.name : 'Log'}>
+    <Dialog open={Boolean(metric)} onClose={onClose} title={metric ? metric.name : t.log}>
       {metric && (
-        <div className={styles.scale} role="group" aria-label={`${metric.name}, 1 to 5`}>
+        <div className={styles.scale} role="group" aria-label={t.scaleLabel(metric.name)}>
           {[1, 2, 3, 4, 5].map((n) => (
             <Button
               key={n}
               onClick={async () => {
                 await logMetric(metric.id, n);
-                onSaved(`${metric.name}: ${n} of 5.`);
+                onSaved(t.scaleSaved(metric.name, n));
                 onClose();
               }}
             >
@@ -383,15 +375,16 @@ export function ScaleDialog({ metric, onClose, onSaved }: { metric: Metric | nul
 
 /** Sources come with the phone app; until then, say so plainly. */
 export function SourceDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useT().health.dialog;
   return (
-    <Dialog open={open} onClose={onClose} title="Connect a source">
+    <Dialog open={open} onClose={onClose} title={t.connect}>
       <div className={styles.form}>
-        <p className={styles.lead}>Apple Health and Health Connect need a phone app to read them, and that app isn’t ready yet. When it is, your sleep, steps, heart rate and workouts come in by themselves, on your devices only.</p>
-        <p className={styles.lead}>Until then, log readings by hand here, and sleep in your daily check-in.</p>
+        <p className={styles.lead}>{t.sourceLead}</p>
+        <p className={styles.lead}>{t.sourceUntil}</p>
         <div className={styles.formActions}>
           <span className={styles.spacer} />
           <Button variant="primary" onClick={onClose}>
-            Got it
+            {t.gotIt}
           </Button>
         </div>
       </div>

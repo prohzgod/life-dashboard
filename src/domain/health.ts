@@ -1,3 +1,4 @@
+import { messages } from '@/i18n/locale';
 import { addDays, dayOfMonth, toDay, type Day } from './days';
 
 /** Health numbers from your check-ins, metrics and workouts. Pure: data in, summaries out. */
@@ -29,7 +30,7 @@ export function sleepSummary(nights: ReadonlyArray<{ minutes: number | null }>):
 
 /** "7h 04m" */
 export function formatSleep(minutes: number): string {
-  return `${Math.floor(minutes / 60)}h ${String(minutes % 60).padStart(2, '0')}m`;
+  return messages().health.sleep(Math.floor(minutes / 60), String(minutes % 60).padStart(2, '0'));
 }
 
 export type SleepMood = { rested: number; short: number; diff: number; restedDays: number; shortDays: number };

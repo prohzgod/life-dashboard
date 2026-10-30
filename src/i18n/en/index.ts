@@ -3,8 +3,10 @@ import { errors, seed } from './data';
 import { finance } from './finance';
 import { format } from './format';
 import { goals } from './goals';
+import { health } from './health';
 import { home } from './home';
 import { library } from './library';
+import { profile } from './profile';
 import { progress } from './progress';
 import { reviews } from './reviews';
 import { screens } from './screens';
@@ -15,4 +17,4 @@ import { today } from './today';
 import { vision } from './vision';
 
 /** English copy. The source of truth for the shape every other language must match. */
-export const en = { calendar, errors, finance, format, goals, home, library, progress, reviews, screens, seed, settings, shell, tasks, today, vision };
+export const en = { calendar, errors, finance, format, goals, health, home, library, profile, progress, reviews, screens, seed, settings, shell, tasks, today, vision };

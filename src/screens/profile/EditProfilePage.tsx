@@ -10,6 +10,7 @@ import { cx } from '@/components/ui/cx';
 import { prepareImage } from '@/lib/images';
 import { useToday } from '@/lib/useToday';
 import { ABOUT_FIELDS, GENDERS } from './fields';
+import { useT } from '@/i18n';
 import styles from './Profile.module.css';
 
 export function EditProfilePage() {
@@ -21,6 +22,8 @@ export function EditProfilePage() {
 type FormState = Pick<Profile, 'displayName' | 'quote' | 'gender' | 'birthday' | 'pronouns' | 'occupation' | 'city' | 'email' | 'phone' | 'customFields' | 'visibility'>;
 
 function Form({ profile }: { profile: Profile }) {
+  const { profile: pt } = useT();
+  const t = pt.editPage;
   const navigate = useNavigate();
   const today = useToday();
   const id = useId();
@@ -56,11 +59,11 @@ function Form({ profile }: { profile: Profile }) {
     <div className={styles.page}>
       <header className={styles.top}>
         <button type="button" className={styles.cancel} onClick={() => navigate('/profile')}>
-          Cancel
+          {t.cancel}
         </button>
-        <h1 className={styles.topTitle}>Edit profile</h1>
+        <h1 className={styles.topTitle}>{t.title}</h1>
         <Button variant="primary" className={styles.save} onClick={() => void save()}>
-          Save
+          {t.save}
         </Button>
       </header>
 
@@ -68,14 +71,14 @@ function Form({ profile }: { profile: Profile }) {
         <ProfileAvatar size="lg" asLink={false} />
         <div className={styles.photoActions}>
           <Button size="sm" icon={<Icon name="camera" size={15} />} onClick={() => photoRef.current?.click()}>
-            {profile.photoAttachmentId ? 'Change photo' : 'Add a photo'}
+            {profile.photoAttachmentId ? t.changePhoto : t.addPhoto}
           </Button>
           {profile.photoAttachmentId ? (
             <button type="button" className={styles.link} onClick={() => void setProfilePhoto(null)}>
-              Use my initial instead
+              {t.useInitial}
             </button>
           ) : (
-            <span className={styles.hint}>Or keep your initial</span>
+            <span className={styles.hint}>{t.keepInitial}</span>
           )}
         </div>
         <input
@@ -83,7 +86,7 @@ function Form({ profile }: { profile: Profile }) {
           type="file"
           accept="image/*"
           hidden
-          aria-label="Choose a profile photo"
+          aria-label={t.choosePhoto}
           onChange={async (e) => {
             const file = e.target.files?.[0];
             e.target.value = '';
@@ -92,19 +95,19 @@ function Form({ profile }: { profile: Profile }) {
         />
       </div>
 
-      <Field id={`${id}-name`} label="Display name" visibility={vis('displayName')} onToggle={() => toggle('displayName')}>
-        <input id={`${id}-name`} value={form.displayName} onChange={(e) => set('displayName', e.target.value)} placeholder="What should we call you?" autoComplete="name" />
+      <Field id={`${id}-name`} label={t.displayName} visibility={vis('displayName')} onToggle={() => toggle('displayName')}>
+        <input id={`${id}-name`} value={form.displayName} onChange={(e) => set('displayName', e.target.value)} placeholder={t.namePlaceholder} autoComplete="name" />
       </Field>
 
-      <Field id={`${id}-quote`} label="Quote or motto" visibility={vis('quote')} onToggle={() => toggle('quote')} note="Shown under your name.">
-        <textarea id={`${id}-quote`} className={styles.quoteInput} rows={2} value={form.quote} onChange={(e) => set('quote', e.target.value)} placeholder="Slow is smooth, and smooth is fast." />
+      <Field id={`${id}-quote`} label={t.quote} visibility={vis('quote')} onToggle={() => toggle('quote')} note={t.quoteNote}>
+        <textarea id={`${id}-quote`} className={styles.quoteInput} rows={2} value={form.quote} onChange={(e) => set('quote', e.target.value)} placeholder={t.quotePlaceholder} />
       </Field>
 
-      <Field id={`${id}-gender`} label="Gender" visibility={vis('gender')} onToggle={() => toggle('gender')} group>
+      <Field id={`${id}-gender`} label={pt.fields.gender.label} visibility={vis('gender')} onToggle={() => toggle('gender')} group>
         <div className={styles.choices} role="radiogroup" aria-labelledby={`${id}-gender`}>
           {GENDERS.map((g) => (
             <button key={g} type="button" role="radio" aria-checked={form.gender === g} className={cx(styles.choice, form.gender === g && styles.choiceOn)} onClick={() => set('gender', form.gender === g ? '' : g)}>
-              {g}
+              {pt.genders[g] ?? g}
             </button>
           ))}
         </div>
@@ -114,14 +117,14 @@ function Form({ profile }: { profile: Profile }) {
         <Field
           key={f.key}
           id={`${id}-${f.key}`}
-          label={f.label}
+          label={pt.fields[f.key].label}
           visibility={vis(f.key)}
           onToggle={() => toggle(f.key)}
           note={
             f.key === 'birthday' && form.birthday
-              ? `Your age (${ageOn(form.birthday, today)}) is worked out from this and blurred with it.`
+              ? t.ageNote(ageOn(form.birthday, today))
               : f.key === 'email'
-                ? 'Only kept on this phone. Never shared.'
+                ? t.emailNote
                 : undefined
           }
         >
@@ -129,7 +132,7 @@ function Form({ profile }: { profile: Profile }) {
             id={`${id}-${f.key}`}
             type={f.type ?? 'text'}
             inputMode={f.inputMode}
-            placeholder={f.placeholder}
+            placeholder={pt.fields[f.key].placeholder}
             value={(f.key === 'birthday' ? (form.birthday ?? '') : form[f.key]) as string}
             onChange={(e) => set(f.key, (f.key === 'birthday' ? e.target.value || null : e.target.value) as never)}
           />
@@ -141,30 +144,30 @@ function Form({ profile }: { profile: Profile }) {
           <div className={styles.fieldHead}>
             <input
               className={styles.customLabel}
-              aria-label="Field name"
-              placeholder="Field name"
+              aria-label={t.fieldName}
+              placeholder={t.fieldName}
               value={c.label}
               onChange={(e) => set('customFields', form.customFields.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))}
             />
-            <VisibilityToggle visibility={vis(c.id)} label={c.label || 'this field'} onToggle={() => toggle(c.id)} />
+            <VisibilityToggle visibility={vis(c.id)} label={c.label || t.thisField} onToggle={() => toggle(c.id)} />
           </div>
           <div className={cx(styles.inputWrap, vis(c.id) === 'blurred' && styles.blurInput)}>
-            <input aria-label={`${c.label || 'Custom field'} value`} value={c.value} onChange={(e) => set('customFields', form.customFields.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))} />
+            <input aria-label={t.customValue(c.label)} value={c.value} onChange={(e) => set('customFields', form.customFields.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))} />
           </div>
           <button type="button" className={styles.link} onClick={() => set('customFields', form.customFields.filter((_, j) => j !== i))}>
-            Remove this field
+            {t.removeField}
           </button>
         </div>
       ))}
 
       <button type="button" className={styles.addField} onClick={() => set('customFields', [...form.customFields, newCustomField('')])}>
         <Icon name="plus" size={16} />
-        Add a field (blood type, emergency contact…)
+        {t.addField}
       </button>
 
       <p className={styles.note}>
         <Icon name="lock" size={15} />
-        Blurred details stay blurred until you tap them, and the Assistant never reads them.
+        {t.note}
       </p>
     </div>
   );
@@ -192,11 +195,12 @@ function Field({ id, label, visibility, onToggle, note, group, children }: { id:
 }
 
 function VisibilityToggle({ visibility, label, onToggle }: { visibility: Visibility; label: string; onToggle: () => void }) {
+  const { profile } = useT();
   const blurred = visibility === 'blurred';
   return (
-    <button type="button" className={cx(styles.vis, blurred && styles.visBlurred)} aria-pressed={blurred} aria-label={`Blur ${label}`} onClick={onToggle}>
+    <button type="button" className={cx(styles.vis, blurred && styles.visBlurred)} aria-pressed={blurred} aria-label={profile.blur(label)} onClick={onToggle}>
       <Icon name={blurred ? 'eyeOff' : 'eye'} size={15} />
-      {blurred ? 'Blurred' : 'Shown'}
+      {blurred ? profile.editPage.blurred : profile.editPage.shown}
     </button>
   );
 }

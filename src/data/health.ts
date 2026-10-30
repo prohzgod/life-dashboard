@@ -172,7 +172,7 @@ export async function loadHealth(today: Day): Promise<HealthView> {
   return {
     sleep: { nights, ...sleepSummary(nights), lastNight: nights.at(-1)?.minutes ?? null },
     pattern: sleepMoodPattern(entries),
-    hasBedtimeHabit: habits.some((h) => /in bed by/i.test(h.title)),
+    hasBedtimeHabit: habits.some((h) => LOCALES.some((locale) => messages(locale).seed.bedtime.title === h.title)),
     steps: { average: dailyAverage(steps, today, 'sum'), today: dayValue(steps, today, 'sum') },
     restingHr: latestWithChange(entriesOf(system('restingHr')), today),
     weight: latestWithChange(entriesOf(system('weight')), today),
