@@ -45,6 +45,7 @@ export const tasks: Messages['tasks'] = {
   mediumPriority: 'Ưu tiên vừa',
   lowPriority: 'Ưu tiên thấp',
   someday: 'Một ngày nào đó',
+  somedayTab: 'Để sau',
   task: 'Việc',
   willBeSaved: 'Sẽ được lưu là',
   enter: 'Enter',

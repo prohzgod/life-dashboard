@@ -47,6 +47,8 @@ export const tasks = {
   mediumPriority: 'Medium priority',
   lowPriority: 'Low priority',
   someday: 'Someday',
+  /** The phone's tab, where space is tight. */
+  somedayTab: 'Someday',
   task: 'Task',
   willBeSaved: 'Will be saved as',
   enter: 'Enter',

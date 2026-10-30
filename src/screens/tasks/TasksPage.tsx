@@ -138,7 +138,7 @@ export function TasksPage() {
             { value: 'inbox', label: counts.inbox ? t.inboxCount(counts.inbox) : t.views.inbox },
             { value: 'today', label: t.views.today },
             { value: 'upcoming', label: t.views.upcoming },
-            { value: 'someday', label: t.someday },
+            { value: 'someday', label: t.somedayTab },
           ]}
           value={tab}
           onChange={(v) => navigate(v === 'inbox' ? '/inbox' : `/tasks?view=${v}`)}
