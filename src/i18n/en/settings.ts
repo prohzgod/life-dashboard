@@ -27,7 +27,7 @@ export const settings = {
     system: 'System',
     palette: 'Colours',
     paletteLabel: 'Colour theme',
-    paletteHint: 'Saved on this device only. Each theme has a light and a dark side; the mode above picks which.',
+    paletteHint: 'Saved on this device only. Each ready-made theme has a light and a dark side; the setting above picks which.',
     names: { grid: 'Grid', leica: 'Leica', nature: 'Nature', focus: 'Focus', ocean: 'Ocean', rose: 'Rosé', custom: 'Your own' },
     about: {
       grid: 'Poster paper, ultramarine, Swiss red',
@@ -43,7 +43,11 @@ export const settings = {
     mainHint: 'Fills, links and progress',
     mark: 'Accent',
     markHint: 'What needs you: behind pace, over budget',
-    customHint: 'Your background sets its own mode; the other mode gets a matching paper. Colours are adjusted where needed so text stays readable.',
+    customHint: 'Your own theme looks the same in light and dark. Colours are adjusted only where text would be hard to read.',
+    unsaved: 'Showing a preview. Save to keep it.',
+    savedTheme: 'Saved. Your theme stays on this device.',
+    cancel: 'Cancel',
+    save: 'Save theme',
   },
   notifications: {
     permission: {

@@ -48,7 +48,5 @@ export const presets: Record<PresetId, { light: ThemeSeeds; dark: ThemeSeeds }> 
 
 export const presetIds = Object.keys(presets) as PresetId[];
 
-/** Ink for a custom theme, picked to read on its paper. */
+/** Ink for your own theme: dark on a light background, light on a dark one. */
 export const customInk = { light: '#14161C', dark: '#ECEAE6' };
-/** Papers a custom theme falls back to for the mode you didn't pick a background for. */
-export const customPaper = { light: '#F8F7F3', dark: '#0B0F18' };

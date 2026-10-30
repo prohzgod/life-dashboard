@@ -28,7 +28,7 @@ export const settings: Messages['settings'] = {
     system: 'Hệ thống',
     palette: 'Màu sắc',
     paletteLabel: 'Chủ đề màu',
-    paletteHint: 'Chỉ lưu trên thiết bị này. Mỗi chủ đề có mặt sáng và mặt tối; chế độ ở trên quyết định mặt nào.',
+    paletteHint: 'Chỉ lưu trên thiết bị này. Mỗi chủ đề có sẵn đều có mặt sáng và mặt tối; cài đặt ở trên quyết định mặt nào.',
     names: { grid: 'Grid', leica: 'Leica', nature: 'Thiên nhiên', focus: 'Tập trung', ocean: 'Đại dương', rose: 'Hồng', custom: 'Của riêng bạn' },
     about: {
       grid: 'Giấy trắng, xanh lam đậm, đỏ Thụy Sĩ',
@@ -44,7 +44,11 @@ export const settings: Messages['settings'] = {
     mainHint: 'Khối màu, liên kết và tiến độ',
     mark: 'Màu nhấn',
     markHint: 'Điều cần bạn chú ý: chậm tiến độ, vượt ngân sách',
-    customHint: 'Nền bạn chọn quyết định chế độ của nó; chế độ còn lại có giấy nền phù hợp. Màu được tinh chỉnh khi cần để chữ luôn dễ đọc.',
+    customHint: 'Chủ đề của riêng bạn trông giống nhau ở chế độ sáng và tối. Màu chỉ được tinh chỉnh khi chữ khó đọc.',
+    unsaved: 'Đang xem trước. Bấm Lưu để giữ lại.',
+    savedTheme: 'Đã lưu. Chủ đề của bạn được giữ trên thiết bị này.',
+    cancel: 'Hủy',
+    save: 'Lưu chủ đề',
   },
   notifications: {
     permission: {

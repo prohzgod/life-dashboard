@@ -1,8 +1,9 @@
 import { colors, type ColorToken, type ThemeName } from '@design/tokens';
-import { customInk, customPaper, presets, type PresetId, type ThemeSeeds } from '@design/themes';
+import { customInk, presets, type PresetId, type ThemeSeeds } from '@design/themes';
 
+export type CustomPalette = { id: 'custom'; background: string; main: string; mark: string };
 /** The colour theme chosen on this device: a preset, or your own three colours. */
-export type PaletteChoice = { id: PresetId } | { id: 'custom'; background: string; main: string; mark: string };
+export type PaletteChoice = { id: PresetId } | CustomPalette;
 
 export const PALETTE_STORAGE_KEY = 'life-dashboard:palette';
 /** The CSS for the chosen theme, kept so index.html can paint it before the app loads. */
@@ -175,37 +176,46 @@ export function deriveColors(s: ThemeSeeds, mode: ThemeName): ThemeTokens {
   };
 }
 
-/** The seeds for each mode of a custom theme: your background in its own mode, a quiet paper in the other. */
-export function customSeeds(c: { background: string; main: string; mark: string }): Record<ThemeName, ThemeSeeds> {
-  const bgMode: ThemeName = isDark(c.background) ? 'dark' : 'light';
-  const seedsFor = (mode: ThemeName): ThemeSeeds => {
-    const paper = mode === bgMode ? c.background : mix(customPaper[mode], c.main, 0.05);
-    const ink = mix(customInk[mode], c.main, 0.08);
-    const surface = mix(paper, ink, mode === 'dark' ? 0.06 : 0.055);
-    // The main colour, lifted or deepened so it holds up on this mode's paper.
-    const field = mode === bgMode ? c.main : readable(c.main, paper, ink, 3);
-    return { paper, surface, ink, field, mark: mode === bgMode ? c.mark : readable(c.mark, paper, ink, 3) };
-  };
-  return { light: seedsFor('light'), dark: seedsFor('dark') };
+/**
+ * Your own theme is one look: your background exactly as picked, in light and dark alike, with ink
+ * that reads on it. The main colour and accent are adjusted only as far as readability needs.
+ */
+export function customSeeds(c: Omit<CustomPalette, 'id'>): { seeds: ThemeSeeds; mode: ThemeName } {
+  const mode: ThemeName = isDark(c.background) ? 'dark' : 'light';
+  const paper = c.background;
+  const ink = mix(customInk[mode], c.main, 0.08);
+  const surface = mix(paper, ink, mode === 'dark' ? 0.07 : 0.055);
+  return { mode, seeds: { paper, surface, ink, field: readable(c.main, paper, ink, 3), mark: readable(c.mark, paper, ink, 3) } };
 }
 
-export function seedsOf(choice: PaletteChoice): Record<ThemeName, ThemeSeeds> {
-  return choice.id === 'custom' ? customSeeds(choice) : presets[choice.id];
+/** The seeds and the mode they're worked out in, for each mode the app can show. */
+function seedsFor(choice: PaletteChoice, showing: ThemeName): { seeds: ThemeSeeds; mode: ThemeName } {
+  return choice.id === 'custom' ? customSeeds(choice) : { seeds: presets[choice.id][showing], mode: showing };
+}
+
+/** The seeds a theme shows in a mode, for previews. */
+export function previewSeeds(choice: PaletteChoice, showing: ThemeName): ThemeSeeds {
+  return seedsFor(choice, showing).seeds;
 }
 
 /** The colours charts and other code read, for the chosen theme and mode. */
-export function paletteColors(choice: PaletteChoice, mode: ThemeName): Record<ColorToken, string> {
-  return choice.id === 'grid' ? colors[mode] : deriveColors(seedsOf(choice)[mode], mode);
+export function paletteColors(choice: PaletteChoice, showing: ThemeName): Record<ColorToken, string> {
+  if (choice.id === 'grid') return colors[showing];
+  const { seeds, mode } = seedsFor(choice, showing);
+  return deriveColors(seeds, mode);
 }
 
 /** CSS that overrides tokens.css in both modes. Empty for Grid, which is tokens.css itself. */
 export function paletteCss(choice: PaletteChoice): string {
   if (choice.id === 'grid') return '';
-  const seeds = seedsOf(choice);
-  const block = (mode: ThemeName) =>
-    Object.entries(deriveColors(seeds[mode], mode))
-      .map(([k, v]) => `--${k}:${v};`)
-      .join('') + `color-scheme:${mode};`;
+  const block = (showing: ThemeName) => {
+    const { seeds, mode } = seedsFor(choice, showing);
+    return (
+      Object.entries(deriveColors(seeds, mode))
+        .map(([k, v]) => `--${k}:${v};`)
+        .join('') + `color-scheme:${mode};`
+    );
+  };
   const light = block('light');
   const dark = block('dark');
   // Selectors one step stronger than tokens.css, so they win in either mode.

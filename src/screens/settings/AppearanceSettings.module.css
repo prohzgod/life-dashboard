@@ -183,3 +183,15 @@
   font-size: var(--text-body-s-size);
   font-variant-numeric: tabular-nums;
 }
+
+.customActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.customActions [role='status'] {
+  margin-right: auto;
+}

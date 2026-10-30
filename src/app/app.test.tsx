@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { freshDatabase } from '@/data/testing';
@@ -95,19 +95,33 @@ describe('colour themes', () => {
   afterEach(() => setPalette({ id: 'grid' }));
 
   it('picks a theme, and makes your own from three colours', async () => {
-    renderAt('/settings/appearance');
+    const router = renderAt('/settings/appearance');
     await userEvent.click(screen.getByRole('radio', { name: /Nature/ }));
     expect(document.documentElement.dataset.palette).toBe('nature');
     expect(localStorage.getItem(PALETTE_CSS_KEY)).toContain('--bg:#F5F2EA');
 
+    // Your own previews as you edit, but nothing is kept until Save.
     await userEvent.click(screen.getByRole('radio', { name: /Your own/ }));
-    const background = screen.getByLabelText(/^Background/);
-    fireEvent.input(background, { target: { value: '#fdf6e3' } });
-    expect(readPalette()).toMatchObject({ id: 'custom', background: '#FDF6E3' });
+    fireEvent.input(screen.getByLabelText(/^Background/), { target: { value: '#fdf6e3' } });
     expect(document.getElementById('palette')?.textContent).toContain('--bg:#FDF6E3');
+    expect(readPalette()).toEqual({ id: 'nature' });
 
-    await userEvent.click(screen.getByRole('radio', { name: /Grid/ }));
-    expect(document.documentElement.hasAttribute('data-palette')).toBe(false);
+    await userEvent.click(screen.getByRole('button', { name: 'Save theme' }));
+    expect(readPalette()).toMatchObject({ id: 'custom', background: '#FDF6E3' });
+    expect(screen.getByText('Saved. Your theme stays on this device.')).toBeInTheDocument();
+    expect(localStorage.getItem(PALETTE_CSS_KEY)).toContain('--bg:#FDF6E3');
+
+    // A change you don't save is undone when you leave the page.
+    fireEvent.input(screen.getByLabelText(/^Background/), { target: { value: '#222222' } });
+    expect(document.getElementById('palette')?.textContent).toContain('--bg:#222222');
+    await act(() => router.navigate('/'));
+    await waitFor(() => expect(document.getElementById('palette')?.textContent).toContain('--bg:#FDF6E3'));
+  });
+
+  it('keeps your own background in light and dark', async () => {
+    setPalette({ id: 'custom', background: '#101820', main: '#2EC4B6', mark: '#FF3366' });
+    const css = document.getElementById('palette')?.textContent ?? '';
+    expect(css.match(/--bg:#101820/g)).toHaveLength(3);
   });
 });
 

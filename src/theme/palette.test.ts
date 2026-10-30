@@ -1,5 +1,5 @@
 import { presetIds, presets } from '@design/themes';
-import { contrast, customSeeds, deriveColors, paletteCss, readPalette, setPalette } from './palette';
+import { contrast, customSeeds, deriveColors, paletteColors, paletteCss, readPalette, setPalette } from './palette';
 
 const checks = (c: ReturnType<typeof deriveColors>) => ({
   body: contrast(c.ink, c.bg),
@@ -26,18 +26,19 @@ describe('colour themes', () => {
     ['a dark background', { background: '#101820', main: '#2EC4B6', mark: '#FF3366' }],
     ['a mid grey background', { background: '#B8B8B8', main: '#3344AA', mark: '#CC2222' }],
   ])('a custom theme with %s keeps text readable in both modes', (_, custom) => {
-    const seeds = customSeeds(custom);
-    for (const mode of ['light', 'dark'] as const) {
-      const r = checks(deriveColors(seeds[mode], mode));
-      expect(r.body).toBeGreaterThanOrEqual(4.5);
-      expect(r.links).toBeGreaterThanOrEqual(4.5);
-      expect(r.onField).toBeGreaterThanOrEqual(3);
-    }
+    const { seeds, mode } = customSeeds(custom);
+    const r = checks(deriveColors(seeds, mode));
+    expect(r.body).toBeGreaterThanOrEqual(4.5);
+    expect(r.links).toBeGreaterThanOrEqual(4.5);
+    expect(r.onField).toBeGreaterThanOrEqual(3);
   });
 
-  it('uses your background in its own mode', () => {
-    expect(customSeeds({ background: '#101820', main: '#2EC4B6', mark: '#FF3366' }).dark.paper).toBe('#101820');
-    expect(customSeeds({ background: '#FAF0E6', main: '#2EC4B6', mark: '#FF3366' }).light.paper).toBe('#FAF0E6');
+  it('shows your background exactly as picked, in light and dark alike', () => {
+    for (const background of ['#101820', '#FAF0E6']) {
+      const choice = { id: 'custom' as const, background, main: '#2EC4B6', mark: '#FF3366' };
+      expect(paletteColors(choice, 'light').bg).toBe(background);
+      expect(paletteColors(choice, 'dark').bg).toBe(background);
+    }
   });
 
   it('adds no CSS for Grid, and saves the choice on this device', () => {
