@@ -1,11 +1,17 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
+/* A row in a plan: a well, or raised glass while it is open and important. */
 .plan {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  min-height: 46px;
-  padding: 4px 4px;
-  border-top: 1px solid var(--line-soft);
+  gap: var(--space-3h);
+  min-height: 64px;
+  padding: var(--space-2h) var(--space-3h) var(--space-2h) var(--space-2h);
+  border-radius: var(--radius-row);
+  background: var(--well);
+}
+
+.raised {
+  border: 1px solid var(--line);
+  background: var(--glass-2);
 }
 
 .body {
@@ -17,9 +23,13 @@
 }
 
 .planTitle {
-  font-size: 14px;
+  font-size: var(--text-body-size);
   font-weight: 500;
-  line-height: 20px;
+  line-height: 1.4;
+}
+
+.raised .planTitle {
+  font-weight: 600;
 }
 
 .doneTitle {
@@ -47,8 +57,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px var(--space-3);
-  color: var(--ink-3);
+  gap: 2px var(--space-2h);
+  color: var(--ink-2);
   font-size: var(--text-caption-size);
   line-height: var(--text-caption-line);
 }
@@ -66,13 +76,19 @@
 }
 
 .rolled {
-  color: var(--warning);
+  color: var(--warn-ink);
   font-weight: 600;
 }
 
 .high {
-  color: var(--danger-ink);
+  flex: none;
+  padding: 5px var(--space-2h);
+  border-radius: var(--radius-pill);
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  font-size: var(--text-caption-size);
   font-weight: 600;
+  line-height: 1;
 }
 
 .when {

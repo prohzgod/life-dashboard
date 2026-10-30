@@ -44,7 +44,7 @@ export function TaskItem({ task, today, lookups, variant = 'compact', selected, 
       checked={done}
       onToggle={() => void toggleTask(task, today)}
       label={done ? t.markNotDone(task.title) : t.markDone(task.title)}
-      size={variant === 'plan' ? 'md' : 'sm'}
+      size={variant === 'plan' ? 'lg' : 'sm'}
     />
   );
   const title = onOpen ? (
@@ -76,7 +76,7 @@ export function TaskItem({ task, today, lookups, variant = 'compact', selected, 
   }
 
   return (
-    <li className={cx(styles.plan, selected && styles.selected)}>
+    <li className={cx(styles.plan, !done && task.priority === 1 && styles.raised, selected && styles.selected)}>
       {check}
       <div className={styles.body}>
         <span className={cx(styles.planTitle, done && styles.doneTitle)}>{title}</span>
@@ -100,10 +100,10 @@ export function TaskItem({ task, today, lookups, variant = 'compact', selected, 
             </span>
           )}
           {rolled > 0 && <span className={styles.rolled}>{rolledOverText(rolled, task.doOn!)}</span>}
-          {task.priority === 1 && !done && <span className={styles.high}>{t.highPriority}</span>}
         </span>
       </div>
       {when && <span className={styles.when}>{when}</span>}
+      {task.priority === 1 && !done && <span className={styles.high}>{t.highPriority}</span>}
     </li>
   );
 }

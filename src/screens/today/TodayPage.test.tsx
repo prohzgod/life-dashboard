@@ -40,7 +40,7 @@ describe('Today', () => {
     renderToday();
     await userEvent.click(await screen.findByRole('checkbox', { name: 'Mark “Water the plants” as done' }));
     expect(await screen.findByRole('checkbox', { name: 'Mark “Water the plants” as not done' })).toHaveAttribute('aria-checked', 'true');
-    expect(screen.getByText('1 of 1 done')).toBeInTheDocument();
+    expect(screen.getByText('1 / 1 done')).toBeInTheDocument();
   });
 
   it('says kindly when tasks rolled over, and moves them in one click', async () => {
@@ -57,8 +57,9 @@ describe('Today', () => {
     await userEvent.click(await screen.findByRole('checkbox', { name: 'Check in Meditate for today' }));
     expect(await screen.findByRole('checkbox', { name: 'Undo today’s Meditate' })).toHaveAttribute('aria-checked', 'true');
 
-    await userEvent.click(screen.getByRole('checkbox', { name: 'Add one glass to Water (0 of 8)' }));
-    expect(await screen.findByText('1 of 8 glasses today')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Add one glass to Water (0 of 8)' }));
+    expect(await screen.findByRole('img', { name: '1 of 8' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Add one glass to Water (1 of 8)' })).toBeInTheDocument();
   });
 
   it('saves mood, energy, sleep and a line', async () => {
@@ -87,7 +88,7 @@ describe('Today', () => {
     expect(await screen.findByRole('progressbar', { name: 'Run 10 km without stopping' })).toBeInTheDocument();
     // Only the nearest horizon stands in: the year goal appears as the parent, not as its own bar.
     expect(screen.queryByRole('progressbar', { name: 'Run a half-marathon' })).not.toBeInTheDocument();
-    expect(screen.getByText(/^Run a half-marathon, /)).toBeInTheDocument();
+    expect(screen.getByText(/^Run a half-marathon: /)).toBeInTheDocument();
     expect(screen.getByText(/Your weekly review picks this week’s focus/)).toBeInTheDocument();
   });
 });

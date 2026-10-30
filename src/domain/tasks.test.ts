@@ -1,4 +1,4 @@
-import { compareForDay, countViews, groupByDay, inView, rolledOverDays, sortForView, type TaskLike } from './tasks';
+import { compareForDay, countViews, doneByDay, groupByDay, inView, rhythmOf, rolledOverDays, sortForView, type TaskLike } from './tasks';
 
 const today = '2026-10-26';
 let n = 0;
@@ -70,5 +70,21 @@ describe('sorting', () => {
       ['2026-10-27', 1],
       ['2026-10-28', 2],
     ]);
+  });
+});
+
+describe('doneByDay', () => {
+  const done = (over: Partial<TaskLike>): TaskLike => ({ id: 'x', status: 'done', doOn: null, priority: null, sortKey: 'a', parentTaskId: null, completedAt: 'x', completedOn: null, ...over });
+
+  it('counts finished top-level tasks per day', () => {
+    const tasks = [done({ completedOn: '2026-10-26' }), done({ completedOn: '2026-10-26' }), done({ completedOn: '2026-10-27' }), done({ completedOn: '2026-10-27', parentTaskId: 'p' }), done({ status: 'open', completedOn: null })];
+    expect(doneByDay(tasks, ['2026-10-26', '2026-10-27', '2026-10-28'])).toEqual([2, 1, 0]);
+  });
+});
+
+describe('rhythmOf', () => {
+  it('places a day in its week (Monday first), month and year', () => {
+    expect(rhythmOf('2026-10-30')).toEqual({ weekDay: 5, monthDay: 30, monthDays: 31, yearDay: 303, yearDays: 365 });
+    expect(rhythmOf('2028-02-29')).toMatchObject({ weekDay: 2, monthDays: 29, yearDay: 60, yearDays: 366 });
   });
 });

@@ -3,14 +3,15 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import type { Day } from '@/domain/days';
 import { getAttachment, getDailyEntry, saveDailyEntry, savePhotoOfTheDay, type DailyEntry } from '@/data';
 import { Icon } from '@/components/icons/Icon';
-import { Card } from '@/components/ui';
+import { Card, EnergyMeter, MoodPicker } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
 import { useT } from '@/i18n';
 import { prepareImage } from '@/lib/images';
 import { useObjectUrl } from '@/lib/useObjectUrl';
 import styles from './Today.module.css';
 
-export function CheckInCard({ today }: { today: Day }) {
+/** The daily check-in: the screen's one dark panel. Mood, energy, sleep, one line and a photo. */
+export function CheckInCard({ today, className }: { today: Day; className?: string }) {
   const t = useT().today.checkIn;
   const entry = useLiveQuery(async () => (await getDailyEntry(today)) ?? null, [today]);
   const photo = useLiveQuery(async () => (entry?.photoId ? ((await getAttachment(entry.photoId)) ?? null) : null), [entry?.photoId]);
@@ -20,19 +21,15 @@ export function CheckInCard({ today }: { today: Day }) {
   const save = (fields: Parameters<typeof saveDailyEntry>[1]) => void saveDailyEntry(today, fields);
 
   return (
-    <Card title={t.title} meta={t.meta} className={cx(styles.card, styles.checkIn)}>
-      <Scale label={t.mood} options={t.moods} value={entry?.mood ?? null} onChange={(mood) => save({ mood })} />
-      <Scale label={t.energy} options={t.energies} value={entry?.energy ?? null} onChange={(energy) => save({ energy })} />
+    <Card title={t.title} meta={t.meta} variant="panel" className={cx(styles.checkIn, className)}>
+      <MoodPicker label={t.mood} options={t.moods} value={entry?.mood ?? null} onChange={(mood) => save({ mood })} />
+      <EnergyMeter label={t.energy} options={t.energies} value={entry?.energy ?? null} onChange={(energy) => save({ energy })} />
       {entry !== undefined && <SleepRow key={`${today}-${entry?.sleepMinutes ?? 'none'}`} minutes={entry?.sleepMinutes ?? null} onSave={(sleepMinutes) => save({ sleepMinutes })} />}
-      <div className={styles.lineRow}>
+      <div className={styles.note}>
         {entry !== undefined && <LineField key={`${today}-${entry?.id ?? 'new'}`} entry={entry} onSave={(line) => save({ line })} />}
-        <button
-          type="button"
-          className={styles.photoButton}
-          aria-label={photoUrl ? t.changePhoto : t.addPhoto}
-          onClick={() => fileRef.current?.click()}
-        >
-          {photoUrl ? <img src={photoUrl} alt="" className={styles.photoThumb} /> : <Icon name="camera" size={18} />}
+        <span className={styles.noteStatus}>{t.autosave}</span>
+        <button type="button" className={styles.photoButton} aria-label={photoUrl ? t.changePhoto : t.addPhoto} onClick={() => fileRef.current?.click()}>
+          {photoUrl ? <img src={photoUrl} alt="" className={styles.photoThumb} /> : <Icon name="camera" size={21} />}
         </button>
         <input
           ref={fileRef}
@@ -52,30 +49,6 @@ export function CheckInCard({ today }: { today: Day }) {
   );
 }
 
-function Scale({ label, options, value, onChange }: { label: string; options: string[]; value: number | null; onChange: (v: number | null) => void }) {
-  return (
-    <div className={styles.scale} role="group" aria-label={label}>
-      <span className={styles.scaleLabel}>{label}</span>
-      <div className={styles.scaleOptions}>
-        {options.map((option, i) => {
-          const selected = value === i + 1;
-          return (
-            <button
-              key={option}
-              type="button"
-              aria-pressed={selected}
-              className={cx(styles.scaleOption, selected && styles.scaleSelected)}
-              onClick={() => onChange(selected ? null : i + 1)}
-            >
-              {option}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 function SleepRow({ minutes, onSave }: { minutes: number | null; onSave: (minutes: number | null) => void }) {
   const t = useT().today.checkIn;
   const [editing, setEditing] = useState(false);
@@ -90,35 +63,34 @@ function SleepRow({ minutes, onSave }: { minutes: number | null; onSave: (minute
     setEditing(false);
   }
 
-  if (editing) {
-    return (
-      <form className={styles.sleep} onSubmit={submit}>
-        <span className={styles.sleepLabel}>
-          <Icon name="moon" size={16} />
-          {t.sleep}
-        </span>
-        <span className={styles.sleepInputs}>
-          <input aria-label={t.hoursSlept} type="number" min={0} max={24} value={hours} onChange={(e) => setHours(e.target.value)} autoFocus />
-          {t.h}
-          <input aria-label={t.minutes} type="number" min={0} max={59} step={5} value={mins} onChange={(e) => setMins(e.target.value)} />
-          {t.m}
-          <button type="submit" className={styles.sleepSave}>
-            {t.save}
-          </button>
-        </span>
-      </form>
-    );
-  }
   return (
-    <div className={styles.sleep}>
-      <span className={styles.sleepLabel}>
-        <Icon name="moon" size={16} />
-        {t.sleep} {minutes !== null ? <strong className={styles.sleepValue}>{`${Math.floor(minutes / 60)}${t.h} ${String(minutes % 60).padStart(2, '0')}${t.m}`}</strong> : <span className={styles.sleepNone}>{t.notLogged}</span>}
-      </span>
-      <button type="button" className={styles.sleepEdit} onClick={() => setEditing(true)}>
-        {minutes === null ? t.add : t.edit}
-      </button>
-    </div>
+    <form className={styles.sleep} onSubmit={submit}>
+      <Icon name="moon" size={22} />
+      <div className={styles.sleepText}>
+        <span className={styles.sleepLabel}>{t.sleep}</span>
+        {editing ? (
+          <span className={styles.sleepInputs}>
+            <input aria-label={t.hoursSlept} type="number" min={0} max={24} value={hours} onChange={(e) => setHours(e.target.value)} autoFocus />
+            {t.h}
+            <input aria-label={t.minutes} type="number" min={0} max={59} step={5} value={mins} onChange={(e) => setMins(e.target.value)} />
+            {t.m}
+          </span>
+        ) : minutes !== null ? (
+          <strong className={styles.sleepValue}>{`${Math.floor(minutes / 60)}${t.h} ${String(minutes % 60).padStart(2, '0')}${t.m}`}</strong>
+        ) : (
+          <span className={styles.sleepNone}>{t.notLogged}</span>
+        )}
+      </div>
+      {editing ? (
+        <button type="submit" className={styles.sleepButton}>
+          {t.save}
+        </button>
+      ) : (
+        <button type="button" className={styles.sleepButton} onClick={() => setEditing(true)}>
+          {minutes === null ? t.add : t.edit}
+        </button>
+      )}
+    </form>
   );
 }
 
@@ -139,12 +111,13 @@ function LineField({ entry, onSave }: { entry: DailyEntry | null; onSave: (line:
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
   return (
-    <input
-      className={styles.lineInput}
+    <textarea
+      className={styles.noteInput}
       aria-label={t.lineLabel}
       placeholder={t.linePlaceholder}
       value={value}
       maxLength={280}
+      rows={3}
       onChange={(e) => {
         const text = e.target.value;
         setValue(text);
@@ -153,6 +126,7 @@ function LineField({ entry, onSave }: { entry: DailyEntry | null; onSave: (line:
       }}
       onBlur={() => commit(value)}
       onKeyDown={(e) => {
+        // One line: Enter saves rather than starting a new one.
         if (e.key === 'Enter') {
           e.preventDefault();
           commit(value);

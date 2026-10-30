@@ -85,3 +85,17 @@ export function countViews(tasks: readonly TaskLike[], today: Day): Record<TaskV
 export function upcomingWindow(today: Day, days: number): { from: Day; to: Day } {
   return { from: addDays(today, 1), to: addDays(today, days) };
 }
+
+/** How many top-level tasks were finished on each of `days` (by their local completion day). */
+export function doneByDay(tasks: readonly TaskLike[], days: readonly Day[]): number[] {
+  return days.map((day) => tasks.filter((t) => t.status === 'done' && !t.parentTaskId && t.completedOn === day).length);
+}
+
+/** Today's place in its week, month and year, for the rhythm capsules on Today. */
+export function rhythmOf(today: Day): { weekDay: number; monthDay: number; monthDays: number; yearDay: number; yearDays: number } {
+  const [y, m, d] = today.split('-').map(Number) as [number, number, number];
+  const weekDay = ((new Date(y, m - 1, d).getDay() + 6) % 7) + 1;
+  const monthDays = new Date(y, m, 0).getDate();
+  const yearDays = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0 ? 366 : 365;
+  return { weekDay, monthDay: d, monthDays, yearDay: diffDays(`${y}-01-01`, today) + 1, yearDays };
+}

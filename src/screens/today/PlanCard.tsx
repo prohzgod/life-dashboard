@@ -2,45 +2,49 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { Link, useNavigate } from 'react-router-dom';
 import type { Day } from '@/domain/days';
 import { inView, rolledOverDays, sortForView } from '@/domain/tasks';
-import { captureTask, moveRolledOverToToday, tasksRepo, type Task } from '@/data';
+import { captureTask, moveRolledOverToToday, planTaskForToday, tasksRepo, type Task } from '@/data';
+import { Icon } from '@/components/icons/Icon';
 import { QuickAddField } from '@/components/tasks/QuickAddField';
 import { TaskItem } from '@/components/tasks/TaskItem';
 import { useTaskLookups } from '@/components/tasks/useTaskLookups';
-import { Button, Card } from '@/components/ui';
+import { ArrowLink, Button, Card } from '@/components/ui';
+import { cx } from '@/components/ui/cx';
 import { useT } from '@/i18n';
-import { formatMinutes } from '@/lib/format';
 import { withCompletedOn } from '@/lib/taskView';
 import styles from './Today.module.css';
 
-export function PlanCard({ today }: { today: Day }) {
+/** How many Anytime tasks to offer for today. */
+const ANYTIME_SHOWN = 4;
+
+/** Today's plan: add a task, tick them off, and pull something in from Anytime. On phones, done tasks fold into one line. */
+export function PlanCard({ today, compact = false, className }: { today: Day; compact?: boolean; className?: string }) {
   const t = useT().today.plan;
   const navigate = useNavigate();
   const lookups = useTaskLookups();
-  const tasks = useLiveQuery(async () => {
+  const data = useLiveQuery(async () => {
     const all = withCompletedOn(await tasksRepo.list());
-    return sortForView(all.filter((t) => inView(t, 'today', today)), 'today');
+    return {
+      tasks: sortForView(all.filter((t) => inView(t, 'today', today)), 'today'),
+      anytime: sortForView(all.filter((t) => inView(t, 'anytime', today)), 'anytime').slice(0, ANYTIME_SHOWN),
+    };
   }, [today]);
+  const tasks = data?.tasks;
 
   const done = tasks?.filter((t) => t.status === 'done').length ?? 0;
   const open = tasks?.filter((t) => t.status !== 'done') ?? [];
-  const minutesLeft = open.reduce((sum, t) => sum + (t.estimateMin ?? 0), 0);
   const rolled = open.filter((t) => rolledOverDays(t, today) > 0).length;
-  const meta = tasks?.length
-    ? `${t.meta(done, tasks.length)}${minutesLeft ? t.left(formatMinutes(minutesLeft)) : ''}`
-    : undefined;
+  // Phones show what's left and fold the finished ones into a link.
+  const shown = compact && open.length ? open : (tasks ?? []);
+  const folded = (tasks?.length ?? 0) - shown.length;
 
-  const open_ = (task: Task) => navigate(`/tasks?view=today&task=${task.id}`);
+  const openTask = (task: Task) => navigate(`/tasks?view=today&task=${task.id}`);
 
   return (
     <Card
       title={t.title}
-      meta={meta}
-      className={styles.card}
-      action={
-        <Link to="/tasks?view=today" className={styles.cardLink}>
-          {t.allTasks}
-        </Link>
-      }
+      meta={tasks?.length ? t.doneOf(done, tasks.length) : undefined}
+      className={cx(styles.plan, className)}
+      action={<ArrowLink to="/tasks?view=today" label={t.open} />}
     >
       <QuickAddField
         label={t.addLabel}
@@ -57,14 +61,37 @@ export function PlanCard({ today }: { today: Day }) {
           </Button>
         </div>
       )}
-      {tasks && tasks.length > 0 ? (
+      {shown.length > 0 ? (
         <ul className={styles.taskList} aria-label={t.list}>
-          {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} today={today} lookups={lookups} variant="plan" onOpen={open_} />
+          {shown.map((task) => (
+            <TaskItem key={task.id} task={task} today={today} lookups={lookups} variant="plan" onOpen={openTask} />
           ))}
         </ul>
       ) : (
         tasks && <p className={styles.quietEmpty}>{t.empty}</p>
+      )}
+      {folded > 0 && (
+        <Link to="/tasks?view=today" className={styles.foldLink}>
+          {t.moreDone(folded)}
+        </Link>
+      )}
+      {!compact && data && data.anytime.length > 0 && (
+        <div className={styles.anytime}>
+          <div className={styles.anytimeHead}>
+            <span className={styles.anytimeTitle}>{t.anytime}</span>
+            <span className={styles.anytimeHint}>{t.anytimeHint}</span>
+          </div>
+          <ul className={styles.anytimeList}>
+            {data.anytime.map((task) => (
+              <li key={task.id}>
+                <button type="button" className={styles.anytimeChip} aria-label={t.addToToday(task.title)} onClick={() => void planTaskForToday(task.id, today)}>
+                  <Icon name="plus" size={16} strokeWidth={2} />
+                  {task.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </Card>
   );

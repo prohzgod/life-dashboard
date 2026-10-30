@@ -28,7 +28,7 @@ describe('phone shell', () => {
     expect(await screen.findByRole('list', { name: 'Home widgets' })).toBeInTheDocument();
     await userEvent.click(within(tabs).getByRole('link', { name: 'Today' }));
     expect(router.state.location.pathname).toBe('/today');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Today' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /^Good (morning|afternoon|evening)\./ })).toBeInTheDocument();
   });
 
   it('pushes other screens with a ‹ Home back link', async () => {

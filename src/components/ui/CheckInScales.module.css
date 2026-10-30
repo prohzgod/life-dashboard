@@ -1,0 +1,73 @@
+.group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: var(--space-3);
+  padding: 0;
+  color: var(--on-panel-2);
+  font-size: var(--text-label-size);
+}
+
+.moods,
+.energies {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-1);
+}
+
+.energies {
+  align-items: flex-end;
+  gap: var(--space-1h);
+}
+
+.choice {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--on-panel-2);
+  font-size: var(--text-caption-size);
+  white-space: nowrap;
+}
+
+.on {
+  color: var(--on-panel);
+  font-weight: 600;
+}
+
+.face {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: var(--panel-well);
+  color: var(--on-panel);
+  transition: background-color var(--dur-base) var(--ease);
+}
+
+.on .face {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  background: var(--panel-well);
+  transition: background-color var(--dur-base) var(--ease);
+}
+
+.filled {
+  background: var(--on-panel);
+}

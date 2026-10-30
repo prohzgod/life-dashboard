@@ -13,3 +13,4 @@ export { ArrowLink, IconButton } from './IconButton';
 export { HatchBar, ProgressCapsule, type ProgressTone } from './Progress';
 export { WarnNote } from './WarnNote';
 export { WeekDots, type DotState } from './WeekDots';
+export { EnergyMeter, MoodPicker } from './CheckInScales';

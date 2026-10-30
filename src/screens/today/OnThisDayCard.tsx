@@ -2,44 +2,26 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { Link } from 'react-router-dom';
 import type { Day } from '@/domain/days';
 import { onThisDay } from '@/data';
-import { Icon } from '@/components/icons/Icon';
-import { cx } from '@/components/ui/cx';
+import { Card } from '@/components/ui';
 import { year } from '@/domain/days';
 import { useT } from '@/i18n';
 import { useObjectUrl } from '@/lib/useObjectUrl';
 import styles from './Today.module.css';
 
-export function OnThisDayCard({ today }: { today: Day }) {
+/** A line or photo from this date in an earlier year. Shows only when there is one. */
+export function OnThisDayCard({ today, className }: { today: Day; className?: string }) {
   const t = useT().today.memory;
   const memory = useLiveQuery(() => onThisDay(today), [today]);
   const photoUrl = useObjectUrl(memory?.photo?.thumbBlob ?? memory?.photo?.blob);
-  if (memory === undefined) return null;
+  if (!memory) return null;
 
   return (
-    <section className={cx(styles.card, styles.memory)} aria-label={t.label}>
-      <div className={styles.memoryPhoto}>
-        {photoUrl ? (
-          <img src={photoUrl} alt={t.photoAlt} className={styles.memoryImage} />
-        ) : (
-          <>
-            <Icon name="image" size={20} />
-            <span className={styles.memoryPhotoLabel}>{t.photo}</span>
-          </>
-        )}
-      </div>
-      <div className={styles.memoryText}>
-        <span className={styles.memoryEyebrow}>{t.eyebrow(memory ? year(memory.entry.day) : null)}</span>
-        {memory ? (
-          <>
-            <p className={styles.memoryQuote}>{memory.entry.line ? `“${memory.entry.line}”` : t.photoOnly}</p>
-            <Link to={`/library/day/${memory.entry.day}`} className={styles.cardLink}>
-              {t.open}
-            </Link>
-          </>
-        ) : (
-          <p className={styles.memoryEmpty}>{t.empty}</p>
-        )}
-      </div>
-    </section>
+    <Card title={t.eyebrow(year(memory.entry.day))} className={className} aria-label={t.label}>
+      {photoUrl && <img src={photoUrl} alt={t.photoAlt} className={styles.memoryImage} />}
+      <p className={styles.memoryQuote}>{memory.entry.line ? `“${memory.entry.line}”` : t.photoOnly}</p>
+      <Link to={`/library/day/${memory.entry.day}`} className={styles.pillLink}>
+        {t.open}
+      </Link>
+    </Card>
   );
 }

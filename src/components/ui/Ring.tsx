@@ -12,14 +12,14 @@ type RingProps = {
 };
 
 /** A circular progress ring with optional content in the middle. */
-export function Ring({ percent, size, stroke = 6, color = 'var(--primary)', children, label }: RingProps) {
+export function Ring({ percent, size, stroke = 6, color = 'var(--accent)', children, label }: RingProps) {
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const value = Math.min(100, Math.max(0, percent));
   return (
     <span className={styles.ring} style={{ width: size, height: size }} role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--track)" strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--well-line)" strokeWidth={stroke} />
         <circle
           cx={size / 2}
           cy={size / 2}

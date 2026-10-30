@@ -139,6 +139,11 @@ export async function deleteTask(id: string): Promise<void> {
   await tasksRepo.remove(id);
 }
 
+/** Plans one task for today (from Anytime on the Today screen). */
+export async function planTaskForToday(id: string, today: Day): Promise<void> {
+  await tasksRepo.update(id, { doOn: today, status: 'open' });
+}
+
 /** Moves every rolled-over task (planned before today, still open) onto today. */
 export async function moveRolledOverToToday(today: Day): Promise<number> {
   const rolled = await tasksRepo.list((t) => t.status === 'open' && !!t.doOn && t.doOn < today && !t.parentTaskId);

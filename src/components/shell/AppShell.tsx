@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { mobileChrome } from '@/app/mobileChrome';
 import { useT } from '@/i18n';
@@ -12,6 +12,7 @@ import { QuickCapture } from './QuickCapture';
 import { TabBar } from './TabBar';
 import { TopNav } from './TopNav';
 import { useReminders } from './useReminders';
+import { ShellActionsContext } from './shellActions';
 
 type Overlay = 'search' | 'capture' | null;
 
@@ -52,6 +53,7 @@ function Shell() {
   }, [pathname]);
 
   const close = () => setOverlay(null);
+  const actions = useMemo(() => ({ openCapture: () => setOverlay('capture'), openSearch: () => setOverlay('search') }), []);
 
   if (isMobile) {
     const chrome = mobileChrome(pathname, search);
@@ -67,7 +69,9 @@ function Shell() {
               {chrome.back.label}
             </Link>
           )}
-          <Outlet />
+          <ShellActionsContext.Provider value={actions}>
+            <Outlet />
+          </ShellActionsContext.Provider>
         </main>
         {!chrome.hideTabBar && <TabBar active={chrome.tab} onCapture={() => setOverlay('capture')} />}
         <CommandPalette open={overlay === 'search'} onClose={close} />
@@ -83,7 +87,9 @@ function Shell() {
       </a>
       <TopNav onSearch={() => setOverlay('search')} />
       <main id="main" className={styles.main} tabIndex={-1}>
-        <Outlet />
+        <ShellActionsContext.Provider value={actions}>
+          <Outlet />
+        </ShellActionsContext.Provider>
       </main>
       <CommandPalette open={overlay === 'search'} onClose={close} />
       <QuickCapture open={overlay === 'capture'} onClose={close} />

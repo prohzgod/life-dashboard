@@ -6,11 +6,39 @@ export const today = {
   dayWeek: (day: number, week: number) => `Day ${day}, week ${week}`,
   yearSoFar: 'Year so far',
   planMyDay: 'Plan my day',
+  hero: {
+    yearGone: (y: number) => `of ${y} gone`,
+    day: 'day of the year',
+    week: 'week of the year',
+  },
+  rhythm: {
+    label: 'Your day, week, month and year',
+    today: 'Today',
+    tasks: (done: number, total: number) => `${done}/${total} tasks`,
+    week: (w: number) => `Week ${w}`,
+    weekDay: (d: number) => `day ${d}/7`,
+    daysLeft: (n: number): string => (n === 1 ? '1 day left' : `${n} days left`),
+  },
+  week: {
+    title: 'This week',
+    done: (w: number) => `tasks done, week ${w}`,
+    bars: (days: string) => `Tasks done this week: ${days}`,
+    today: (n: number): string => (n === 1 ? '1 task' : `${n} tasks`),
+    open: 'Open Progress',
+  },
+  vision: {
+    title: 'Vision board',
+    goal: (y: number) => `Goal ${y}`,
+    empty: 'Pin a picture to your Vision board and it will show here.',
+    open: 'Open your Vision board',
+  },
   focus: {
     title: 'This week’s focus',
     goals: 'Goals',
     empty: 'No active goals right now. Pick up to three in your weekly review.',
     hint: 'Showing your nearest goals. Your weekly review picks this week’s focus.',
+    planned: (value: string) => `planned: ${value}`,
+    open: 'Open Goals',
   },
   agenda: {
     title: 'Agenda',
@@ -21,6 +49,7 @@ export const today = {
     allDay: 'All day',
     timeBlockOf: (area: string) => `Time block, ${area}`,
     readOnly: (name: string) => `${name} (read-only)`,
+    nowLeft: (min: number) => `Happening now · ${min} min left`,
   },
   plan: {
     title: 'Today’s plan',
@@ -33,6 +62,12 @@ export const today = {
     planForToday: (n: number): string => (n === 1 ? 'Plan it for today' : 'Plan them for today'),
     list: 'Today’s tasks',
     empty: 'Nothing planned yet. Add something above, or pick from Anytime.',
+    doneOf: (done: number, total: number) => `${done} / ${total} done`,
+    open: 'Open all tasks',
+    anytime: 'Anytime',
+    anytimeHint: 'tap to add to today',
+    addToToday: (title: string) => `Add “${title}” to today`,
+    moreDone: (n: number) => `+${n} done · see all`,
   },
   habits: {
     title: 'Habits',
@@ -51,6 +86,8 @@ export const today = {
     undo: (title: string) => `Undo today’s ${title}`,
     addOne: (unit: string, title: string, value: number, target: number) => `Add one${unit ? ` ${unit}` : ''} to ${title} (${value} of ${target})`,
     checkIn: (title: string) => `Check in ${title} for today`,
+    short: 'Never miss twice',
+    ofTarget: (value: number, target: number) => `${value} of ${target}`,
   },
   checkIn: {
     title: 'Daily check-in',
@@ -73,6 +110,8 @@ export const today = {
     edit: 'edit',
     lineLabel: 'One line about today',
     linePlaceholder: 'One line worth remembering…',
+    autosave: 'Saves as you type',
+    sleepRange: (from: string, to: string) => `${from} → ${to}`,
   },
   memory: {
     label: 'On this day',

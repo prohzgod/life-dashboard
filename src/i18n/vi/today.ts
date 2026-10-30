@@ -7,11 +7,39 @@ export const today: Messages['today'] = {
   dayWeek: (day, week) => `Ngày ${day}, tuần ${week}`,
   yearSoFar: 'Năm nay đến giờ',
   planMyDay: 'Lên kế hoạch ngày',
+  hero: {
+    yearGone: (y) => `năm ${y} đã qua`,
+    day: 'ngày thứ',
+    week: 'tuần thứ',
+  },
+  rhythm: {
+    label: 'Ngày, tuần, tháng và năm của bạn',
+    today: 'Hôm nay',
+    tasks: (done, total) => `${done}/${total} việc`,
+    week: (w) => `Tuần ${w}`,
+    weekDay: (d) => `ngày ${d}/7`,
+    daysLeft: (n) => `còn ${n} ngày`,
+  },
+  week: {
+    title: 'Tiến độ tuần',
+    done: (w) => `việc xong · tuần ${w}`,
+    bars: (days) => `Việc xong tuần này: ${days}`,
+    today: (n) => `${n} việc`,
+    open: 'Mở Tiến độ',
+  },
+  vision: {
+    title: 'Bảng tầm nhìn',
+    goal: (y) => `Mục tiêu ${y}`,
+    empty: 'Ghim một bức ảnh lên Bảng tầm nhìn để thấy nó ở đây.',
+    open: 'Mở Bảng tầm nhìn',
+  },
   focus: {
     title: 'Trọng tâm tuần này',
     goals: 'Mục tiêu',
     empty: 'Hiện chưa có mục tiêu nào đang chạy. Chọn tối đa ba mục tiêu khi nhìn lại tuần.',
     hint: 'Đang hiện các mục tiêu gần nhất. Buổi nhìn lại tuần sẽ chọn trọng tâm tuần này.',
+    planned: (value) => `kế hoạch: ${value}`,
+    open: 'Mở mục tiêu',
   },
   agenda: {
     title: 'Lịch trình',
@@ -22,6 +50,7 @@ export const today: Messages['today'] = {
     allDay: 'Cả ngày',
     timeBlockOf: (area) => `Khung giờ, ${area}`,
     readOnly: (name) => `${name} (chỉ xem)`,
+    nowLeft: (min) => `Đang diễn ra · còn ${min} phút`,
   },
   plan: {
     title: 'Kế hoạch hôm nay',
@@ -34,6 +63,12 @@ export const today: Messages['today'] = {
     planForToday: () => 'Chuyển sang hôm nay',
     list: 'Việc hôm nay',
     empty: 'Chưa có kế hoạch. Thêm một việc ở trên, hoặc chọn từ mục Bất cứ lúc nào.',
+    doneOf: (done, total) => `${done} / ${total} xong`,
+    open: 'Mở tất cả việc',
+    anytime: 'Bất cứ lúc nào',
+    anytimeHint: 'bấm để thêm vào hôm nay',
+    addToToday: (title) => `Thêm “${title}” vào hôm nay`,
+    moreDone: (n) => `+${n} việc đã xong · xem tất cả`,
   },
   habits: {
     title: 'Thói quen',
@@ -52,6 +87,8 @@ export const today: Messages['today'] = {
     undo: (title) => `Hoàn tác ${title} hôm nay`,
     addOne: (unit, title, value, target) => `Thêm một${unit ? ` ${unit}` : ''} vào ${title} (${value}/${target})`,
     checkIn: (title) => `Đánh dấu ${title} hôm nay`,
+    short: 'Đừng bỏ lỡ hai lần',
+    ofTarget: (value, target) => `${value} trên ${target}`,
   },
   checkIn: {
     title: 'Ghi nhận hằng ngày',
@@ -74,6 +111,8 @@ export const today: Messages['today'] = {
     edit: 'sửa',
     lineLabel: 'Một dòng về hôm nay',
     linePlaceholder: 'Một dòng đáng nhớ…',
+    autosave: 'Tự động lưu',
+    sleepRange: (from, to) => `${from} → ${to}`,
   },
   memory: {
     label: 'Ngày này năm xưa',

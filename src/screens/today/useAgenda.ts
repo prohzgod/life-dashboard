@@ -27,6 +27,8 @@ export type AgendaEntry = {
   allDay: boolean;
   done: boolean;
   soon: string | null;
+  /** Happening right now: how far along (0–1) and the minutes left. */
+  now: { progress: number; minutesLeft: number } | null;
 };
 
 /** Today's events and time blocks in order, for the agenda strip and the Home widget. */
@@ -40,11 +42,13 @@ export function useAgenda(today: Day): { entries: AgendaEntry[]; calendars: stri
     const midnight = dayToDate(today).getTime();
     const at = (min: number) => midnight + min * 60_000;
     const entries: AgendaEntry[] = [
-      ...allDay.map((a) => ({ key: a.key, title: a.title, time: agenda.allDay, source: a.calendarName, tone: a.tone, block: false, allDay: true, done: false, soon: null })),
+      ...allDay.map((a) => ({ key: a.key, title: a.title, time: agenda.allDay, source: a.calendarName, tone: a.tone, block: false, allDay: true, done: false, soon: null, now: null })),
       ...[...timed]
         .sort((a, b) => a.startMin - b.startMin)
         .map((t) => {
-          const over = at(t.endMin) <= minute * 60_000;
+          const nowMs = minute * 60_000;
+          const over = at(t.endMin) <= nowMs;
+          const running = !t.done && at(t.startMin) <= nowMs && !over;
           return {
             key: t.key,
             title: t.title,
@@ -54,7 +58,10 @@ export function useAgenda(today: Day): { entries: AgendaEntry[]; calendars: stri
             block: t.kind === 'block',
             allDay: false,
             done: t.done || over,
-            soon: t.done ? null : startsIn(at(t.startMin), at(t.endMin), minute * 60_000),
+            soon: t.done ? null : startsIn(at(t.startMin), at(t.endMin), nowMs),
+            now: running
+              ? { progress: (nowMs - at(t.startMin)) / Math.max(1, at(t.endMin) - at(t.startMin)), minutesLeft: Math.max(1, Math.round((at(t.endMin) - nowMs) / 60_000)) }
+              : null,
           };
         }),
     ];
