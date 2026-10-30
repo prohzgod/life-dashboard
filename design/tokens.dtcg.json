@@ -1,1178 +1,700 @@
 {
- "$description": "Life Dashboard · Grid (W3C Design Tokens format). Colors have light and dark sets.",
- "color": {
-  "light": {
-   "bg": {
-    "$type": "color",
-    "$value": "#F8F7F3",
-    "$description": "The sheet: page background, white poster paper."
-   },
-   "surface": {
-    "$type": "color",
-    "$value": "#EDECE7",
-    "$description": "Panels and cards on `bg`, a step darker. No border, no shadow."
-   },
-   "raised": {
-    "$type": "color",
-    "$value": "#F8F7F3",
-    "$description": "The selected segment in a segmented control."
-   },
-   "sunken": {
-    "$type": "color",
-    "$value": "#E2DFDA",
-    "$description": "Filled controls (secondary buttons, options), wells and tracks inside panels."
-   },
-   "sunken-2": {
-    "$type": "color",
-    "$value": "#D6D4CE",
-    "$description": "Segmented-control tracks and pressed fills."
-   },
-   "subtle": {
-    "$type": "color",
-    "$value": "#EDECE7",
-    "$description": "Side panes (tree, filters, calendar options)."
-   },
-   "track": {
-    "$type": "color",
-    "$value": "#E2DFDA",
-    "$description": "Empty part of progress bars, empty day squares, disabled fills."
-   },
-   "line": {
-    "$type": "color",
-    "$value": "#D8D6D0",
-    "$description": "Hairlines between table rows; the edge of floating layers."
-   },
-   "line-soft": {
-    "$type": "color",
-    "$value": "#E4E3DE",
-    "$description": "Quiet dividers between list rows."
-   },
-   "line-strong": {
-    "$type": "color",
-    "$value": "#BAB7B0",
-    "$description": "Dashed drop zones and the add tile."
-   },
-   "control": {
-    "$type": "color",
-    "$value": "#7D8088",
-    "$description": "The 1px line under inputs; empty checkboxes and switches."
-   },
-   "ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Headlines, body text and the primary control."
-   },
-   "ink-2": {
-    "$type": "color",
-    "$value": "#2C303B",
-    "$description": "Secondary text and icons."
-   },
-   "ink-3": {
-    "$type": "color",
-    "$value": "#575B64",
-    "$description": "Captions and labels."
-   },
-   "ink-4": {
-    "$type": "color",
-    "$value": "#83868E",
-    "$description": "Decoration and disabled text only (not for reading)."
-   },
-   "inverse": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "The field: the ultramarine that floods a block (Today's year, the current review step, the Weekly review tile, chart ticks)."
-   },
-   "on-inverse": {
-    "$type": "color",
-    "$value": "#F8F7F3",
-    "$description": "Text and figures on the field."
-   },
-   "on-inverse-2": {
-    "$type": "color",
-    "$value": "#C2D1F3",
-    "$description": "Quiet text and tracks on the field."
-   },
-   "inverse-accent": {
-    "$type": "color",
-    "$value": "#F8F7F3",
-    "$description": "Labels on the field (never red on blue)."
-   },
-   "primary": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "The primary control: a square ink block. Checked states, focus ring."
-   },
-   "primary-hover": {
-    "$type": "color",
-    "$value": "#2C303B",
-    "$description": "Primary control on hover."
-   },
-   "on-primary": {
-    "$type": "color",
-    "$value": "#F8F7F3",
-    "$description": "Text on the primary control."
-   },
-   "on-primary-2": {
-    "$type": "color",
-    "$value": "#BAB7B0",
-    "$description": "Quiet text on the primary control."
-   },
-   "primary-soft": {
-    "$type": "color",
-    "$value": "#DAE5FD",
-    "$description": "A pale ultramarine fill: the selected row, a time block, the current day."
-   },
-   "primary-softer": {
-    "$type": "color",
-    "$value": "#EBF0FB",
-    "$description": "The palest ultramarine tint: today's column."
-   },
-   "primary-ink": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Ultramarine text on `primary-soft`."
-   },
-   "primary-line": {
-    "$type": "color",
-    "$value": "#9CB6F2",
-    "$description": "Dashed edge of a time block."
-   },
-   "link": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Links and quiet buttons (ultramarine)."
-   },
-   "accent": {
-    "$type": "color",
-    "$value": "#D9241B",
-    "$description": "The Swiss red mark: the wordmark square, today's marker, the one thing that needs you, text selection."
-   },
-   "accent-soft": {
-    "$type": "color",
-    "$value": "#FDE3DE",
-    "$description": "A pale red fill behind `accent-ink` text."
-   },
-   "accent-ink": {
-    "$type": "color",
-    "$value": "#9E1710",
-    "$description": "Red text on `accent-soft`."
-   },
-   "success": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Done and on pace: resolves to the ultramarine."
-   },
-   "success-soft": {
-    "$type": "color",
-    "$value": "#DAE5FD",
-    "$description": "Pale ultramarine behind done states."
-   },
-   "warning": {
-    "$type": "color",
-    "$value": "#D9241B",
-    "$description": "Behind pace: resolves to the red mark."
-   },
-   "warning-soft": {
-    "$type": "color",
-    "$value": "#FDE3DE",
-    "$description": "Pale red behind warnings."
-   },
-   "warning-ink": {
-    "$type": "color",
-    "$value": "#9E1710",
-    "$description": "Red text on `warning-soft`."
-   },
-   "danger": {
-    "$type": "color",
-    "$value": "#D9241B",
-    "$description": "Over budget, errors, destructive actions: the red mark."
-   },
-   "danger-soft": {
-    "$type": "color",
-    "$value": "#FDE3DE",
-    "$description": "Pale red behind errors."
-   },
-   "danger-ink": {
-    "$type": "color",
-    "$value": "#9E1710",
-    "$description": "Red text on `danger-soft`."
-   },
-   "health": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Area colour for Health: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "health-soft": {
-    "$type": "color",
-    "$value": "#EBF0FB",
-    "$description": "Pale fill for Health chips and events."
-   },
-   "health-ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Text on `health-soft`."
-   },
-   "career": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Area colour for Career: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "career-soft": {
-    "$type": "color",
-    "$value": "#EBF0FB",
-    "$description": "Pale fill for Career chips and events."
-   },
-   "career-ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Text on `career-soft`."
-   },
-   "finance": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Area colour for Finance: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "finance-soft": {
-    "$type": "color",
-    "$value": "#EBF0FB",
-    "$description": "Pale fill for Finance chips and events."
-   },
-   "finance-muted": {
-    "$type": "color",
-    "$value": "#DAE5FD",
-    "$description": "Past months in the spending chart."
-   },
-   "finance-ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Text on `finance-soft`."
-   },
-   "family": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Area colour for Family: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "family-soft": {
-    "$type": "color",
-    "$value": "#EBF0FB",
-    "$description": "Pale fill for Family chips and events."
-   },
-   "family-ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Text on `family-soft`."
-   },
-   "growth": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Area colour for Growth: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "growth-soft": {
-    "$type": "color",
-    "$value": "#EBF0FB",
-    "$description": "Pale fill for Growth chips and events."
-   },
-   "growth-ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Text on `growth-soft`."
-   },
-   "home": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Area colour for Home: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "home-soft": {
-    "$type": "color",
-    "$value": "#EBF0FB",
-    "$description": "Pale fill for Home chips and events."
-   },
-   "home-ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Text on `home-soft`."
-   },
-   "fun": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Area colour for Fun: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "fun-soft": {
-    "$type": "color",
-    "$value": "#EBF0FB",
-    "$description": "Pale fill for Fun chips and events."
-   },
-   "fun-ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Text on `fun-soft`."
-   },
-   "viz-soft": {
-    "$type": "color",
-    "$value": "#9CB6F2",
-    "$description": "Second chart series, short nights."
-   },
-   "mood-1": {
-    "$type": "color",
-    "$value": "#E2DFDA",
-    "$description": "Mood 1 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "mood-2": {
-    "$type": "color",
-    "$value": "#BBCBEC",
-    "$description": "Mood 2 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "mood-3": {
-    "$type": "color",
-    "$value": "#84A3EA",
-    "$description": "Mood 3 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "mood-4": {
-    "$type": "color",
-    "$value": "#4A72DE",
-    "$description": "Mood 4 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "mood-5": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Mood 5 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "heat-0": {
-    "$type": "color",
-    "$value": "#E2DFDA",
-    "$description": "Heatmap step 0 on the ultramarine ramp."
-   },
-   "heat-1": {
-    "$type": "color",
-    "$value": "#BBCBEC",
-    "$description": "Heatmap step 1 on the ultramarine ramp."
-   },
-   "heat-2": {
-    "$type": "color",
-    "$value": "#84A3EA",
-    "$description": "Heatmap step 2 on the ultramarine ramp."
-   },
-   "heat-3": {
-    "$type": "color",
-    "$value": "#4A72DE",
-    "$description": "Heatmap step 3 on the ultramarine ramp."
-   },
-   "heat-4": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "Heatmap step 4 on the ultramarine ramp."
-   },
-   "nav-bg": {
-    "$type": "color",
-    "$value": "#EDECE7",
-    "$description": "Sidebar background (paper, a step darker)."
-   },
-   "nav-surface": {
-    "$type": "color",
-    "$value": "#E2DFDA",
-    "$description": "Active sidebar item."
-   },
-   "nav-line": {
-    "$type": "color",
-    "$value": "#D8D6D0",
-    "$description": "Sidebar dividers."
-   },
-   "nav-ink": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Sidebar text."
-   },
-   "nav-ink-2": {
-    "$type": "color",
-    "$value": "#2C303B",
-    "$description": "Secondary sidebar text."
-   },
-   "nav-ink-3": {
-    "$type": "color",
-    "$value": "#575B64",
-    "$description": "Sidebar group labels."
-   },
-   "nav-success": {
-    "$type": "color",
-    "$value": "#1F40BE",
-    "$description": "The saved-on-this-device square."
-   },
-   "nav-accent": {
-    "$type": "color",
-    "$value": "#0F141E",
-    "$description": "Quick capture: the ink block."
-   },
-   "on-nav-accent": {
-    "$type": "color",
-    "$value": "#F8F7F3",
-    "$description": "Text on Quick capture."
-   }
+  "color": {
+    "light": {
+      "ink": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Main text, icons, headings"
+      },
+      "ink-2": {
+        "$value": "#474A55",
+        "$type": "color",
+        "$description": "Secondary text, inactive nav labels"
+      },
+      "ink-3": {
+        "$value": "#5C606C",
+        "$type": "color",
+        "$description": "Tertiary text, timestamps, done tasks, unchecked ring"
+      },
+      "glass": {
+        "$value": "rgba(255,255,255,0.56)",
+        "$type": "color",
+        "$description": "Card / nav / header surface (with backdrop blur)"
+      },
+      "glass-2": {
+        "$value": "rgba(255,255,255,0.74)",
+        "$type": "color",
+        "$description": "Raised surface inside a card: inputs, tiles, active rows, round buttons"
+      },
+      "line": {
+        "$value": "rgba(255,255,255,0.78)",
+        "$type": "color",
+        "$description": "1px border on glass surfaces (the 'glass edge')"
+      },
+      "well": {
+        "$value": "rgba(22,23,27,0.05)",
+        "$type": "color",
+        "$description": "Recessed rows: task rows, past events, chips"
+      },
+      "well-line": {
+        "$value": "rgba(22,23,27,0.10)",
+        "$type": "color",
+        "$description": "Borders of wells, progress tracks, ring track, dashed boxes"
+      },
+      "inverse": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Strong fill: active nav pill, primary button, done check, current event"
+      },
+      "on-inverse": {
+        "$value": "#FFFFFF",
+        "$type": "color",
+        "$description": "Text/icons on inverse"
+      },
+      "hatch": {
+        "$value": "rgba(22,23,27,0.14)",
+        "$type": "color",
+        "$description": "Diagonal stripes = remaining part of a progress bar"
+      },
+      "on-panel": {
+        "$value": "#F5F4F7",
+        "$type": "color",
+        "$description": "Text on panel"
+      },
+      "on-panel-2": {
+        "$value": "#B9B8C4",
+        "$type": "color",
+        "$description": "Secondary text on panel"
+      },
+      "panel-well": {
+        "$value": "rgba(255,255,255,0.09)",
+        "$type": "color",
+        "$description": "Controls inside panel"
+      },
+      "warn-bg": {
+        "$value": "#FFE7D6",
+        "$type": "color",
+        "$description": "Behind-schedule / missed / high-priority background"
+      },
+      "warn-ink": {
+        "$value": "#9A3A0B",
+        "$type": "color",
+        "$description": "Text on warn-bg, missed-day dashed ring"
+      },
+      "good": {
+        "$value": "#1F7A4D",
+        "$type": "color",
+        "$description": "Positive delta text (ahead of plan, streak kept)"
+      },
+      "danger": {
+        "$value": "#B42318",
+        "$type": "color",
+        "$description": "Destructive actions, errors"
+      },
+      "focus": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "2px focus outline, 2px offset"
+      },
+      "on-accent": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Text/icons on accent: ALWAYS dark"
+      }
+    },
+    "dark": {
+      "ink": {
+        "$value": "#F4F2F8",
+        "$type": "color",
+        "$description": "Main text, icons, headings"
+      },
+      "ink-2": {
+        "$value": "#CBC8D6",
+        "$type": "color",
+        "$description": "Secondary text, inactive nav labels"
+      },
+      "ink-3": {
+        "$value": "#A4A1B2",
+        "$type": "color",
+        "$description": "Tertiary text, timestamps, done tasks, unchecked ring"
+      },
+      "glass": {
+        "$value": "rgba(255,255,255,0.07)",
+        "$type": "color",
+        "$description": "Card / nav / header surface (with backdrop blur)"
+      },
+      "glass-2": {
+        "$value": "rgba(255,255,255,0.11)",
+        "$type": "color",
+        "$description": "Raised surface inside a card: inputs, tiles, active rows, round buttons"
+      },
+      "line": {
+        "$value": "rgba(255,255,255,0.12)",
+        "$type": "color",
+        "$description": "1px border on glass surfaces (the 'glass edge')"
+      },
+      "well": {
+        "$value": "rgba(255,255,255,0.06)",
+        "$type": "color",
+        "$description": "Recessed rows: task rows, past events, chips"
+      },
+      "well-line": {
+        "$value": "rgba(255,255,255,0.16)",
+        "$type": "color",
+        "$description": "Borders of wells, progress tracks, ring track, dashed boxes"
+      },
+      "inverse": {
+        "$value": "#F4F2F8",
+        "$type": "color",
+        "$description": "Strong fill: active nav pill, primary button, done check, current event"
+      },
+      "on-inverse": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Text/icons on inverse"
+      },
+      "hatch": {
+        "$value": "rgba(255,255,255,0.16)",
+        "$type": "color",
+        "$description": "Diagonal stripes = remaining part of a progress bar"
+      },
+      "on-panel": {
+        "$value": "#F5F4F7",
+        "$type": "color",
+        "$description": "Text on panel"
+      },
+      "on-panel-2": {
+        "$value": "#C3C0CE",
+        "$type": "color",
+        "$description": "Secondary text on panel"
+      },
+      "panel-well": {
+        "$value": "rgba(255,255,255,0.09)",
+        "$type": "color",
+        "$description": "Controls inside panel"
+      },
+      "warn-bg": {
+        "$value": "rgba(255,145,77,0.16)",
+        "$type": "color",
+        "$description": "Behind-schedule / missed / high-priority background"
+      },
+      "warn-ink": {
+        "$value": "#FFB68A",
+        "$type": "color",
+        "$description": "Text on warn-bg, missed-day dashed ring"
+      },
+      "good": {
+        "$value": "#7FE0AE",
+        "$type": "color",
+        "$description": "Positive delta text (ahead of plan, streak kept)"
+      },
+      "danger": {
+        "$value": "#FF9C94",
+        "$type": "color",
+        "$description": "Destructive actions, errors"
+      },
+      "focus": {
+        "$value": "#F4F2F8",
+        "$type": "color",
+        "$description": "2px focus outline, 2px offset"
+      },
+      "on-accent": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Text/icons on accent: ALWAYS dark"
+      }
+    },
+    "accent": {
+      "tangerine": {
+        "$value": "#FF7A45",
+        "$type": "color",
+        "$description": "Cam"
+      },
+      "butter": {
+        "$value": "#FFD25C",
+        "$type": "color",
+        "$description": "Vàng bơ"
+      },
+      "lime": {
+        "$value": "#CFF26B",
+        "$type": "color",
+        "$description": "Chanh"
+      },
+      "lavender": {
+        "$value": "#B9A6FF",
+        "$type": "color",
+        "$description": "Oải hương"
+      }
+    }
   },
-  "dark": {
-   "bg": {
-    "$type": "color",
-    "$value": "#0B0F18",
-    "$description": "The sheet: page background, white poster paper."
-   },
-   "surface": {
-    "$type": "color",
-    "$value": "#141823",
-    "$description": "Panels and cards on `bg`, a step darker. No border, no shadow."
-   },
-   "raised": {
-    "$type": "color",
-    "$value": "#282E3B",
-    "$description": "The selected segment in a segmented control."
-   },
-   "sunken": {
-    "$type": "color",
-    "$value": "#1F2430",
-    "$description": "Filled controls (secondary buttons, options), wells and tracks inside panels."
-   },
-   "sunken-2": {
-    "$type": "color",
-    "$value": "#282E3B",
-    "$description": "Segmented-control tracks and pressed fills."
-   },
-   "subtle": {
-    "$type": "color",
-    "$value": "#141823",
-    "$description": "Side panes (tree, filters, calendar options)."
-   },
-   "track": {
-    "$type": "color",
-    "$value": "#1F2430",
-    "$description": "Empty part of progress bars, empty day squares, disabled fills."
-   },
-   "line": {
-    "$type": "color",
-    "$value": "#303540",
-    "$description": "Hairlines between table rows; the edge of floating layers."
-   },
-   "line-soft": {
-    "$type": "color",
-    "$value": "#222630",
-    "$description": "Quiet dividers between list rows."
-   },
-   "line-strong": {
-    "$type": "color",
-    "$value": "#4D535E",
-    "$description": "Dashed drop zones and the add tile."
-   },
-   "control": {
-    "$type": "color",
-    "$value": "#70747E",
-    "$description": "The 1px line under inputs; empty checkboxes and switches."
-   },
-   "ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Headlines, body text and the primary control."
-   },
-   "ink-2": {
-    "$type": "color",
-    "$value": "#C9C7C2",
-    "$description": "Secondary text and icons."
-   },
-   "ink-3": {
-    "$type": "color",
-    "$value": "#9B9EA6",
-    "$description": "Captions and labels."
-   },
-   "ink-4": {
-    "$type": "color",
-    "$value": "#656972",
-    "$description": "Decoration and disabled text only (not for reading)."
-   },
-   "inverse": {
-    "$type": "color",
-    "$value": "#678DEE",
-    "$description": "The field: the ultramarine that floods a block (Today's year, the current review step, the Weekly review tile, chart ticks)."
-   },
-   "on-inverse": {
-    "$type": "color",
-    "$value": "#0B0F18",
-    "$description": "Text and figures on the field."
-   },
-   "on-inverse-2": {
-    "$type": "color",
-    "$value": "#222D47",
-    "$description": "Quiet text and tracks on the field."
-   },
-   "inverse-accent": {
-    "$type": "color",
-    "$value": "#0B0F18",
-    "$description": "Labels on the field (never red on blue)."
-   },
-   "primary": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "The primary control: a square ink block. Checked states, focus ring."
-   },
-   "primary-hover": {
-    "$type": "color",
-    "$value": "#C9C7C2",
-    "$description": "Primary control on hover."
-   },
-   "on-primary": {
-    "$type": "color",
-    "$value": "#0B0F18",
-    "$description": "Text on the primary control."
-   },
-   "on-primary-2": {
-    "$type": "color",
-    "$value": "#4D535E",
-    "$description": "Quiet text on the primary control."
-   },
-   "primary-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "A pale ultramarine fill: the selected row, a time block, the current day."
-   },
-   "primary-softer": {
-    "$type": "color",
-    "$value": "#171F30",
-    "$description": "The palest ultramarine tint: today's column."
-   },
-   "primary-ink": {
-    "$type": "color",
-    "$value": "#A0BDFF",
-    "$description": "Ultramarine text on `primary-soft`."
-   },
-   "primary-line": {
-    "$type": "color",
-    "$value": "#3D5590",
-    "$description": "Dashed edge of a time block."
-   },
-   "link": {
-    "$type": "color",
-    "$value": "#8DAFFE",
-    "$description": "Links and quiet buttons (ultramarine)."
-   },
-   "accent": {
-    "$type": "color",
-    "$value": "#F45B4B",
-    "$description": "The Swiss red mark: the wordmark square, today's marker, the one thing that needs you, text selection."
-   },
-   "accent-soft": {
-    "$type": "color",
-    "$value": "#451E19",
-    "$description": "A pale red fill behind `accent-ink` text."
-   },
-   "accent-ink": {
-    "$type": "color",
-    "$value": "#FEAC9F",
-    "$description": "Red text on `accent-soft`."
-   },
-   "success": {
-    "$type": "color",
-    "$value": "#8DAFFE",
-    "$description": "Done and on pace: resolves to the ultramarine."
-   },
-   "success-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Pale ultramarine behind done states."
-   },
-   "warning": {
-    "$type": "color",
-    "$value": "#F45B4B",
-    "$description": "Behind pace: resolves to the red mark."
-   },
-   "warning-soft": {
-    "$type": "color",
-    "$value": "#451E19",
-    "$description": "Pale red behind warnings."
-   },
-   "warning-ink": {
-    "$type": "color",
-    "$value": "#FEAC9F",
-    "$description": "Red text on `warning-soft`."
-   },
-   "danger": {
-    "$type": "color",
-    "$value": "#F45B4B",
-    "$description": "Over budget, errors, destructive actions: the red mark."
-   },
-   "danger-soft": {
-    "$type": "color",
-    "$value": "#451E19",
-    "$description": "Pale red behind errors."
-   },
-   "danger-ink": {
-    "$type": "color",
-    "$value": "#FEAC9F",
-    "$description": "Red text on `danger-soft`."
-   },
-   "health": {
-    "$type": "color",
-    "$value": "#678DEE",
-    "$description": "Area colour for Health: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "health-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Pale fill for Health chips and events."
-   },
-   "health-ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Text on `health-soft`."
-   },
-   "career": {
-    "$type": "color",
-    "$value": "#678DEE",
-    "$description": "Area colour for Career: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "career-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Pale fill for Career chips and events."
-   },
-   "career-ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Text on `career-soft`."
-   },
-   "finance": {
-    "$type": "color",
-    "$value": "#678DEE",
-    "$description": "Area colour for Finance: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "finance-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Pale fill for Finance chips and events."
-   },
-   "finance-muted": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Past months in the spending chart."
-   },
-   "finance-ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Text on `finance-soft`."
-   },
-   "family": {
-    "$type": "color",
-    "$value": "#678DEE",
-    "$description": "Area colour for Family: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "family-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Pale fill for Family chips and events."
-   },
-   "family-ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Text on `family-soft`."
-   },
-   "growth": {
-    "$type": "color",
-    "$value": "#678DEE",
-    "$description": "Area colour for Growth: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "growth-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Pale fill for Growth chips and events."
-   },
-   "growth-ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Text on `growth-soft`."
-   },
-   "home": {
-    "$type": "color",
-    "$value": "#678DEE",
-    "$description": "Area colour for Home: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "home-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Pale fill for Home chips and events."
-   },
-   "home-ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Text on `home-soft`."
-   },
-   "fun": {
-    "$type": "color",
-    "$value": "#678DEE",
-    "$description": "Area colour for Fun: the ultramarine, like every area (areas are told apart by name)."
-   },
-   "fun-soft": {
-    "$type": "color",
-    "$value": "#1F2C4C",
-    "$description": "Pale fill for Fun chips and events."
-   },
-   "fun-ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Text on `fun-soft`."
-   },
-   "viz-soft": {
-    "$type": "color",
-    "$value": "#334673",
-    "$description": "Second chart series, short nights."
-   },
-   "mood-1": {
-    "$type": "color",
-    "$value": "#1F2430",
-    "$description": "Mood 1 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "mood-2": {
-    "$type": "color",
-    "$value": "#2C4072",
-    "$description": "Mood 2 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "mood-3": {
-    "$type": "color",
-    "$value": "#405EAD",
-    "$description": "Mood 3 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "mood-4": {
-    "$type": "color",
-    "$value": "#5E84E3",
-    "$description": "Mood 4 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "mood-5": {
-    "$type": "color",
-    "$value": "#96B6FE",
-    "$description": "Mood 5 of 5 on the ultramarine ramp (pale = low, deep = great)."
-   },
-   "heat-0": {
-    "$type": "color",
-    "$value": "#1F2430",
-    "$description": "Heatmap step 0 on the ultramarine ramp."
-   },
-   "heat-1": {
-    "$type": "color",
-    "$value": "#2C4072",
-    "$description": "Heatmap step 1 on the ultramarine ramp."
-   },
-   "heat-2": {
-    "$type": "color",
-    "$value": "#405EAD",
-    "$description": "Heatmap step 2 on the ultramarine ramp."
-   },
-   "heat-3": {
-    "$type": "color",
-    "$value": "#5E84E3",
-    "$description": "Heatmap step 3 on the ultramarine ramp."
-   },
-   "heat-4": {
-    "$type": "color",
-    "$value": "#96B6FE",
-    "$description": "Heatmap step 4 on the ultramarine ramp."
-   },
-   "nav-bg": {
-    "$type": "color",
-    "$value": "#141823",
-    "$description": "Sidebar background (paper, a step darker)."
-   },
-   "nav-surface": {
-    "$type": "color",
-    "$value": "#1F2430",
-    "$description": "Active sidebar item."
-   },
-   "nav-line": {
-    "$type": "color",
-    "$value": "#303540",
-    "$description": "Sidebar dividers."
-   },
-   "nav-ink": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Sidebar text."
-   },
-   "nav-ink-2": {
-    "$type": "color",
-    "$value": "#C9C7C2",
-    "$description": "Secondary sidebar text."
-   },
-   "nav-ink-3": {
-    "$type": "color",
-    "$value": "#9B9EA6",
-    "$description": "Sidebar group labels."
-   },
-   "nav-success": {
-    "$type": "color",
-    "$value": "#8DAFFE",
-    "$description": "The saved-on-this-device square."
-   },
-   "nav-accent": {
-    "$type": "color",
-    "$value": "#EDEBE7",
-    "$description": "Quick capture: the ink block."
-   },
-   "on-nav-accent": {
-    "$type": "color",
-    "$value": "#0B0F18",
-    "$description": "Text on Quick capture."
-   }
+  "gradient": {
+    "panel": {
+      "light": {
+        "$value": "linear-gradient(160deg,#25252E 0%,#141419 100%)",
+        "$type": "gradient"
+      },
+      "dark": {
+        "$value": "linear-gradient(160deg,rgba(255,255,255,0.15) 0%,rgba(255,255,255,0.05) 100%)",
+        "$type": "gradient"
+      }
+    },
+    "background": {
+      "dawn": {
+        "desktop": {
+          "$value": "radial-gradient(1100px 760px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 62%), radial-gradient(1000px 720px at 100% 4%, #DCD5FF 0%, rgba(220,213,255,0) 58%), radial-gradient(1200px 820px at 55% 106%, #FFEABF 0%, rgba(255,234,191,0) 60%), #F4F1EE",
+          "$type": "gradient",
+          "$description": "Bình minh"
+        },
+        "phone": {
+          "$value": "radial-gradient(520px 520px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 70%), radial-gradient(480px 560px at 100% 18%, #DCD5FF 0%, rgba(220,213,255,0) 65%), radial-gradient(560px 700px at 30% 62%, #FFEABF 0%, rgba(255,234,191,0) 62%), radial-gradient(520px 640px at 100% 96%, #FFD3D6 0%, rgba(255,211,214,0) 62%), #F4F1EE",
+          "$type": "gradient",
+          "$description": "Bình minh"
+        }
+      },
+      "mist": {
+        "desktop": {
+          "$value": "radial-gradient(1100px 760px at 0% 0%, #D3E6FF 0%, rgba(211,230,255,0) 60%), radial-gradient(1000px 720px at 100% 0%, #D3F2E7 0%, rgba(211,242,231,0) 58%), radial-gradient(1200px 820px at 50% 110%, #E7E0FF 0%, rgba(231,224,255,0) 60%), #EEF2F5",
+          "$type": "gradient",
+          "$description": "Sương mai"
+        },
+        "phone": {
+          "$value": "radial-gradient(520px 520px at 0% 0%, #D3E6FF 0%, rgba(211,230,255,0) 70%), radial-gradient(480px 560px at 100% 20%, #D3F2E7 0%, rgba(211,242,231,0) 65%), radial-gradient(560px 700px at 20% 70%, #E7E0FF 0%, rgba(231,224,255,0) 62%), #EEF2F5",
+          "$type": "gradient",
+          "$description": "Sương mai"
+        }
+      },
+      "photo": {
+        "desktop": {
+          "$value": "#EADFEF",
+          "$type": "gradient",
+          "$description": "Ảnh của bạn"
+        },
+        "phone": {
+          "$value": "#EADFEF",
+          "$type": "gradient",
+          "$description": "Ảnh của bạn"
+        }
+      },
+      "night": {
+        "desktop": {
+          "$value": "radial-gradient(1000px 700px at 0% 0%, #3B2D5C 0%, rgba(59,45,92,0) 62%), radial-gradient(900px 650px at 100% 8%, #173A57 0%, rgba(23,58,87,0) 58%), radial-gradient(1100px 760px at 60% 110%, #4A2A3B 0%, rgba(74,42,59,0) 60%), #0F0F16",
+          "$type": "gradient",
+          "$description": "Đêm"
+        },
+        "phone": {
+          "$value": "radial-gradient(520px 560px at 0% 0%, #3B2D5C 0%, rgba(59,45,92,0) 70%), radial-gradient(480px 560px at 100% 26%, #173A57 0%, rgba(23,58,87,0) 65%), radial-gradient(560px 700px at 20% 72%, #4A2A3B 0%, rgba(74,42,59,0) 62%), #0F0F16",
+          "$type": "gradient",
+          "$description": "Đêm"
+        }
+      }
+    }
+  },
+  "font": {
+    "family": {
+      "sans": {
+        "$value": [
+          "Be Vietnam Pro",
+          "system-ui",
+          "sans-serif"
+        ],
+        "$type": "fontFamily"
+      }
+    }
+  },
+  "typography": {
+    "display": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "clamp(38px, 4.4vw, 62px)",
+        "lineHeight": "1.06",
+        "fontWeight": 500,
+        "letterSpacing": "-0.035em"
+      },
+      "$type": "typography",
+      "$description": "Greeting on desktop/tablet (second sentence in ink-3)"
+    },
+    "display-mobile": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "34px",
+        "lineHeight": "1.1",
+        "fontWeight": 500,
+        "letterSpacing": "-0.035em"
+      },
+      "$type": "typography",
+      "$description": "Greeting on phone (2 lines)"
+    },
+    "numeral-xl": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "64px",
+        "lineHeight": "1",
+        "fontWeight": 300,
+        "letterSpacing": "-0.045em"
+      },
+      "$type": "typography",
+      "$description": "Hero numbers: 83% · 303 · 44 (unit like % at 30px, tracking 0)"
+    },
+    "numeral-l": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "48px",
+        "lineHeight": "1",
+        "fontWeight": 300,
+        "letterSpacing": "-0.04em"
+      },
+      "$type": "typography",
+      "$description": "Card hero number: 6 / 10 km, 20 việc"
+    },
+    "numeral-m": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "30px",
+        "lineHeight": "1",
+        "fontWeight": 300,
+        "letterSpacing": "-0.03em"
+      },
+      "$type": "typography",
+      "$description": "Tile number: 12 / 20"
+    },
+    "numeral-s": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "24px",
+        "lineHeight": "1.1",
+        "fontWeight": 300,
+        "letterSpacing": "-0.03em"
+      },
+      "$type": "typography",
+      "$description": "Phone stat tiles"
+    },
+    "title": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "20px",
+        "lineHeight": "1.3",
+        "fontWeight": 600,
+        "letterSpacing": "-0.015em"
+      },
+      "$type": "typography",
+      "$description": "Card titles (phone 19px)"
+    },
+    "heading": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "16px",
+        "lineHeight": "1.35",
+        "fontWeight": 600,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Tile titles, logo word"
+    },
+    "body": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "15px",
+        "lineHeight": "1.5",
+        "fontWeight": 400,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Task titles (500), inputs, buttons (500)"
+    },
+    "label": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "13px",
+        "lineHeight": "1.4",
+        "fontWeight": 500,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Date line, capsule labels, chips, links"
+    },
+    "caption": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "12px",
+        "lineHeight": "1.4",
+        "fontWeight": 400,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Meta lines: #tag · time"
+    },
+    "micro": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "11px",
+        "lineHeight": "1.3",
+        "fontWeight": 600,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Badges, tab-bar labels, weekday letters"
+    }
+  },
+  "space": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "1": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "1h": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "2h": {
+      "$value": "10px",
+      "$type": "dimension"
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "3h": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "4h": {
+      "$value": "18px",
+      "$type": "dimension"
+    },
+    "5": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "6": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "7": {
+      "$value": "28px",
+      "$type": "dimension"
+    },
+    "8": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "10": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "11": {
+      "$value": "44px",
+      "$type": "dimension"
+    },
+    "12": {
+      "$value": "48px",
+      "$type": "dimension"
+    }
+  },
+  "radius": {
+    "sm": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Energy bars, small marks"
+    },
+    "md": {
+      "$value": "18px",
+      "$type": "dimension",
+      "$description": "Warn box, inline notices"
+    },
+    "row": {
+      "$value": "22px",
+      "$type": "dimension",
+      "$description": "Task rows, event blocks, sleep row"
+    },
+    "tile": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Tiles inside a card, phone stat tiles, textarea"
+    },
+    "tile-lg": {
+      "$value": "28px",
+      "$type": "dimension",
+      "$description": "Phone habit tiles"
+    },
+    "card": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$description": "Every card; phone year card"
+    },
+    "pill": {
+      "$value": "999px",
+      "$type": "dimension",
+      "$description": "Buttons, inputs, nav, chips, progress, avatars"
+    }
+  },
+  "layout": {
+    "page-max": {
+      "$value": "1360px",
+      "$type": "dimension",
+      "$description": "Max content width"
+    },
+    "page-gutter": {
+      "$value": "clamp(16px, 3vw, 40px)",
+      "$type": "dimension",
+      "$description": "Side padding (desktop 40, tablet ~25)"
+    },
+    "page-gutter-phone": {
+      "$value": "18px",
+      "$type": "dimension",
+      "$description": "Phone side padding"
+    },
+    "card-gap": {
+      "$value": "20px",
+      "$type": "dimension",
+      "$description": "Gap between cards (phone 16)"
+    },
+    "card-pad": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Card padding (phone 20)"
+    },
+    "control-h": {
+      "$value": "56px",
+      "$type": "dimension",
+      "$description": "Primary buttons, inputs, logo pill"
+    },
+    "control-h-sm": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$description": "Small buttons, arrow buttons, chips-as-buttons"
+    },
+    "icon-btn": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$description": "Header round icon buttons (phone 44)"
+    },
+    "check": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$description": "Task check circle (phone 44)"
+    },
+    "touch-min": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Minimum tap target"
+    },
+    "nav-item-h": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Top nav pill item height"
+    },
+    "tabbar-h": {
+      "$value": "76px",
+      "$type": "dimension",
+      "$description": "Phone floating tab bar height"
+    },
+    "tabbar-inset": {
+      "$value": "14px",
+      "$type": "dimension",
+      "$description": "Tab bar left/right inset"
+    },
+    "tabbar-bottom": {
+      "$value": "22px",
+      "$type": "dimension",
+      "$description": "Tab bar bottom offset (+ safe-area-inset-bottom)"
+    },
+    "fab": {
+      "$value": "60px",
+      "$type": "dimension",
+      "$description": "Center + button in tab bar"
+    },
+    "bp-tablet": {
+      "$value": "768px",
+      "$type": "dimension",
+      "$description": "≥ this: top pill nav + bento page. Below: phone layout + tab bar"
+    },
+    "bp-desktop": {
+      "$value": "1200px",
+      "$type": "dimension",
+      "$description": "≥ this: 3-column bento row"
+    }
+  },
+  "blur": {
+    "blur": {
+      "$value": "22px",
+      "$type": "dimension",
+      "$description": "Glass backdrop blur (photo 28px, night 24px)"
+    },
+    "saturate": {
+      "$value": "150%",
+      "$type": "number",
+      "$description": "Glass backdrop saturate()"
+    }
+  },
+  "shadow": {
+    "shadow-card": {
+      "light": {
+        "$value": "0 24px 60px -30px rgba(46,34,74,0.30)",
+        "$type": "shadow",
+        "$description": "Every glass card"
+      },
+      "dark": {
+        "$value": "0 24px 60px -30px rgba(0,0,0,0.65)",
+        "$type": "shadow",
+        "$description": "Every glass card"
+      }
+    },
+    "shadow-tabbar": {
+      "light": {
+        "$value": "0 18px 40px -16px rgba(20,16,40,0.35)",
+        "$type": "shadow",
+        "$description": "Floating phone tab bar"
+      },
+      "dark": {
+        "$value": "0 18px 40px -16px rgba(0,0,0,0.6)",
+        "$type": "shadow",
+        "$description": "Floating phone tab bar"
+      }
+    },
+    "shadow-fab": {
+      "light": {
+        "$value": "0 8px 20px -8px rgba(20,16,40,0.45)",
+        "$type": "shadow",
+        "$description": "Center + button"
+      },
+      "dark": {
+        "$value": "0 8px 20px -8px rgba(0,0,0,0.6)",
+        "$type": "shadow",
+        "$description": "Center + button"
+      }
+    }
+  },
+  "motion": {
+    "dur-fast": {
+      "$value": "120ms",
+      "$type": "duration",
+      "$description": "Press, toggle"
+    },
+    "dur-base": {
+      "$value": "200ms",
+      "$type": "duration",
+      "$description": "Hover, chip select, check"
+    },
+    "dur-slow": {
+      "$value": "320ms",
+      "$type": "duration",
+      "$description": "Card enter, theme/background crossfade"
+    },
+    "ease": {
+      "$value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Default easing"
+    }
   }
- },
- "font": {
-  "family": {
-   "display": {
-    "$type": "fontFamily",
-    "$value": "'Cormorant Garamond', 'Iowan Old Style', Georgia, serif"
-   },
-   "sans": {
-    "$type": "fontFamily",
-    "$value": "'Jost', 'Avenir Next', system-ui, sans-serif"
-   }
-  }
- },
- "typography": {
-  "display-xl": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.display}",
-    "fontSize": "64px",
-    "lineHeight": "64px",
-    "fontWeight": 500,
-    "letterSpacing": "-0.01em"
-   },
-   "$description": "Covers, empty states, year in review"
-  },
-  "display-l": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.display}",
-    "fontSize": "46px",
-    "lineHeight": "50px",
-    "fontWeight": 500,
-    "letterSpacing": "-0.01em"
-   },
-   "$description": "Library page title (desktop)"
-  },
-  "display-m": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.display}",
-    "fontSize": "38px",
-    "lineHeight": "42px",
-    "fontWeight": 500,
-    "letterSpacing": "-0.01em"
-   },
-   "$description": "Desktop screen titles"
-  },
-  "mobile-title": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.display}",
-    "fontSize": "41px",
-    "lineHeight": "44px",
-    "fontWeight": 500,
-    "letterSpacing": "-0.01em"
-   },
-   "$description": "Mobile tab-root titles (Today, Tasks, Library); Home greeting uses 38/42"
-  },
-  "mobile-page-title": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.display}",
-    "fontSize": "36px",
-    "lineHeight": "40px",
-    "fontWeight": 500,
-    "letterSpacing": "0"
-   },
-   "$description": "Mobile detail titles (goal, page, task, review step)"
-  },
-  "title": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.display}",
-    "fontSize": "28px",
-    "lineHeight": "32px",
-    "fontWeight": 600,
-    "letterSpacing": "0"
-   },
-   "$description": "Detail-panel titles, quote cards, sheet titles (26 on mobile)"
-  },
-  "numeral": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.display}",
-    "fontSize": "36px",
-    "lineHeight": "40px",
-    "fontWeight": 500,
-    "letterSpacing": "0"
-   },
-   "$description": "Big stat numbers; lining + tabular figures"
-  },
-  "heading": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.sans}",
-    "fontSize": "16px",
-    "lineHeight": "24px",
-    "fontWeight": 600,
-    "letterSpacing": "0"
-   },
-   "$description": "Card and section headings"
-  },
-  "body-l": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.sans}",
-    "fontSize": "16px",
-    "lineHeight": "25px",
-    "fontWeight": 400,
-    "letterSpacing": "0"
-   },
-   "$description": "Mobile editor text, form inputs (16px avoids iOS zoom)"
-  },
-  "body": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.sans}",
-    "fontSize": "15px",
-    "lineHeight": "24px",
-    "fontWeight": 400,
-    "letterSpacing": "0"
-   },
-   "$description": "Running text, task titles, list rows"
-  },
-  "body-s": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.sans}",
-    "fontSize": "13px",
-    "lineHeight": "20px",
-    "fontWeight": 400,
-    "letterSpacing": "0"
-   },
-   "$description": "Secondary lines, table cells, buttons"
-  },
-  "caption": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.sans}",
-    "fontSize": "12px",
-    "lineHeight": "16px",
-    "fontWeight": 500,
-    "letterSpacing": "0"
-   },
-   "$description": "Metadata, chart labels, status lines"
-  },
-  "label": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.sans}",
-    "fontSize": "11px",
-    "lineHeight": "16px",
-    "fontWeight": 600,
-    "letterSpacing": "0.12em"
-   },
-   "$description": "Uppercase eyebrows and group labels"
-  },
-  "tab-label": {
-   "$type": "typography",
-   "$value": {
-    "fontFamily": "{font.family.sans}",
-    "fontSize": "11px",
-    "lineHeight": "14px",
-    "fontWeight": 500,
-    "letterSpacing": "0"
-   },
-   "$description": "Mobile tab bar labels (700 when active)"
-  }
- },
- "space": {
-  "space-1": {
-   "$type": "dimension",
-   "$value": "4px"
-  },
-  "space-2": {
-   "$type": "dimension",
-   "$value": "8px"
-  },
-  "space-3": {
-   "$type": "dimension",
-   "$value": "12px"
-  },
-  "space-4": {
-   "$type": "dimension",
-   "$value": "16px"
-  },
-  "space-5": {
-   "$type": "dimension",
-   "$value": "20px"
-  },
-  "space-6": {
-   "$type": "dimension",
-   "$value": "24px"
-  },
-  "space-8": {
-   "$type": "dimension",
-   "$value": "32px"
-  },
-  "space-12": {
-   "$type": "dimension",
-   "$value": "48px"
-  }
- },
- "radius": {
-  "radius-xs": {
-   "$type": "dimension",
-   "$value": "8px",
-   "$description": "Checkboxes, kbd hints"
-  },
-  "radius-sm": {
-   "$type": "dimension",
-   "$value": "12px",
-   "$description": "Chips, segmented pills"
-  },
-  "radius-md": {
-   "$type": "dimension",
-   "$value": "16px",
-   "$description": "Buttons, inputs, nav items"
-  },
-  "radius-well": {
-   "$type": "dimension",
-   "$value": "20px",
-   "$description": "Stat tiles, habit tiles, wells"
-  },
-  "radius-lg": {
-   "$type": "dimension",
-   "$value": "24px",
-   "$description": "Cards and panels"
-  },
-  "radius-tile": {
-   "$type": "dimension",
-   "$value": "24px",
-   "$description": "Bento tiles on mobile Home"
-  },
-  "radius-xl": {
-   "$type": "dimension",
-   "$value": "28px",
-   "$description": "Bottom sheets, large media"
-  },
-  "radius-pill": {
-   "$type": "dimension",
-   "$value": "999px",
-   "$description": "Status pills, avatars, FAB"
-  }
- },
- "layout": {
-  "sidebar-width": {
-   "$type": "dimension",
-   "$value": "248px",
-   "$description": "Desktop sidebar"
-  },
-  "desktop-padding": {
-   "$type": "dimension",
-   "$value": "32px",
-   "$description": "Desktop content padding"
-  },
-  "desktop-gap": {
-   "$type": "dimension",
-   "$value": "24px",
-   "$description": "Gap between desktop cards"
-  },
-  "mobile-gutter": {
-   "$type": "dimension",
-   "$value": "18px",
-   "$description": "Mobile side padding"
-  },
-  "mobile-topbar-height": {
-   "$type": "dimension",
-   "$value": "56px",
-   "$description": "Mobile pushed-screen top bar"
-  },
-  "tabbar-height": {
-   "$type": "dimension",
-   "$value": "84px",
-   "$description": "Mobile tab bar incl. 20px home-indicator space"
-  },
-  "float-inset": {
-   "$type": "dimension",
-   "$value": "12px",
-   "$description": "Gap between a floating nav (sidebar, tab bar) and the window edge"
-  },
-  "fab-size": {
-   "$type": "dimension",
-   "$value": "56px",
-   "$description": "Centre capture button"
-  },
-  "touch-min": {
-   "$type": "dimension",
-   "$value": "44px",
-   "$description": "Minimum touch target"
-  },
-  "bento-columns": {
-   "$type": "number",
-   "$value": 4,
-   "$description": "Mobile Home grid columns"
-  },
-  "bento-gap": {
-   "$type": "dimension",
-   "$value": "9px",
-   "$description": "Mobile Home grid gap"
-  },
-  "bento-row": {
-   "$type": "dimension",
-   "$value": "70px",
-   "$description": "Mobile Home row height (Edit mode 64)"
-  },
-  "breakpoint-mobile": {
-   "$type": "dimension",
-   "$value": "768px",
-   "$description": "Below this width use the mobile layouts"
-  }
- },
- "shadow": {
-  "light": {
-   "shadow-sm": {
-    "$type": "shadow",
-    "$value": "none"
-   },
-   "shadow-md": {
-    "$type": "shadow",
-    "$value": "0 12px 32px -12px rgba(15,20,30,0.28), 0 2px 6px rgba(15,20,30,0.06)"
-   },
-   "shadow-primary": {
-    "$type": "shadow",
-    "$value": "0 8px 20px -6px rgba(15,20,30,0.35)"
-   }
-  },
-  "dark": {
-   "shadow-sm": {
-    "$type": "shadow",
-    "$value": "none"
-   },
-   "shadow-md": {
-    "$type": "shadow",
-    "$value": "0 14px 34px -12px rgba(0,0,0,0.75), 0 0 0 1px #303540"
-   },
-   "shadow-primary": {
-    "$type": "shadow",
-    "$value": "0 8px 20px -6px rgba(0,0,0,0.6)"
-   }
-  }
- },
- "motion": {
-  "dur-fast": {
-   "$type": "duration",
-   "$value": "120ms"
-  },
-  "dur": {
-   "$type": "duration",
-   "$value": "200ms"
-  },
-  "dur-slow": {
-   "$type": "duration",
-   "$value": "320ms"
-  },
-  "ease": {
-   "$type": "cubicBezier",
-   "$value": "cubic-bezier(0.2, 0.8, 0.2, 1)"
-  }
- }
 }

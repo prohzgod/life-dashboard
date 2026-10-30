@@ -1,8 +1,7 @@
-/* Hallmark · part of the Grid system: tokens and floor rules live in src/styles/global.css */
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 760px);
-  gap: var(--desktop-gap);
+  gap: var(--card-gap);
 }
 
 .row {
@@ -16,182 +15,162 @@
 .text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .label {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--text-heading-size);
+  font-weight: var(--text-heading-weight);
 }
 
 .hint {
   color: var(--ink-3);
-  font-size: var(--text-body-s-size);
-  line-height: var(--text-body-s-line);
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line);
 }
 
-.palettes {
+.hint:empty {
+  display: none;
+}
+
+.group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-3);
   min-width: 0;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-.swatchGrid {
+.swatches {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: var(--space-3);
-  margin-top: var(--space-3);
 }
 
-.swatch {
+.swatch,
+.accent {
   display: flex;
   flex-direction: column;
   gap: 2px;
   padding: var(--space-2) var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--sunken);
+  border-radius: var(--radius-tile);
+  background: var(--glass-2);
+  border: 1px solid var(--line);
   cursor: pointer;
-  transition: background var(--dur-fast) var(--ease);
+  transition: box-shadow var(--dur-base) var(--ease);
 }
 
-.swatch:hover {
-  background: var(--sunken-2);
-}
-
-/* The chosen theme gets the ink ring, like other checked controls. */
+/* The chosen one gets the ink ring, like other checked controls. */
 .swatchOn {
-  box-shadow: inset 0 0 0 2px var(--primary);
+  box-shadow: inset 0 0 0 2px var(--inverse);
 }
 
-.swatch:has(input:focus-visible) {
-  outline: 2px solid var(--primary);
+.swatch:has(input:focus-visible),
+.accent:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
 .swatchName {
   margin-top: var(--space-2);
   padding: 0 var(--space-1);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--text-body-size);
+  font-weight: 500;
 }
 
-.swatch .hint {
+.swatchHint {
   padding: 0 var(--space-1);
+  color: var(--ink-3);
   font-size: var(--text-caption-size);
   line-height: var(--text-caption-line);
 }
 
+/* A small window onto the background: its paint, its photo, and one glass card. */
 .preview {
   position: relative;
   display: block;
-  height: 76px;
+  height: 84px;
   overflow: hidden;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
+  background: var(--bg-veil), var(--bg-image) center / cover no-repeat, var(--bg-paint);
+}
+
+.previewPhoto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .previewCard {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 54%;
-  height: 56px;
-  padding: 10px;
-  border-radius: var(--radius-xs);
-}
-
-.previewLine,
-.previewLineShort {
-  height: 4px;
-  border-radius: var(--radius-pill);
-  opacity: 0.8;
-}
-
-.previewLineShort {
-  width: 60%;
-  opacity: 0.45;
-}
-
-.previewField {
-  position: absolute;
-  top: 10px;
   right: 10px;
-  width: 28%;
-  height: 56px;
-  border-radius: var(--radius-xs);
+  bottom: 10px;
+  left: 10px;
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
-.previewMark {
-  position: absolute;
-  bottom: 18px;
-  left: 20px;
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-pill);
-}
-
-.custom {
-  display: flex;
-  flex-direction: column;
+.accents {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: var(--space-3);
-  margin-top: var(--space-5);
 }
 
-.colorField {
+.accentChip {
   display: flex;
   align-items: center;
+  height: 52px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.photo {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-3);
-  min-height: var(--touch-min);
-  cursor: pointer;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--well-line);
 }
 
-.colorInput {
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: none;
-  cursor: pointer;
-}
-
-.colorInput::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.colorInput::-webkit-color-swatch {
-  border: 0;
-  border-radius: var(--radius-pill);
-  box-shadow: inset 0 0 0 1px var(--line-strong);
-}
-
-.colorInput::-moz-color-swatch {
-  border: 0;
-  border-radius: var(--radius-pill);
-}
-
-.colorValue {
-  margin-left: auto;
-  color: var(--ink-3);
-  font-size: var(--text-body-s-size);
-  font-variant-numeric: tabular-nums;
-}
-
-.customActions {
+.actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-.customActions [role='status'] {
-  margin-right: auto;
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.boardPhoto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--well);
+}
+
+.boardPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

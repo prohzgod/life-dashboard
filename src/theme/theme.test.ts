@@ -25,11 +25,11 @@ describe('theme preference', () => {
     expect(document.documentElement.dataset.theme).toBe('light');
   });
 
-  it('clears the saved value and the attribute for system', () => {
+  it('clears the saved value for system and follows the computer', () => {
     setThemePreference('dark');
     setThemePreference('system');
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBeNull();
-    expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
+    expect(document.documentElement.dataset.theme).toBe('light');
   });
 
   it('can apply to any root element', () => {

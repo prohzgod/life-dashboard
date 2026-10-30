@@ -35,7 +35,7 @@ export const profile: Messages['profile'] = {
     onPhone: 'Trên điện thoại này',
     language: 'Ngôn ngữ',
     appearance: 'Giao diện',
-    themes: { light: 'Sáng', dark: 'Tối', system: 'Hệ thống' },
+    themes: { light: 'Sáng', dark: 'Tối', system: 'Tự động' },
     home: 'Trang chủ & mô-đun',
     widgets: (n) => `${n} tiện ích`,
     notifications: 'Thông báo',

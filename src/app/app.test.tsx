@@ -1,9 +1,9 @@
-import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { freshDatabase } from '@/data/testing';
 import { LOCALE_STORAGE_KEY, setLocale } from '@/i18n';
-import { PALETTE_CSS_KEY, readPalette, setPalette } from '@/theme/palette';
+import { DEFAULT_LOOK, LOOK_STORAGE_KEY, readLook, setLook } from '@/theme/appearance';
 import { THEME_STORAGE_KEY } from '@/theme/theme';
 import { LocaleRoot } from './LocaleRoot';
 import { routes } from './router';
@@ -75,53 +75,46 @@ describe('app shell', () => {
   });
 });
 
-describe('theme setting', () => {
-  it('switches the theme from Settings › Appearance and saves it on this device', async () => {
+describe('appearance setting', () => {
+  afterEach(() => setLook(DEFAULT_LOOK));
+
+  it('switches light and dark from Settings › Appearance and saves it on this device', async () => {
     renderAt('/settings/appearance');
     const group = screen.getByRole('radiogroup', { name: 'Light or dark' });
-    expect(within(group).getByRole('radio', { name: 'System' })).toHaveAttribute('aria-checked', 'true');
+    expect(within(group).getByRole('radio', { name: 'Auto' })).toHaveAttribute('aria-checked', 'true');
 
     await userEvent.click(within(group).getByRole('radio', { name: 'Dark' }));
     expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(document.documentElement.dataset.bg).toBe('night');
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
-    expect(within(group).getByRole('radio', { name: 'Dark' })).toHaveAttribute('aria-checked', 'true');
 
-    await userEvent.click(within(group).getByRole('radio', { name: 'System' }));
-    expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
-  });
-});
-
-describe('colour themes', () => {
-  afterEach(() => setPalette({ id: 'grid' }));
-
-  it('picks a theme, and makes your own from three colours', async () => {
-    const router = renderAt('/settings/appearance');
-    await userEvent.click(screen.getByRole('radio', { name: /Nature/ }));
-    expect(document.documentElement.dataset.palette).toBe('nature');
-    expect(localStorage.getItem(PALETTE_CSS_KEY)).toContain('--bg:#F5F2EA');
-
-    // Your own previews as you edit, but nothing is kept until Save.
-    await userEvent.click(screen.getByRole('radio', { name: /Your own/ }));
-    fireEvent.input(screen.getByLabelText(/^Background/), { target: { value: '#fdf6e3' } });
-    expect(document.getElementById('palette')?.textContent).toContain('--bg:#FDF6E3');
-    expect(readPalette()).toEqual({ id: 'nature' });
-
-    await userEvent.click(screen.getByRole('button', { name: 'Save theme' }));
-    expect(readPalette()).toMatchObject({ id: 'custom', background: '#FDF6E3' });
-    expect(screen.getByText('Saved. Your theme stays on this device.')).toBeInTheDocument();
-    expect(localStorage.getItem(PALETTE_CSS_KEY)).toContain('--bg:#FDF6E3');
-
-    // A change you don't save is undone when you leave the page.
-    fireEvent.input(screen.getByLabelText(/^Background/), { target: { value: '#222222' } });
-    expect(document.getElementById('palette')?.textContent).toContain('--bg:#222222');
-    await act(() => router.navigate('/'));
-    await waitFor(() => expect(document.getElementById('palette')?.textContent).toContain('--bg:#FDF6E3'));
+    await userEvent.click(within(group).getByRole('radio', { name: 'Light' }));
+    expect(document.documentElement.dataset.theme).toBe('light');
+    expect(document.documentElement.dataset.bg).toBe('dawn');
   });
 
-  it('keeps your own background in light and dark', async () => {
-    setPalette({ id: 'custom', background: '#101820', main: '#2EC4B6', mark: '#FF3366' });
-    const css = document.getElementById('palette')?.textContent ?? '';
-    expect(css.match(/--bg:#101820/g)).toHaveLength(3);
+  it('picks a background and an accent', async () => {
+    renderAt('/settings/appearance');
+    await userEvent.click(screen.getByRole('radio', { name: /Morning mist/ }));
+    expect(document.documentElement.dataset.bg).toBe('mist');
+    await userEvent.click(screen.getByRole('radio', { name: /Lime/ }));
+    expect(document.documentElement.dataset.accent).toBe('lime');
+    expect(readLook()).toEqual({ background: 'mist', accent: 'lime' });
+    expect(JSON.parse(localStorage.getItem(LOOK_STORAGE_KEY)!)).toEqual({ background: 'mist', accent: 'lime' });
+
+    // Night is always dark.
+    await userEvent.click(screen.getByRole('radio', { name: /Night/ }));
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(screen.getByRole('radio', { name: /Night/ })).toBeChecked();
+  });
+
+  it('offers your own photo once you pick Your photo', async () => {
+    renderAt('/settings/appearance');
+    await userEvent.click(screen.getByRole('radio', { name: /Your photo/ }));
+    expect(document.documentElement.dataset.bg).toBe('photo');
+    expect(screen.getByRole('button', { name: /Upload a photo/ })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'From your Vision board' }));
+    expect(await screen.findByText('Your Vision board has no pictures yet.')).toBeInTheDocument();
   });
 });
 

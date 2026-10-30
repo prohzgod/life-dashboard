@@ -1,7 +1,8 @@
 # Design
 
-Life Dashboard uses **Grid**, a Swiss style from the Hallmark design skill: white poster paper, a blue-black ink, ultramarine fields and one Swiss red mark. The rules are in `docs/DESIGN.md`.
+Life Dashboard uses **Glass v2**: frosted-glass cards on a gradient or photo background, a floating pill navigation and phone tab bar, one accent colour and Be Vietnam Pro. It replaced Grid on 30 October 2026.
 
-- `TOKENS.md`, `tokens.json`, `tokens.css`, `tokens.ts`, `tokens.dtcg.json`: the design tokens in every format. `tokens.json` is the source of truth; keep the other files in step with it.
+- `v2/`: the Glass v2 pack, the visual source of truth. `v2/README.md` is the spec, `v2/screens/*.png` show how things look, `v2/mockups/*.dc.html` give exact sizes (reference only), `v2/assets/backgrounds/` the photos.
+- `tokens.css`: the tokens the app imports, light and dark, per background (`data-bg`) and accent (`data-accent`), plus the older token names mapped onto them. `tokens.ts` has the same values for code; `tokens.dtcg.json` for design tools; `TOKENS.md` describes them.
 
-There are no mockups any more. The Midnight & Brass screenshots and mockups that guided the first build were removed when the app moved to Grid (October 2026). The running app is the reference: check a screen at 1440×960 and 390×844, in both themes, against the rules in `docs/DESIGN.md`.
+Check a screen at 390, 834, 1280 and 1440 wide, on Dawn, your photo and Night.

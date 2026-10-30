@@ -1,156 +1,179 @@
+import { useLiveQuery } from 'dexie-react-hooks';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '@/components/icons/Icon';
-import { useEffect, useRef, useState } from 'react';
 import { Button, Card, Segmented } from '@/components/ui';
+import { cx } from '@/components/ui/cx';
+import { clearBackgroundPhoto, getBackgroundPhoto, listBoardPhotos, setBackgroundFromBoard, setBackgroundPhoto } from '@/data';
 import { useT } from '@/i18n';
-import { presetIds, presets, type PresetId } from '@design/themes';
-import { applyPalette, previewSeeds, type CustomPalette, type PaletteChoice } from '@/theme/palette';
+import { useAttachmentUrl } from '@/screens/library/editor/useAttachmentUrl';
+import { ACCENTS, BACKGROUNDS, showOwnPhoto, type Background } from '@/theme/appearance';
 import type { ThemePreference } from '@/theme/theme';
-import { usePalette } from '@/theme/usePalette';
+import { useLook } from '@/theme/useAppearance';
 import { useResolvedTheme } from '@/theme/useResolvedTheme';
 import { useThemePreference } from '@/theme/useThemePreference';
-import { cx } from '@/components/ui/cx';
 import styles from './AppearanceSettings.module.css';
 
-const themeIcons = { light: 'sun', dark: 'moon', system: 'monitor' } as const satisfies Record<ThemePreference, string>;
+const modeIcons = { system: 'monitor', light: 'sun', dark: 'moon' } as const satisfies Record<ThemePreference, string>;
 
+/** Settings › Appearance: background, accent, and light or dark. Everything saves as you pick it. */
 export function AppearanceSettings() {
   const t = useT().settings.appearance;
-  const [theme, setTheme] = useThemePreference();
-  const themeOptions = (['light', 'dark', 'system'] as const).map((value) => ({ value, label: t[value], icon: <Icon name={themeIcons[value]} size={16} /> }));
+  const [mode, setMode] = useThemePreference();
+  const [look, setLook] = useLook();
+  const theme = useResolvedTheme();
+  const showing: Background = theme === 'dark' ? 'night' : look.background;
+
+  const pickMode = (next: ThemePreference) => {
+    setMode(next);
+    // Night is always dark; asking for light brings back Dawn.
+    if (next !== 'dark' && look.background === 'night') setLook({ ...look, background: 'dawn' });
+  };
+  const pickBackground = (background: Background) => {
+    setLook({ ...look, background });
+    // A light background only shows in light mode, so switch to it rather than seem to ignore you.
+    if (background !== 'night' && theme === 'dark') setMode('light');
+  };
+  const modeOptions = (['system', 'light', 'dark'] as const).map((value) => ({ value, label: t[value], icon: <Icon name={modeIcons[value]} size={16} /> }));
 
   return (
     <div className={styles.grid}>
-      <Card title={t.theme}>
-        <div className={styles.row}>
-          <div className={styles.text}>
-            <span id="theme-label" className={styles.label}>
-              {t.colorTheme}
-            </span>
-            <span className={styles.hint}>{t.hint}</span>
+      <Card title={t.background}>
+        <fieldset className={styles.group}>
+          <legend className="visually-hidden">{t.background}</legend>
+          <p className={styles.hint}>{t.backgroundHint}</p>
+          <div className={styles.swatches}>
+            {BACKGROUNDS.map((id) => (
+              <label key={id} className={cx(styles.swatch, showing === id && styles.swatchOn)}>
+                <input type="radio" name="background" className="visually-hidden" checked={showing === id} onChange={() => pickBackground(id)} />
+                {/* The background itself, painted by tokens.css for this data-bg. */}
+                <BackgroundPreview id={id} />
+                <span className={styles.swatchName}>{t.backgrounds[id]}</span>
+                <span className={styles.swatchHint}>{t.backgroundAbout[id]}</span>
+              </label>
+            ))}
           </div>
-          <Segmented label={t.colorTheme} options={themeOptions} value={theme} onChange={setTheme} />
+        </fieldset>
+        {showing === 'photo' && <PhotoPicker />}
+      </Card>
+
+      <Card title={t.accent}>
+        <fieldset className={styles.group}>
+          <legend className="visually-hidden">{t.accent}</legend>
+          <p className={styles.hint}>{t.accentHint}</p>
+          <div className={styles.accents}>
+            {ACCENTS.map((id) => (
+              <label key={id} className={cx(styles.accent, look.accent === id && styles.swatchOn)}>
+                <input type="radio" name="accent" className="visually-hidden" checked={look.accent === id} onChange={() => setLook({ ...look, accent: id })} />
+                <span className={styles.accentChip} data-accent={id} aria-hidden="true">
+                  Aa
+                </span>
+                <span className={styles.swatchName}>{t.accents[id]}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </Card>
+
+      <Card title={t.mode}>
+        <div className={styles.row}>
+          <p className={styles.hint}>{t.modeHint}</p>
+          <Segmented label={t.mode} options={modeOptions} value={mode} onChange={pickMode} />
         </div>
       </Card>
-      <PaletteCard />
     </div>
   );
 }
 
-/**
- * Pick a colour theme, or make your own from three colours. Presets save as you pick them; your
- * own theme previews as you change it and is kept only when you press Save.
- */
-function PaletteCard() {
-  const t = useT().settings.appearance;
-  const [saved, save] = usePalette();
-  const mode = useResolvedTheme();
-  const [draft, setDraft] = useState<CustomPalette | null>(null);
-  const [status, setStatus] = useState('');
-  const editing = draft ?? (saved.id === 'custom' ? saved : null);
-  const showing: PaletteChoice = draft ?? saved;
-  // Your own theme starts from the last one you saved, else from the theme showing now.
-  const base = saved.id === 'custom' ? null : presets[saved.id][mode];
-  const starter: CustomPalette = saved.id === 'custom' ? saved : { id: 'custom', background: base!.paper, main: base!.field, mark: base!.mark };
-  const changed = !!draft && JSON.stringify(draft) !== JSON.stringify(saved);
-
-  // A draft shows on the whole app while you edit; leaving without saving puts the saved theme back.
-  const latest = useRef({ draft, saved });
-  useEffect(() => {
-    latest.current = { draft, saved };
-    if (draft) applyPalette(draft);
-  }, [draft, saved]);
-  useEffect(() => () => void (latest.current.draft && applyPalette(latest.current.saved)), []);
-
-  const edit = (patch: Partial<CustomPalette>) => {
-    setStatus('');
-    setDraft({ ...(editing ?? starter), ...patch });
-  };
-  const options: Array<{ id: PresetId | 'custom'; pick: () => void }> = [
-    ...presetIds.map((id) => ({
-      id,
-      pick: () => {
-        setDraft(null);
-        setStatus('');
-        save({ id });
-      },
-    })),
-    { id: 'custom' as const, pick: () => edit({}) },
-  ];
-
+function BackgroundPreview({ id }: { id: Background }) {
+  const own = useLiveQuery(getBackgroundPhoto);
+  const ownUrl = useMemo(() => (own ? URL.createObjectURL(own) : null), [own]);
+  useEffect(() => () => void (ownUrl && URL.revokeObjectURL(ownUrl)), [ownUrl]);
   return (
-    <Card title={t.palette}>
-      <fieldset className={styles.palettes}>
-        <legend className={styles.label}>{t.paletteLabel}</legend>
-        <p className={styles.hint}>{t.paletteHint}</p>
-        <div className={styles.swatchGrid}>
-          {options.map((o) => {
-            const seeds = previewSeeds(o.id === 'custom' ? (editing ?? starter) : { id: o.id }, mode);
-            return (
-              <label key={o.id} className={cx(styles.swatch, showing.id === o.id && styles.swatchOn)}>
-                <input type="radio" name="palette" className="visually-hidden" checked={showing.id === o.id} onChange={o.pick} />
-                {/* A tiny page in the theme's own colours: paper, a card, a field and the mark. */}
-                <span className={styles.preview} style={{ background: seeds.paper }} aria-hidden="true">
-                  <span className={styles.previewCard} style={{ background: seeds.surface }}>
-                    <span className={styles.previewLine} style={{ background: seeds.ink }} />
-                    <span className={styles.previewLineShort} style={{ background: seeds.ink }} />
-                  </span>
-                  <span className={styles.previewField} style={{ background: seeds.field }} />
-                  <span className={styles.previewMark} style={{ background: seeds.mark }} />
-                </span>
-                <span className={styles.swatchName}>{t.names[o.id]}</span>
-                <span className={styles.hint}>{t.about[o.id]}</span>
-              </label>
-            );
-          })}
-        </div>
-      </fieldset>
-      {editing && (
-        <div className={styles.custom}>
-          <ColorField label={t.background} value={editing.background} onChange={(background) => edit({ background })} />
-          <ColorField label={t.main} hint={t.mainHint} value={editing.main} onChange={(main) => edit({ main })} />
-          <ColorField label={t.mark} hint={t.markHint} value={editing.mark} onChange={(mark) => edit({ mark })} />
-          <p className={styles.hint}>{t.customHint}</p>
-          <div className={styles.customActions}>
-            <span role="status" className={styles.hint}>
-              {status || (changed ? t.unsaved : '')}
-            </span>
-            {draft && (
-              <Button
-                onClick={() => {
-                  setDraft(null);
-                  applyPalette(saved);
-                }}
-              >
-                {t.cancel}
-              </Button>
-            )}
-            <Button
-              variant="primary"
-              disabled={!changed}
-              onClick={() => {
-                save(draft!);
-                setDraft(null);
-                setStatus(t.savedTheme);
-              }}
-            >
-              {t.save}
-            </Button>
-          </div>
-        </div>
-      )}
-    </Card>
+    <span className={styles.preview} data-bg={id} data-theme={id === 'night' ? 'dark' : 'light'} aria-hidden="true">
+      {id === 'photo' && ownUrl && <img src={ownUrl} alt="" className={styles.previewPhoto} />}
+      <span className={styles.previewCard} />
+    </span>
   );
 }
 
-function ColorField({ label, hint, value, onChange }: { label: string; hint?: string; value: string; onChange: (v: string) => void }) {
+function PhotoPicker() {
+  const t = useT().settings.appearance;
+  const own = useLiveQuery(getBackgroundPhoto);
+  const board = useLiveQuery(listBoardPhotos);
+  const [status, setStatus] = useState('');
+  const [browsing, setBrowsing] = useState(false);
+  const file = useRef<HTMLInputElement>(null);
+
+  const use = async (blob: Blob | null) => {
+    if (blob) await setBackgroundPhoto(blob);
+    else await clearBackgroundPhoto();
+    showOwnPhoto(blob);
+    setStatus(blob ? t.own : t.sample);
+  };
+
   return (
-    <label className={styles.colorField}>
-      <input type="color" className={styles.colorInput} value={value.toLowerCase()} onChange={(e) => onChange(e.target.value.toUpperCase())} />
-      <span className={styles.text}>
-        <span className={styles.label}>{label}</span>
-        {hint && <span className={styles.hint}>{hint}</span>}
-      </span>
-      <span className={styles.colorValue}>{value}</span>
-    </label>
+    <div className={styles.photo}>
+      <div className={styles.text}>
+        <span className={styles.label}>{t.photo}</span>
+        <span className={styles.hint}>{t.photoHint}</span>
+      </div>
+      <div className={styles.actions}>
+        <Button onClick={() => file.current?.click()}>
+          <Icon name="image" size={16} />
+          {t.upload}
+        </Button>
+        <Button onClick={() => setBrowsing((b) => !b)} aria-expanded={browsing}>
+          {t.fromBoard}
+        </Button>
+        {own && <Button onClick={() => void use(null)}>{t.useSample}</Button>}
+        <input
+          ref={file}
+          type="file"
+          accept="image/*"
+          className="visually-hidden"
+          tabIndex={-1}
+          aria-label={t.upload}
+          onChange={(e) => {
+            const picked = e.target.files?.[0];
+            e.target.value = '';
+            if (!picked) return;
+            if (!picked.type.startsWith('image/')) return setStatus(t.photoFailed);
+            void use(picked);
+          }}
+        />
+      </div>
+      {browsing &&
+        (board && board.length > 0 ? (
+          <ul className={styles.board}>
+            {board.map((p) => (
+              <li key={p.attachmentId}>
+                <BoardPhoto
+                  attachmentId={p.attachmentId}
+                  label={t.pickFromBoard(p.caption)}
+                  onPick={async () => {
+                    const blob = await setBackgroundFromBoard(p.attachmentId);
+                    showOwnPhoto(blob);
+                    setStatus(t.own);
+                  }}
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.hint}>{t.boardEmpty}</p>
+        ))}
+      <p role="status" className={styles.hint}>
+        {status}
+      </p>
+    </div>
+  );
+}
+
+function BoardPhoto({ attachmentId, label, onPick }: { attachmentId: string; label: string; onPick: () => void }) {
+  const src = useAttachmentUrl(`attachment://${attachmentId}`, true);
+  return (
+    <button type="button" className={styles.boardPhoto} aria-label={label} onClick={onPick}>
+      {src && <img src={src} alt="" />}
+    </button>
   );
 }

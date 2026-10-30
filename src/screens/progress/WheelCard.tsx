@@ -42,7 +42,7 @@ export function WheelCard({ wheel, today }: { wheel: WheelOfLife; today: Day }) 
                 splitNumber: 5,
                 axisName: { color: c['ink-2'], fontSize: 12 },
                 splitLine: { lineStyle: { color: c.line } },
-                splitArea: { areaStyle: { color: [c.surface, c.sunken] } },
+                splitArea: { areaStyle: { color: [c.fill, c.fill2] } },
                 axisLine: { lineStyle: { color: c.line } },
               },
               series: [
@@ -53,7 +53,7 @@ export function WheelCard({ wheel, today }: { wheel: WheelOfLife; today: Day }) 
                     ...(wheel.before.size
                       ? [{ name: t.before, value: wheel.areas.map((a) => wheel.before.get(a.id) ?? 0), lineStyle: { type: 'dashed', color: c['ink-3'], width: 1.5 } }]
                       : []),
-                    { name: t.now, value: wheel.areas.map((a) => wheel.now.get(a.id) ?? 0), lineStyle: { color: c.inverse, width: 2 }, areaStyle: { color: c['viz-soft'], opacity: 0.45 } },
+                    { name: t.now, value: wheel.areas.map((a) => wheel.now.get(a.id) ?? 0), lineStyle: { color: c.strong, width: 2 }, areaStyle: { color: c.accent, opacity: 0.4 } },
                   ],
                 },
               ],

@@ -27,16 +27,18 @@ body {
 
 ::selection {
   background: var(--accent);
-  color: var(--on-primary);
+  color: var(--on-accent);
 }
 
 body {
   margin: 0;
-  background: var(--bg);
+  /* The picture itself is the fixed .app-bg layer (src/app/AppBackground.tsx). */
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--text-body-size);
   line-height: var(--text-body-line);
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -70,7 +72,7 @@ kbd {
 }
 
 :focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 

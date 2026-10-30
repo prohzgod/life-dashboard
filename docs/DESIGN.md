@@ -1,8 +1,20 @@
-# Grid: design rules
+# Design rules
 
-Swiss style for a tool you open every morning: white poster paper, a blue-black ink, one ultramarine that floods a field, and one Swiss red that marks the thing that needs you. Structure comes from scale, space and changes of paper, never from strokes; soft, very round shapes keep it friendly. The theme is Hallmark's **Grid**; it replaced Midnight & Brass in October 2026 (see `docs/REDESIGN-DRAFT.md`).
+> **Glass v2 replaced Grid's look on 30 October 2026.** The visual source of truth is now `design/v2/README.md` (with its screenshots and mockups) and the tokens in `design/tokens.css`. The rules below are kept for layout, copy and accessibility; where they talk about paper, ultramarine, the red mark, Radio Canada or square fields, read Glass v2 instead: glass cards on a background, one accent you choose, the near-black `--inverse` as the strong fill, Be Vietnam Pro.
 
-Tokens live in `design/tokens.json` (source of truth, a usage note per token) and `design/tokens.css` (CSS variables, light and dark). Token names kept from the first design (`--surface`, `--primary`, `--career-soft`…) so components didn't change; what they mean now is below.
+## Glass v2 in short
+
+- **Background**: one fixed layer behind everything (`.app-bg`, `src/app/AppBackground.tsx`): Dawn, Morning mist, your photo, or Night. Never put gradients on cards.
+- **Glass card**: `--glass` + `backdrop-filter: blur(var(--blur)) saturate(var(--saturate))` + 1px `--line` + `--radius-card` + `--shadow-card`, padding `--card-pad`. Inside a card, `--glass-2` (raised) or `--well` (recessed); never blur twice.
+- **One dark `--panel` per screen** (Today: the Daily check-in).
+- **One accent** (`--accent`, chosen in Settings › Appearance): today/now, the selected choice, badges, the + button. Text on it is always `--on-accent`.
+- **Strong fill = `--inverse`**: active nav item, primary button, done checks, the current event, chart bars.
+- **Big numbers are light (300)**, labels 500, titles 600. Everything is rounded: pills for controls, 22–32px for surfaces. Progress is a pill with diagonal `.hatch` stripes for what remains.
+- Settings › Appearance: background, accent, and light/dark/auto. Saved on this device; applied before first paint by `index.html`. Night is always dark.
+
+The older token names (`--surface`, `--primary`, `--sunken`, `--career-soft` …) still work: `design/tokens.css` maps each onto a Glass v2 value.
+
+# Grid (before October 30, 2026)
 
 ## Colour: three roles and the paper
 
@@ -12,12 +24,6 @@ Tokens live in `design/tokens.json` (source of truth, a usage note per token) an
 - **Mark, the Swiss red.** `--accent`, `--danger` and `--warning` all resolve to it: behind pace, over budget, today's marker, the wordmark square, text selection. One red field per page at most, and **never red on the ultramarine**.
 - **Data.** Life areas (`--health` … `--fun`), mood (`--mood-1…5`) and heatmaps (`--heat-0…4`) are names only: they all resolve to the one ultramarine ramp, by choice. Areas are told apart by their name, never by colour.
 - Dark mode keeps the roles: a blue-black sheet, warm white ink, the ultramarine and the red lifted for contrast.
-
-## Colour themes
-
-Settings › Appearance offers colour themes beside light and dark: **Grid** (the default, exactly `tokens.css`), **Leica**, **Nature**, **Focus**, **Ocean**, **Rosé**, and **Your own** (pick a background, a main colour and an accent). Each theme is five seeds per mode in `design/themes.ts` (paper, surface, ink, field, mark), so the three roles above survive any theme. `src/theme/palette.ts` derives every other colour token from the seeds, nudges colours until text reads (body 7:1, captions and links 4.5:1, tested for every preset), and writes a `<style id="palette">` that overrides the tokens in both modes. index.html replays the saved CSS before first paint. Components keep using the CSS variables and never know which theme is on; charts read `useThemeColors()`.
-
-To add a theme: add its seeds to `design/themes.ts`, a name and one-line description in `settings.appearance` (en and vi), and check it at both sizes in light and dark.
 
 ## Type
 

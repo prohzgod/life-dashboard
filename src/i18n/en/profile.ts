@@ -35,7 +35,7 @@ export const profile = {
     onPhone: 'On this phone',
     language: 'Language',
     appearance: 'Appearance',
-    themes: { light: 'Light', dark: 'Dark', system: 'System' },
+    themes: { light: 'Light', dark: 'Dark', system: 'Auto' },
     home: 'Home & modules',
     widgets: (n: number) => `${n} widgets`,
     notifications: 'Notifications',

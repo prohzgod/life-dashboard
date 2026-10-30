@@ -1,3 +1,5 @@
+import { applyAppearance } from './appearance';
+
 export type ThemePreference = 'light' | 'dark' | 'system';
 
 export const THEME_STORAGE_KEY = 'life-dashboard:theme';
@@ -18,10 +20,9 @@ export function readThemePreference(): ThemePreference {
   }
 }
 
-/** Sets `data-theme` on <html>; with "system" the attribute is removed and tokens.css follows the OS. */
+/** Sets `data-theme` (and the background that goes with it) on <html>; "system" follows the OS. */
 export function applyThemePreference(preference: ThemePreference, root: HTMLElement = document.documentElement) {
-  if (preference === 'system') root.removeAttribute('data-theme');
-  else root.setAttribute('data-theme', preference);
+  applyAppearance(root, preference);
 }
 
 export function setThemePreference(preference: ThemePreference) {

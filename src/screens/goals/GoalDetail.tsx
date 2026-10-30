@@ -100,7 +100,7 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
         </span>
       </div>
 
-      {history && history.length > 0 && <ProgressChart goalStart={goal.startDate} goalEnd={goal.endDate} history={history} today={today} color={area?.color} stretch={goal.commitment === 'aspirational'} title={goal.title} />}
+      {history && history.length > 0 && <ProgressChart goalStart={goal.startDate} goalEnd={goal.endDate} history={history} today={today} stretch={goal.commitment === 'aspirational'} title={goal.title} />}
 
       {(goal.progressMethod === 'metric' || goal.progressMethod === 'manual') && <LogValue key={goal.currentValue} goalId={goal.id} value={goal.currentValue} unit={goal.progressMethod === 'manual' && !goal.unit ? '%' : goal.unit} target={goal.targetValue} />}
 
@@ -217,8 +217,8 @@ export function GoalDetail({ view, board, today }: { view: GoalView; board: Goal
   );
 }
 
-function ProgressChart({ goalStart, goalEnd, history, today, color, stretch, title }: {
-  goalStart: Day; goalEnd: Day; history: Array<{ at: string; percent: number }>; today: Day; color?: string; stretch: boolean; title: string;
+function ProgressChart({ goalStart, goalEnd, history, today, stretch, title }: {
+  goalStart: Day; goalEnd: Day; history: Array<{ at: string; percent: number }>; today: Day; stretch: boolean; title: string;
 }) {
   const start = dayToDate(goalStart).getTime();
   const end = dayToDate(addDays(goalEnd, 1)).getTime();
@@ -243,7 +243,7 @@ function ProgressChart({ goalStart, goalEnd, history, today, color, stretch, tit
           axisTick: { show: false },
           axisLabel: { color: c['ink-3'], fontSize: 11, showMaxLabel: false, formatter: (v: number) => format.monthsShort[new Date(v).getMonth()]! },
         },
-        yAxis: { type: 'value', min: 0, max: 100, show: true, splitNumber: 4, axisLabel: { show: false }, splitLine: { lineStyle: { color: c['line-soft'] } } },
+        yAxis: { type: 'value', min: 0, max: 100, show: true, splitNumber: 4, axisLabel: { show: false }, splitLine: { lineStyle: { color: c.line } } },
         tooltip: { trigger: 'axis', valueFormatter: (v: number) => `${Math.round(v)}%` },
         series: [
           {
@@ -251,7 +251,7 @@ function ProgressChart({ goalStart, goalEnd, history, today, color, stretch, tit
             type: 'line',
             symbol: 'none',
             data: [[start, 0], [end, stretch ? STRETCH_WIN * 100 : 100]],
-            lineStyle: { type: 'dashed', color: c['ink-4'], width: 1.5 },
+            lineStyle: { type: 'dashed', color: c['ink-3'], width: 1.5 },
             markLine: {
               symbol: 'none',
               silent: true,
@@ -266,11 +266,11 @@ function ProgressChart({ goalStart, goalEnd, history, today, color, stretch, tit
             step: false,
             symbol: 'none',
             data: history.map((p) => [new Date(p.at).getTime(), p.percent]),
-            lineStyle: { color: color ? c[color as keyof typeof c] : c.primary, width: 2 },
+            lineStyle: { color: c.strong, width: 2 },
             markPoint: {
               symbol: 'circle',
               symbolSize: 8,
-              itemStyle: { color: color ? c[color as keyof typeof c] : c.primary },
+              itemStyle: { color: c.strong },
               label: { show: false },
               data: [{ coord: [now, last] }],
             },

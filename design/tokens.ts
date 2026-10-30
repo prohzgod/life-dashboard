@@ -1,260 +1,270 @@
-/* Grid design tokens for Life Dashboard. Generated from tokens.json. Use CSS variables in components; use this file for charts, canvas and logic. */
-
-export type ThemeName = 'light' | 'dark';
-
+// Life Dashboard · Glass v2 tokens — generated. Mirrors tokens.css; use CSS vars in components,
+// these values only where JS needs raw numbers (charts, canvas, theme picker UI).
 export const colors = {
-  light: {
-    "bg": '#F8F7F3',
-    "surface": '#EDECE7',
-    "raised": '#F8F7F3',
-    "sunken": '#E2DFDA',
-    "sunken-2": '#D6D4CE',
-    "subtle": '#EDECE7',
-    "track": '#E2DFDA',
-    "line": '#D8D6D0',
-    "line-soft": '#E4E3DE',
-    "line-strong": '#BAB7B0',
-    "control": '#7D8088',
-    "ink": '#0F141E',
-    "ink-2": '#2C303B',
-    "ink-3": '#575B64',
-    "ink-4": '#83868E',
-    "inverse": '#1F40BE',
-    "on-inverse": '#F8F7F3',
-    "on-inverse-2": '#C2D1F3',
-    "inverse-accent": '#F8F7F3',
-    "primary": '#0F141E',
-    "primary-hover": '#2C303B',
-    "on-primary": '#F8F7F3',
-    "on-primary-2": '#BAB7B0',
-    "primary-soft": '#DAE5FD',
-    "primary-softer": '#EBF0FB',
-    "primary-ink": '#1F40BE',
-    "primary-line": '#9CB6F2',
-    "link": '#1F40BE',
-    "accent": '#D9241B',
-    "accent-soft": '#FDE3DE',
-    "accent-ink": '#9E1710',
-    "success": '#1F40BE',
-    "success-soft": '#DAE5FD',
-    "warning": '#D9241B',
-    "warning-soft": '#FDE3DE',
-    "warning-ink": '#9E1710',
-    "danger": '#D9241B',
-    "danger-soft": '#FDE3DE',
-    "danger-ink": '#9E1710',
-    "health": '#1F40BE',
-    "health-soft": '#EBF0FB',
-    "health-ink": '#0F141E',
-    "career": '#1F40BE',
-    "career-soft": '#EBF0FB',
-    "career-ink": '#0F141E',
-    "finance": '#1F40BE',
-    "finance-soft": '#EBF0FB',
-    "finance-muted": '#DAE5FD',
-    "finance-ink": '#0F141E',
-    "family": '#1F40BE',
-    "family-soft": '#EBF0FB',
-    "family-ink": '#0F141E',
-    "growth": '#1F40BE',
-    "growth-soft": '#EBF0FB',
-    "growth-ink": '#0F141E',
-    "home": '#1F40BE',
-    "home-soft": '#EBF0FB',
-    "home-ink": '#0F141E',
-    "fun": '#1F40BE',
-    "fun-soft": '#EBF0FB',
-    "fun-ink": '#0F141E',
-    "viz-soft": '#9CB6F2',
-    "mood-1": '#E2DFDA',
-    "mood-2": '#BBCBEC',
-    "mood-3": '#84A3EA',
-    "mood-4": '#4A72DE',
-    "mood-5": '#1F40BE',
-    "heat-0": '#E2DFDA',
-    "heat-1": '#BBCBEC',
-    "heat-2": '#84A3EA',
-    "heat-3": '#4A72DE',
-    "heat-4": '#1F40BE',
-    "nav-bg": '#EDECE7',
-    "nav-surface": '#E2DFDA',
-    "nav-line": '#D8D6D0',
-    "nav-ink": '#0F141E',
-    "nav-ink-2": '#2C303B',
-    "nav-ink-3": '#575B64',
-    "nav-success": '#1F40BE',
-    "nav-accent": '#0F141E',
-    "on-nav-accent": '#F8F7F3',
+  "light": {
+    "ink": "#16171B",
+    "ink-2": "#474A55",
+    "ink-3": "#5C606C",
+    "glass": "rgba(255,255,255,0.56)",
+    "glass-2": "rgba(255,255,255,0.74)",
+    "line": "rgba(255,255,255,0.78)",
+    "well": "rgba(22,23,27,0.05)",
+    "well-line": "rgba(22,23,27,0.10)",
+    "inverse": "#16171B",
+    "on-inverse": "#FFFFFF",
+    "hatch": "rgba(22,23,27,0.14)",
+    "panel": "linear-gradient(160deg,#25252E 0%,#141419 100%)",
+    "on-panel": "#F5F4F7",
+    "on-panel-2": "#B9B8C4",
+    "panel-well": "rgba(255,255,255,0.09)",
+    "warn-bg": "#FFE7D6",
+    "warn-ink": "#9A3A0B",
+    "good": "#1F7A4D",
+    "danger": "#B42318",
+    "focus": "#16171B",
+    "on-accent": "#16171B"
   },
-  dark: {
-    "bg": '#0B0F18',
-    "surface": '#141823',
-    "raised": '#282E3B',
-    "sunken": '#1F2430',
-    "sunken-2": '#282E3B',
-    "subtle": '#141823',
-    "track": '#1F2430',
-    "line": '#303540',
-    "line-soft": '#222630',
-    "line-strong": '#4D535E',
-    "control": '#70747E',
-    "ink": '#EDEBE7',
-    "ink-2": '#C9C7C2',
-    "ink-3": '#9B9EA6',
-    "ink-4": '#656972',
-    "inverse": '#678DEE',
-    "on-inverse": '#0B0F18',
-    "on-inverse-2": '#222D47',
-    "inverse-accent": '#0B0F18',
-    "primary": '#EDEBE7',
-    "primary-hover": '#C9C7C2',
-    "on-primary": '#0B0F18',
-    "on-primary-2": '#4D535E',
-    "primary-soft": '#1F2C4C',
-    "primary-softer": '#171F30',
-    "primary-ink": '#A0BDFF',
-    "primary-line": '#3D5590',
-    "link": '#8DAFFE',
-    "accent": '#F45B4B',
-    "accent-soft": '#451E19',
-    "accent-ink": '#FEAC9F',
-    "success": '#8DAFFE',
-    "success-soft": '#1F2C4C',
-    "warning": '#F45B4B',
-    "warning-soft": '#451E19',
-    "warning-ink": '#FEAC9F',
-    "danger": '#F45B4B',
-    "danger-soft": '#451E19',
-    "danger-ink": '#FEAC9F',
-    "health": '#678DEE',
-    "health-soft": '#1F2C4C',
-    "health-ink": '#EDEBE7',
-    "career": '#678DEE',
-    "career-soft": '#1F2C4C',
-    "career-ink": '#EDEBE7',
-    "finance": '#678DEE',
-    "finance-soft": '#1F2C4C',
-    "finance-muted": '#1F2C4C',
-    "finance-ink": '#EDEBE7',
-    "family": '#678DEE',
-    "family-soft": '#1F2C4C',
-    "family-ink": '#EDEBE7',
-    "growth": '#678DEE',
-    "growth-soft": '#1F2C4C',
-    "growth-ink": '#EDEBE7',
-    "home": '#678DEE',
-    "home-soft": '#1F2C4C',
-    "home-ink": '#EDEBE7',
-    "fun": '#678DEE',
-    "fun-soft": '#1F2C4C',
-    "fun-ink": '#EDEBE7',
-    "viz-soft": '#334673',
-    "mood-1": '#1F2430',
-    "mood-2": '#2C4072',
-    "mood-3": '#405EAD',
-    "mood-4": '#5E84E3',
-    "mood-5": '#96B6FE',
-    "heat-0": '#1F2430',
-    "heat-1": '#2C4072',
-    "heat-2": '#405EAD',
-    "heat-3": '#5E84E3',
-    "heat-4": '#96B6FE',
-    "nav-bg": '#141823',
-    "nav-surface": '#1F2430',
-    "nav-line": '#303540',
-    "nav-ink": '#EDEBE7',
-    "nav-ink-2": '#C9C7C2',
-    "nav-ink-3": '#9B9EA6',
-    "nav-success": '#8DAFFE',
-    "nav-accent": '#EDEBE7',
-    "on-nav-accent": '#0B0F18',
-  },
+  "dark": {
+    "ink": "#F4F2F8",
+    "ink-2": "#CBC8D6",
+    "ink-3": "#A4A1B2",
+    "glass": "rgba(255,255,255,0.07)",
+    "glass-2": "rgba(255,255,255,0.11)",
+    "line": "rgba(255,255,255,0.12)",
+    "well": "rgba(255,255,255,0.06)",
+    "well-line": "rgba(255,255,255,0.16)",
+    "inverse": "#F4F2F8",
+    "on-inverse": "#16171B",
+    "hatch": "rgba(255,255,255,0.16)",
+    "panel": "linear-gradient(160deg,rgba(255,255,255,0.15) 0%,rgba(255,255,255,0.05) 100%)",
+    "on-panel": "#F5F4F7",
+    "on-panel-2": "#C3C0CE",
+    "panel-well": "rgba(255,255,255,0.09)",
+    "warn-bg": "rgba(255,145,77,0.16)",
+    "warn-ink": "#FFB68A",
+    "good": "#7FE0AE",
+    "danger": "#FF9C94",
+    "focus": "#F4F2F8",
+    "on-accent": "#16171B"
+  }
 } as const;
 
 export type ColorToken = keyof typeof colors.light;
+export const cssVar = (t: ColorToken | string): string => `var(--${t})`;
 
-/** CSS variable reference for a color token, e.g. cssVar('primary') -> 'var(--primary)' */
-export const cssVar = (name: ColorToken | string) => `var(--${name})`;
-
-export const areas = ['health', 'career', 'finance', 'family', 'growth', 'home', 'fun'] as const;
-export type Area = (typeof areas)[number];
-
-export const fonts = {
-  display: "'Radio Canada Big', ui-sans-serif, system-ui, sans-serif",
-  sans: "'Radio Canada', ui-sans-serif, system-ui, sans-serif",
+export const accents = {
+  "tangerine": {
+    "name": "Cam",
+    "value": "#FF7A45"
+  },
+  "butter": {
+    "name": "Vàng bơ",
+    "value": "#FFD25C"
+  },
+  "lime": {
+    "name": "Chanh",
+    "value": "#CFF26B"
+  },
+  "lavender": {
+    "name": "Oải hương",
+    "value": "#B9A6FF"
+  }
 } as const;
+export type AccentId = keyof typeof accents;
+
+export const backgrounds = {
+  "dawn": {
+    "name": "Bình minh",
+    "theme": "light",
+    "paint": "radial-gradient(1100px 760px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 62%), radial-gradient(1000px 720px at 100% 4%, #DCD5FF 0%, rgba(220,213,255,0) 58%), radial-gradient(1200px 820px at 55% 106%, #FFEABF 0%, rgba(255,234,191,0) 60%), #F4F1EE",
+    "paintPhone": "radial-gradient(520px 520px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 70%), radial-gradient(480px 560px at 100% 18%, #DCD5FF 0%, rgba(220,213,255,0) 65%), radial-gradient(560px 700px at 30% 62%, #FFEABF 0%, rgba(255,234,191,0) 62%), radial-gradient(520px 640px at 100% 96%, #FFD3D6 0%, rgba(255,211,214,0) 62%), #F4F1EE",
+    "overrides": {}
+  },
+  "mist": {
+    "name": "Sương mai",
+    "theme": "light",
+    "paint": "radial-gradient(1100px 760px at 0% 0%, #D3E6FF 0%, rgba(211,230,255,0) 60%), radial-gradient(1000px 720px at 100% 0%, #D3F2E7 0%, rgba(211,242,231,0) 58%), radial-gradient(1200px 820px at 50% 110%, #E7E0FF 0%, rgba(231,224,255,0) 60%), #EEF2F5",
+    "paintPhone": "radial-gradient(520px 520px at 0% 0%, #D3E6FF 0%, rgba(211,230,255,0) 70%), radial-gradient(480px 560px at 100% 20%, #D3F2E7 0%, rgba(211,242,231,0) 65%), radial-gradient(560px 700px at 20% 70%, #E7E0FF 0%, rgba(231,224,255,0) 62%), #EEF2F5",
+    "overrides": {}
+  },
+  "photo": {
+    "name": "Ảnh của bạn",
+    "theme": "light",
+    "paint": "#EADFEF",
+    "paintPhone": "#EADFEF",
+    "overrides": {
+      "glass": "rgba(255,255,255,0.54)",
+      "glass-2": "rgba(255,255,255,0.72)",
+      "ink-3": "#4E5260",
+      "blur": "28px",
+      "bg-veil": "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 40%)"
+    }
+  },
+  "night": {
+    "name": "Đêm",
+    "theme": "dark",
+    "paint": "radial-gradient(1000px 700px at 0% 0%, #3B2D5C 0%, rgba(59,45,92,0) 62%), radial-gradient(900px 650px at 100% 8%, #173A57 0%, rgba(23,58,87,0) 58%), radial-gradient(1100px 760px at 60% 110%, #4A2A3B 0%, rgba(74,42,59,0) 60%), #0F0F16",
+    "paintPhone": "radial-gradient(520px 560px at 0% 0%, #3B2D5C 0%, rgba(59,45,92,0) 70%), radial-gradient(480px 560px at 100% 26%, #173A57 0%, rgba(23,58,87,0) 65%), radial-gradient(560px 700px at 20% 72%, #4A2A3B 0%, rgba(74,42,59,0) 62%), #0F0F16",
+    "overrides": {
+      "blur": "24px"
+    }
+  }
+} as const;
+export type BackgroundId = keyof typeof backgrounds;
+
+export const fonts = { sans: "'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif" } as const;
 
 export const typography = {
-  "display-xl": { family: fonts.display, size: 64, lineHeight: 64, weight: 700, letterSpacing: '-0.03em' }, // Covers, empty states, year in review
-  "display-l": { family: fonts.display, size: 46, lineHeight: 50, weight: 700, letterSpacing: '-0.03em' }, // Library page title (desktop)
-  "display-m": { family: fonts.display, size: 38, lineHeight: 42, weight: 700, letterSpacing: '-0.03em' }, // Desktop screen titles
-  "mobile-title": { family: fonts.display, size: 41, lineHeight: 44, weight: 700, letterSpacing: '-0.03em' }, // Mobile tab-root titles (Today, Tasks, Library); Home greeting uses 38/42
-  "mobile-page-title": { family: fonts.display, size: 36, lineHeight: 40, weight: 700, letterSpacing: '-0.03em' }, // Mobile detail titles (goal, page, task, review step)
-  "title": { family: fonts.display, size: 28, lineHeight: 32, weight: 700, letterSpacing: '-0.03em' }, // Detail-panel titles, quote cards, sheet titles (26 on mobile)
-  "numeral": { family: fonts.display, size: 36, lineHeight: 40, weight: 700, letterSpacing: '-0.03em' }, // Big stat numbers; lining + tabular figures
-  "heading": { family: fonts.sans, size: 16, lineHeight: 24, weight: 600, letterSpacing: '0' }, // Card and section headings
-  "body-l": { family: fonts.sans, size: 16, lineHeight: 25, weight: 400, letterSpacing: '0' }, // Mobile editor text, form inputs (16px avoids iOS zoom)
-  "body": { family: fonts.sans, size: 15, lineHeight: 24, weight: 400, letterSpacing: '0' }, // Running text, task titles, list rows
-  "body-s": { family: fonts.sans, size: 13, lineHeight: 20, weight: 400, letterSpacing: '0' }, // Secondary lines, table cells, buttons
-  "caption": { family: fonts.sans, size: 12, lineHeight: 16, weight: 500, letterSpacing: '0' }, // Metadata, chart labels, status lines
-  "label": { family: fonts.sans, size: 11, lineHeight: 16, weight: 600, letterSpacing: '0' }, // Group labels and captions, sentence case
-  "tab-label": { family: fonts.sans, size: 11, lineHeight: 14, weight: 500, letterSpacing: '0' }, // Mobile tab bar labels (700 when active)
+  "display": {
+    "size": "clamp(38px, 4.4vw, 62px)",
+    "lineHeight": "1.06",
+    "weight": 500,
+    "tracking": "-0.035em"
+  },
+  "display-mobile": {
+    "size": "34px",
+    "lineHeight": "1.1",
+    "weight": 500,
+    "tracking": "-0.035em"
+  },
+  "numeral-xl": {
+    "size": "64px",
+    "lineHeight": "1",
+    "weight": 300,
+    "tracking": "-0.045em"
+  },
+  "numeral-l": {
+    "size": "48px",
+    "lineHeight": "1",
+    "weight": 300,
+    "tracking": "-0.04em"
+  },
+  "numeral-m": {
+    "size": "30px",
+    "lineHeight": "1",
+    "weight": 300,
+    "tracking": "-0.03em"
+  },
+  "numeral-s": {
+    "size": "24px",
+    "lineHeight": "1.1",
+    "weight": 300,
+    "tracking": "-0.03em"
+  },
+  "title": {
+    "size": "20px",
+    "lineHeight": "1.3",
+    "weight": 600,
+    "tracking": "-0.015em"
+  },
+  "heading": {
+    "size": "16px",
+    "lineHeight": "1.35",
+    "weight": 600,
+    "tracking": "0"
+  },
+  "body": {
+    "size": "15px",
+    "lineHeight": "1.5",
+    "weight": 400,
+    "tracking": "0"
+  },
+  "label": {
+    "size": "13px",
+    "lineHeight": "1.4",
+    "weight": 500,
+    "tracking": "0"
+  },
+  "caption": {
+    "size": "12px",
+    "lineHeight": "1.4",
+    "weight": 400,
+    "tracking": "0"
+  },
+  "micro": {
+    "size": "11px",
+    "lineHeight": "1.3",
+    "weight": 600,
+    "tracking": "0"
+  }
 } as const;
 
 export const space = {
-  1: 4,
-  2: 8,
-  3: 12,
-  4: 16,
-  5: 20,
-  6: 24,
-  8: 32,
-  12: 48,
+  "0": 0,
+  "1": 4,
+  "1h": 6,
+  "2": 8,
+  "2h": 10,
+  "3": 12,
+  "3h": 14,
+  "4": 16,
+  "4h": 18,
+  "5": 20,
+  "6": 24,
+  "7": 28,
+  "8": 32,
+  "10": 40,
+  "11": 44,
+  "12": 48
 } as const;
-
 export const radius = {
-  xs: 8, // Checkboxes, kbd hints
-  sm: 12, // Chips, segmented pills
-  md: 16, // Wells, notes, nav items (buttons and inputs are pills)
-  well: 20, // Stat tiles, habit tiles, wells
-  lg: 24, // Panels and cards
-  tile: 24, // Bento tiles on mobile Home
-  xl: 28, // Bottom sheets, large media
-  pill: 999, // Status pills, avatars, FAB
+  "sm": "12px",
+  "md": "18px",
+  "row": "22px",
+  "tile": "24px",
+  "tile-lg": "28px",
+  "card": "32px",
+  "pill": "999px"
 } as const;
-
 export const shadows = {
-  light: {
-    sm: 'none',
-    md: '0 12px 32px -12px rgba(15,20,30,0.28), 0 2px 6px rgba(15,20,30,0.06)',
-    primary: '0 8px 20px -6px rgba(15,20,30,0.35)',
+  "card": {
+    "light": "0 24px 60px -30px rgba(46,34,74,0.30)",
+    "dark": "0 24px 60px -30px rgba(0,0,0,0.65)"
   },
-  dark: {
-    sm: 'none',
-    md: '0 14px 34px -12px rgba(0,0,0,0.75), 0 0 0 1px #303540',
-    primary: '0 8px 20px -6px rgba(0,0,0,0.6)',
+  "tabbar": {
+    "light": "0 18px 40px -16px rgba(20,16,40,0.35)",
+    "dark": "0 18px 40px -16px rgba(0,0,0,0.6)"
   },
+  "fab": {
+    "light": "0 8px 20px -8px rgba(20,16,40,0.45)",
+    "dark": "0 8px 20px -8px rgba(0,0,0,0.6)"
+  }
 } as const;
-
 export const layout = {
-  sidebarWidth: 248, // Desktop sidebar
-  desktopPadding: 32, // Desktop content padding
-  desktopGap: 24, // Gap between desktop cards
-  mobileGutter: 18, // Mobile side padding
-  mobileTopbarHeight: 56, // Mobile pushed-screen top bar
-  tabbarHeight: 84, // Mobile tab bar incl. 20px home-indicator space
-  floatInset: 12, // Gap between a floating nav (sidebar, tab bar) and the window edge
-  fabSize: 56, // Centre capture button
-  touchMin: 44, // Minimum touch target
-  bentoColumns: 4, // Mobile Home grid columns
-  bentoGap: 9, // Mobile Home grid gap
-  bentoRow: 70, // Mobile Home row height (Edit mode 64)
-  breakpointMobile: 768, // Below this width use the mobile layouts
+  "page-max": "1360px",
+  "page-gutter": "clamp(16px, 3vw, 40px)",
+  "page-gutter-phone": "18px",
+  "card-gap": "20px",
+  "card-pad": "24px",
+  "control-h": "56px",
+  "control-h-sm": "40px",
+  "icon-btn": "48px",
+  "check": "40px",
+  "touch-min": "44px",
+  "nav-item-h": "44px",
+  "tabbar-h": "76px",
+  "tabbar-inset": "14px",
+  "tabbar-bottom": "22px",
+  "fab": "60px",
+  "bp-tablet": "768px",
+  "bp-desktop": "1200px"
+} as const;
+export const glass = {
+  "blur": "22px",
+  "saturate": "150%"
+} as const;
+export const motion = {
+  "dur-fast": "120ms",
+  "dur-base": "200ms",
+  "dur-slow": "320ms",
+  "ease": "cubic-bezier(0.2, 0.8, 0.2, 1)"
 } as const;
 
-export const motion = {
-  durFast: '120ms', // Hovers
-  dur: '200ms', // Toggles, checkboxes
-  durSlow: '320ms', // Sheets, page pushes
-  ease: 'cubic-bezier(0.2, 0.8, 0.2, 1)', // All transitions
-} as const;
+/** Chart colors: series = inverse, today/highlight = accent, future = well-line. */
+export const chart = { series: cssVar('inverse'), highlight: cssVar('accent'), muted: cssVar('well-line'), grid: cssVar('well-line') } as const;
+
+// ---- App extras (not part of the generated pack) ----
+
+/** The seven life areas. In Glass v2 they share the strong fill; the area's name tells them apart. */
+export const areas = ['health', 'career', 'finance', 'family', 'growth', 'home', 'fun'] as const;
+export type Area = (typeof areas)[number];

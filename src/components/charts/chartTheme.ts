@@ -1,6 +1,19 @@
-import { fonts, type ColorToken } from '@design/tokens';
+import { fonts } from '@design/tokens';
 
-/** One theme's colors from design/tokens.ts, by token name. */
-export type ChartColors = Record<ColorToken, string>;
+/** The colours a chart may use, resolved for the theme and accent showing (see useThemeColors). */
+export type ChartColors = {
+  ink: string;
+  'ink-2': string;
+  'ink-3': string;
+  /** Grid and axis lines. */
+  line: string;
+  /** Alternating bands (radar). */
+  fill: string;
+  fill2: string;
+  /** Lines and points: the strong fill. */
+  strong: string;
+  /** Today, the one thing that needs you. */
+  accent: string;
+};
 
 export const chartFont = fonts.sans;

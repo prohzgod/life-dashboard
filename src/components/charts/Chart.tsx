@@ -6,7 +6,7 @@ import type { EChartsCoreOption } from 'echarts/core';
 // The ES module build: the CommonJS one (lib/) arrives wrapped in an object in production builds.
 import ReactEChartsCore from 'echarts-for-react/esm/core';
 import type { ChartColors } from './chartTheme';
-import { useThemeColors } from '@/theme/usePalette';
+import { useThemeColors } from '@/theme/useAppearance';
 
 echarts.use([LineChart, RadarChart, GridComponent, LegendComponent, MarkLineComponent, MarkPointComponent, RadarComponent, TooltipComponent, SVGRenderer]);
 
