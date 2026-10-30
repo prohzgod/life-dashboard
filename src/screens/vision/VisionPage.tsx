@@ -13,12 +13,14 @@ import { useToday } from '@/lib/useToday';
 import { FreeCanvas } from './FreeCanvas';
 import { VisionCard } from './VisionCard';
 import { CardDialog, ImageLinkDialog, LibraryPhotosDialog, PinGoalDialog } from './VisionDialogs';
+import { useT } from '@/i18n';
 import styles from './Vision.module.css';
 
 type Open = { kind: 'card'; card?: VisionCardView } | { kind: 'pin' } | { kind: 'library' } | { kind: 'link' } | null;
 
 /** /vision: the year's board of words and pictures, by area, with goals pinned to them. */
 export function VisionPage() {
+  const t = useT().vision;
   const today = useToday();
   const phone = useIsMobile();
   const [params, setParams] = useSearchParams();
@@ -41,10 +43,10 @@ export function VisionPage() {
 
   async function addFiles(files: Iterable<File>) {
     const images = [...files].filter((f) => f.type.startsWith('image/'));
-    if (!images.length) return setMessage('Those aren’t pictures. Try a JPEG, PNG or HEIC.');
+    if (!images.length) return setMessage(t.notPictures);
     const prepared = await Promise.all(images.map(async (f) => ({ ...(await prepareImage(f, 900)), name: f.name })));
     await addImageCards(prepared, { areaId: areaFilter });
-    setMessage(images.length === 1 ? 'Added a picture to your board.' : `Added ${images.length} pictures to your board.`);
+    setMessage(t.added(images.length));
   }
 
   async function addFromLink(url: string): Promise<string | null> {
@@ -52,10 +54,10 @@ export function VisionPage() {
       const blob = await fetchImage(url);
       const name = decodeURIComponent(new URL(url).pathname.split('/').pop() ?? '');
       await addImageCards([{ ...(await prepareImage(blob, 900)), name }], { areaId: areaFilter });
-      setMessage('Added a picture to your board.');
+      setMessage(t.added(1));
       return null;
     } catch (err) {
-      return err instanceof VisionError ? err.message : 'That picture couldn’t be added.';
+      return err instanceof VisionError ? err.message : t.addFailed;
     }
   }
 
@@ -92,7 +94,7 @@ export function VisionPage() {
       accept="image/*"
       multiple
       hidden
-      aria-label="Choose pictures for the board"
+      aria-label={t.choose}
       onChange={(e) => {
         if (e.target.files) void addFiles(e.target.files);
         e.target.value = '';
@@ -120,12 +122,12 @@ export function VisionPage() {
     return (
       <div className={styles.phone}>
         <header className={styles.phoneHeader}>
-          <Link to="/" className={styles.phoneBack} aria-label="Back to Home">
+          <Link to="/" className={styles.phoneBack} aria-label={t.backHome}>
             <Icon name="chevronLeft" size={18} />
-            Home
+            {t.home}
           </Link>
-          <h1 className={styles.phoneTitle}>Vision board</h1>
-          <button type="button" className={styles.roundButton} aria-label="Add to board" onClick={() => setSheet(true)}>
+          <h1 className={styles.phoneTitle}>{t.title}</h1>
+          <button type="button" className={styles.roundButton} aria-label={t.addToBoard} onClick={() => setSheet(true)}>
             <Icon name="plus" size={20} />
           </button>
         </header>
@@ -140,7 +142,7 @@ export function VisionPage() {
             </div>
           ))}
         </div>
-        <Sheet open={sheet} onClose={() => setSheet(false)} title="Add to board">
+        <Sheet open={sheet} onClose={() => setSheet(false)} title={t.addToBoard}>
           <div className={styles.sheetActions}>
             <Button
               variant="primary"
@@ -150,7 +152,7 @@ export function VisionPage() {
                 fileRef.current?.click();
               }}
             >
-              Add pictures
+              {t.addPictures}
             </Button>
             <Button
               onClick={() => {
@@ -158,7 +160,7 @@ export function VisionPage() {
                 setOpen({ kind: 'card' });
               }}
             >
-              Add words
+              {t.addWords}
             </Button>
             <Button
               onClick={() => {
@@ -166,7 +168,7 @@ export function VisionPage() {
                 setOpen({ kind: 'library' });
               }}
             >
-              Pick from your Library
+              {t.fromLibrary}
             </Button>
             <Button
               onClick={() => {
@@ -174,7 +176,7 @@ export function VisionPage() {
                 setOpen({ kind: 'pin' });
               }}
             >
-              Pin a goal
+              {t.pinGoal}
             </Button>
           </div>
         </Sheet>
@@ -189,41 +191,41 @@ export function VisionPage() {
         <div className={styles.heading}>
           <div className={styles.titleBlock}>
             <span className={styles.eyebrow}>{board?.year}</span>
-            <h1 className={styles.title}>Vision board</h1>
+            <h1 className={styles.title}>{t.title}</h1>
           </div>
           {word}
         </div>
         <div className={styles.actions}>
           <Segmented
-            label="Layout"
+            label={t.layout}
             value={layout}
             onChange={(v) => setParam('layout', v === 'canvas' ? 'canvas' : null)}
             options={[
-              { value: 'grid', label: 'Grid' },
-              { value: 'canvas', label: 'Free canvas' },
+              { value: 'grid', label: t.layouts.grid },
+              { value: 'canvas', label: t.layouts.canvas },
             ]}
           />
           <Menu
-            label={`Showing ${filterName ?? 'All areas'}`}
+            label={t.showing(filterName ?? t.allAreas)}
             className={styles.filter}
             trigger={
               <span className={styles.filterLabel}>
-                {filterName ?? 'All areas'}
+                {filterName ?? t.allAreas}
                 <Icon name="chevronDown" size={14} />
               </span>
             }
-            items={[{ label: 'All areas', onSelect: () => setParam('area', null) }, ...(areas ?? []).map((a) => ({ label: a.name, onSelect: () => setParam('area', a.id) }))]}
+            items={[{ label: t.allAreas, onSelect: () => setParam('area', null) }, ...(areas ?? []).map((a) => ({ label: a.name, onSelect: () => setParam('area', a.id) }))]}
           />
-          <Button onClick={() => setOpen({ kind: 'card' })}>Add words</Button>
-          <Button onClick={() => setOpen({ kind: 'pin' })}>Pin a goal</Button>
+          <Button onClick={() => setOpen({ kind: 'card' })}>{t.addWords}</Button>
+          <Button onClick={() => setOpen({ kind: 'pin' })}>{t.pinGoal}</Button>
           <Button variant="primary" onClick={() => fileRef.current?.click()}>
-            Add images
+            {t.addImages}
           </Button>
         </div>
       </header>
 
       {board && all.length === 0 && <Empty onWords={() => setOpen({ kind: 'card' })} onImages={() => fileRef.current?.click()} />}
-      {board && all.length > 0 && cards.length === 0 && <p className={styles.quiet}>Nothing on the board for {filterName} yet.</p>}
+      {board && all.length > 0 && cards.length === 0 && <p className={styles.quiet}>{t.nothingFor(filterName ?? '')}</p>}
 
       {layout === 'grid' ? (
         <div className={styles.grid}>
@@ -244,17 +246,18 @@ export function VisionPage() {
 }
 
 function WordOfYear({ word, year, phone }: { word: string | null; year: number; phone: boolean }) {
+  const t = useT().vision;
   if (phone) {
     return (
       <div className={styles.phoneWord}>
-        <span>{year}, word of the year</span>
+        <span>{t.phoneWord(year)}</span>
         {word ? (
           <Link to="/goals" className={styles.wordPill}>
             {word}
           </Link>
         ) : (
           <Link to="/goals" className={styles.textLink}>
-            Choose one
+            {t.chooseOne}
           </Link>
         )}
       </div>
@@ -264,16 +267,17 @@ function WordOfYear({ word, year, phone }: { word: string | null; year: number; 
     <Link to="/goals" className={styles.wordChip}>
       {word ? (
         <>
-          Word of the year: <strong>{word}</strong>
+          {t.wordOfYear} <strong>{word}</strong>
         </>
       ) : (
-        'Choose a word of the year'
+        t.chooseWord
       )}
     </Link>
   );
 }
 
 function DropZone({ onFiles, onLink, onLibrary, className }: { onFiles: (files: FileList) => void; onLink: () => void; onLibrary: () => void; className?: string }) {
+  const t = useT().vision;
   const [over, setOver] = useState(false);
   const stop = (e: DragEvent) => {
     e.preventDefault();
@@ -295,13 +299,13 @@ function DropZone({ onFiles, onLink, onLibrary, className }: { onFiles: (files: 
     >
       <Icon name="plus" size={18} />
       <span>
-        Drop images,{' '}
+        {t.dropImages}{' '}
         <button type="button" className={styles.inlineButton} onClick={onLink}>
-          paste a link
+          {t.pasteLink}
         </button>
-        , or{' '}
+        {t.or}{' '}
         <button type="button" className={styles.inlineButton} onClick={onLibrary}>
-          pick photos from your Library
+          {t.pickPhotos}
         </button>
       </span>
     </div>
@@ -309,15 +313,16 @@ function DropZone({ onFiles, onLink, onLibrary, className }: { onFiles: (files: 
 }
 
 function Empty({ onWords, onImages }: { onWords: () => void; onImages: () => void }) {
+  const t = useT().vision;
   return (
-    <section className={styles.empty} aria-label="Empty board">
-      <h2 className={styles.emptyTitle}>Picture the year you want</h2>
-      <p className={styles.quiet}>Add a few words for each part of your life, pictures that pull you forward, and pin the goals that get you there.</p>
+    <section className={styles.empty} aria-label={t.empty.label}>
+      <h2 className={styles.emptyTitle}>{t.empty.title}</h2>
+      <p className={styles.quiet}>{t.empty.body}</p>
       <div className={styles.emptyActions}>
         <Button variant="primary" onClick={onImages}>
-          Add images
+          {t.addImages}
         </Button>
-        <Button onClick={onWords}>Add words</Button>
+        <Button onClick={onWords}>{t.addWords}</Button>
       </div>
     </section>
   );

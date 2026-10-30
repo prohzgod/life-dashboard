@@ -5,6 +5,7 @@ import type { VisionCardView } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { cx } from '@/components/ui/cx';
 import { useAttachmentUrl } from '@/screens/library/editor/useAttachmentUrl';
+import { useT } from '@/i18n';
 import styles from './Vision.module.css';
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 
 /** One card on the board: words set large, or a picture with its caption; a pinned goal shows its progress. */
 export function VisionCard({ card, phone = false, onEdit, className, style }: Props) {
+  const t = useT().vision.card;
   const tone = card.area?.color;
   const toneStyle = (card.bold ? {} : tone ? { '--card-bg': `var(--${tone}-soft)`, '--card-ink': `var(--${tone}-ink)` } : {}) as CSSProperties;
   const goal = card.goal && (
@@ -25,13 +27,13 @@ export function VisionCard({ card, phone = false, onEdit, className, style }: Pr
       {card.goal.percent !== null && `, ${Math.round(card.goal.percent)}%`}
     </Link>
   );
-  const label = card.kind === 'words' ? `Edit “${card.text}”` : `Edit ${card.text ? `“${card.text}”` : 'picture'}`;
+  const label = card.kind === 'words' ? t.editWords(card.text) : t.editPicture(card.text);
 
   return (
     <article
       className={cx(styles.card, card.kind === 'image' ? styles.imageCard : styles.wordsCard, card.bold && styles.bold, card.size === 'L' && styles.tall, phone && styles.cardPhone, className)}
       style={{ ...toneStyle, ...style }}
-      aria-label={card.kind === 'words' ? card.text : card.text || 'Picture'}
+      aria-label={card.kind === 'words' ? card.text : card.text || t.picture}
     >
       {card.kind === 'image' ? <Picture card={card} /> : null}
       {card.kind === 'words' && (
@@ -59,9 +61,10 @@ export function VisionCard({ card, phone = false, onEdit, className, style }: Pr
 }
 
 function Picture({ card }: { card: VisionCardView }) {
+  const t = useT().vision.card;
   const src = useAttachmentUrl(card.attachmentId ? `attachment://${card.attachmentId}` : '');
   return src ? (
-    <img className={styles.picture} src={src} alt={card.text || 'A picture on your vision board'} draggable={false} />
+    <img className={styles.picture} src={src} alt={card.text || t.pictureAlt} draggable={false} />
   ) : (
     <span className={styles.picturePlaceholder} aria-hidden="true">
       <Icon name="image" size={28} />

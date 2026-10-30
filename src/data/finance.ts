@@ -218,7 +218,7 @@ export async function addSavingsReminder(cents: number, today: Day): Promise<voi
     goalId: null,
     keyResultId: null,
     parentTaskId: null,
-    title: `Move ${formatMoney(cents, currency, { whole: true })} to savings`,
+    title: messages().finance.reminderTask(formatMoney(cents, currency, { whole: true })),
     notes: '',
     status: 'open',
     priority: null,
@@ -278,6 +278,6 @@ export async function loadFinanceMonth(month: Month, today: Day): Promise<Financ
     savingsGoals,
     accounts,
     netWorth: accounts.reduce((sum, a) => sum + (a.kind === 'asset' ? a.balance : -a.balance), 0),
-    hasReminder: tasks.some((t) => t.rrule?.startsWith('FREQ=MONTHLY') && /to savings$/.test(t.title) && t.status !== 'done'),
+    hasReminder: tasks.some((t) => t.rrule?.startsWith('FREQ=MONTHLY') && LOCALES.some((locale) => t.title.endsWith(messages(locale).finance.reminderSuffix)) && t.status !== 'done'),
   };
 }

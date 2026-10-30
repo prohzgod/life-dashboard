@@ -24,13 +24,17 @@ export function addMonthsTo(month: Month, n: number): Month {
   return `${Math.floor(index / 12)}-${String((index % 12) + 1).padStart(2, '0')}`;
 }
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
 /** "September 2026" or, with short, "Sep". */
 export function monthLabel(month: Month, short = false): string {
   const [y, m] = month.split('-').map(Number) as [number, number];
-  const name = MONTHS[m - 1]!;
-  return short ? name.slice(0, 3) : `${name} ${y}`;
+  const { format } = messages();
+  return short ? format.monthsShort[m - 1]! : format.monthYear(new Date(y, m - 1, 1));
+}
+
+/** "September": the month's name alone. */
+export function monthName(month: Month): string {
+  const [y, m] = month.split('-').map(Number) as [number, number];
+  return messages().calendar.monthName(new Date(y, m - 1, 1));
 }
 
 /** "12.5" or "-38.40" or "$1,100" typed by hand → cents. Null when it isn't a number. */
@@ -122,10 +126,11 @@ export function summarizeMonth(txs: readonly TxLike[], categories: readonly Cate
 
 /** "1 day left, $660 under budget", in plain words. */
 export function budgetSentence(s: MonthSummary, money: (cents: number) => string): string {
-  const left = s.daysLeft === 0 ? 'Month closed' : s.daysLeft === 1 ? '1 day left' : `${s.daysLeft} days left`;
-  if (!s.budget) return `${left}, no budget set`;
+  const t = messages().finance.budget;
+  const left = s.daysLeft === 0 ? t.closed : t.daysLeft(s.daysLeft);
+  if (!s.budget) return t.none(left);
   const diff = s.budget - s.spent;
-  return `${left}, ${diff >= 0 ? `${money(diff)} under budget` : `${money(-diff)} over budget`}`;
+  return diff >= 0 ? t.under(left, money(diff)) : t.over(left, money(-diff));
 }
 
 export type TrendMonth = { month: Month; spent: number; budget: number; over: boolean };
@@ -145,12 +150,13 @@ export function trendSentence(trend: readonly TrendMonth[], money: (cents: numbe
   if (withData.length < 2) return null;
   const parts: string[] = [];
   const over = withData.filter((t) => t.over && t !== trend.at(-1));
-  if (over.length === 1) parts.push(`${monthLabel(over[0]!.month).split(' ')[0]} went over budget (${money(over[0]!.spent)}).`);
-  else if (over.length > 1) parts.push(`${over.length} of the last ${trend.length - 1} months went over budget.`);
+  const t = messages().finance.trendNote;
+  if (over.length === 1) parts.push(t.oneOver(monthName(over[0]!.month), money(over[0]!.spent)));
+  else if (over.length > 1) parts.push(t.manyOver(over.length, trend.length - 1));
   const current = trend.at(-1)!;
   const lowerThan = trend.slice(0, -1).filter((t) => t.spent > 0);
   if (current.spent > 0 && lowerThan.length && lowerThan.every((t) => t.spent > current.spent)) {
-    parts.push(`${monthLabel(current.month).split(' ')[0]} is your lowest month since ${monthLabel(lowerThan[0]!.month).split(' ')[0]}.`);
+    parts.push(t.lowest(monthName(current.month), monthName(lowerThan[0]!.month)));
   }
   return parts.join(' ') || null;
 }

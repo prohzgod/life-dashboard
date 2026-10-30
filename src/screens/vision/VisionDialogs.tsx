@@ -17,6 +17,7 @@ import { Button, Segmented } from '@/components/ui';
 import { Dialog } from '@/components/ui/Dialog';
 import { cx } from '@/components/ui/cx';
 import { useAttachmentUrl } from '@/screens/library/editor/useAttachmentUrl';
+import { useT } from '@/i18n';
 import styles from './Vision.module.css';
 
 function useChoices() {
@@ -36,7 +37,8 @@ function ErrorLine({ text }: { text: string }) {
 
 /** New words, or edit any card: words or caption, area, size, style and a pinned goal. */
 export function CardDialog({ open, onClose, card, position }: { open: boolean; onClose: () => void; card?: VisionCardView; position?: { index: number; count: number } }) {
-  const title = card ? (card.kind === 'words' ? 'Edit words' : 'Edit picture') : 'Add words';
+  const t = useT().vision.dialog;
+  const title = card ? (card.kind === 'words' ? t.editWords : t.editPicture) : t.addWords;
   return (
     <Dialog open={open} onClose={onClose} title={title}>
       {open && <CardForm key={card?.id ?? 'new'} card={card} position={position} onDone={onClose} />}
@@ -45,6 +47,7 @@ export function CardDialog({ open, onClose, card, position }: { open: boolean; o
 }
 
 function CardForm({ card, position, onDone }: { card?: VisionCardView; position?: { index: number; count: number }; onDone: () => void }) {
+  const t = useT().vision.dialog;
   const id = useId();
   const choices = useChoices();
   const words = !card || card.kind === 'words';
@@ -60,28 +63,28 @@ function CardForm({ card, position, onDone }: { card?: VisionCardView; position?
       else await addWordsCard(fields);
       onDone();
     } catch (err) {
-      setError(err instanceof VisionError ? err.message : 'That didn’t save. Try again.');
+      setError(err instanceof VisionError ? err.message : t.saveFailed);
     }
   }
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
       <div className={styles.field}>
-        <label htmlFor={`${id}-text`}>{words ? 'Words' : 'Caption'}</label>
+        <label htmlFor={`${id}-text`}>{words ? t.words : t.caption}</label>
         <textarea
           id={`${id}-text`}
           data-autofocus
           rows={words ? 3 : 2}
           value={form.text}
           onChange={(e) => set('text', e.target.value)}
-          placeholder={words ? 'Strong body, quiet mind.' : 'Kyoto in spring'}
+          placeholder={words ? t.wordsPlaceholder : t.captionPlaceholder}
         />
       </div>
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <label htmlFor={`${id}-area`}>Area</label>
+          <label htmlFor={`${id}-area`}>{t.area}</label>
           <select id={`${id}-area`} value={form.areaId} onChange={(e) => set('areaId', e.target.value)}>
-            <option value="">No area</option>
+            <option value="">{t.noArea}</option>
             {choices?.areas.map((a) => (
               <option key={a.id} value={a.id}>
                 {a.name}
@@ -90,9 +93,9 @@ function CardForm({ card, position, onDone }: { card?: VisionCardView; position?
           </select>
         </div>
         <div className={styles.field}>
-          <label htmlFor={`${id}-goal`}>Pinned goal</label>
+          <label htmlFor={`${id}-goal`}>{t.pinnedGoal}</label>
           <select id={`${id}-goal`} value={form.goalId} onChange={(e) => set('goalId', e.target.value)}>
-            <option value="">None</option>
+            <option value="">{t.none}</option>
             {choices?.goals.map((g) => (
               <option key={g.id} value={g.id}>
                 {g.title}
@@ -103,21 +106,21 @@ function CardForm({ card, position, onDone }: { card?: VisionCardView; position?
       </div>
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <span className={styles.fieldLabel}>Size</span>
+          <span className={styles.fieldLabel}>{t.size}</span>
           <Segmented
-            label="Size"
+            label={t.size}
             value={form.size}
             onChange={(v) => set('size', v)}
             options={[
-              { value: 'S', label: 'Regular' },
-              { value: 'L', label: 'Tall' },
+              { value: 'S', label: t.sizes.S },
+              { value: 'L', label: t.sizes.L },
             ]}
           />
         </div>
         {words && (
           <label className={styles.check}>
             <input type="checkbox" checked={form.bold} onChange={(e) => set('bold', e.target.checked)} />
-            Dark card
+            {t.dark}
           </label>
         )}
       </div>
@@ -134,7 +137,7 @@ function CardForm({ card, position, onDone }: { card?: VisionCardView; position?
                 onDone();
               }}
             >
-              Move earlier
+              {t.earlier}
             </Button>
             <Button
               variant="quiet"
@@ -145,7 +148,7 @@ function CardForm({ card, position, onDone }: { card?: VisionCardView; position?
                 onDone();
               }}
             >
-              Move later
+              {t.later}
             </Button>
             <Button
               variant="quiet"
@@ -156,14 +159,14 @@ function CardForm({ card, position, onDone }: { card?: VisionCardView; position?
                 onDone();
               }}
             >
-              Remove from board
+              {t.remove}
             </Button>
           </>
         )}
         <span className={styles.spacer} />
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          {card ? 'Save' : 'Add to board'}
+          {card ? t.save : t.add}
         </Button>
       </div>
     </form>
@@ -172,14 +175,16 @@ function CardForm({ card, position, onDone }: { card?: VisionCardView; position?
 
 /** Pin a goal to a card, or make a words card for it. */
 export function PinGoalDialog({ open, onClose, cards }: { open: boolean; onClose: () => void; cards: VisionCardView[] }) {
+  const t = useT().vision.dialog;
   return (
-    <Dialog open={open} onClose={onClose} title="Pin a goal">
+    <Dialog open={open} onClose={onClose} title={t.pinGoal}>
       {open && <PinGoalForm cards={cards} onDone={onClose} />}
     </Dialog>
   );
 }
 
 function PinGoalForm({ cards, onDone }: { cards: VisionCardView[]; onDone: () => void }) {
+  const t = useT().vision.dialog;
   const id = useId();
   const choices = useChoices();
   const [goalId, setGoalId] = useState('');
@@ -189,7 +194,7 @@ function PinGoalForm({ cards, onDone }: { cards: VisionCardView[]; onDone: () =>
   async function submit(e: FormEvent) {
     e.preventDefault();
     const goal = choices?.goals.find((g) => g.id === goalId);
-    if (!goal) return setError('Choose a goal.');
+    if (!goal) return setError(t.chooseGoal);
     if (cardId === 'new') await addWordsCard({ text: goal.title, goalId: goal.id, areaId: goal.areaId });
     else await updateVisionCard(cardId, { goalId: goal.id });
     onDone();
@@ -197,11 +202,11 @@ function PinGoalForm({ cards, onDone }: { cards: VisionCardView[]; onDone: () =>
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
-      <p className={styles.quiet}>A pinned goal shows its progress on the card, and the card links to it.</p>
+      <p className={styles.quiet}>{t.pinHint}</p>
       <div className={styles.field}>
-        <label htmlFor={`${id}-goal`}>Goal</label>
+        <label htmlFor={`${id}-goal`}>{t.goal}</label>
         <select id={`${id}-goal`} data-autofocus value={goalId} onChange={(e) => setGoalId(e.target.value)}>
-          <option value="">Choose a goal</option>
+          <option value="">{t.chooseGoalOption}</option>
           {choices?.goals.map((g) => (
             <option key={g.id} value={g.id}>
               {g.title}
@@ -210,23 +215,23 @@ function PinGoalForm({ cards, onDone }: { cards: VisionCardView[]; onDone: () =>
         </select>
       </div>
       <div className={styles.field}>
-        <label htmlFor={`${id}-card`}>On</label>
+        <label htmlFor={`${id}-card`}>{t.on}</label>
         <select id={`${id}-card`} value={cardId} onChange={(e) => setCardId(e.target.value)}>
-          <option value="new">A new card with the goal’s name</option>
+          <option value="new">{t.newCard}</option>
           {cards.map((c) => (
             <option key={c.id} value={c.id}>
-              {c.text || 'Picture'}
+              {c.text || t.photo}
             </option>
           ))}
         </select>
       </div>
-      {choices && choices.goals.length === 0 && <p className={styles.quiet}>You have no active goals yet. Set one in Goals first.</p>}
+      {choices && choices.goals.length === 0 && <p className={styles.quiet}>{t.noGoals}</p>}
       <ErrorLine text={error} />
       <div className={styles.formActions}>
         <span className={styles.spacer} />
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          Pin goal
+          {t.pin}
         </Button>
       </div>
     </form>
@@ -235,14 +240,16 @@ function PinGoalForm({ cards, onDone }: { cards: VisionCardView[]; onDone: () =>
 
 /** Pick pictures already in your Library. */
 export function LibraryPhotosDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useT().vision.dialog;
   return (
-    <Dialog open={open} onClose={onClose} title="Photos from your Library">
+    <Dialog open={open} onClose={onClose} title={t.libraryTitle}>
       {open && <LibraryPhotosForm onDone={onClose} />}
     </Dialog>
   );
 }
 
 function LibraryPhotosForm({ onDone }: { onDone: () => void }) {
+  const t = useT().vision.dialog;
   const photos = useLiveQuery(() => listPhotos(), []);
   const [picked, setPicked] = useState<string[]>([]);
   const toggle = (id: string) => setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
@@ -256,8 +263,8 @@ function LibraryPhotosForm({ onDone }: { onDone: () => void }) {
         onDone();
       }}
     >
-      {photos && photos.length === 0 && <p className={styles.quiet}>No photos in your Library yet. Pictures you add to pages and galleries show up here.</p>}
-      <ul className={styles.photoGrid} aria-label="Library photos">
+      {photos && photos.length === 0 && <p className={styles.quiet}>{t.noPhotos}</p>}
+      <ul className={styles.photoGrid} aria-label={t.libraryPhotos}>
         {photos?.map((p) => (
           <li key={p.id}>
             <PhotoChoice photo={p} picked={picked.includes(p.id)} onToggle={() => toggle(p.id)} />
@@ -266,9 +273,9 @@ function LibraryPhotosForm({ onDone }: { onDone: () => void }) {
       </ul>
       <div className={styles.formActions}>
         <span className={styles.spacer} />
-        <Button onClick={onDone}>Cancel</Button>
+        <Button onClick={onDone}>{t.cancel}</Button>
         <Button type="submit" variant="primary" disabled={!picked.length}>
-          {picked.length ? `Add ${picked.length} to board` : 'Add to board'}
+          {picked.length ? t.addN(picked.length) : t.add}
         </Button>
       </div>
     </form>
@@ -276,9 +283,10 @@ function LibraryPhotosForm({ onDone }: { onDone: () => void }) {
 }
 
 function PhotoChoice({ photo, picked, onToggle }: { photo: Attachment; picked: boolean; onToggle: () => void }) {
+  const t = useT().vision.dialog;
   const src = useAttachmentUrl(`attachment://${photo.id}`, true);
   return (
-    <button type="button" className={cx(styles.photoChoice, picked && styles.photoPicked)} aria-pressed={picked} aria-label={photo.caption || 'Photo'} onClick={onToggle}>
+    <button type="button" className={cx(styles.photoChoice, picked && styles.photoPicked)} aria-pressed={picked} aria-label={photo.caption || t.photo} onClick={onToggle}>
       {src && <img src={src} alt="" />}
     </button>
   );
@@ -286,19 +294,20 @@ function PhotoChoice({ photo, picked, onToggle }: { photo: Attachment; picked: b
 
 /** Paste the link to a picture. */
 export function ImageLinkDialog({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd: (url: string) => Promise<string | null> }) {
+  const t = useT().vision.dialog;
   const id = useId();
   const [url, setUrl] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   return (
-    <Dialog open={open} onClose={onClose} title="Add a picture from a link">
+    <Dialog open={open} onClose={onClose} title={t.linkTitle}>
       {open && (
         <form
           className={styles.form}
           noValidate
           onSubmit={async (e) => {
             e.preventDefault();
-            if (!/^https?:\/\//i.test(url.trim())) return setError('Paste a link starting with https://');
+            if (!/^https?:\/\//i.test(url.trim())) return setError(t.pasteHttps);
             setBusy(true);
             const problem = await onAdd(url);
             setBusy(false);
@@ -310,16 +319,16 @@ export function ImageLinkDialog({ open, onClose, onAdd }: { open: boolean; onClo
           }}
         >
           <div className={styles.field}>
-            <label htmlFor={`${id}-url`}>Picture link</label>
+            <label htmlFor={`${id}-url`}>{t.pictureLink}</label>
             <input id={`${id}-url`} data-autofocus type="url" inputMode="url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://…/kyoto.jpg" />
           </div>
-          <p className={styles.quiet}>The picture is copied onto this device, so the board works offline.</p>
+          <p className={styles.quiet}>{t.copied}</p>
           <ErrorLine text={error} />
           <div className={styles.formActions}>
             <span className={styles.spacer} />
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose}>{t.cancel}</Button>
             <Button type="submit" variant="primary" disabled={busy}>
-              {busy ? 'Copying…' : 'Add picture'}
+              {busy ? t.copying : t.addPicture}
             </Button>
           </div>
         </form>

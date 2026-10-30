@@ -11,7 +11,7 @@ export const LOCALE_STORAGE_KEY = 'life-dashboard:locale';
 
 const catalogs: Record<Locale, Messages> = { vi, en };
 /** The BCP 47 tag handed to Intl for numbers, currencies and dates. */
-const INTL_TAGS: Record<Locale, string> = { vi: 'vi-VN', en: 'en-GB' };
+const INTL_TAGS: Record<Locale, string> = { vi: 'vi-VN', en: 'en-US' };
 
 const listeners = new Set<() => void>();
 /** Read from storage once; copy is looked up on every render. */

@@ -1,6 +1,7 @@
 import type { Messages } from '../locale';
 import { calendar } from './calendar';
 import { errors, seed } from './data';
+import { finance } from './finance';
 import { format } from './format';
 import { goals } from './goals';
 import { home } from './home';
@@ -12,6 +13,7 @@ import { settings } from './settings';
 import { shell } from './shell';
 import { tasks } from './tasks';
 import { today } from './today';
+import { vision } from './vision';
 
 /** Vietnamese copy, the default language. */
-export const vi: Messages = { calendar, errors, format, goals, home, library, progress, reviews, screens, seed, settings, shell, tasks, today };
+export const vi: Messages = { calendar, errors, finance, format, goals, home, library, progress, reviews, screens, seed, settings, shell, tasks, today, vision };

@@ -24,6 +24,7 @@ import { Dialog } from '@/components/ui/Dialog';
 import { prepareImage } from '@/lib/images';
 import { formatDayShort } from '@/lib/format';
 import { formatMoney } from '@/lib/money';
+import { messages, useT } from '@/i18n';
 import styles from './Finance.module.css';
 
 function Field({ label, children, hint }: { label: string; hint?: string; children: (id: string) => ReactNode }) {
@@ -45,7 +46,7 @@ function ErrorLine({ text }: { text: string }) {
   ) : null;
 }
 
-const problem = (error: unknown) => (error instanceof FinanceError || error instanceof CsvError ? error.message : 'That didn’t save. Try again.');
+const problem = (error: unknown) => (error instanceof FinanceError || error instanceof CsvError ? error.message : messages().finance.dialog.saveFailed);
 
 /** Cents → what the amount field shows: "38.40". */
 const editable = (cents: number) => (Math.abs(cents) / 100).toFixed(2);
@@ -66,7 +67,8 @@ type TxProps = {
 };
 
 export function TransactionDialog(props: TxProps) {
-  const title = props.transaction ? 'Edit transaction' : 'Add expense';
+  const t = useT().finance.dialog;
+  const title = props.transaction ? t.editTx : t.addExpense;
   return (
     <Dialog open={props.open} onClose={props.onClose} title={title}>
       {props.open && <TransactionForm key={props.transaction?.id ?? 'new'} {...props} />}
@@ -75,6 +77,7 @@ export function TransactionDialog(props: TxProps) {
 }
 
 function TransactionForm({ onClose, transaction, budgets, goals, today, currency, onSaved }: TxProps) {
+  const t = useT().finance.dialog;
   const kindOf = (categoryId: string | null): Kind => budgets.find((b) => b.id === categoryId)?.kind ?? (transaction && transaction.amount > 0 ? 'income' : 'expense');
   const [kind, setKind] = useState<Kind>(transaction ? kindOf(transaction.categoryId) : 'expense');
   const [form, setForm] = useState({
@@ -100,7 +103,7 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
   async function submit(e: FormEvent) {
     e.preventDefault();
     const cents = parseMoney(form.amount);
-    if (cents === null || cents === 0) return setError('Enter an amount, like 38.40.');
+    if (cents === null || cents === 0) return setError(t.enterAmount);
     const amount = kind === 'income' ? Math.abs(cents) : -Math.abs(cents);
     const categoryId = form.categoryId || (kind !== 'expense' ? (choices[0]?.id ?? null) : null);
     setBusy(true);
@@ -108,7 +111,7 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
       const fields = { day: form.day, description: form.description, amount, categoryId, goalId: kind === 'savings' ? form.goalId || null : null, notes: form.notes };
       if (transaction) await updateTransaction(transaction.id, fields);
       else await addTransaction({ ...fields, receipt: receipt ? { ...(await prepareImage(receipt, 640)), name: receipt.name } : null });
-      onSaved(transaction ? 'Saved.' : `Added ${formatMoney(amount, currency, { signed: true })} for ${form.description.trim()}.`);
+      onSaved(transaction ? t.savedShort : t.added(formatMoney(amount, currency, { signed: true }), form.description.trim()));
       onClose();
     } catch (err) {
       setError(problem(err));
@@ -120,22 +123,18 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
       <Segmented
-        label="Kind"
+        label={t.kind}
         value={kind}
         onChange={pickKind}
-        options={[
-          { value: 'expense', label: 'Expense' },
-          { value: 'income', label: 'Income' },
-          { value: 'savings', label: 'To savings' },
-        ]}
+        options={(['expense', 'income', 'savings'] as const).map((k) => ({ value: k, label: t.kinds[k] }))}
       />
       <div className={styles.fieldRow}>
-        <Field label={`Amount (${currency})`}>
+        <Field label={t.amount(currency)}>
           {(id) => <input id={id} data-autofocus inputMode="decimal" autoComplete="off" value={form.amount} onChange={(e) => set('amount', e.target.value)} placeholder="38.40" />}
         </Field>
-        <Field label="Date">{(id) => <input id={id} type="date" value={form.day} onChange={(e) => set('day', e.target.value)} />}</Field>
+        <Field label={t.date}>{(id) => <input id={id} type="date" value={form.day} onChange={(e) => set('day', e.target.value)} />}</Field>
       </div>
-      <Field label={kind === 'income' ? 'From' : kind === 'savings' ? 'What for' : 'What for'}>
+      <Field label={kind === 'income' ? t.from : t.whatFor}>
         {(id) => (
           <input
             id={id}
@@ -146,15 +145,15 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
               const guess = await suggestCategory(form.description);
               if (guess && budgets.some((b) => b.id === guess && b.kind === 'expense')) set('categoryId', guess);
             }}
-            placeholder={kind === 'income' ? 'Salary' : kind === 'savings' ? 'To emergency fund' : 'Groceries'}
+            placeholder={t.placeholders[kind]}
           />
         )}
       </Field>
       {kind === 'expense' && (
-        <Field label="Category">
+        <Field label={t.category}>
           {(id) => (
             <select id={id} value={form.categoryId} onChange={(e) => set('categoryId', e.target.value)}>
-              <option value="">Not sorted yet</option>
+              <option value="">{t.notSortedYet}</option>
               {choices.map((b) => (
                 <option key={b.id} value={b.id}>
                   {b.name}
@@ -165,10 +164,10 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
         </Field>
       )}
       {kind === 'savings' && (
-        <Field label="Savings goal" hint={goals.length ? 'The goal’s progress moves with this.' : 'Make a goal with a money target in Goals to link it here.'}>
+        <Field label={t.savingsGoal} hint={goals.length ? t.goalHint : t.noGoalHint}>
           {(id) => (
             <select id={id} value={form.goalId} onChange={(e) => set('goalId', e.target.value)}>
-              <option value="">No goal</option>
+              <option value="">{t.noGoal}</option>
               {goals.map((g) => (
                 <option key={g.view.goal.id} value={g.view.goal.id}>
                   {g.view.goal.title}
@@ -179,11 +178,11 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
         </Field>
       )}
       {!transaction && kind === 'expense' && (
-        <Field label="Receipt photo" hint="Optional. Kept on this device with the expense.">
+        <Field label={t.receipt} hint={t.receiptHint}>
           {(id) => <input id={id} type="file" accept="image/*" capture="environment" onChange={(e) => setReceipt(e.target.files?.[0] ?? null)} />}
         </Field>
       )}
-      <Field label="Notes">{(id) => <input id={id} value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder="Optional" />}</Field>
+      <Field label={t.notes}>{(id) => <input id={id} value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder={t.optional} />}</Field>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
         {transaction && (
@@ -192,17 +191,17 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
             className={styles.dangerButton}
             onClick={async () => {
               await deleteTransaction(transaction.id);
-              onSaved('Deleted.');
+              onSaved(t.deleted);
               onClose();
             }}
           >
-            Delete
+            {t.delete}
           </Button>
         )}
         <span className={styles.spacer} />
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t.cancel}</Button>
         <Button type="submit" variant="primary" disabled={busy}>
-          {transaction ? 'Save' : 'Add'}
+          {transaction ? t.save : t.add}
         </Button>
       </div>
     </form>
@@ -213,13 +212,14 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
 
 export function ImportDialog({ open, onClose, onDone }: { open: boolean; onClose: () => void; onDone: (text: string) => void }) {
   return (
-    <Dialog open={open} onClose={onClose} title="Import a bank CSV">
+    <Dialog open={open} onClose={onClose} title={messages().finance.dialog.importTitle}>
       {open && <ImportForm onClose={onClose} onDone={onDone} />}
     </Dialog>
   );
 }
 
 function ImportForm({ onClose, onDone }: { onClose: () => void; onDone: (text: string) => void }) {
+  const t = useT().finance.dialog;
   const [text, setText] = useState<{ name: string; body: string } | null>(null);
   const [order, setOrder] = useState<DateOrder | null>(null);
   const [error, setError] = useState('');
@@ -242,13 +242,11 @@ function ImportForm({ onClose, onDone }: { onClose: () => void; onDone: (text: s
       noValidate
       onSubmit={async (e) => {
         e.preventDefault();
-        if (!statement?.rows.length) return setError('Choose a CSV file with transactions first.');
+        if (!statement?.rows.length) return setError(t.chooseCsv);
         setBusy(true);
         try {
           const r = await importTransactions(statement.rows);
-          onDone(
-            `Imported ${r.added} ${r.added === 1 ? 'transaction' : 'transactions'}${r.duplicates ? `, skipped ${r.duplicates} already here` : ''}${r.uncategorised ? `. ${r.uncategorised} need a category` : ''}.`,
-          );
+          onDone(t.imported(r.added, r.duplicates, r.uncategorised));
           onClose();
         } catch (err) {
           setError(problem(err));
@@ -257,8 +255,8 @@ function ImportForm({ onClose, onDone }: { onClose: () => void; onDone: (text: s
         }
       }}
     >
-      <p className={styles.lead}>Download a CSV from your bank’s website and choose it here. It’s read on this device; nothing is sent anywhere, and no bank login is needed.</p>
-      <Field label="CSV file">
+      <p className={styles.lead}>{t.importLead}</p>
+      <Field label={t.csvFile}>
         {(id) => (
           <input
             id={id}
@@ -276,20 +274,18 @@ function ImportForm({ onClose, onDone }: { onClose: () => void; onDone: (text: s
       </Field>
       {statement && (
         <div className={styles.preview} role="status">
-          <strong>
-            {statement.rows.length} {statement.rows.length === 1 ? 'transaction' : 'transactions'}
-          </strong>
-          {days.length > 0 && ` from ${formatDayShort(days[0]!)} to ${formatDayShort(days.at(-1)!)}`}
-          {statement.skipped > 0 && `. ${statement.skipped} ${statement.skipped === 1 ? 'row' : 'rows'} without a date or amount will be left out`}.
+          <strong>{t.preview(statement.rows.length)}</strong>
+          {days.length > 0 && t.previewRange(formatDayShort(days[0]!), formatDayShort(days.at(-1)!))}
+          {statement.skipped > 0 && t.skipped(statement.skipped)}.
         </div>
       )}
       {statement && (
-        <Field label="Dates are written" hint="Change this if the dates above look wrong.">
+        <Field label={t.datesWritten} hint={t.datesHint}>
           {(id) => (
             <select id={id} value={order ?? statement.order} onChange={(e) => setOrder(e.target.value as DateOrder)}>
-              <option value="dmy">Day / month / year</option>
-              <option value="mdy">Month / day / year</option>
-              <option value="ymd">Year-month-day</option>
+              <option value="dmy">{t.orders.dmy}</option>
+              <option value="mdy">{t.orders.mdy}</option>
+              <option value="ymd">{t.orders.ymd}</option>
             </select>
           )}
         </Field>
@@ -297,9 +293,9 @@ function ImportForm({ onClose, onDone }: { onClose: () => void; onDone: (text: s
       <ErrorLine text={readError || error} />
       <div className={styles.formActions}>
         <span className={styles.spacer} />
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t.cancel}</Button>
         <Button type="submit" variant="primary" disabled={busy || !statement?.rows.length}>
-          Import
+          {t.import}
         </Button>
       </div>
     </form>
@@ -312,13 +308,14 @@ const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'NZD', 'CAD', 'JPY', 'VND', 'SGD
 
 export function BudgetsDialog({ open, onClose, budgets, currency, savingsTarget }: { open: boolean; onClose: () => void; budgets: Budget[]; currency: string; savingsTarget: number }) {
   return (
-    <Dialog open={open} onClose={onClose} title="Edit budgets">
+    <Dialog open={open} onClose={onClose} title={messages().finance.dialog.editBudgets}>
       {open && <BudgetsForm budgets={budgets} currency={currency} savingsTarget={savingsTarget} onClose={onClose} />}
     </Dialog>
   );
 }
 
 function BudgetsForm({ budgets, currency, savingsTarget, onClose }: { budgets: Budget[]; currency: string; savingsTarget: number; onClose: () => void }) {
+  const t = useT().finance.dialog;
   const spending = budgets.filter((b) => b.kind === 'expense');
   const [rows, setRows] = useState(spending.map((b) => ({ id: b.id, name: b.name, amount: b.amount === null ? '' : editable(b.amount) })));
   const [newName, setNewName] = useState('');
@@ -331,7 +328,7 @@ function BudgetsForm({ budgets, currency, savingsTarget, onClose }: { budgets: B
     try {
       const parsed = rows.map((r) => {
         const amount = r.amount.trim() ? parseMoney(r.amount) : null;
-        if (r.amount.trim() && amount === null) throw new FinanceError(`“${r.amount}” for ${r.name} isn’t an amount.`);
+        if (r.amount.trim() && amount === null) throw new FinanceError(t.notAmount(r.amount, r.name));
         return { id: r.id, name: r.name, amount: amount === null ? null : Math.abs(amount) };
       });
       await saveBudgets(parsed);
@@ -345,34 +342,34 @@ function BudgetsForm({ budgets, currency, savingsTarget, onClose }: { budgets: B
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
-      <p className={styles.lead}>Monthly amounts. Leave one empty to track spending without a limit.</p>
+      <p className={styles.lead}>{t.budgetsLead}</p>
       <ul className={styles.budgetRows}>
         {rows.map((r, i) => (
           <li key={r.id}>
-            <input aria-label="Category name" value={r.name} onChange={(e) => setRows(rows.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))} />
+            <input aria-label={t.categoryName} value={r.name} onChange={(e) => setRows(rows.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))} />
             <input
-              aria-label={`Monthly budget for ${r.name}`}
+              aria-label={t.monthlyFor(r.name)}
               inputMode="decimal"
-              placeholder="No limit"
+              placeholder={t.noLimit}
               value={r.amount}
               onChange={(e) => setRows(rows.map((x, j) => (j === i ? { ...x, amount: e.target.value } : x)))}
             />
             <Button
               variant="quiet"
               size="sm"
-              aria-label={`Remove ${r.name}`}
+              aria-label={t.removeItem(r.name)}
               onClick={async () => {
                 await removeBudget(r.id);
                 setRows(rows.filter((x) => x.id !== r.id));
               }}
             >
-              Remove
+              {t.remove}
             </Button>
           </li>
         ))}
       </ul>
       <div className={styles.addRow}>
-        <input aria-label="New category" placeholder="New category, e.g. Pets" value={newName} onChange={(e) => setNewName(e.target.value)} />
+        <input aria-label={t.newCategory} placeholder={t.newCategoryPlaceholder} value={newName} onChange={(e) => setNewName(e.target.value)} />
         <Button
           size="sm"
           onClick={async () => {
@@ -386,11 +383,11 @@ function BudgetsForm({ budgets, currency, savingsTarget, onClose }: { budgets: B
             }
           }}
         >
-          Add category
+          {t.addCategory}
         </Button>
       </div>
       <div className={styles.fieldRow}>
-        <Field label="Currency">
+        <Field label={t.currency}>
           {(id) => (
             <select id={id} value={cur} onChange={(e) => setCur(e.target.value)}>
               {[...new Set([currency, ...CURRENCIES])].map((c) => (
@@ -401,14 +398,14 @@ function BudgetsForm({ budgets, currency, savingsTarget, onClose }: { budgets: B
             </select>
           )}
         </Field>
-        <Field label="Savings goal (% of income)">{(id) => <input id={id} inputMode="numeric" value={target} onChange={(e) => setTarget(e.target.value)} />}</Field>
+        <Field label={t.savingsTarget}>{(id) => <input id={id} inputMode="numeric" value={target} onChange={(e) => setTarget(e.target.value)} />}</Field>
       </div>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
         <span className={styles.spacer} />
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t.cancel}</Button>
         <Button type="submit" variant="primary">
-          Save budgets
+          {t.saveBudgets}
         </Button>
       </div>
     </form>
@@ -419,29 +416,30 @@ function BudgetsForm({ budgets, currency, savingsTarget, onClose }: { budgets: B
 
 export function AccountsDialog({ open, onClose, accounts, currency }: { open: boolean; onClose: () => void; accounts: Account[]; currency: string }) {
   return (
-    <Dialog open={open} onClose={onClose} title="Accounts and net worth">
+    <Dialog open={open} onClose={onClose} title={messages().finance.dialog.accountsTitle}>
       {open && <AccountsForm accounts={accounts} currency={currency} onClose={onClose} />}
     </Dialog>
   );
 }
 
 function AccountsForm({ accounts, currency, onClose }: { accounts: Account[]; currency: string; onClose: () => void }) {
+  const t = useT().finance.dialog;
   const [draft, setDraft] = useState({ name: '', kind: 'asset' as Account['kind'], balance: '' });
   const [error, setError] = useState('');
   return (
     <div className={styles.form}>
-      <p className={styles.lead}>Type in balances yourself; nothing connects to a bank. Update them when you like.</p>
+      <p className={styles.lead}>{t.accountsLead}</p>
       {accounts.length > 0 && (
         <ul className={styles.accountList}>
           {accounts.map((a) => (
             <li key={a.id}>
               <span>
                 {a.name}
-                <span className={styles.hint}>{a.kind === 'asset' ? ', I own' : ', I owe'}</span>
+                <span className={styles.hint}>{a.kind === 'asset' ? t.own : t.owe}</span>
               </span>
               <span className={styles.amount}>{formatMoney(a.kind === 'asset' ? a.balance : -a.balance, currency)}</span>
-              <Button variant="quiet" size="sm" aria-label={`Remove ${a.name}`} onClick={() => removeAccount(a.id)}>
-                Remove
+              <Button variant="quiet" size="sm" aria-label={t.removeItem(a.name)} onClick={() => removeAccount(a.id)}>
+                {t.remove}
               </Button>
             </li>
           ))}
@@ -453,7 +451,7 @@ function AccountsForm({ accounts, currency, onClose }: { accounts: Account[]; cu
         onSubmit={async (e) => {
           e.preventDefault();
           const cents = parseMoney(draft.balance);
-          if (cents === null) return setError('Enter the balance, like 2500.');
+          if (cents === null) return setError(t.enterBalance);
           const sent = draft;
           try {
             await saveAccount({ name: sent.name, kind: sent.kind, balance: Math.abs(cents) });
@@ -465,22 +463,22 @@ function AccountsForm({ accounts, currency, onClose }: { accounts: Account[]; cu
           }
         }}
       >
-        <Field label="Account">{(id) => <input id={id} data-autofocus value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="Everyday account" />}</Field>
-        <Field label="Kind">
+        <Field label={t.account}>{(id) => <input id={id} data-autofocus value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder={t.accountPlaceholder} />}</Field>
+        <Field label={t.kindLabel}>
           {(id) => (
             <select id={id} value={draft.kind} onChange={(e) => setDraft({ ...draft, kind: e.target.value as Account['kind'] })}>
-              <option value="asset">I own</option>
-              <option value="debt">I owe</option>
+              <option value="asset">{t.iOwn}</option>
+              <option value="debt">{t.iOwe}</option>
             </select>
           )}
         </Field>
-        <Field label="Balance">{(id) => <input id={id} inputMode="decimal" value={draft.balance} onChange={(e) => setDraft({ ...draft, balance: e.target.value })} placeholder="2,500" />}</Field>
-        <Button type="submit">Add account</Button>
+        <Field label={t.balance}>{(id) => <input id={id} inputMode="decimal" value={draft.balance} onChange={(e) => setDraft({ ...draft, balance: e.target.value })} placeholder="2,500" />}</Field>
+        <Button type="submit">{t.addAccount}</Button>
       </form>
       <ErrorLine text={error} />
       <div className={styles.formActions}>
         <Button variant="primary" onClick={onClose}>
-          Done
+          {t.done}
         </Button>
       </div>
     </div>

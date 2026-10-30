@@ -1,3 +1,4 @@
+import { intlLocale } from '@/i18n/locale';
 /** Money on screen. Amounts are cents; the currency is the one chosen in Finance. */
 
 const formats = new Map<string, Intl.NumberFormat>();
@@ -21,7 +22,7 @@ type Options = {
 };
 
 /** 213800 → "$2,138.00"; with whole, "$2,138"; with signed, "+$2,138.00" or "−$38.40". */
-export function formatMoney(cents: number, currency: string, { signed = false, whole = false, locale }: Options = {}): string {
+export function formatMoney(cents: number, currency: string, { signed = false, whole = false, locale = intlLocale() }: Options = {}): string {
   const text = format(currency, !whole, locale).format(Math.abs(cents) / 100);
   if (cents < 0) return `−${text}`;
   return signed && cents > 0 ? `+${text}` : text;
@@ -40,6 +41,6 @@ export function defaultCurrency(): string {
 }
 
 /** The symbol a currency uses ("$", "€"), to recognise money goals by their unit. */
-export function currencySymbol(currency: string, locale?: string): string {
+export function currencySymbol(currency: string, locale = intlLocale()): string {
   return format(currency, false, locale).formatToParts(0).find((p) => p.type === 'currency')?.value ?? currency;
 }

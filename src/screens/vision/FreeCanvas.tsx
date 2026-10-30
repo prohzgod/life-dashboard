@@ -3,6 +3,7 @@ import { CANVAS, canvasHeight, clampRect, packCanvas, type CanvasRect } from '@/
 import { saveCanvasLayout, setCanvasRect, type VisionCardView } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { VisionCard } from './VisionCard';
+import { useT } from '@/i18n';
 import styles from './Vision.module.css';
 
 type Drag = { id: string; mode: 'move' | 'resize'; startX: number; startY: number; from: CanvasRect };
@@ -12,6 +13,7 @@ type Drag = { id: string; mode: 'move' | 'resize'; startX: number; startY: numbe
  * (Shift for bigger steps). The board is 1200 px wide and scales to fit the window.
  */
 export function FreeCanvas({ cards, onEdit }: { cards: VisionCardView[]; onEdit: (card: VisionCardView) => void }) {
+  const t = useT().vision.canvas;
   const wrapRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [drag, setDrag] = useState<Drag | null>(null);
@@ -79,14 +81,14 @@ export function FreeCanvas({ cards, onEdit }: { cards: VisionCardView[]; onEdit:
       <div className={styles.canvas} style={{ width: CANVAS.width, height, transform: `scale(${scale})` }} onPointerMove={move} onPointerUp={end} onPointerCancel={end}>
         {cards.map((card, i) => {
           const rect = rects[i]!;
-          const name = card.text || 'picture';
+          const name = card.text || t.picture;
           return (
             <div key={card.id} className={styles.placed} style={{ left: rect.x, top: rect.y, width: rect.w, height: rect.h, zIndex: drag?.id === card.id ? 2 : 1 }}>
               <VisionCard card={card} onEdit={() => onEdit(card)} className={styles.placedCard} />
               <button
                 type="button"
                 className={styles.moveHandle}
-                aria-label={`Move “${name}”. Arrow keys move it.`}
+                aria-label={t.move(name)}
                 onPointerDown={(e) => start(e, card.id, 'move', rect)}
                 onKeyDown={(e) => onKey(e, card.id, 'move', rect)}
               >
@@ -95,7 +97,7 @@ export function FreeCanvas({ cards, onEdit }: { cards: VisionCardView[]; onEdit:
               <button
                 type="button"
                 className={styles.resizeHandle}
-                aria-label={`Resize “${name}”. Arrow keys resize it.`}
+                aria-label={t.resize(name)}
                 onPointerDown={(e) => start(e, card.id, 'resize', rect)}
                 onKeyDown={(e) => onKey(e, card.id, 'resize', rect)}
               />
