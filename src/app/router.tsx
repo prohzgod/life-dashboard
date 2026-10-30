@@ -51,6 +51,7 @@ export const routes: RouteObject[] = [
       { path: 'settings', element: <Navigate to="/settings/privacy" replace /> },
       { path: 'settings/:tab', element: <SettingsPage /> },
       { path: 'dev/components', element: <DevComponentsPage /> },
+      { path: 'kit', element: <DevComponentsPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

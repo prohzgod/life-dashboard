@@ -8,9 +8,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding: var(--desktop-gap);
-  border-radius: var(--radius-xl);
-  background: var(--bg);
+  padding: var(--card-gap);
+  border-radius: var(--radius-card);
+  background: var(--bg-paint);
   color: var(--ink);
   color-scheme: inherit;
 }

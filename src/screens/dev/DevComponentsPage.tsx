@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { areas } from '@design/tokens';
 import { Icon } from '@/components/icons/Icon';
 import { PageHeader } from '@/components/shell/PageHeader';
-import { Button, Card, Checkbox, Chip, PaceBar, Segmented, StatTile, Switch, type ChipTone } from '@/components/ui';
+import { Button, Card, Checkbox, CheckButton, Chip, EnergyMeter, HatchBar, IconButton, MoodPicker, PaceBar, ProgressCapsule, Segmented, StatTile, Switch, WarnNote, WeekDots, type ChipTone } from '@/components/ui';
 import styles from './DevComponentsPage.module.css';
 
 const statusTones: ChipTone[] = ['neutral', 'primary', 'success', 'warning', 'danger', 'accent'];
@@ -12,11 +12,11 @@ const periods = [
   { value: 'year', label: 'Year' },
 ] as const;
 
-/** Every base component in both themes, side by side. Not linked from the sidebar. */
+/** Every shared component on Dawn and on Night, side by side. Not linked from the nav (/kit or /dev/components). */
 export function DevComponentsPage() {
   return (
     <>
-      <PageHeader title="Components" eyebrow="Grid, dev" subtitle="Base components from docs/DESIGN.md in the light and the dark theme." />
+      <PageHeader title="Glass kit" eyebrow="Glass v2, dev" subtitle="Shared components from design/v2/README.md on Dawn and on Night. Compare with design/v2/screens/glass-kit.png." />
       <div className={styles.columns}>
         <ThemePanel theme="light" />
         <ThemePanel theme="dark" />
@@ -31,12 +31,26 @@ function ThemePanel({ theme }: { theme: 'light' | 'dark' }) {
   const [sync, setSync] = useState(true);
   const [lock, setLock] = useState(false);
   const [period, setPeriod] = useState<(typeof periods)[number]['value']>('year');
+  const [mood, setMood] = useState<number | null>(4);
+  const [energy, setEnergy] = useState<number | null>(4);
+  const [done, setDone] = useState(true);
 
   return (
-    <section data-theme={theme} className={styles.panel} aria-label={`${theme === 'light' ? 'Light' : 'Dark'} theme`}>
+    <section data-theme={theme} data-bg={theme === 'dark' ? 'night' : 'dawn'} className={styles.panel} aria-label={`${theme === 'light' ? 'Light' : 'Dark'} theme`}>
       <h2 className={styles.panelTitle}>{theme === 'light' ? 'Light' : 'Dark'}</h2>
 
-      <Card title="Button" meta="primary, secondary, quiet">
+      <Card title="Button" meta="primary, secondary, accent, quiet, icon">
+        <div className={styles.row}>
+          <Button variant="primary" size="lg" icon={<Icon name="plus" size={19} strokeWidth={2} />}>
+            Quick capture
+          </Button>
+          <Button size="lg">Plan my day</Button>
+          <Button variant="accent" size="lg">
+            Save
+          </Button>
+          <IconButton icon="search" label="Search" />
+          <IconButton icon="plus" label="Add" tone="inverse" />
+        </div>
         <div className={styles.row}>
           <Button variant="primary">Add to plan</Button>
           <Button>Save for later</Button>
@@ -80,6 +94,32 @@ function ThemePanel({ theme }: { theme: 'light' | 'dark' }) {
           <Switch checked={lock} onChange={setLock} label="App lock" />
           <Segmented label="Period" options={periods} value={period} onChange={setPeriod} />
         </div>
+      </Card>
+
+      <Card title="Progress" meta="capsules, hatch bar, checks, week dots">
+        <div className={styles.row}>
+          <ProgressCapsule label="Today" meta="2/5 tasks" percent={40} tone="accent" />
+          <ProgressCapsule label="Week 44" meta="day 5/7" percent={64} tone="inverse" />
+        </div>
+        <div className={styles.row}>
+          <ProgressCapsule label="October" meta="30/31" percent={97} tone="glass" />
+          <ProgressCapsule label="2026" meta="62 days left" percent={83} tone="outline" />
+        </div>
+        <HatchBar value={0.6} planned={0.7} label="Run 10 km" />
+        <div className={styles.row}>
+          <CheckButton checked={done} onToggle={() => setDone(!done)} label="Done" size="lg" />
+          <CheckButton checked={!done} onToggle={() => setDone(!done)} label="Not done" size="lg" />
+          <WeekDots
+            label="This week"
+            days={(['done', 'done', 'done', 'missed', 'today', 'future', 'future'] as const).map((state, i) => ({ key: String(i), letter: ['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]!, state }))}
+          />
+        </div>
+        <WarnNote>Half-marathon is about 4 weeks behind</WarnNote>
+      </Card>
+
+      <Card title="Panel" meta="the one dark card" variant="panel">
+        <MoodPicker label="Mood" options={['Awful', 'Low', 'Okay', 'Good', 'Great']} value={mood} onChange={setMood} />
+        <EnergyMeter label="Energy" options={['Drained', 'Low', 'Okay', 'Good', 'Charged']} value={energy} onChange={setEnergy} />
       </Card>
 
       <Card title="PaceBar">
