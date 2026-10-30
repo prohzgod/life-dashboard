@@ -1,0 +1,700 @@
+{
+  "color": {
+    "light": {
+      "ink": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Main text, icons, headings"
+      },
+      "ink-2": {
+        "$value": "#474A55",
+        "$type": "color",
+        "$description": "Secondary text, inactive nav labels"
+      },
+      "ink-3": {
+        "$value": "#5C606C",
+        "$type": "color",
+        "$description": "Tertiary text, timestamps, done tasks, unchecked ring"
+      },
+      "glass": {
+        "$value": "rgba(255,255,255,0.56)",
+        "$type": "color",
+        "$description": "Card / nav / header surface (with backdrop blur)"
+      },
+      "glass-2": {
+        "$value": "rgba(255,255,255,0.74)",
+        "$type": "color",
+        "$description": "Raised surface inside a card: inputs, tiles, active rows, round buttons"
+      },
+      "line": {
+        "$value": "rgba(255,255,255,0.78)",
+        "$type": "color",
+        "$description": "1px border on glass surfaces (the 'glass edge')"
+      },
+      "well": {
+        "$value": "rgba(22,23,27,0.05)",
+        "$type": "color",
+        "$description": "Recessed rows: task rows, past events, chips"
+      },
+      "well-line": {
+        "$value": "rgba(22,23,27,0.10)",
+        "$type": "color",
+        "$description": "Borders of wells, progress tracks, ring track, dashed boxes"
+      },
+      "inverse": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Strong fill: active nav pill, primary button, done check, current event"
+      },
+      "on-inverse": {
+        "$value": "#FFFFFF",
+        "$type": "color",
+        "$description": "Text/icons on inverse"
+      },
+      "hatch": {
+        "$value": "rgba(22,23,27,0.14)",
+        "$type": "color",
+        "$description": "Diagonal stripes = remaining part of a progress bar"
+      },
+      "on-panel": {
+        "$value": "#F5F4F7",
+        "$type": "color",
+        "$description": "Text on panel"
+      },
+      "on-panel-2": {
+        "$value": "#B9B8C4",
+        "$type": "color",
+        "$description": "Secondary text on panel"
+      },
+      "panel-well": {
+        "$value": "rgba(255,255,255,0.09)",
+        "$type": "color",
+        "$description": "Controls inside panel"
+      },
+      "warn-bg": {
+        "$value": "#FFE7D6",
+        "$type": "color",
+        "$description": "Behind-schedule / missed / high-priority background"
+      },
+      "warn-ink": {
+        "$value": "#9A3A0B",
+        "$type": "color",
+        "$description": "Text on warn-bg, missed-day dashed ring"
+      },
+      "good": {
+        "$value": "#1F7A4D",
+        "$type": "color",
+        "$description": "Positive delta text (ahead of plan, streak kept)"
+      },
+      "danger": {
+        "$value": "#B42318",
+        "$type": "color",
+        "$description": "Destructive actions, errors"
+      },
+      "focus": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "2px focus outline, 2px offset"
+      },
+      "on-accent": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Text/icons on accent: ALWAYS dark"
+      }
+    },
+    "dark": {
+      "ink": {
+        "$value": "#F4F2F8",
+        "$type": "color",
+        "$description": "Main text, icons, headings"
+      },
+      "ink-2": {
+        "$value": "#CBC8D6",
+        "$type": "color",
+        "$description": "Secondary text, inactive nav labels"
+      },
+      "ink-3": {
+        "$value": "#A4A1B2",
+        "$type": "color",
+        "$description": "Tertiary text, timestamps, done tasks, unchecked ring"
+      },
+      "glass": {
+        "$value": "rgba(255,255,255,0.07)",
+        "$type": "color",
+        "$description": "Card / nav / header surface (with backdrop blur)"
+      },
+      "glass-2": {
+        "$value": "rgba(255,255,255,0.11)",
+        "$type": "color",
+        "$description": "Raised surface inside a card: inputs, tiles, active rows, round buttons"
+      },
+      "line": {
+        "$value": "rgba(255,255,255,0.12)",
+        "$type": "color",
+        "$description": "1px border on glass surfaces (the 'glass edge')"
+      },
+      "well": {
+        "$value": "rgba(255,255,255,0.06)",
+        "$type": "color",
+        "$description": "Recessed rows: task rows, past events, chips"
+      },
+      "well-line": {
+        "$value": "rgba(255,255,255,0.16)",
+        "$type": "color",
+        "$description": "Borders of wells, progress tracks, ring track, dashed boxes"
+      },
+      "inverse": {
+        "$value": "#F4F2F8",
+        "$type": "color",
+        "$description": "Strong fill: active nav pill, primary button, done check, current event"
+      },
+      "on-inverse": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Text/icons on inverse"
+      },
+      "hatch": {
+        "$value": "rgba(255,255,255,0.16)",
+        "$type": "color",
+        "$description": "Diagonal stripes = remaining part of a progress bar"
+      },
+      "on-panel": {
+        "$value": "#F5F4F7",
+        "$type": "color",
+        "$description": "Text on panel"
+      },
+      "on-panel-2": {
+        "$value": "#C3C0CE",
+        "$type": "color",
+        "$description": "Secondary text on panel"
+      },
+      "panel-well": {
+        "$value": "rgba(255,255,255,0.09)",
+        "$type": "color",
+        "$description": "Controls inside panel"
+      },
+      "warn-bg": {
+        "$value": "rgba(255,145,77,0.16)",
+        "$type": "color",
+        "$description": "Behind-schedule / missed / high-priority background"
+      },
+      "warn-ink": {
+        "$value": "#FFB68A",
+        "$type": "color",
+        "$description": "Text on warn-bg, missed-day dashed ring"
+      },
+      "good": {
+        "$value": "#7FE0AE",
+        "$type": "color",
+        "$description": "Positive delta text (ahead of plan, streak kept)"
+      },
+      "danger": {
+        "$value": "#FF9C94",
+        "$type": "color",
+        "$description": "Destructive actions, errors"
+      },
+      "focus": {
+        "$value": "#F4F2F8",
+        "$type": "color",
+        "$description": "2px focus outline, 2px offset"
+      },
+      "on-accent": {
+        "$value": "#16171B",
+        "$type": "color",
+        "$description": "Text/icons on accent: ALWAYS dark"
+      }
+    },
+    "accent": {
+      "tangerine": {
+        "$value": "#FF7A45",
+        "$type": "color",
+        "$description": "Cam"
+      },
+      "butter": {
+        "$value": "#FFD25C",
+        "$type": "color",
+        "$description": "Vàng bơ"
+      },
+      "lime": {
+        "$value": "#CFF26B",
+        "$type": "color",
+        "$description": "Chanh"
+      },
+      "lavender": {
+        "$value": "#B9A6FF",
+        "$type": "color",
+        "$description": "Oải hương"
+      }
+    }
+  },
+  "gradient": {
+    "panel": {
+      "light": {
+        "$value": "linear-gradient(160deg,#25252E 0%,#141419 100%)",
+        "$type": "gradient"
+      },
+      "dark": {
+        "$value": "linear-gradient(160deg,rgba(255,255,255,0.15) 0%,rgba(255,255,255,0.05) 100%)",
+        "$type": "gradient"
+      }
+    },
+    "background": {
+      "dawn": {
+        "desktop": {
+          "$value": "radial-gradient(1100px 760px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 62%), radial-gradient(1000px 720px at 100% 4%, #DCD5FF 0%, rgba(220,213,255,0) 58%), radial-gradient(1200px 820px at 55% 106%, #FFEABF 0%, rgba(255,234,191,0) 60%), #F4F1EE",
+          "$type": "gradient",
+          "$description": "Bình minh"
+        },
+        "phone": {
+          "$value": "radial-gradient(520px 520px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 70%), radial-gradient(480px 560px at 100% 18%, #DCD5FF 0%, rgba(220,213,255,0) 65%), radial-gradient(560px 700px at 30% 62%, #FFEABF 0%, rgba(255,234,191,0) 62%), radial-gradient(520px 640px at 100% 96%, #FFD3D6 0%, rgba(255,211,214,0) 62%), #F4F1EE",
+          "$type": "gradient",
+          "$description": "Bình minh"
+        }
+      },
+      "mist": {
+        "desktop": {
+          "$value": "radial-gradient(1100px 760px at 0% 0%, #D3E6FF 0%, rgba(211,230,255,0) 60%), radial-gradient(1000px 720px at 100% 0%, #D3F2E7 0%, rgba(211,242,231,0) 58%), radial-gradient(1200px 820px at 50% 110%, #E7E0FF 0%, rgba(231,224,255,0) 60%), #EEF2F5",
+          "$type": "gradient",
+          "$description": "Sương mai"
+        },
+        "phone": {
+          "$value": "radial-gradient(520px 520px at 0% 0%, #D3E6FF 0%, rgba(211,230,255,0) 70%), radial-gradient(480px 560px at 100% 20%, #D3F2E7 0%, rgba(211,242,231,0) 65%), radial-gradient(560px 700px at 20% 70%, #E7E0FF 0%, rgba(231,224,255,0) 62%), #EEF2F5",
+          "$type": "gradient",
+          "$description": "Sương mai"
+        }
+      },
+      "photo": {
+        "desktop": {
+          "$value": "#EADFEF",
+          "$type": "gradient",
+          "$description": "Ảnh của bạn"
+        },
+        "phone": {
+          "$value": "#EADFEF",
+          "$type": "gradient",
+          "$description": "Ảnh của bạn"
+        }
+      },
+      "night": {
+        "desktop": {
+          "$value": "radial-gradient(1000px 700px at 0% 0%, #3B2D5C 0%, rgba(59,45,92,0) 62%), radial-gradient(900px 650px at 100% 8%, #173A57 0%, rgba(23,58,87,0) 58%), radial-gradient(1100px 760px at 60% 110%, #4A2A3B 0%, rgba(74,42,59,0) 60%), #0F0F16",
+          "$type": "gradient",
+          "$description": "Đêm"
+        },
+        "phone": {
+          "$value": "radial-gradient(520px 560px at 0% 0%, #3B2D5C 0%, rgba(59,45,92,0) 70%), radial-gradient(480px 560px at 100% 26%, #173A57 0%, rgba(23,58,87,0) 65%), radial-gradient(560px 700px at 20% 72%, #4A2A3B 0%, rgba(74,42,59,0) 62%), #0F0F16",
+          "$type": "gradient",
+          "$description": "Đêm"
+        }
+      }
+    }
+  },
+  "font": {
+    "family": {
+      "sans": {
+        "$value": [
+          "Be Vietnam Pro",
+          "system-ui",
+          "sans-serif"
+        ],
+        "$type": "fontFamily"
+      }
+    }
+  },
+  "typography": {
+    "display": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "clamp(38px, 4.4vw, 62px)",
+        "lineHeight": "1.06",
+        "fontWeight": 500,
+        "letterSpacing": "-0.035em"
+      },
+      "$type": "typography",
+      "$description": "Greeting on desktop/tablet (second sentence in ink-3)"
+    },
+    "display-mobile": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "34px",
+        "lineHeight": "1.1",
+        "fontWeight": 500,
+        "letterSpacing": "-0.035em"
+      },
+      "$type": "typography",
+      "$description": "Greeting on phone (2 lines)"
+    },
+    "numeral-xl": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "64px",
+        "lineHeight": "1",
+        "fontWeight": 300,
+        "letterSpacing": "-0.045em"
+      },
+      "$type": "typography",
+      "$description": "Hero numbers: 83% · 303 · 44 (unit like % at 30px, tracking 0)"
+    },
+    "numeral-l": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "48px",
+        "lineHeight": "1",
+        "fontWeight": 300,
+        "letterSpacing": "-0.04em"
+      },
+      "$type": "typography",
+      "$description": "Card hero number: 6 / 10 km, 20 việc"
+    },
+    "numeral-m": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "30px",
+        "lineHeight": "1",
+        "fontWeight": 300,
+        "letterSpacing": "-0.03em"
+      },
+      "$type": "typography",
+      "$description": "Tile number: 12 / 20"
+    },
+    "numeral-s": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "24px",
+        "lineHeight": "1.1",
+        "fontWeight": 300,
+        "letterSpacing": "-0.03em"
+      },
+      "$type": "typography",
+      "$description": "Phone stat tiles"
+    },
+    "title": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "20px",
+        "lineHeight": "1.3",
+        "fontWeight": 600,
+        "letterSpacing": "-0.015em"
+      },
+      "$type": "typography",
+      "$description": "Card titles (phone 19px)"
+    },
+    "heading": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "16px",
+        "lineHeight": "1.35",
+        "fontWeight": 600,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Tile titles, logo word"
+    },
+    "body": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "15px",
+        "lineHeight": "1.5",
+        "fontWeight": 400,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Task titles (500), inputs, buttons (500)"
+    },
+    "label": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "13px",
+        "lineHeight": "1.4",
+        "fontWeight": 500,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Date line, capsule labels, chips, links"
+    },
+    "caption": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "12px",
+        "lineHeight": "1.4",
+        "fontWeight": 400,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Meta lines: #tag · time"
+    },
+    "micro": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "11px",
+        "lineHeight": "1.3",
+        "fontWeight": 600,
+        "letterSpacing": "0"
+      },
+      "$type": "typography",
+      "$description": "Badges, tab-bar labels, weekday letters"
+    }
+  },
+  "space": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "1": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "1h": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "2h": {
+      "$value": "10px",
+      "$type": "dimension"
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "3h": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "4h": {
+      "$value": "18px",
+      "$type": "dimension"
+    },
+    "5": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "6": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "7": {
+      "$value": "28px",
+      "$type": "dimension"
+    },
+    "8": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "10": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "11": {
+      "$value": "44px",
+      "$type": "dimension"
+    },
+    "12": {
+      "$value": "48px",
+      "$type": "dimension"
+    }
+  },
+  "radius": {
+    "sm": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Energy bars, small marks"
+    },
+    "md": {
+      "$value": "18px",
+      "$type": "dimension",
+      "$description": "Warn box, inline notices"
+    },
+    "row": {
+      "$value": "22px",
+      "$type": "dimension",
+      "$description": "Task rows, event blocks, sleep row"
+    },
+    "tile": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Tiles inside a card, phone stat tiles, textarea"
+    },
+    "tile-lg": {
+      "$value": "28px",
+      "$type": "dimension",
+      "$description": "Phone habit tiles"
+    },
+    "card": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$description": "Every card; phone year card"
+    },
+    "pill": {
+      "$value": "999px",
+      "$type": "dimension",
+      "$description": "Buttons, inputs, nav, chips, progress, avatars"
+    }
+  },
+  "layout": {
+    "page-max": {
+      "$value": "1360px",
+      "$type": "dimension",
+      "$description": "Max content width"
+    },
+    "page-gutter": {
+      "$value": "clamp(16px, 3vw, 40px)",
+      "$type": "dimension",
+      "$description": "Side padding (desktop 40, tablet ~25)"
+    },
+    "page-gutter-phone": {
+      "$value": "18px",
+      "$type": "dimension",
+      "$description": "Phone side padding"
+    },
+    "card-gap": {
+      "$value": "20px",
+      "$type": "dimension",
+      "$description": "Gap between cards (phone 16)"
+    },
+    "card-pad": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Card padding (phone 20)"
+    },
+    "control-h": {
+      "$value": "56px",
+      "$type": "dimension",
+      "$description": "Primary buttons, inputs, logo pill"
+    },
+    "control-h-sm": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$description": "Small buttons, arrow buttons, chips-as-buttons"
+    },
+    "icon-btn": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$description": "Header round icon buttons (phone 44)"
+    },
+    "check": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$description": "Task check circle (phone 44)"
+    },
+    "touch-min": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Minimum tap target"
+    },
+    "nav-item-h": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Top nav pill item height"
+    },
+    "tabbar-h": {
+      "$value": "76px",
+      "$type": "dimension",
+      "$description": "Phone floating tab bar height"
+    },
+    "tabbar-inset": {
+      "$value": "14px",
+      "$type": "dimension",
+      "$description": "Tab bar left/right inset"
+    },
+    "tabbar-bottom": {
+      "$value": "22px",
+      "$type": "dimension",
+      "$description": "Tab bar bottom offset (+ safe-area-inset-bottom)"
+    },
+    "fab": {
+      "$value": "60px",
+      "$type": "dimension",
+      "$description": "Center + button in tab bar"
+    },
+    "bp-tablet": {
+      "$value": "768px",
+      "$type": "dimension",
+      "$description": "≥ this: top pill nav + bento page. Below: phone layout + tab bar"
+    },
+    "bp-desktop": {
+      "$value": "1200px",
+      "$type": "dimension",
+      "$description": "≥ this: 3-column bento row"
+    }
+  },
+  "blur": {
+    "blur": {
+      "$value": "22px",
+      "$type": "dimension",
+      "$description": "Glass backdrop blur (photo 28px, night 24px)"
+    },
+    "saturate": {
+      "$value": "150%",
+      "$type": "number",
+      "$description": "Glass backdrop saturate()"
+    }
+  },
+  "shadow": {
+    "shadow-card": {
+      "light": {
+        "$value": "0 24px 60px -30px rgba(46,34,74,0.30)",
+        "$type": "shadow",
+        "$description": "Every glass card"
+      },
+      "dark": {
+        "$value": "0 24px 60px -30px rgba(0,0,0,0.65)",
+        "$type": "shadow",
+        "$description": "Every glass card"
+      }
+    },
+    "shadow-tabbar": {
+      "light": {
+        "$value": "0 18px 40px -16px rgba(20,16,40,0.35)",
+        "$type": "shadow",
+        "$description": "Floating phone tab bar"
+      },
+      "dark": {
+        "$value": "0 18px 40px -16px rgba(0,0,0,0.6)",
+        "$type": "shadow",
+        "$description": "Floating phone tab bar"
+      }
+    },
+    "shadow-fab": {
+      "light": {
+        "$value": "0 8px 20px -8px rgba(20,16,40,0.45)",
+        "$type": "shadow",
+        "$description": "Center + button"
+      },
+      "dark": {
+        "$value": "0 8px 20px -8px rgba(0,0,0,0.6)",
+        "$type": "shadow",
+        "$description": "Center + button"
+      }
+    }
+  },
+  "motion": {
+    "dur-fast": {
+      "$value": "120ms",
+      "$type": "duration",
+      "$description": "Press, toggle"
+    },
+    "dur-base": {
+      "$value": "200ms",
+      "$type": "duration",
+      "$description": "Hover, chip select, check"
+    },
+    "dur-slow": {
+      "$value": "320ms",
+      "$type": "duration",
+      "$description": "Card enter, theme/background crossfade"
+    },
+    "ease": {
+      "$value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Default easing"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hôm nay · Đêm</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1520px; overflow: hidden; background: #0F0F16;">
+<dc-import name="Main" bg="night" accent="{{accent}}" hint-size="1440px,1520px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","options":["#FF7A45","#FFD25C","#CFF26B","#B9A6FF"],"default":"#FF7A45","section":"Theme"},"$preview":{"width":1440,"height":1520}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent || '#FF7A45' };
+  }
+}
+</script>
+</body>
+</html>

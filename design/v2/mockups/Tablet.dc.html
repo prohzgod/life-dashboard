@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hôm nay · iPad dọc</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 834px; height: 2720px; overflow: hidden; background: #EEF2F5;">
+<dc-import name="Main" bg="{{bg}}" accent="{{accent}}" hint-size="834px,2720px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"bg":{"editor":"enum","options":["dawn","mist","photo","night"],"default":"mist","section":"Theme"},"accent":{"editor":"color","options":["#FF7A45","#FFD25C","#CFF26B","#B9A6FF"],"default":"#CFF26B","section":"Theme"},"$preview":{"width":834,"height":2720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { bg: this.props.bg || 'mist', accent: this.props.accent || '#CFF26B' };
+  }
+}
+</script>
+</body>
+</html>

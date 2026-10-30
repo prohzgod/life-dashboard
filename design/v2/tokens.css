@@ -1,0 +1,249 @@
+/* Life Dashboard · Glass v2 tokens — generated, do not hand-edit (see design/v2/TOKENS.md).
+   Usage: <html data-theme="light|dark" data-bg="dawn|mist|photo|night" data-accent="tangerine|butter|lime|lavender">
+   Fonts: npm i @fontsource/be-vietnam-pro and import weights 300,400,500,600,700 (bundled = works offline). */
+
+:root {
+  color-scheme: light;
+  --ink: #16171B;
+  --ink-2: #474A55;
+  --ink-3: #5C606C;
+  --glass: rgba(255,255,255,0.56);
+  --glass-2: rgba(255,255,255,0.74);
+  --line: rgba(255,255,255,0.78);
+  --well: rgba(22,23,27,0.05);
+  --well-line: rgba(22,23,27,0.10);
+  --inverse: #16171B;
+  --on-inverse: #FFFFFF;
+  --hatch: rgba(22,23,27,0.14);
+  --panel: linear-gradient(160deg,#25252E 0%,#141419 100%);
+  --on-panel: #F5F4F7;
+  --on-panel-2: #B9B8C4;
+  --panel-well: rgba(255,255,255,0.09);
+  --warn-bg: #FFE7D6;
+  --warn-ink: #9A3A0B;
+  --good: #1F7A4D;
+  --danger: #B42318;
+  --focus: #16171B;
+  --on-accent: #16171B;
+  --shadow-card: 0 24px 60px -30px rgba(46,34,74,0.30);
+  --shadow-tabbar: 0 18px 40px -16px rgba(20,16,40,0.35);
+  --shadow-fab: 0 8px 20px -8px rgba(20,16,40,0.45);
+  --accent: #FF7A45;
+  --blur: 22px;
+  --saturate: 150%;
+  --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --text-display-size: clamp(38px, 4.4vw, 62px);
+  --text-display-line: 1.06;
+  --text-display-weight: 500;
+  --text-display-tracking: -0.035em;
+  --text-display-mobile-size: 34px;
+  --text-display-mobile-line: 1.1;
+  --text-display-mobile-weight: 500;
+  --text-display-mobile-tracking: -0.035em;
+  --text-numeral-xl-size: 64px;
+  --text-numeral-xl-line: 1;
+  --text-numeral-xl-weight: 300;
+  --text-numeral-xl-tracking: -0.045em;
+  --text-numeral-l-size: 48px;
+  --text-numeral-l-line: 1;
+  --text-numeral-l-weight: 300;
+  --text-numeral-l-tracking: -0.04em;
+  --text-numeral-m-size: 30px;
+  --text-numeral-m-line: 1;
+  --text-numeral-m-weight: 300;
+  --text-numeral-m-tracking: -0.03em;
+  --text-numeral-s-size: 24px;
+  --text-numeral-s-line: 1.1;
+  --text-numeral-s-weight: 300;
+  --text-numeral-s-tracking: -0.03em;
+  --text-title-size: 20px;
+  --text-title-line: 1.3;
+  --text-title-weight: 600;
+  --text-title-tracking: -0.015em;
+  --text-heading-size: 16px;
+  --text-heading-line: 1.35;
+  --text-heading-weight: 600;
+  --text-heading-tracking: 0;
+  --text-body-size: 15px;
+  --text-body-line: 1.5;
+  --text-body-weight: 400;
+  --text-body-tracking: 0;
+  --text-label-size: 13px;
+  --text-label-line: 1.4;
+  --text-label-weight: 500;
+  --text-label-tracking: 0;
+  --text-caption-size: 12px;
+  --text-caption-line: 1.4;
+  --text-caption-weight: 400;
+  --text-caption-tracking: 0;
+  --text-micro-size: 11px;
+  --text-micro-line: 1.3;
+  --text-micro-weight: 600;
+  --text-micro-tracking: 0;
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-1h: 6px;
+  --space-2: 8px;
+  --space-2h: 10px;
+  --space-3: 12px;
+  --space-3h: 14px;
+  --space-4: 16px;
+  --space-4h: 18px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-11: 44px;
+  --space-12: 48px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-row: 22px;
+  --radius-tile: 24px;
+  --radius-tile-lg: 28px;
+  --radius-card: 32px;
+  --radius-pill: 999px;
+  --page-max: 1360px;
+  --page-gutter: clamp(16px, 3vw, 40px);
+  --page-gutter-phone: 18px;
+  --card-gap: 20px;
+  --card-pad: 24px;
+  --control-h: 56px;
+  --control-h-sm: 40px;
+  --icon-btn: 48px;
+  --check: 40px;
+  --touch-min: 44px;
+  --nav-item-h: 44px;
+  --tabbar-h: 76px;
+  --tabbar-inset: 14px;
+  --tabbar-bottom: 22px;
+  --fab: 60px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1200px;
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --bg-paint: radial-gradient(1100px 760px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 62%), radial-gradient(1000px 720px at 100% 4%, #DCD5FF 0%, rgba(220,213,255,0) 58%), radial-gradient(1200px 820px at 55% 106%, #FFEABF 0%, rgba(255,234,191,0) 60%), #F4F1EE;
+  --bg-image: none;
+  --bg-veil: none;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #F4F2F8;
+  --ink-2: #CBC8D6;
+  --ink-3: #A4A1B2;
+  --glass: rgba(255,255,255,0.07);
+  --glass-2: rgba(255,255,255,0.11);
+  --line: rgba(255,255,255,0.12);
+  --well: rgba(255,255,255,0.06);
+  --well-line: rgba(255,255,255,0.16);
+  --inverse: #F4F2F8;
+  --on-inverse: #16171B;
+  --hatch: rgba(255,255,255,0.16);
+  --panel: linear-gradient(160deg,rgba(255,255,255,0.15) 0%,rgba(255,255,255,0.05) 100%);
+  --on-panel-2: #C3C0CE;
+  --warn-bg: rgba(255,145,77,0.16);
+  --warn-ink: #FFB68A;
+  --good: #7FE0AE;
+  --danger: #FF9C94;
+  --focus: #F4F2F8;
+  --shadow-card: 0 24px 60px -30px rgba(0,0,0,0.65);
+  --shadow-tabbar: 0 18px 40px -16px rgba(0,0,0,0.6);
+  --shadow-fab: 0 8px 20px -8px rgba(0,0,0,0.6);
+}
+
+/* Bình minh */
+[data-bg="dawn"] {
+  --bg-paint: radial-gradient(1100px 760px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 62%), radial-gradient(1000px 720px at 100% 4%, #DCD5FF 0%, rgba(220,213,255,0) 58%), radial-gradient(1200px 820px at 55% 106%, #FFEABF 0%, rgba(255,234,191,0) 60%), #F4F1EE;
+}
+
+/* Sương mai */
+[data-bg="mist"] {
+  --bg-paint: radial-gradient(1100px 760px at 0% 0%, #D3E6FF 0%, rgba(211,230,255,0) 60%), radial-gradient(1000px 720px at 100% 0%, #D3F2E7 0%, rgba(211,242,231,0) 58%), radial-gradient(1200px 820px at 50% 110%, #E7E0FF 0%, rgba(231,224,255,0) 60%), #EEF2F5;
+}
+
+/* Ảnh của bạn */
+[data-bg="photo"] {
+  --bg-paint: #EADFEF;
+  --glass: rgba(255,255,255,0.54);
+  --glass-2: rgba(255,255,255,0.72);
+  --ink-3: #4E5260;
+  --blur: 28px;
+  --bg-veil: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 40%);
+  --bg-image: url('/backgrounds/dawn-hills-tall.jpg') /* user's chosen photo */;
+}
+
+/* Đêm */
+[data-bg="night"] {
+  --bg-paint: radial-gradient(1000px 700px at 0% 0%, #3B2D5C 0%, rgba(59,45,92,0) 62%), radial-gradient(900px 650px at 100% 8%, #173A57 0%, rgba(23,58,87,0) 58%), radial-gradient(1100px 760px at 60% 110%, #4A2A3B 0%, rgba(74,42,59,0) 60%), #0F0F16;
+  --blur: 24px;
+}
+
+@media (max-width: 767px) {
+  [data-bg="dawn"] { --bg-paint: radial-gradient(520px 520px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 70%), radial-gradient(480px 560px at 100% 18%, #DCD5FF 0%, rgba(220,213,255,0) 65%), radial-gradient(560px 700px at 30% 62%, #FFEABF 0%, rgba(255,234,191,0) 62%), radial-gradient(520px 640px at 100% 96%, #FFD3D6 0%, rgba(255,211,214,0) 62%), #F4F1EE; }
+  [data-bg="mist"] { --bg-paint: radial-gradient(520px 520px at 0% 0%, #D3E6FF 0%, rgba(211,230,255,0) 70%), radial-gradient(480px 560px at 100% 20%, #D3F2E7 0%, rgba(211,242,231,0) 65%), radial-gradient(560px 700px at 20% 70%, #E7E0FF 0%, rgba(231,224,255,0) 62%), #EEF2F5; }
+  [data-bg="night"] { --bg-paint: radial-gradient(520px 560px at 0% 0%, #3B2D5C 0%, rgba(59,45,92,0) 70%), radial-gradient(480px 560px at 100% 26%, #173A57 0%, rgba(23,58,87,0) 65%), radial-gradient(560px 700px at 20% 72%, #4A2A3B 0%, rgba(74,42,59,0) 62%), #0F0F16; }
+  :root { --card-gap: 16px; --card-pad: 20px; --icon-btn: 44px; --check: 44px; --text-title-size: 19px; }
+}
+
+[data-accent="tangerine"] { --accent: #FF7A45; } /* Cam */
+
+[data-accent="butter"] { --accent: #FFD25C; } /* Vàng bơ */
+
+[data-accent="lime"] { --accent: #CFF26B; } /* Chanh */
+
+[data-accent="lavender"] { --accent: #B9A6FF; } /* Oải hương */
+
+
+/* ---- Base + recipes (copy into components) ------------------------------ */
+:root, [data-theme] { color: var(--ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+.hatch { background: repeating-linear-gradient(-45deg, var(--hatch) 0 2px, transparent 2px 9px); }
+.app-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-veil), var(--bg-image) center / cover no-repeat, var(--bg-paint); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Accessibility fallbacks */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass: rgba(255,255,255,0.86); --glass-2: rgba(255,255,255,0.94); }
+  [data-theme="dark"] { --glass: #1E1D27; --glass-2: #26252F; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root { --glass: rgba(255,255,255,0.9); --glass-2: #FFFFFF; --blur: 0px; }
+  [data-theme="dark"] { --glass: #1E1D27; --glass-2: #26252F; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; }
+}
+
+.text-display { font-family: var(--font-sans); font-size: var(--text-display-size); line-height: var(--text-display-line); font-weight: var(--text-display-weight); letter-spacing: var(--text-display-tracking); }
+
+.text-display-mobile { font-family: var(--font-sans); font-size: var(--text-display-mobile-size); line-height: var(--text-display-mobile-line); font-weight: var(--text-display-mobile-weight); letter-spacing: var(--text-display-mobile-tracking); }
+
+.text-numeral-xl { font-family: var(--font-sans); font-size: var(--text-numeral-xl-size); line-height: var(--text-numeral-xl-line); font-weight: var(--text-numeral-xl-weight); letter-spacing: var(--text-numeral-xl-tracking); }
+
+.text-numeral-l { font-family: var(--font-sans); font-size: var(--text-numeral-l-size); line-height: var(--text-numeral-l-line); font-weight: var(--text-numeral-l-weight); letter-spacing: var(--text-numeral-l-tracking); }
+
+.text-numeral-m { font-family: var(--font-sans); font-size: var(--text-numeral-m-size); line-height: var(--text-numeral-m-line); font-weight: var(--text-numeral-m-weight); letter-spacing: var(--text-numeral-m-tracking); }
+
+.text-numeral-s { font-family: var(--font-sans); font-size: var(--text-numeral-s-size); line-height: var(--text-numeral-s-line); font-weight: var(--text-numeral-s-weight); letter-spacing: var(--text-numeral-s-tracking); }
+
+.text-title { font-family: var(--font-sans); font-size: var(--text-title-size); line-height: var(--text-title-line); font-weight: var(--text-title-weight); letter-spacing: var(--text-title-tracking); }
+
+.text-heading { font-family: var(--font-sans); font-size: var(--text-heading-size); line-height: var(--text-heading-line); font-weight: var(--text-heading-weight); letter-spacing: var(--text-heading-tracking); }
+
+.text-body { font-family: var(--font-sans); font-size: var(--text-body-size); line-height: var(--text-body-line); font-weight: var(--text-body-weight); letter-spacing: var(--text-body-tracking); }
+
+.text-label { font-family: var(--font-sans); font-size: var(--text-label-size); line-height: var(--text-label-line); font-weight: var(--text-label-weight); letter-spacing: var(--text-label-tracking); }
+
+.text-caption { font-family: var(--font-sans); font-size: var(--text-caption-size); line-height: var(--text-caption-line); font-weight: var(--text-caption-weight); letter-spacing: var(--text-caption-tracking); }
+
+.text-micro { font-family: var(--font-sans); font-size: var(--text-micro-size); line-height: var(--text-micro-line); font-weight: var(--text-micro-weight); letter-spacing: var(--text-micro-tracking); }
