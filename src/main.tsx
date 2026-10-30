@@ -16,9 +16,11 @@ import { registerServiceWorker } from './app/registerServiceWorker';
 import { StorageError } from './app/StorageError';
 import { applyLocale, readLocale } from './i18n';
 import { LocaleRoot } from './app/LocaleRoot';
+import { applyPalette, readPalette } from './theme/palette';
 import { applyThemePreference, readThemePreference } from './theme/theme';
 
 applyThemePreference(readThemePreference());
+applyPalette(readPalette());
 applyLocale(readLocale());
 registerServiceWorker();
 

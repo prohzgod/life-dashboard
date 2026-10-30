@@ -1,8 +1,9 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { freshDatabase } from '@/data/testing';
 import { LOCALE_STORAGE_KEY, setLocale } from '@/i18n';
+import { PALETTE_CSS_KEY, readPalette, setPalette } from '@/theme/palette';
 import { THEME_STORAGE_KEY } from '@/theme/theme';
 import { LocaleRoot } from './LocaleRoot';
 import { routes } from './router';
@@ -77,7 +78,7 @@ describe('app shell', () => {
 describe('theme setting', () => {
   it('switches the theme from Settings › Appearance and saves it on this device', async () => {
     renderAt('/settings/appearance');
-    const group = screen.getByRole('radiogroup', { name: 'Color theme' });
+    const group = screen.getByRole('radiogroup', { name: 'Light or dark' });
     expect(within(group).getByRole('radio', { name: 'System' })).toHaveAttribute('aria-checked', 'true');
 
     await userEvent.click(within(group).getByRole('radio', { name: 'Dark' }));
@@ -87,6 +88,26 @@ describe('theme setting', () => {
 
     await userEvent.click(within(group).getByRole('radio', { name: 'System' }));
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
+  });
+});
+
+describe('colour themes', () => {
+  afterEach(() => setPalette({ id: 'grid' }));
+
+  it('picks a theme, and makes your own from three colours', async () => {
+    renderAt('/settings/appearance');
+    await userEvent.click(screen.getByRole('radio', { name: /Nature/ }));
+    expect(document.documentElement.dataset.palette).toBe('nature');
+    expect(localStorage.getItem(PALETTE_CSS_KEY)).toContain('--bg:#F5F2EA');
+
+    await userEvent.click(screen.getByRole('radio', { name: /Your own/ }));
+    const background = screen.getByLabelText(/^Background/);
+    fireEvent.input(background, { target: { value: '#fdf6e3' } });
+    expect(readPalette()).toMatchObject({ id: 'custom', background: '#FDF6E3' });
+    expect(document.getElementById('palette')?.textContent).toContain('--bg:#FDF6E3');
+
+    await userEvent.click(screen.getByRole('radio', { name: /Grid/ }));
+    expect(document.documentElement.hasAttribute('data-palette')).toBe(false);
   });
 });
 

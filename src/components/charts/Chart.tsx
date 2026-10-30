@@ -5,9 +5,8 @@ import { SVGRenderer } from 'echarts/renderers';
 import type { EChartsCoreOption } from 'echarts/core';
 // The ES module build: the CommonJS one (lib/) arrives wrapped in an object in production builds.
 import ReactEChartsCore from 'echarts-for-react/esm/core';
-import { colors } from '@design/tokens';
 import type { ChartColors } from './chartTheme';
-import { useResolvedTheme } from '@/theme/useResolvedTheme';
+import { useThemeColors } from '@/theme/usePalette';
 
 echarts.use([LineChart, RadarChart, GridComponent, LegendComponent, MarkLineComponent, MarkPointComponent, RadarComponent, TooltipComponent, SVGRenderer]);
 
@@ -23,12 +22,12 @@ type ChartProps = {
 
 /** An ECharts chart in the app's colors, redrawn when the theme changes. */
 export function Chart({ option, height, label, className }: ChartProps) {
-  const theme = useResolvedTheme();
+  const colors = useThemeColors();
   return (
     <div role="img" aria-label={label} className={className}>
       <ReactEChartsCore
         echarts={echarts}
-        option={option(colors[theme])}
+        option={option(colors)}
         notMerge
         lazyUpdate
         style={{ height, width: '100%' }}

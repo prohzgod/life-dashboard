@@ -16,6 +16,15 @@
         if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
         // Same for the language (src/i18n/locale.ts); Vietnamese is the default.
         if (localStorage.getItem('life-dashboard:locale') === 'en') document.documentElement.setAttribute('lang', 'en');
+        // And the colour theme, from the CSS src/theme/palette.ts saved last time.
+        var p = localStorage.getItem('life-dashboard:palette-css');
+        if (p) {
+          var s = document.createElement('style');
+          s.id = 'palette';
+          s.textContent = p;
+          document.head.appendChild(s);
+          document.documentElement.setAttribute('data-palette', 'saved');
+        }
       } catch (e) {}
     </script>
   </head>

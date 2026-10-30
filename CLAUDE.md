@@ -6,6 +6,7 @@ Read these before starting any task:
 - `docs/PRODUCT.md`: scope, screens, data model, build phases.
 - `docs/DESIGN.md`: the Grid visual rules (white paper, blue-black ink, ultramarine fields, one Swiss red mark; very round corners, a floating sidebar and tab bar, sentence case).
 - `design/TOKENS.md`: every design token (colors light/dark, fonts, type scale, spacing, radius, shadows, layout sizes, motion). Import `design/tokens.css` once; use `design/tokens.ts` for charts and logic; `design/tokens.json` is the source of truth.
+- `design/themes.ts`: the colour themes (five seeds per mode); `src/theme/palette.ts` turns them into every colour token. Never hard-code a colour to suit one theme.
 - `design/README.md`: there are no mockups any more; the running app is the reference. Build new screens from the rules in `docs/DESIGN.md` and the patterns of the existing screens, and check them at 1440×960 and 390×844 in both themes.
 
 ## Stack (decided)

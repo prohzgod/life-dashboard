@@ -13,6 +13,12 @@ Tokens live in `design/tokens.json` (source of truth, a usage note per token) an
 - **Data.** Life areas (`--health` … `--fun`), mood (`--mood-1…5`) and heatmaps (`--heat-0…4`) are names only: they all resolve to the one ultramarine ramp, by choice. Areas are told apart by their name, never by colour.
 - Dark mode keeps the roles: a blue-black sheet, warm white ink, the ultramarine and the red lifted for contrast.
 
+## Colour themes
+
+Settings › Appearance offers colour themes beside light and dark: **Grid** (the default, exactly `tokens.css`), **Leica**, **Nature**, **Focus**, **Ocean**, **Rosé**, and **Your own** (pick a background, a main colour and an accent). Each theme is five seeds per mode in `design/themes.ts` (paper, surface, ink, field, mark), so the three roles above survive any theme. `src/theme/palette.ts` derives every other colour token from the seeds, nudges colours until text reads (body 7:1, captions and links 4.5:1, tested for every preset), and writes a `<style id="palette">` that overrides the tokens in both modes. index.html replays the saved CSS before first paint. Components keep using the CSS variables and never know which theme is on; charts read `useThemeColors()`.
+
+To add a theme: add its seeds to `design/themes.ts`, a name and one-line description in `settings.appearance` (en and vi), and check it at both sizes in light and dark.
+
 ## Type
 
 - `--font-display` **Radio Canada Big** 700, sentence case, tight tracking (−0.03em): screen titles, big figures, the wordmark. Figures may run larger than the head beside them.
