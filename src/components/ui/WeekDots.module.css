@@ -1,12 +1,15 @@
 .week {
   display: flex;
   justify-content: space-between;
-  gap: var(--space-1);
+  gap: 2px;
 }
 
+/* Seven equal shares of whatever width there is, so the week never spills out of a narrow tile. */
 .day {
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
+  min-width: 0;
   align-items: center;
   gap: var(--space-1h);
   color: var(--ink-3);
@@ -20,9 +23,12 @@
 }
 
 .dot {
-  width: 18px;
-  height: 18px;
+  width: min(18px, 100%);
+  aspect-ratio: 1;
   border-radius: var(--radius-pill);
+  transition:
+    background-color var(--dur-base) var(--ease),
+    border-color var(--dur-base) var(--ease);
 }
 
 .done {

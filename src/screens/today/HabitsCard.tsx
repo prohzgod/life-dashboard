@@ -4,7 +4,7 @@ import type { Day } from '@/domain/days';
 import type { HabitSummary } from '@/domain/habits';
 import { listHabitsWithSummaries, tapHabit } from '@/data';
 import { Icon } from '@/components/icons/Icon';
-import { Card, CheckButton, IconButton, WeekDots, type DotState } from '@/components/ui';
+import { AnimatedNumber, Card, CheckButton, IconButton, WeekDots, type DotState } from '@/components/ui';
 import { Ring } from '@/components/ui/Ring';
 import { cx } from '@/components/ui/cx';
 import { messages, useT } from '@/i18n';
@@ -42,7 +42,7 @@ export function HabitsCard({ today, compact = false, className }: { today: Day; 
       className={cx(styles.habitsCard, compact && styles.habitsCompact, className)}
       action={
         <Link to="/progress" className={styles.pillLink}>
-          {t.trends}
+          <span className={styles.pillText}>{t.trends}</span>
           <Icon name="arrowUpRight" size={16} strokeWidth={2} />
         </Link>
       }
@@ -69,7 +69,7 @@ export function HabitsCard({ today, compact = false, className }: { today: Day; 
                 <div className={styles.habitCount}>
                   <Ring percent={summary.todayDone ? 100 : (summary.todayValue / habit.target) * 100} size={56} stroke={8} color="var(--accent)" label={t.ofTarget(summary.todayValue, habit.target)} />
                   <span className={styles.numeralM}>
-                    {summary.todayValue}
+                    <AnimatedNumber value={summary.todayValue} />
                     <small> / {habit.target}</small>
                   </span>
                 </div>

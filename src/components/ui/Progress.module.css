@@ -45,6 +45,15 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  transition: width 560ms var(--ease);
+  animation: fill-grow 720ms var(--ease);
+}
+
+/* Bars grow from nothing on first paint, then move to each new value. */
+@keyframes fill-grow {
+  from {
+    width: 0;
+  }
 }
 
 .short {
@@ -86,6 +95,8 @@
 .barFill {
   height: 100%;
   border-radius: var(--radius-pill);
+  transition: width 560ms var(--ease);
+  animation: fill-grow 720ms var(--ease);
 }
 
 .tick {

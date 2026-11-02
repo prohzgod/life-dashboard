@@ -1,4 +1,5 @@
 import { useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { SlidingPill } from './SlidingPill';
 import styles from './Segmented.module.css';
 import { cx } from './cx';
 
@@ -30,6 +31,7 @@ export function Segmented<T extends string>({ options, value, onChange, label, c
 
   return (
     <div role="radiogroup" aria-label={label} className={cx(styles.track, className)}>
+      <SlidingPill selector="[aria-checked='true']" className={styles.pill} />
       {options.map((option, index) => {
         const selected = option.value === value;
         return (

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Tab } from '@/app/mobileChrome';
 import { useT, type Messages } from '@/i18n';
 import { Icon, type IconName } from '../icons/Icon';
+import { SlidingPill } from '../ui';
 import { cx } from '../ui/cx';
 import styles from './TabBar.module.css';
 
@@ -23,6 +24,7 @@ export function TabBar({ active, onCapture }: { active: Tab; onCapture: () => vo
   );
   return (
     <nav aria-label={shell.tabs} className={styles.bar}>
+      <SlidingPill selector="[aria-current='page']" className={styles.pill} />
       {TABS.slice(0, 2).map(link)}
       <button type="button" className={styles.capture} aria-label={shell.quickCapture} onClick={onCapture}>
         <Icon name="plus" size={24} strokeWidth={2.2} />

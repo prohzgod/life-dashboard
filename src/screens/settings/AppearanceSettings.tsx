@@ -8,6 +8,7 @@ import { useT } from '@/i18n';
 import { useAttachmentUrl } from '@/screens/library/editor/useAttachmentUrl';
 import { ACCENTS, BACKGROUNDS, showOwnPhoto, type Background } from '@/theme/appearance';
 import type { ThemePreference } from '@/theme/theme';
+import { withThemeTransition } from '@/theme/transition';
 import { useLook } from '@/theme/useAppearance';
 import { useResolvedTheme } from '@/theme/useResolvedTheme';
 import { useThemePreference } from '@/theme/useThemePreference';
@@ -23,16 +24,18 @@ export function AppearanceSettings() {
   const theme = useResolvedTheme();
   const showing: Background = theme === 'dark' ? 'night' : look.background;
 
-  const pickMode = (next: ThemePreference) => {
-    setMode(next);
-    // Night is always dark; asking for light brings back Dawn.
-    if (next !== 'dark' && look.background === 'night') setLook({ ...look, background: 'dawn' });
-  };
-  const pickBackground = (background: Background) => {
-    setLook({ ...look, background });
-    // A light background only shows in light mode, so switch to it rather than seem to ignore you.
-    if (background !== 'night' && theme === 'dark') setMode('light');
-  };
+  const pickMode = (next: ThemePreference) =>
+    withThemeTransition(() => {
+      setMode(next);
+      // Night is always dark; asking for light brings back Dawn.
+      if (next !== 'dark' && look.background === 'night') setLook({ ...look, background: 'dawn' });
+    });
+  const pickBackground = (background: Background) =>
+    withThemeTransition(() => {
+      setLook({ ...look, background });
+      // A light background only shows in light mode, so switch to it rather than seem to ignore you.
+      if (background !== 'night' && theme === 'dark') setMode('light');
+    });
   const modeOptions = (['system', 'light', 'dark'] as const).map((value) => ({ value, label: t[value], icon: <Icon name={modeIcons[value]} size={16} /> }));
 
   return (
@@ -63,7 +66,7 @@ export function AppearanceSettings() {
           <div className={styles.accents}>
             {ACCENTS.map((id) => (
               <label key={id} className={cx(styles.accent, look.accent === id && styles.swatchOn)}>
-                <input type="radio" name="accent" className="visually-hidden" checked={look.accent === id} onChange={() => setLook({ ...look, accent: id })} />
+                <input type="radio" name="accent" className="visually-hidden" checked={look.accent === id} onChange={() => withThemeTransition(() => setLook({ ...look, accent: id }))} />
                 <span className={styles.accentChip} data-accent={id} aria-hidden="true">
                   Aa
                 </span>

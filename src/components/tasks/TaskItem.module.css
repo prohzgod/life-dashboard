@@ -7,6 +7,15 @@
   padding: var(--space-2h) var(--space-3h) var(--space-2h) var(--space-2h);
   border-radius: var(--radius-row);
   background: var(--well);
+  transition: background-color var(--dur-base) var(--ease);
+  animation: row-in var(--dur-slow) var(--ease);
+}
+
+/* A row arriving fades in. Rows that are already there glide (useFlipList). */
+@keyframes row-in {
+  from {
+    opacity: 0;
+  }
 }
 
 .raised {
@@ -23,6 +32,10 @@
 }
 
 .planTitle {
+  text-decoration: line-through transparent;
+  transition:
+    color var(--dur-slow) var(--ease),
+    text-decoration-color var(--dur-slow) var(--ease);
   font-size: var(--text-body-size);
   font-weight: 500;
   line-height: 1.4;
@@ -34,7 +47,7 @@
 
 .doneTitle {
   color: var(--ink-3);
-  text-decoration: line-through;
+  text-decoration-color: currentcolor;
 }
 
 .titleButton {

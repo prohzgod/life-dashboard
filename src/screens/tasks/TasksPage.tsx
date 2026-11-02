@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
 import { Segmented } from '@/components/ui';
+import { useFlipList } from '@/lib/motion';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { inView, rolledOverDays, sortForView, groupByDay, countViews, type TaskView } from '@/domain/tasks';
 import { addDays, type Day } from '@/domain/days';
@@ -172,9 +173,10 @@ type ListProps = {
 };
 
 function TaskList({ tasks, today, lookups, selectedId, onOpen, empty, showDay }: ListProps) {
+  const list = useFlipList<HTMLUListElement>();
   if (!tasks.length) return <p className={styles.empty}>{empty}</p>;
   return (
-    <ul className={styles.listCard}>
+    <ul ref={list} className={styles.listCard}>
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} today={today} lookups={lookups} selected={task.id === selectedId} onOpen={onOpen} showDay={showDay} />
       ))}

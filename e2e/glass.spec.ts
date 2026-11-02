@@ -51,6 +51,8 @@ const screens = ['/', '/inbox', '/tasks', '/calendar', '/goals', '/progress', '/
 
 for (const name of ['dawn', 'night'] as const) {
   test(`axe finds no serious problems on ${name}`, async ({ page }) => {
+    // Fourteen full scans take most of the default 30 seconds, and more when the whole suite runs at once.
+    test.setTimeout(90_000);
     await useLook(page, name);
     const problems: string[] = [];
     for (const path of screens) {

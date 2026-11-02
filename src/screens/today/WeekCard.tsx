@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { addDays, dayToDate, isoWeek, startOfWeek, type Day } from '@/domain/days';
 import { doneByDay } from '@/domain/tasks';
 import { tasksRepo } from '@/data';
-import { ArrowLink, Card } from '@/components/ui';
+import { AnimatedNumber, ArrowLink, Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
 import { useT } from '@/i18n';
 import { withCompletedOn } from '@/lib/taskView';
@@ -22,7 +22,7 @@ export function WeekCard({ today, className }: { today: Day; className?: string 
   return (
     <Card title={t.title} className={className} action={<ArrowLink to="/progress" label={t.open} />}>
       <p className={styles.weekTotal}>
-        <span className={styles.numeralL}>{total}</span>
+        <AnimatedNumber value={total} className={styles.numeralL} />
         <span>{t.done(isoWeek(today))}</span>
       </p>
       <ol className={styles.weekBars} aria-label={t.bars(days.map((d, i) => `${letter(d)} ${counts[i]}`).join(', '))}>

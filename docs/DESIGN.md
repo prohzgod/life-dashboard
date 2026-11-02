@@ -60,7 +60,16 @@ Plain, kind, second person, exact. No dashes as punctuation ("Thu 1 Jan to Thu 3
 
 ## Motion
 
-State only: 120ms hovers, 200ms toggles, a 320ms rise for sheets, all on `--ease`. Width is never animated. `prefers-reduced-motion` turns it all off.
+Motion shows where things came from and that the app heard you. Tokens are in `design/TOKENS.md`.
+
+- **Screens** crossfade, with a view transition on every change of view (`src/app/router.tsx`). Nothing slides or flies in, and the nav and tab bar hold still. Never fade an ancestor of glass by hand: opacity below 1 switches off the backdrop blur inside it, and the cards pop when the fade ends.
+- **Navs and switches** share `SlidingPill`, so the highlight travels between items.
+- **Overlays** (dialogs, sheets, menus, toasts) animate out as well as in, through `usePresence`. Entering takes 200 to 320ms on `--ease`, leaving is shorter on `--ease-exit`. A dialog or sheet closes for real the moment you dismiss it, so focus returns and the page works while it animates away; never leave the page inert for the length of an animation.
+- **Presses** shrink anything pressable to `--press-scale` and spring back. **Choices** (a tick, a mood) pop with `--ease-spring`, only when you just made them, never on first paint.
+- **Numbers** count to a new value with `AnimatedNumber`; values that aren't plain numbers rise into place. Rings and bars draw on first paint, then move to each new value.
+- **Scrolling** settles cards into place as they enter the view, by movement only, so nothing below the fold is ever faint.
+- Animate `transform`, `opacity` and colours. Width or height only on something that doesn't push its neighbours (a pill, a bar fill).
+- `prefers-reduced-motion` turns all of it off, including the wait for an overlay to close.
 
 ## Checking a screen
 

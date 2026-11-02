@@ -16,6 +16,49 @@
   background: var(--scrim);
 }
 
+.dialog[open] {
+  animation: dialog-in var(--dur-slow) var(--ease);
+}
+
+.dialog[open]::backdrop {
+  animation: scrim-in var(--dur-slow) var(--ease);
+}
+
+/* Already closed, so the browser no longer shows it or its ::backdrop: it stays on show by itself,
+   the shadow standing in for the scrim, and fades. The page underneath already works. */
+.dialog[data-closing] {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: block;
+  height: fit-content;
+  box-shadow:
+    var(--shadow-card),
+    0 0 0 100vmax var(--scrim);
+  pointer-events: none;
+  animation: dialog-out var(--dur-base) var(--ease-exit) forwards;
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+}
+
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+
 .body {
   display: flex;
   flex-direction: column;
@@ -52,4 +95,14 @@
 
 .close:hover {
   background: var(--glass);
+}
+
+.close svg {
+  transition: rotate var(--dur-base) var(--ease);
+}
+
+@media (hover: hover) {
+  .close:hover svg {
+    rotate: 90deg;
+  }
 }

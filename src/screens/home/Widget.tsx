@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { dayOfMonth, dayToDate, type Day } from '@/domain/days';
 import type { HomeData, HomeWidget } from '@/data';
 import { Icon, type IconName } from '@/components/icons/Icon';
+import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
 import { Ring } from '@/components/ui/Ring';
 import { cx } from '@/components/ui/cx';
 import { monthLabel } from '@/domain/finance';
@@ -34,7 +35,7 @@ export function Widget({ widget, data, today }: Props) {
         <Link to="/today" className={cx(styles.tile, styles.row)}>
           <Ring percent={total ? (done / total) * 100 : 0} size={size === 'L' ? 46 : 54} stroke={5} label={t.doneToday(done, total)}>
             <span className={styles.ringText}>
-              {done}/{total}
+              <AnimatedNumber value={done} />/{total}
             </span>
           </Ring>
           <span className={styles.rowText}>

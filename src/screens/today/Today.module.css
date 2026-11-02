@@ -98,6 +98,7 @@
 }
 
 .capture {
+  transition: var(--tap);
   display: flex;
   align-items: center;
   gap: var(--space-2h);
@@ -123,28 +124,131 @@
   font-weight: 600;
 }
 
-/* ---- Card rows ---- */
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
+/* ---- Card board ----
+   Columns of stacked cards. When the window is tall enough the whole screen fits it like a
+   dashboard: the board takes the height left under the hero and each card scrolls on its own. */
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--card-gap);
 }
 
-.row > * {
+.board > *,
+.stack > * {
   min-width: 0;
 }
 
-.planCol { flex: 5 1 420px; }
-.midCol {
+.stack {
   display: flex;
-  flex: 4 1 340px;
   flex-direction: column;
   gap: var(--card-gap);
+  min-height: 0;
 }
-.checkInCol { flex: 3 1 300px; }
-.habitsCol { flex: 7 1 480px; }
-.smallCol { flex: 3 1 280px; }
+
+/* Tablets: two columns, two rows. */
+@media (min-width: 768px) and (min-height: 860px) {
+  .page {
+    height: var(--workspace-h);
+    gap: var(--space-5);
+  }
+
+  .board {
+    flex: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    min-height: 0;
+  }
+}
+
+/* Laptops and desktops: four columns, one row. */
+@media (min-width: 1100px) and (min-height: 700px) {
+  .page {
+    height: var(--workspace-h);
+    gap: var(--space-5);
+  }
+
+  .board {
+    flex: 1;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 4fr) minmax(290px, 3.4fr);
+    grid-template-rows: minmax(0, 1fr);
+    min-height: 0;
+  }
+}
+
+@media (min-width: 768px) and (min-height: 860px), (min-width: 1100px) and (min-height: 700px) {
+  .hero {
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-top: 0;
+  }
+
+  .greeting {
+    flex: 1 1 auto;
+  }
+
+  .date {
+    margin-bottom: var(--space-1h);
+  }
+
+  .display {
+    font-size: var(--text-display-compact-size);
+  }
+
+  .numbers {
+    gap: var(--space-6);
+  }
+
+  .numbers > div {
+    gap: var(--space-1);
+  }
+
+  .numbers dd {
+    font-size: var(--text-numeral-l-size);
+    line-height: var(--text-numeral-l-line);
+    letter-spacing: var(--text-numeral-l-tracking);
+  }
+
+  .numbers .unit {
+    font-size: var(--text-numeral-s-size);
+  }
+
+  .rhythmRow {
+    margin-top: 0;
+  }
+
+  .stack {
+    height: 100%;
+  }
+
+  /* Each card takes its share of the column and scrolls inside when its content is longer. */
+  .stack > *,
+  .checkInCol {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* The card scrolls; its own parts keep their height. */
+  .stack > * > *,
+  .checkInCol > * {
+    flex-shrink: 0;
+  }
+
+  .stack > .grow2 { flex-grow: 2; }
+  .stack > .grow3 { flex-grow: 3; }
+  /* Week keeps its natural height when there is room; Habits never drops below half the column. */
+  .stack > .natural { flex: 0 1 auto; }
+  .stack > .half { min-height: 50%; }
+
+  .board .weekBars {
+    height: 88px;
+  }
+
+  .stack > .vision {
+    min-height: 0;
+  }
+}
 
 .chip {
   padding: var(--space-1) var(--space-2h);
@@ -290,6 +394,7 @@
 }
 
 .anytimeChip {
+  animation: row-pop var(--dur-slow) var(--ease-spring) backwards;
   display: flex;
   align-items: center;
   gap: var(--space-1h);
@@ -305,6 +410,13 @@
   font-weight: 500;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+@keyframes row-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
 }
 
 /* ---- Agenda ---- */
@@ -574,6 +686,7 @@
 }
 
 .sleepInputs {
+  animation: row-pop var(--dur-base) var(--ease);
   display: flex;
   align-items: center;
   gap: var(--space-1h);
@@ -603,6 +716,7 @@
 }
 
 .note {
+  transition: background-color var(--dur-base) var(--ease);
   position: relative;
   display: flex;
   flex: 1;
@@ -666,6 +780,28 @@
 }
 
 /* ---- Habits ---- */
+.habitsCard {
+  container-type: inline-size;
+}
+
+/* In a narrow card, "See trends" becomes a round arrow; the words stay for screen readers. */
+@container (max-width: 380px) {
+  .habitsCard .pillLink {
+    justify-content: center;
+    width: var(--control-h-sm);
+    padding: 0;
+  }
+
+  .habitsCard .pillText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 .habitTiles {
   display: flex;
   flex-wrap: wrap;
@@ -677,7 +813,8 @@
 
 .habitTile {
   display: flex;
-  flex: 1 1 150px;
+  /* Wide enough inside its padding for the seven days of WeekDots. */
+  flex: 1 1 188px;
   flex-direction: column;
   gap: var(--space-3h);
   min-width: 0;
@@ -735,12 +872,14 @@
   margin: 0 calc(-1 * var(--card-pad));
   padding: 0 var(--card-pad) var(--space-1);
   overflow-x: auto;
+  /* Snap to the padded edge, not the card's: without this the first tile opens against the side. */
+  scroll-padding-inline: var(--card-pad);
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
 }
 
 .habitsCompact .habitTile {
-  flex: 0 0 160px;
+  flex: 0 0 188px;
   border-radius: var(--radius-tile-lg);
   scroll-snap-align: start;
 }
@@ -799,6 +938,15 @@
   min-height: 10px;
   border-radius: var(--radius-pill);
   background: var(--inverse);
+  transform-origin: bottom;
+  transition: height 560ms var(--ease-spring);
+  animation: bar-grow 620ms var(--ease) backwards;
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleY(0);
+  }
 }
 
 .weekToday .weekBar {

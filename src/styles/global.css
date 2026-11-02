@@ -25,6 +25,126 @@ body {
   overflow-x: clip;
 }
 
+/* Scrollbars (tokens: --scrollbar-*). Chrome and Safari draw a pill inset by a transparent border,
+   with the track kept back from the ends so it never runs over a card's curved corner. Firefox
+   only knows the standard properties, so it gets those; Chrome would ignore the ::-webkit rules
+   if both were set. */
+::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  margin: var(--scrollbar-end-gap);
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 40px;
+  border: var(--scrollbar-inset) solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--scrollbar-thumb) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+}
+
+/* Motion that applies everywhere. `scale` rather than `transform`, so a press never fights a
+   component's own transform (the Switch knob, a centred toast). */
+:where(button, a[class], [role='button'], summary):not(.bn-container *) {
+  transition: var(--tap);
+}
+
+/* The press is the feedback on touch screens; the browser's square flash would sit on top of it. */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(button, a[class], [role='button'], summary):not(:disabled, .bn-container *):active {
+  scale: var(--press-scale);
+}
+
+/* Typing: the caret takes the accent and the placeholder steps back once a field has focus. */
+input,
+textarea {
+  caret-color: var(--accent);
+}
+
+::placeholder {
+  transition: opacity var(--dur-base) var(--ease);
+}
+
+:focus::placeholder {
+  opacity: 0.6;
+}
+
+/* The page glides for jumps made in code. AppShell asks for "instant" between screens. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Asked for less motion: nothing moves, whatever a component says (and closing overlays go at once). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after,
+  ::backdrop {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* A change of screen or a change of look is one crossfade of the whole window. Parts that are the
+   same in both don't move or flicker. The blur survives, as the browser fades flattened pictures. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-slow);
+  animation-timing-function: ease-in-out;
+}
+
+/* The nav and tab bar stay live on top, so their pill slides. A change of look fades them with the
+   rest: src/theme/transition.ts sets this attribute, which takes their names away. */
+::view-transition-group(top-nav),
+::view-transition-group(tab-bar),
+::view-transition-new(top-nav),
+::view-transition-new(tab-bar) {
+  animation: none;
+}
+
+::view-transition-old(top-nav),
+::view-transition-old(tab-bar) {
+  display: none;
+}
+
+html[data-whole-fade] * {
+  view-transition-name: none !important;
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
 ::selection {
   background: var(--accent);
   color: var(--on-accent);

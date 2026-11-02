@@ -36,8 +36,19 @@
   padding-block: 8px;
   padding: 0 var(--space-3);
   border-radius: var(--radius-md);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+  animation: option-in var(--dur-base) var(--ease);
   color: var(--ink-2);
   cursor: pointer;
+}
+
+@keyframes option-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
 }
 
 .optionActive {

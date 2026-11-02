@@ -11,6 +11,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { getBackgroundPhoto, initData } from './data';
 import { router } from './app/router';
+import { preloadScreens } from './app/preloadScreens';
 import { registerServiceWorker } from './app/registerServiceWorker';
 import { StorageError } from './app/StorageError';
 import { applyLocale, readLocale } from './i18n';
@@ -37,6 +38,7 @@ initData().then(
         </LocaleRoot>
       </StrictMode>,
     );
+    preloadScreens();
   },
   (error: unknown) => {
     console.error('Could not open local storage', error);

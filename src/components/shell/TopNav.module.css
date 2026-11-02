@@ -1,7 +1,11 @@
 .header {
+  /* Stays out of the crossfade between screens, so the nav holds still and its pill can slide. */
+  view-transition-name: top-nav;
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  /* The pill nav is 2px taller than the other pills; keep the bar to --control-h so full-height screens fit. */
+  height: var(--control-h);
 }
 
 .logo {
@@ -48,6 +52,7 @@
 }
 
 .nav {
+  position: relative;
   display: flex;
   gap: 2px;
   max-width: 100%;
@@ -71,7 +76,20 @@
   flex: none;
 }
 
+/* The strong fill behind the screen you're on; it slides to the next one you open. */
+.nav > .pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-pill);
+  background: var(--inverse);
+  transition:
+    transform 420ms var(--ease),
+    width 420ms var(--ease);
+}
+
 .item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -86,8 +104,8 @@
   white-space: nowrap;
   text-decoration: none;
   transition:
-    background-color var(--dur-base) var(--ease),
-    color var(--dur-base) var(--ease);
+    color var(--dur-base) var(--ease),
+    var(--tap);
 }
 
 .item:hover {
@@ -96,7 +114,6 @@
 
 .active,
 .active:hover {
-  background: var(--inverse);
   color: var(--on-inverse);
 }
 
@@ -142,7 +159,24 @@
   background: var(--glass-2);
 }
 
+.round {
+  transition:
+    background-color var(--dur-base) var(--ease),
+    var(--tap);
+}
+
+.round svg {
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+@media (hover: hover) {
+  .round:hover svg {
+    transform: scale(1.12);
+  }
+}
+
 .toggle {
+  position: relative;
   display: flex;
   gap: 2px;
   padding: var(--space-1);
@@ -153,7 +187,17 @@
   backdrop-filter: blur(var(--blur));
 }
 
+.togglePill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-pill);
+  background: var(--inverse);
+  transition: transform var(--dur-slow) var(--ease);
+}
+
 .toggleOption {
+  position: relative;
   display: grid;
   place-items: center;
   width: var(--control-h-sm);
@@ -163,11 +207,22 @@
   border-radius: var(--radius-pill);
   background: transparent;
   color: var(--ink-2);
+  transition:
+    color var(--dur-base) var(--ease),
+    var(--tap);
 }
 
 .toggleOption[aria-pressed='true'] {
-  background: var(--inverse);
   color: var(--on-inverse);
+}
+
+/* The sun or moon turns as it's chosen. */
+.toggleOption svg {
+  transition: rotate 520ms var(--ease);
+}
+
+.toggleOption[aria-pressed='true'] svg {
+  rotate: 90deg;
 }
 
 .offline {

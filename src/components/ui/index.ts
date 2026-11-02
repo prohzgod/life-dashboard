@@ -1,3 +1,4 @@
+export { AnimatedNumber } from './AnimatedNumber';
 export { Button, ButtonLink } from './Button';
 export { Card } from './Card';
 export { CheckButton } from './CheckButton';
@@ -7,6 +8,7 @@ export { Menu, type MenuItem } from './Menu';
 export { PaceBar } from './PaceBar';
 export { Segmented, type SegmentedOption } from './Segmented';
 export { Sheet } from './Sheet';
+export { SlidingPill } from './SlidingPill';
 export { StatTile } from './StatTile';
 export { Switch } from './Switch';
 export { ArrowLink, IconButton } from './IconButton';

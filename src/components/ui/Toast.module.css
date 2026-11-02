@@ -24,9 +24,20 @@
   text-underline-offset: 3px;
 }
 
+.toast[data-closing] {
+  animation: lift var(--dur-base) var(--ease-exit) forwards;
+}
+
 @keyframes drop {
   from {
-    transform: translate(-50%, -12px);
+    transform: translate(-50%, -12px) scale(0.96);
+    opacity: 0;
+  }
+}
+
+@keyframes lift {
+  to {
+    transform: translate(-50%, -10px);
     opacity: 0;
   }
 }

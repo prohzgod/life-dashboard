@@ -12,7 +12,7 @@ import styles from './Today.module.css';
  * in the strong fill with how long is left, the next one raised with an accent dot. On phones, only
  * now and next.
  */
-export function AgendaCard({ today, compact = false }: { today: Day; compact?: boolean }) {
+export function AgendaCard({ today, compact = false, className }: { today: Day; compact?: boolean; className?: string }) {
   const t = useT().today.agenda;
   const agenda = useAgenda(today);
   if (!agenda) return null;
@@ -41,6 +41,7 @@ export function AgendaCard({ today, compact = false }: { today: Day; compact?: b
   return (
     <Card
       title={t.title}
+      className={className}
       meta={agenda.calendars.length ? <span className={styles.chip}>{agenda.calendars.join(', ')}</span> : undefined}
       action={<ArrowLink to="/calendar" label={more > 0 ? t.moreInCalendar(more) : t.open} />}
     >

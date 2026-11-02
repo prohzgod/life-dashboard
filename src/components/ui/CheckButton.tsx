@@ -1,3 +1,4 @@
+import { useHasChanged } from '@/lib/motion';
 import { Icon } from '../icons/Icon';
 import styles from './CheckButton.module.css';
 import { cx } from './cx';
@@ -16,6 +17,7 @@ type CheckButtonProps = {
 
 /** A square check that toggles on its own (no label text), for task rows and habit tiles. */
 export function CheckButton({ checked, onToggle, label, size = 'md', children, disabled }: CheckButtonProps) {
+  const toggled = useHasChanged(checked);
   return (
     <button
       type="button"
@@ -23,7 +25,7 @@ export function CheckButton({ checked, onToggle, label, size = 'md', children, d
       aria-checked={checked}
       aria-label={label}
       disabled={disabled}
-      className={cx(styles.check, styles[size], checked && styles.checked)}
+      className={cx(styles.check, styles[size], checked && styles.checked, checked && toggled && styles.justChecked)}
       onClick={(event) => {
         event.stopPropagation();
         onToggle();

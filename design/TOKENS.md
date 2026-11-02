@@ -59,6 +59,7 @@ Designed for Vietnamese diacritics. Bundle it with `@fontsource/be-vietnam-pro` 
 | Style | Size | Line | Weight | Tracking | Use |
 |---|---|---|---|---|---|
 | `.text-display` | clamp(38px, 4.4vw, 62px) | 1.06 | 500 | -0.035em | Greeting on desktop/tablet (second sentence in ink-3) |
+| `--text-display-compact-size` | clamp(30px, 2.8vw, 42px) | 1.06 | 500 | -0.035em | Greeting on Today when the screen fits one window |
 | `.text-display-mobile` | 34px | 1.1 | 500 | -0.035em | Greeting on phone (2 lines) |
 | `.text-numeral-xl` | 64px | 1 | 300 | -0.045em | Hero numbers: 83% · 303 · 44 (unit like % at 30px, tracking 0) |
 | `.text-numeral-l` | 48px | 1 | 300 | -0.04em | Card hero number: 6 / 10 km, 20 việc |
@@ -152,7 +153,13 @@ Fallbacks are built in: no `backdrop-filter` support or `prefers-reduced-transpa
 | `--dur-fast` | `120ms` | Press, toggle |
 | `--dur-base` | `200ms` | Hover, chip select, check |
 | `--dur-slow` | `320ms` | Card enter, theme/background crossfade |
-| `--ease` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | Default easing |
+| `--ease` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | Default easing: anything arriving or moving |
+| `--ease-exit` | `cubic-bezier(0.4, 0, 1, 1)` | Anything leaving (dialogs, sheets, menus, toasts) |
+| `--ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | A small overshoot: checks, chosen moods, chips, the release of a press |
+| `--press-scale` | `0.97` | How far anything pressable shrinks while held |
+| `--tap` | `scale var(--dur-fast) var(--ease-spring)` | Add to a `transition` list on anything pressable that sets its own `transition`, or the press snaps |
+
+Shared parts: `SlidingPill` (the highlight in navs and switches), `AnimatedNumber` (counts to a new value), `usePresence` (keeps an overlay on screen while it closes) and `useFlipList` (keeps rows gliding when a list changes), in `src/lib/motion.ts`.
 
 ## Contrast (WCAG 2.1, computed on the real surfaces)
 
@@ -200,3 +207,15 @@ Screens built before Glass v2 use the Grid token names. `design/tokens.css` keep
 | `--shadow-md` | `--shadow-card` |
 
 Two names changed meaning: `--line` is now the white glass edge (use `--well-line` for a divider), and `--inverse` is the near-black strong fill (it was the ultramarine field). Added for the app: `--paper`, and `--glass-float` (`--float`) for menus, dialogs and sheets, which need a near-opaque surface.
+
+## Scrollbars
+
+| Token | Value | Use |
+|---|---|---|
+| `--scrollbar-thumb` | `--ink` at 22% (`--on-panel` at 24% inside a panel) | The thumb, no track |
+| `--scrollbar-thumb-hover` | `--ink` at 40% | Thumb on hover |
+| `--scrollbar-size` | 12px | Width of the scrollbar area |
+| `--scrollbar-inset` | 4px | Transparent border around the thumb, so it shows as a 4px pill off the edge |
+| `--scrollbar-end-gap` | 18px | Track margin at both ends, which keeps the thumb clear of rounded corners |
+
+Styled once in `src/styles/global.css`; don't style scrollbars per component (`scrollbar-width: none` for sideways chip rows is fine).

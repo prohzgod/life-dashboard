@@ -8,6 +8,7 @@
 }
 
 .nav {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -37,7 +38,19 @@
   line-height: var(--text-label-line);
 }
 
+.navPill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-md);
+  background: var(--raised);
+  transition:
+    transform var(--dur-slow) var(--ease),
+    height var(--dur-slow) var(--ease);
+}
+
 .navItem {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -48,8 +61,8 @@
   font-size: 14px;
   text-decoration: none;
   transition:
-    background-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease);
+    color var(--dur-fast) var(--ease),
+    var(--tap);
 }
 
 .navItem:hover {
@@ -61,7 +74,6 @@
 }
 
 .navActive {
-  background: var(--raised);
   color: var(--ink);
   font-weight: 600;
 }

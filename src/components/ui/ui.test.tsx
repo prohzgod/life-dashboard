@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
-import { Button, Card, Checkbox, Chip, PaceBar, Segmented, StatTile, Switch } from '.';
+import { AnimatedNumber, Button, Card, Checkbox, Chip, PaceBar, Segmented, Sheet, StatTile, Switch } from '.';
+import { Dialog } from './Dialog';
 
 describe('Button', () => {
   it('is a real button that defaults to type="button"', async () => {
@@ -140,5 +141,62 @@ describe('Card and StatTile', () => {
     expect(screen.getByText('Average mood')).toBeInTheDocument();
     expect(screen.getByText('3.8')).toBeInTheDocument();
     expect(screen.getByText('best month: May')).toBeInTheDocument();
+  });
+});
+
+describe('overlays closing', () => {
+  /** A stand-in for a running closing animation: resolves when the test says so. */
+  function fakeAnimation(dialog: Element) {
+    let finish = () => {};
+    const finished = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    dialog.getAnimations = () => [{ effect: { target: dialog }, finished } as unknown as Animation];
+    return finish;
+  }
+
+  it('keeps a Dialog and what it showed until its closing animation ends', async () => {
+    const { rerender } = render(
+      <Dialog open onClose={() => {}} title="Title">
+        <p>Inside</p>
+      </Dialog>,
+    );
+    const dialog = screen.getByText('Inside').closest('dialog')!;
+    const finish = fakeAnimation(dialog);
+
+    // Owners usually clear their state as they close, so the children go at the same moment.
+    rerender(
+      <Dialog open={false} onClose={() => {}} title="Title">
+        {null}
+      </Dialog>,
+    );
+    expect(screen.getByText('Inside')).toBeInTheDocument();
+    expect(dialog).toHaveAttribute('data-closing');
+
+    await act(async () => finish());
+    expect(screen.queryByText('Inside')).not.toBeInTheDocument();
+  });
+
+  it('closes at once when nothing is animating', () => {
+    const { rerender } = render(
+      <Sheet open onClose={() => {}} title="Title">
+        <p>Inside</p>
+      </Sheet>,
+    );
+    rerender(
+      <Sheet open={false} onClose={() => {}} title="Title">
+        <p>Inside</p>
+      </Sheet>,
+    );
+    expect(screen.queryByText('Inside')).not.toBeInTheDocument();
+  });
+});
+
+describe('AnimatedNumber', () => {
+  it('shows the new value straight away where nothing can animate', () => {
+    const { rerender } = render(<AnimatedNumber value={1} />);
+    expect(screen.getByText('1')).toBeInTheDocument();
+    rerender(<AnimatedNumber value={8} format={(n) => `${n} km`} />);
+    expect(screen.getByText('8 km')).toBeInTheDocument();
   });
 });

@@ -413,6 +413,14 @@
 
 .savingDot {
   background: var(--warning);
+  animation: saving-pulse 900ms var(--ease) infinite alternate;
+}
+
+@keyframes saving-pulse {
+  to {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
 }
 
 .article {

@@ -1,4 +1,6 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { usePresence } from '@/lib/motion';
 import styles from './Menu.module.css';
 import { cx } from './cx';
 
@@ -14,19 +16,43 @@ type MenuProps = {
   triggerClassName?: string;
 };
 
-/** A button that opens a short list of actions. Arrow keys move, Escape closes. */
+/**
+ * A button that opens a short list of actions. Arrow keys move, Escape closes.
+ * The list renders in a portal with fixed position under the button, so a parent that scrolls or
+ * clips (the top nav pill) can't cut it off.
+ */
 export function Menu({ label, trigger, items, className, triggerClassName }: MenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const menuId = useId();
+  const [place, setPlace] = useState<CSSProperties>();
+  const { present, closing } = usePresence(open, menuRef);
+
+  // Under the button, right edges lined up; follows the button when the page scrolls or resizes.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const update = () => {
+      const rect = buttonRef.current?.getBoundingClientRect();
+      if (rect) setPlace({ top: rect.bottom + 4, right: Math.max(8, window.innerWidth - rect.right) });
+    };
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, true);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update, true);
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
     itemRefs.current.find((el) => el && !el.disabled)?.focus();
     const onPointer = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+      const target = event.target as Node;
+      if (!rootRef.current?.contains(target) && !menuRef.current?.contains(target)) setOpen(false);
     };
     document.addEventListener('pointerdown', onPointer);
     return () => document.removeEventListener('pointerdown', onPointer);
@@ -51,42 +77,47 @@ export function Menu({ label, trigger, items, className, triggerClassName }: Men
       >
         {trigger}
       </button>
-      {open && (
-        <div
-          id={menuId}
-          role="menu"
-          aria-label={label}
-          className={styles.menu}
-          onKeyDown={(event) => {
-            const enabled = itemRefs.current.filter((el): el is HTMLButtonElement => !!el && !el.disabled);
-            const at = enabled.indexOf(document.activeElement as HTMLButtonElement);
-            if (event.key === 'Escape') close();
-            else if (event.key === 'ArrowDown') enabled[(at + 1) % enabled.length]?.focus();
-            else if (event.key === 'ArrowUp') enabled[(at - 1 + enabled.length) % enabled.length]?.focus();
-            else return;
-            event.preventDefault();
-          }}
-        >
-          {items.map((item, i) => (
-            <button
-              key={item.label}
-              ref={(el) => {
-                itemRefs.current[i] = el;
-              }}
-              type="button"
-              role="menuitem"
-              disabled={item.disabled}
-              className={cx(styles.item, item.danger && styles.danger)}
-              onClick={() => {
-                setOpen(false);
-                item.onSelect();
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {present &&
+        createPortal(
+          <div
+            ref={menuRef}
+            id={menuId}
+            role="menu"
+            aria-label={label}
+            className={styles.menu}
+            style={place}
+            data-closing={closing || undefined}
+            onKeyDown={(event) => {
+              const enabled = itemRefs.current.filter((el): el is HTMLButtonElement => !!el && !el.disabled);
+              const at = enabled.indexOf(document.activeElement as HTMLButtonElement);
+              if (event.key === 'Escape') close();
+              else if (event.key === 'ArrowDown') enabled[(at + 1) % enabled.length]?.focus();
+              else if (event.key === 'ArrowUp') enabled[(at - 1 + enabled.length) % enabled.length]?.focus();
+              else return;
+              event.preventDefault();
+            }}
+          >
+            {items.map((item, i) => (
+              <button
+                key={item.label}
+                ref={(el) => {
+                  itemRefs.current[i] = el;
+                }}
+                type="button"
+                role="menuitem"
+                disabled={item.disabled}
+                className={cx(styles.item, item.danger && styles.danger)}
+                onClick={() => {
+                  setOpen(false);
+                  item.onSelect();
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

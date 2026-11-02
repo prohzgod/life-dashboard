@@ -9,11 +9,22 @@
   text-decoration: none;
   transition:
     background-color var(--dur-base) var(--ease),
-    transform var(--dur-fast) var(--ease);
+    var(--tap);
 }
 
-.button:active:not(:disabled) {
-  transform: scale(0.96);
+.button svg {
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+@media (hover: hover) {
+  .button:hover:not(:disabled) svg {
+    transform: scale(1.12);
+  }
+
+  /* The arrow on a card's link leans the way it goes. */
+  a.button:hover svg {
+    transform: translate(1.5px, -1.5px);
+  }
 }
 
 .md {

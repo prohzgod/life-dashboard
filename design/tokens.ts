@@ -257,7 +257,9 @@ export const motion = {
   "dur-fast": "120ms",
   "dur-base": "200ms",
   "dur-slow": "320ms",
-  "ease": "cubic-bezier(0.2, 0.8, 0.2, 1)"
+  "ease": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+  "ease-exit": "cubic-bezier(0.4, 0, 1, 1)",
+  "ease-spring": "cubic-bezier(0.34, 1.56, 0.64, 1)"
 } as const;
 
 /** Chart colors: series = inverse, today/highlight = accent, future = well-line. */

@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import type { Day } from '@/domain/days';
 import { metricProgress } from '@/domain/progress';
 import { goalsRepo, listFocusGoals } from '@/data';
-import { ArrowLink, Card, HatchBar, WarnNote } from '@/components/ui';
+import { AnimatedNumber, ArrowLink, Card, HatchBar, WarnNote } from '@/components/ui';
 import { useT } from '@/i18n';
 import { readPace } from '@/lib/paceText';
 import styles from './Today.module.css';
@@ -10,7 +10,7 @@ import styles from './Today.module.css';
 const round = (n: number) => Math.round(n * 10) / 10;
 
 /** This week's focus: the first goal set large, with where you should be by now. */
-export function FocusCard({ today }: { today: Day }) {
+export function FocusCard({ today, className }: { today: Day; className?: string }) {
   const t = useT().today.focus;
   const data = useLiveQuery(async () => {
     const [focus, allGoals] = await Promise.all([listFocusGoals(today), goalsRepo.list()]);
@@ -18,7 +18,7 @@ export function FocusCard({ today }: { today: Day }) {
   }, [today]);
 
   return (
-    <Card title={t.title} action={<ArrowLink to="/goals" label={t.open} />}>
+    <Card title={t.title} className={className} action={<ArrowLink to="/goals" label={t.open} />}>
       {data && data.goals.length === 0 && <p className={styles.quietEmpty}>{t.empty}</p>}
       {data?.goals.map((goal, i) => {
         const progress = metricProgress(goal) ?? 0;
@@ -32,7 +32,7 @@ export function FocusCard({ today }: { today: Day }) {
             <p className={styles.focusTitle}>{goal.title}</p>
             {i === 0 && (
               <div className={styles.focusFigure}>
-                <span className={styles.numeralL}>{metric ? goal.currentValue : Math.round(progress)}</span>
+                <AnimatedNumber value={metric ? goal.currentValue! : Math.round(progress)} className={styles.numeralL} />
                 <span className={styles.focusOf}>{metric ? `/ ${goal.targetValue}${unit}` : '%'}</span>
                 {metric && <span className={styles.focusPlanned}>{t.planned(`${round(goal.startValue! + (pace.expected / 100) * (goal.targetValue! - goal.startValue!))}${unit}`)}</span>}
               </div>

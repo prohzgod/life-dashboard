@@ -28,6 +28,14 @@
   height: 100%;
   border-radius: var(--radius-pill);
   background: var(--inverse);
+  transition: width 560ms var(--ease);
+  animation: pace-grow 720ms var(--ease);
+}
+
+@keyframes pace-grow {
+  from {
+    width: 0;
+  }
 }
 
 .tick {

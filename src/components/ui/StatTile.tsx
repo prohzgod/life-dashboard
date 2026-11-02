@@ -18,7 +18,10 @@ export function StatTile({ label, value, unit, caption, tone = 'surface', classN
     <div className={cx(styles.tile, styles[tone], className)}>
       <span className={styles.label}>{label}</span>
       <span className={styles.value}>
-        {value}
+        {/* A new value rises into place. */}
+        <span key={String(value)} className={styles.swap}>
+          {value}
+        </span>
         {unit && <span className={styles.unit}> {unit}</span>}
       </span>
       {caption && <span className={styles.caption}>{caption}</span>}

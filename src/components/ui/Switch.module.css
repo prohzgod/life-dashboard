@@ -8,7 +8,9 @@
   border-radius: var(--radius-pill);
   background: var(--well-line);
   box-shadow: inset 0 0 0 1px var(--well-line);
-  transition: background-color var(--dur) var(--ease);
+  transition:
+    background-color var(--dur) var(--ease),
+    var(--tap);
 }
 
 .on {
@@ -25,7 +27,18 @@
   border-radius: var(--radius-pill);
   background: var(--on-inverse);
   box-shadow: var(--shadow-fab);
-  transition: transform var(--dur) var(--ease);
+  transition:
+    transform var(--dur-slow) var(--ease-spring),
+    width var(--dur-base) var(--ease);
+}
+
+/* The knob stretches while you hold it. */
+.switch:active:not(:disabled) .knob {
+  width: 26px;
+}
+
+.on:active:not(:disabled) .knob {
+  transform: translateX(16px);
 }
 
 .on .knob {

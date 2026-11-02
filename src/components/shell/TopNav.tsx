@@ -7,9 +7,10 @@ import { useT } from '@/i18n';
 import { withCompletedOn } from '@/lib/taskView';
 import { useToday } from '@/lib/useToday';
 import { useResolvedTheme } from '@/theme/useResolvedTheme';
+import { withThemeTransition } from '@/theme/transition';
 import { useThemePreference } from '@/theme/useThemePreference';
 import { Icon } from '../icons/Icon';
-import { Menu } from '../ui';
+import { Menu, SlidingPill } from '../ui';
 import { cx } from '../ui/cx';
 import { ProfileAvatar } from './ProfileAvatar';
 import styles from './TopNav.module.css';
@@ -48,6 +49,7 @@ export function TopNav({ onSearch }: { onSearch: () => void }) {
 
       <nav aria-label={t.shell.mainNav} className={styles.navWrap}>
         <ul className={styles.nav}>
+          <SlidingPill as="li" selector={`.${styles.active}`} className={styles.pill} />
           {MAIN.map((screen) => {
             const on = isOn(screen, pathname);
             const count = screen.key === 'inbox' ? counts?.inbox : undefined;
@@ -91,10 +93,11 @@ export function TopNav({ onSearch }: { onSearch: () => void }) {
           <Icon name="search" size={20} />
         </button>
         <div className={styles.toggle} role="group" aria-label={t.settings.appearance.mode}>
-          <button type="button" aria-label={t.shell.lightTheme} aria-pressed={theme === 'light'} className={styles.toggleOption} onClick={() => setMode('light')}>
+          <SlidingPill selector="[aria-pressed='true']" className={styles.togglePill} />
+          <button type="button" aria-label={t.shell.lightTheme} aria-pressed={theme === 'light'} className={styles.toggleOption} onClick={() => withThemeTransition(() => setMode('light'))}>
             <Icon name="sun" size={18} />
           </button>
-          <button type="button" aria-label={t.shell.darkTheme} aria-pressed={theme === 'dark'} className={styles.toggleOption} onClick={() => setMode('dark')}>
+          <button type="button" aria-label={t.shell.darkTheme} aria-pressed={theme === 'dark'} className={styles.toggleOption} onClick={() => withThemeTransition(() => setMode('dark'))}>
             <Icon name="moon" size={18} />
           </button>
         </div>

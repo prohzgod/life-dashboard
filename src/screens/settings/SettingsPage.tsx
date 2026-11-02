@@ -1,5 +1,6 @@
 import { Link, Navigate, NavLink, useParams } from 'react-router-dom';
 import { Icon } from '@/components/icons/Icon';
+import { SlidingPill } from '@/components/ui';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { EmptyState } from '@/components/shell/EmptyState';
 import { PageHeader } from '@/components/shell/PageHeader';
@@ -41,6 +42,7 @@ export function SettingsPage() {
     <>
       <PageHeader title={t.title} />
       <nav aria-label={t.sections} className={styles.tabs}>
+        <SlidingPill selector={`.${styles.active}`} className={styles.tabLine} />
         {settingsTabs.map((s) => (
           <NavLink key={s} to={`/settings/${s}`} className={({ isActive }) => (isActive ? `${styles.tab} ${styles.active}` : styles.tab)}>
             {t.tabs[s]}

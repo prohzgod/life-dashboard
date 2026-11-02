@@ -1,4 +1,5 @@
 .track {
+  position: relative;
   display: inline-flex;
   gap: 2px;
   padding: 4px;
@@ -7,7 +8,20 @@
   background: var(--glass);
 }
 
+/* The strong fill behind the chosen option, sliding between them. */
+.pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-pill);
+  background: var(--inverse);
+  transition:
+    transform var(--dur-slow) var(--ease),
+    width var(--dur-slow) var(--ease);
+}
+
 .option {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -20,8 +34,8 @@
   font-size: var(--text-label-size);
   font-weight: 500;
   transition:
-    background-color var(--dur) var(--ease),
-    color var(--dur) var(--ease);
+    color var(--dur) var(--ease),
+    var(--tap);
 }
 
 .option:hover:not(.selected) {
@@ -29,7 +43,6 @@
 }
 
 .selected {
-  background: var(--inverse);
   color: var(--on-inverse);
 }
 

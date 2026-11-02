@@ -44,3 +44,15 @@
   font-size: var(--text-caption-size);
   line-height: var(--text-caption-line);
 }
+
+.swap {
+  display: inline-block;
+  animation: value-in var(--dur-slow) var(--ease);
+}
+
+@keyframes value-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

@@ -37,6 +37,7 @@
   --text-display-line: 1.06;
   --text-display-weight: 500;
   --text-display-tracking: -0.035em;
+  --text-display-compact-size: clamp(30px, 2.8vw, 42px);
   --text-display-mobile-size: 34px;
   --text-display-mobile-line: 1.1;
   --text-display-mobile-weight: 500;
@@ -125,6 +126,10 @@
   --dur-base: 200ms;
   --dur-slow: 320ms;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --press-scale: 0.97;
+  --tap: scale var(--dur-fast) var(--ease-spring);
   --bg-paint: radial-gradient(1100px 760px at 0% 0%, #FFD8C6 0%, rgba(255,216,198,0) 62%), radial-gradient(1000px 720px at 100% 4%, #DCD5FF 0%, rgba(220,213,255,0) 58%), radial-gradient(1200px 820px at 55% 106%, #FFEABF 0%, rgba(255,234,191,0) 60%), #F4F1EE;
   --bg-image: none;
   --bg-veil: none;
@@ -249,6 +254,12 @@
   --line-strong: var(--hatch);
   --control: var(--ink-3);
   --ink-4: color-mix(in srgb, var(--ink-3) 70%, transparent);
+  /* Scrollbars: a thin pill with no track, inset from the edge and clear of rounded corners. */
+  --scrollbar-thumb: color-mix(in srgb, var(--ink) 22%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--ink) 40%, transparent);
+  --scrollbar-size: 12px;
+  --scrollbar-inset: 4px;
+  --scrollbar-end-gap: 18px;
   --float: var(--glass-float);
   --scrim: rgba(18, 16, 30, 0.42);
 
@@ -386,7 +397,7 @@
   --fab-size: var(--fab);
   --header-h: calc(var(--control-h) + 2 * var(--space-5));
   /* Full-height screens (Tasks, Calendar, Library) fill the window below the top nav. */
-  --workspace-h: calc(100dvh - var(--control-h) - 2 * var(--space-7) - var(--space-8));
+  --workspace-h: calc(100dvh - var(--control-h) - var(--space-7) - var(--space-8) - var(--space-12));
   --bento-columns: 4;
   --bento-gap: 9px;
   --bento-row: 70px;

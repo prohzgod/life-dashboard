@@ -333,6 +333,7 @@
 .bar {
   width: 7px;
   border-radius: 6px;
+  transition: height 560ms var(--ease);
 }
 
 .swatches {
@@ -398,6 +399,7 @@
   display: block;
   height: 100%;
   border-radius: 6px;
+  transition: width 560ms var(--ease);
 }
 
 .editTile {
@@ -437,4 +439,5 @@
   height: 100%;
   border-radius: 6px;
   background: var(--finance);
+  transition: width 560ms var(--ease);
 }

@@ -30,6 +30,8 @@ export function Ring({ percent, size, stroke = 6, color = 'var(--accent)', child
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={c * (1 - value / 100)}
+          className={styles.arc}
+          style={{ '--ring-c': c } as React.CSSProperties}
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </svg>

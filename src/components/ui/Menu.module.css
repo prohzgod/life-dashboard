@@ -20,11 +20,19 @@
   background: var(--glass);
 }
 
+/* A chevron in the trigger turns over while the menu is open. */
+[aria-expanded] > svg {
+  transition: rotate var(--dur-base) var(--ease);
+}
+
+[aria-expanded='true'] > svg {
+  rotate: 180deg;
+}
+
 .menu {
-  position: absolute;
-  top: calc(100% + 4px);
-  right: 0;
-  z-index: 20;
+  /* top and right come from the button's position (Menu.tsx). */
+  position: fixed;
+  z-index: 40;
   display: flex;
   flex-direction: column;
   min-width: 200px;
@@ -35,6 +43,27 @@
   -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
   backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
   box-shadow: var(--shadow-card);
+  transform-origin: top right;
+  animation: menu-in var(--dur-base) var(--ease);
+}
+
+.menu[data-closing] {
+  pointer-events: none;
+  animation: menu-out var(--dur-fast) var(--ease-exit) forwards;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.94);
+  }
+}
+
+@keyframes menu-out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.96);
+  }
 }
 
 .item {
@@ -45,6 +74,9 @@
   background: transparent;
   font-size: var(--text-body-size);
   text-align: left;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    var(--tap);
 }
 
 .item:hover:not(:disabled),

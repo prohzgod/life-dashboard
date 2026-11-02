@@ -3,3 +3,15 @@
   flex-wrap: wrap;
   gap: 8px;
 }
+
+/* Each thing the line is understood to mean pops in as you type it. */
+.chips > * {
+  animation: chip-pop var(--dur-slow) var(--ease-spring);
+}
+
+@keyframes chip-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}

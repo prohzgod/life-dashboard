@@ -31,7 +31,8 @@
   transition:
     background-color var(--dur) var(--ease),
     border-color var(--dur) var(--ease),
-    color var(--dur) var(--ease);
+    color var(--dur) var(--ease),
+    var(--tap);
 }
 
 .input:checked + .box {

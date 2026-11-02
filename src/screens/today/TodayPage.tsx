@@ -6,7 +6,7 @@ import { Icon } from '@/components/icons/Icon';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
 import { useShellActions } from '@/components/shell/shellActions';
 import { useOnlineStatus } from '@/components/shell/useOnlineStatus';
-import { ButtonLink, HatchBar, IconButton, ProgressCapsule } from '@/components/ui';
+import { AnimatedNumber, ButtonLink, HatchBar, IconButton, ProgressCapsule } from '@/components/ui';
 import { formatDayLong, formatWeekdayDate, numberWord } from '@/lib/format';
 import { messages, useT, type Messages } from '@/i18n';
 import { useIsMobile } from '@/lib/useMediaQuery';
@@ -105,19 +105,21 @@ function DesktopToday() {
         </div>
       </section>
 
-      <div className={styles.row}>
-        <PlanCard today={today} className={styles.planCol} />
-        <div className={styles.midCol}>
+      <div className={styles.board}>
+        <div className={styles.stack}>
+          <PlanCard today={today} className={styles.grow3} />
+          <VisionTile today={today} className={styles.grow2} />
+        </div>
+        <div className={styles.stack}>
           <AgendaCard today={today} />
           <FocusCard today={today} />
+          <OnThisDayCard today={today} />
+        </div>
+        <div className={styles.stack}>
+          <HabitsCard today={today} className={styles.half} />
+          <WeekCard today={today} className={styles.natural} />
         </div>
         <CheckInCard today={today} className={styles.checkInCol} />
-      </div>
-      <div className={styles.row}>
-        <HabitsCard today={today} className={styles.habitsCol} />
-        <WeekCard today={today} className={styles.smallCol} />
-        <VisionTile today={today} className={styles.smallCol} />
-        <OnThisDayCard today={today} className={styles.smallCol} />
       </div>
     </div>
   );
@@ -191,7 +193,7 @@ function PhoneToday() {
         <li>
           <span>{t.today.rhythm.today}</span>
           <strong>
-            {counts?.done ?? 0}
+            <AnimatedNumber value={counts?.done ?? 0} />
             <small>/{counts?.total ?? 0}</small>
           </strong>
         </li>

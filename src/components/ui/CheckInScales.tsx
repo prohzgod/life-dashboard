@@ -1,4 +1,5 @@
 import { Icon, type IconName } from '@/components/icons/Icon';
+import { useHasChanged } from '@/lib/motion';
 import styles from './CheckInScales.module.css';
 import { cx } from './cx';
 
@@ -8,6 +9,7 @@ type ScaleProps = { label: string; options: readonly string[]; value: number | n
 
 /** Five faces, 48px; the chosen one fills with the accent. Tap it again to clear. Made for the dark panel. */
 export function MoodPicker({ label, options, value, onChange, className }: ScaleProps) {
+  const chosen = useHasChanged(value);
   return (
     <fieldset className={cx(styles.group, className)}>
       <legend className={styles.legend}>{label}</legend>
@@ -15,7 +17,7 @@ export function MoodPicker({ label, options, value, onChange, className }: Scale
         {options.map((option, i) => {
           const on = value === i + 1;
           return (
-            <button key={option} type="button" aria-pressed={on} className={cx(styles.choice, on && styles.on)} onClick={() => onChange(on ? null : i + 1)}>
+            <button key={option} type="button" aria-pressed={on} className={cx(styles.choice, on && styles.on, on && chosen && styles.justChosen)} onClick={() => onChange(on ? null : i + 1)}>
               <span className={styles.face}>
                 <Icon name={FACES[i]!} size={26} strokeWidth={1.7} />
               </span>
@@ -38,7 +40,7 @@ export function EnergyMeter({ label, options, value, onChange, className }: Scal
           const on = value === i + 1;
           return (
             <button key={option} type="button" aria-pressed={on} className={cx(styles.choice, on && styles.on)} onClick={() => onChange(on ? null : i + 1)}>
-              <span className={cx(styles.bar, value !== null && i < value && styles.filled)} style={{ height: 20 + i * 10 }} />
+              <span className={cx(styles.bar, value !== null && i < value && styles.filled)} style={{ height: 20 + i * 10, transitionDelay: `${i * 30}ms` }} />
               {option}
             </button>
           );

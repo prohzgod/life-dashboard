@@ -1,5 +1,7 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom';
 import { AppShell } from '@/components/shell/AppShell';
+import { canAnimate } from '@/lib/motion';
+import { changesView } from './routeMotion';
 import { DevComponentsPage } from '@/screens/dev/DevComponentsPage';
 import { LazyLibraryPage } from '@/screens/library/LazyLibraryPage';
 import { ReviewPage } from '@/screens/review/ReviewPage';
@@ -58,3 +60,8 @@ export const routes: RouteObject[] = [
 ];
 
 export const router = createBrowserRouter(routes);
+
+// Every change of view is one crossfade of the window, however it was asked for (a link, a tab, code).
+const navigate = router.navigate.bind(router) as (to: unknown, options?: object) => Promise<void>;
+router.navigate = ((to: unknown, options?: object) =>
+  navigate(to, typeof to !== 'number' && to !== null && canAnimate() && changesView(window.location.href, to as string) ? { ...options, viewTransition: true } : options)) as typeof router.navigate;

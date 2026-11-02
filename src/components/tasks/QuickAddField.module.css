@@ -37,6 +37,15 @@
 .plus {
   flex-shrink: 0;
   color: var(--ink-2);
+  transition:
+    rotate var(--dur-slow) var(--ease-spring),
+    color var(--dur-base) var(--ease);
+}
+
+/* Typing: the + turns as you focus, and Enter lights up once there's something to save. */
+.field:focus-within .plus {
+  color: var(--ink);
+  rotate: 90deg;
 }
 
 .input {
@@ -69,6 +78,16 @@
   color: var(--ink-2);
   font-size: var(--text-caption-size);
   font-weight: 600;
+  transition:
+    background-color var(--dur-base) var(--ease),
+    color var(--dur-base) var(--ease),
+    transform var(--dur-base) var(--ease-spring);
+}
+
+.field:has(.input:not(:placeholder-shown)) .kbd {
+  background: var(--inverse);
+  color: var(--on-inverse);
+  transform: scale(1.04);
 }
 
 .preview,

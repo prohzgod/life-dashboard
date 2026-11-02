@@ -4,7 +4,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { budgetSentence, monthLabel, monthName, monthOf, trendSentence, type CategorySpend } from '@/domain/finance';
 import { addSavingsReminder, getPrivacyState, loadFinanceMonth, type SavingsGoal, type Transaction } from '@/data';
 import { Icon } from '@/components/icons/Icon';
-import { Button } from '@/components/ui';
+import { AnimatedNumber, Button } from '@/components/ui';
 import { Toast } from '@/components/ui/Toast';
 import { cx } from '@/components/ui/cx';
 import { formatDayMonth } from '@/lib/format';
@@ -97,7 +97,7 @@ export function FinancePage() {
         <section className={cx(styles.card, styles.phoneHero)} aria-label={t.spentThisMonth}>
           <span className={styles.statLabel}>{t.spentIn(monthName(month))}</span>
           <span className={styles.heroAmount}>
-            {whole(s.spent)} {s.budget > 0 && <span className={styles.ofBudget}>{t.of(whole(s.budget))}</span>}
+            <AnimatedNumber value={s.spent} format={whole} /> {s.budget > 0 && <span className={styles.ofBudget}>{t.of(whole(s.budget))}</span>}
           </span>
           <Track share={spentShare} over={s.budget > 0 && s.spent > s.budget} pace={paceShare(month, today)} />
           <span className={cx(styles.heroNote, s.budget > 0 && s.spent > s.budget ? styles.bad : styles.good)}>{hidden ? t.amountsHidden : budgetSentence(s, (c) => formatMoney(c, data.currency, { whole: true }))}</span>
@@ -207,14 +207,14 @@ export function FinancePage() {
       </header>
 
       <div className={styles.stats}>
-        <Stat label={t.spentThisMonth} amount={whole(s.spent)} of={s.budget > 0 ? whole(s.budget) : null}>
+        <Stat label={t.spentThisMonth} amount={<AnimatedNumber value={s.spent} format={whole} />} of={s.budget > 0 ? whole(s.budget) : null}>
           <Track share={spentShare} over={s.budget > 0 && s.spent > s.budget} />
           <span className={styles.statNote}>{hidden ? t.amountsHidden : budgetSentence(s, (c) => formatMoney(c, data.currency, { whole: true }))}</span>
         </Stat>
-        <Stat label={t.income} amount={whole(s.income)}>
+        <Stat label={t.income} amount={<AnimatedNumber value={s.income} format={whole} />}>
           <span className={styles.statNote}>{s.incomeSources ? t.incomeSources(s.incomeSources) : t.noIncomeMonth}</span>
         </Stat>
-        <Stat label={t.saved} amount={whole(s.saved)}>
+        <Stat label={t.saved} amount={<AnimatedNumber value={s.saved} format={whole} />}>
           <span className={styles.statNote}>
             {s.savingsRate === null ? t.savingsGoalOnly(Math.round(data.savingsTarget * 100)) : t.savingsGoal(Math.round(s.savingsRate * 100), Math.round(data.savingsTarget * 100), s.savingsRate >= data.savingsTarget)}
           </span>
@@ -356,7 +356,7 @@ function paceShare(month: string, today: string): number | undefined {
   return day / new Date(y, m, 0).getDate();
 }
 
-function Stat({ label, amount, of, children }: { label: string; amount: string; of?: string | null; children: ReactNode }) {
+function Stat({ label, amount, of, children }: { label: string; amount: ReactNode; of?: string | null; children: ReactNode }) {
   const t = useT().finance;
   return (
     <section className={styles.stat} aria-label={label}>

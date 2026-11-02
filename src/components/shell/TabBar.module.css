@@ -1,5 +1,7 @@
 /* A glass pill floating above the bottom edge; the active tab is the strong fill, + is the accent. */
 .bar {
+  /* Stays out of the crossfade between screens, so the bar holds still and its pill can slide. */
+  view-transition-name: tab-bar;
   position: fixed;
   right: var(--tabbar-inset);
   bottom: calc(var(--tabbar-bottom) + env(safe-area-inset-bottom, 0px));
@@ -19,7 +21,20 @@
   box-shadow: var(--shadow-tabbar);
 }
 
+/* The strong fill behind the active tab, sliding between tabs. */
+.pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-pill);
+  background: var(--inverse);
+  transition:
+    transform 420ms var(--ease),
+    width 420ms var(--ease);
+}
+
 .tab {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,15 +49,29 @@
   line-height: var(--text-micro-line);
   white-space: nowrap;
   text-decoration: none;
+  transition:
+    color var(--dur-base) var(--ease),
+    var(--tap);
 }
 
 .active {
-  background: var(--inverse);
   color: var(--on-inverse);
   font-weight: 600;
 }
 
+/* The icon hops as its tab becomes active. */
+.active svg {
+  animation: tab-hop 420ms var(--ease-spring);
+}
+
+@keyframes tab-hop {
+  from {
+    transform: translateY(5px) scale(0.86);
+  }
+}
+
 .capture {
+  position: relative;
   display: grid;
   justify-self: center;
   place-items: center;

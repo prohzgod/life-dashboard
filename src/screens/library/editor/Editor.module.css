@@ -136,37 +136,63 @@
   color: var(--accent-ink);
 }
 
-/* [[ and @ menus */
+/* [[ and @ menus: solid like the / menu (the float tint laid over the paper colour), so the page
+   underneath never shows through. Long lists scroll inside. */
 .suggest {
+  position: relative;
+  z-index: 30;
   display: flex;
   flex-direction: column;
-  min-width: 260px;
-  max-width: 360px;
-  padding: var(--space-1);
+  gap: 2px;
+  min-width: 280px;
+  max-width: 380px;
+  max-height: min(360px, 50vh);
+  padding: var(--space-1h);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-tile);
+  background: linear-gradient(var(--float), var(--float)), var(--paper);
+  box-shadow: var(--shadow-card);
+  transform-origin: top left;
+  animation: suggest-in var(--dur-base) var(--ease);
+}
+
+@keyframes suggest-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
 }
 
 .suggestItem {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  height: 34px;
-  padding: 0 12px;
+  min-height: var(--touch-min);
+  padding: 0 var(--space-3h);
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: transparent;
   color: var(--ink);
-  font-size: 14px;
+  font-size: var(--text-body-size);
   text-align: left;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    var(--tap);
+}
+
+.suggestItem:hover {
+  background: var(--well);
 }
 
 .suggestActive,
-.suggestItem:hover {
-  background: var(--sunken);
+.suggestActive:hover {
+  background: var(--inverse);
+  color: var(--on-inverse);
 }
 
 .suggestTitle {
@@ -179,6 +205,10 @@
   flex-shrink: 0;
   color: var(--ink-3);
   font-size: var(--text-caption-size);
+}
+
+.suggestActive .suggestHint {
+  color: var(--on-inverse-2);
 }
 
 /* Gallery block */

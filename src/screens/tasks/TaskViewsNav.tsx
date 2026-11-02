@@ -1,4 +1,5 @@
 import { NavLink, useSearchParams } from 'react-router-dom';
+import { SlidingPill } from '@/components/ui';
 import type { TaskView } from '@/domain/tasks';
 import type { LifeArea } from '@/data';
 import { cx } from '@/components/ui/cx';
@@ -23,6 +24,7 @@ export function TaskViewsNav({ counts, active, areaId, tagId, areas, tags }: Pro
 
   return (
     <aside className={styles.nav} aria-label={t.nav.label}>
+      <SlidingPill selector={`.${styles.navActive}`} className={styles.navPill} />
       <nav className={styles.navGroup} aria-labelledby="views-label">
         <h2 id="views-label" className={styles.navLabel}>
           {t.nav.views}

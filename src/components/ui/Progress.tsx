@@ -1,3 +1,4 @@
+import { AnimatedNumber } from './AnimatedNumber';
 import styles from './Progress.module.css';
 import { cx } from './cx';
 
@@ -28,7 +29,9 @@ export function ProgressCapsule({ label, meta, percent, tone = 'inverse', classN
       <div className={styles.track} role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={value} aria-valuetext={meta ? `${value}%, ${meta}` : `${value}%`}>
         {/* A fill too short for its label still shows the label, on the hatching. */}
         <div className={cx(styles.fill, styles[tone], value < 18 && styles.short)} style={{ width: `${Math.max(value, 0)}%` }}>
-          <span className={styles.value}>{value}%</span>
+          <span className={styles.value}>
+            <AnimatedNumber value={value} />%
+          </span>
         </div>
       </div>
     </div>

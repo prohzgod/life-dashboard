@@ -10,6 +10,7 @@ import { useTaskLookups } from '@/components/tasks/useTaskLookups';
 import { ArrowLink, Button, Card } from '@/components/ui';
 import { cx } from '@/components/ui/cx';
 import { useT } from '@/i18n';
+import { useFlipList } from '@/lib/motion';
 import { withCompletedOn } from '@/lib/taskView';
 import styles from './Today.module.css';
 
@@ -29,6 +30,7 @@ export function PlanCard({ today, compact = false, className }: { today: Day; co
     };
   }, [today]);
   const tasks = data?.tasks;
+  const list = useFlipList<HTMLUListElement>();
 
   const done = tasks?.filter((t) => t.status === 'done').length ?? 0;
   const open = tasks?.filter((t) => t.status !== 'done') ?? [];
@@ -62,7 +64,7 @@ export function PlanCard({ today, compact = false, className }: { today: Day; co
         </div>
       )}
       {shown.length > 0 ? (
-        <ul className={styles.taskList} aria-label={t.list}>
+        <ul ref={list} className={styles.taskList} aria-label={t.list}>
           {shown.map((task) => (
             <TaskItem key={task.id} task={task} today={today} lookups={lookups} variant="plan" onOpen={openTask} />
           ))}

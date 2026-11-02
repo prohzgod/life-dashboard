@@ -15,3 +15,15 @@
   position: relative;
   font-variant-numeric: lining-nums tabular-nums;
 }
+
+/* Draws itself on first paint, then moves to each new value. */
+.arc {
+  transition: stroke-dashoffset 560ms var(--ease);
+  animation: ring-draw 720ms var(--ease);
+}
+
+@keyframes ring-draw {
+  from {
+    stroke-dashoffset: var(--ring-c);
+  }
+}

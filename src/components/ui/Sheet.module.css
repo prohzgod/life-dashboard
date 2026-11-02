@@ -14,20 +14,44 @@
   color: var(--ink);
 }
 
+/* It comes up from below the screen and goes back the same way. */
 .sheet[open] {
   animation: rise var(--dur-slow) var(--ease);
 }
 
+.sheet[open]::backdrop {
+  animation: scrim-in var(--dur-slow) var(--ease);
+}
+
+/* Already closed, so the browser no longer shows it or its ::backdrop: it stays on show by itself,
+   the shadow standing in for the scrim, and slides away. The page underneath already works. */
+.sheet[data-closing] {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: block;
+  height: fit-content;
+  box-shadow: 0 0 0 100vmax var(--scrim);
+  pointer-events: none;
+  animation: sink var(--dur-base) var(--ease-exit) forwards;
+}
+
 @keyframes rise {
   from {
-    transform: translateY(24px);
-    opacity: 0;
+    transform: translateY(100%);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .sheet[open] {
-    animation: none;
+@keyframes sink {
+  to {
+    box-shadow: 0 0 0 100vmax transparent;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes scrim-in {
+  from {
+    opacity: 0;
   }
 }
 
