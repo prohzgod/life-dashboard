@@ -256,7 +256,7 @@ describe('when the session has ended', () => {
 describe('sending the right account', () => {
   it('names the linked account on every sync request', async () => {
     const { realApi } = await import('./api');
-    const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) => new Response(JSON.stringify({ rows: [], cursor: 0, hasMore: false }), { status: 200 }));
+    const fetchMock = vi.fn<(url: string, init?: RequestInit) => Promise<Response>>(async () => new Response(JSON.stringify({ rows: [], cursor: 0, hasMore: false }), { status: 200 }));
     vi.stubGlobal('fetch', fetchMock);
     await realApi.pull(0);
     expect((fetchMock.mock.calls[0]![1]!.headers as Record<string, string>)['x-sync-account']).toBe('me');
