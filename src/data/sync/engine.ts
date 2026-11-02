@@ -1,6 +1,7 @@
 import { MAX_BATCH_BYTES, MAX_ROW_BYTES, SYNC_TABLES, type SyncRow } from '@shared';
 import { batchByBytes, decideApply, rowBytes, toWireRow } from '@/domain/sync';
 import { db, normalizeEvent, normalizeGoal, normalizeMetric, normalizeNode, normalizeTask } from '../db';
+import { resolveDuplicates } from './duplicates';
 import { markAsPull } from './dirtyHooks';
 import { listDirty, markClean, type DirtyRow } from './dirty';
 import { SyncAuthError, realApi, type SyncApi } from './api';
@@ -91,6 +92,7 @@ async function run(api: SyncApi): Promise<SyncResult> {
     // Push first: a row changed here reaches the server before its older copy could arrive.
     const { pushed, skipped } = await push(api);
     const pulled = await pull(api);
+    if (pulled) await resolveDuplicates();
     await setMeta(META.lastAt, new Date().toISOString());
     setSyncState('synced');
     return { status: 'done', pushed, pulled, skipped };
