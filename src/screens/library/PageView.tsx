@@ -5,6 +5,7 @@ import { journalDayOf, LibraryError, pinnedWidget, pinToHome, renameNode, savePa
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Toast } from '@/components/ui/Toast';
 import { useIsMobile } from '@/lib/useMediaQuery';
+import { useSavedLabel } from '@/lib/useSyncStatus';
 import { PageOptionsSheet } from './PageOptionsSheet';
 import { Icon } from '@/components/icons/Icon';
 import { Menu } from '@/components/ui';
@@ -27,6 +28,7 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
   const trail = ancestors(all, node.id);
   const isMobile = useIsMobile();
   const [sheet, setSheet] = useState(false);
+  const savedLabel = useSavedLabel();
   const [toast, setToast] = useState<string | null>(null);
   const clearToast = useCallback(() => setToast(null), []);
   const pinned = useLiveQuery(async () => !!(await pinnedWidget('node', node.id)), [node.id]);
@@ -71,7 +73,7 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
           <div className={styles.topActions}>
             <span className={styles.saved} role="status">
               <span className={saving ? styles.savingDot : styles.savedDot} aria-hidden="true" />
-              {saving ? t.saving : t.saved}
+              {saving ? t.saving : savedLabel}
             </span>
             <Menu
                 label={t.options}

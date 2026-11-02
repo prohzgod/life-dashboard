@@ -4,6 +4,7 @@ import { listBacklinks, listNodeAttachments, type LibraryNode } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { timeAgo } from '@/lib/format';
 import { useT } from '@/i18n';
+import { useStoredLabel } from '@/lib/useSyncStatus';
 import styles from './Library.module.css';
 
 function size(bytes: number) {
@@ -16,6 +17,7 @@ function size(bytes: number) {
 export function PageRail({ node }: { node: LibraryNode }) {
   const { library } = useT();
   const t = library.rail;
+  const storedLabel = useStoredLabel();
   const backlinks = useLiveQuery(() => listBacklinks(node.id), [node.id]);
   const attachments = useLiveQuery(() => listNodeAttachments(node.id), [node.id]);
 
@@ -54,7 +56,7 @@ export function PageRail({ node }: { node: LibraryNode }) {
       <div className={styles.stored}>
         <span className={styles.storedTitle}>
           <Icon name="lock" size={14} />
-          {t.stored}
+          {storedLabel}
         </span>
         <span>{library.edited(timeAgo(node.updatedAt))}</span>
       </div>

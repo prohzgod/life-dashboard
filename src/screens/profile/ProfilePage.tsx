@@ -8,6 +8,7 @@ import { Icon, type IconName } from '@/components/icons/Icon';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
 import { cx } from '@/components/ui/cx';
 import { formatDate } from '@/lib/format';
+import { useSyncStatus } from '@/lib/useSyncStatus';
 import { useToday } from '@/lib/useToday';
 import { useThemePreference } from '@/theme/useThemePreference';
 import { ABOUT_FIELDS, fieldValue } from './fields';
@@ -16,7 +17,8 @@ import styles from './Profile.module.css';
 
 /** Profile: who you are, what's blurred on screen, and the way into Settings. */
 export function ProfilePage() {
-  const { profile: t, settings } = useT();
+  const { profile: t, settings, sync } = useT();
+  const { info: syncInfo } = useSyncStatus();
   const [locale] = useLocale();
   const today = useToday();
   const [theme] = useThemePreference();
@@ -114,6 +116,7 @@ export function ProfilePage() {
 
       <nav className={styles.card} aria-label={t.settings}>
         <ul className={styles.settings}>
+          <SettingRow icon="globe" label={sync.title} detail={syncInfo?.email ?? sync.profileOff} to="/settings/sync" />
           <SettingRow icon="lock" label={t.rows.privacy} detail={t.rows.onPhone} to="/settings/privacy" />
           <SettingRow icon="globe" label={t.rows.language} detail={settings.general.names[locale]} to="/settings/general" />
           <SettingRow icon="palette" label={t.rows.appearance} detail={t.rows.themes[theme]} to="/settings/appearance" />

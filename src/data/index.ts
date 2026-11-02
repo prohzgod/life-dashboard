@@ -20,6 +20,8 @@ export * from './finance';
 export * from './health';
 export * from './notifications';
 export * from './appearance';
+export * from './sync/public';
+export { useAutoSync } from './sync/useAutoSync';
 export { localizeSeedContent } from './localize';
 export { countExportRecords, countRecords, exportAllAsJson, ImportError, importReplacingAll, parseExport, type ExportFile } from './backup';
 export { newId, nowIso, toLocalDay } from './ids';

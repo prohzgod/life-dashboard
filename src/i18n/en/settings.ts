@@ -6,6 +6,7 @@ export const settings = {
   profile: 'Profile',
   tabs: {
     general: 'General',
+    sync: 'Account and sync',
     privacy: 'Privacy & data',
     notifications: 'Notifications',
     modules: 'Modules',

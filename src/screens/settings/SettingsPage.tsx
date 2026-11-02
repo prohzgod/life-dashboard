@@ -9,9 +9,10 @@ import { AppearanceSettings } from './AppearanceSettings';
 import { GeneralSettings } from './GeneralSettings';
 import { NotificationSettings } from './NotificationSettings';
 import { PrivacySettings } from './PrivacySettings';
+import { SyncSettings } from './SyncSettings';
 import styles from './SettingsPage.module.css';
 
-const settingsTabs = ['general', 'privacy', 'notifications', 'modules', 'appearance'] as const;
+const settingsTabs = ['general', 'sync', 'privacy', 'notifications', 'modules', 'appearance'] as const;
 
 type TabSlug = (typeof settingsTabs)[number];
 
@@ -57,6 +58,7 @@ export function SettingsPage() {
 function TabContent({ slug }: { slug: TabSlug }) {
   const t = useT().settings;
   if (slug === 'general') return <GeneralSettings />;
+  if (slug === 'sync') return <SyncSettings />;
   if (slug === 'appearance') return <AppearanceSettings />;
   if (slug === 'privacy') return <PrivacySettings />;
   if (slug === 'notifications') return <NotificationSettings />;

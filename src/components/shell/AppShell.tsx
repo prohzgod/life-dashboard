@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { mobileChrome } from '@/app/mobileChrome';
+import { useAutoSync } from '@/data';
+import { SyncNotice } from '@/screens/settings/SyncSettings';
 import { useT } from '@/i18n';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { Icon } from '../icons/Icon';
@@ -18,6 +20,7 @@ type Overlay = 'search' | 'capture' | null;
 
 export function AppShell() {
   useReminders();
+  useAutoSync();
   return (
     <LockGate>
       <Shell />
@@ -63,6 +66,7 @@ function Shell() {
           {t.shell.skipToContent}
         </a>
         <main id="main" className={styles.mobileMain} tabIndex={-1}>
+          <SyncNotice />
           {chrome.back && (
             <Link to={chrome.back.to} className={styles.back} aria-label={t.shell.backTo(chrome.back.label)}>
               <Icon name="chevronLeft" size={20} strokeWidth={2.2} />

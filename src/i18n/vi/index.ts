@@ -13,10 +13,11 @@ import { progress } from './progress';
 import { reviews } from './reviews';
 import { screens } from './screens';
 import { settings } from './settings';
+import { sync } from './sync';
 import { shell } from './shell';
 import { tasks } from './tasks';
 import { today } from './today';
 import { vision } from './vision';
 
 /** Vietnamese copy, the default language. */
-export const vi: Messages = { calendar, errors, finance, format, goals, health, home, library, privacy, profile, progress, reviews, screens, seed, settings, shell, tasks, today, vision };
+export const vi: Messages = { calendar, errors, finance, format, goals, health, home, library, privacy, profile, progress, reviews, screens, seed, settings, shell, sync, tasks, today, vision };

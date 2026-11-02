@@ -9,6 +9,7 @@ import { itemsForDay, monthTitle, stepAnchor, viewRange } from './items';
 import { MonthGrid } from './MonthViews';
 import { TimeGrid } from './TimeGrid';
 import { useT } from '@/i18n';
+import { useSavedLabel } from '@/lib/useSyncStatus';
 import styles from './Calendar.module.css';
 
 /** The phone calendar: a strip of the week's days over one day's timeline; week as a list; month as dots. */
@@ -19,6 +20,7 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
   const imported = range?.calendars.filter((c) => c.source === 'ics' && c.visible) ?? [];
   const latest = imported.map((c) => c.lastSyncedAt).filter(Boolean).sort().at(-1);
   const habits = range?.habits[anchor];
+  const savedLabel = useSavedLabel();
 
   return (
     <div className={styles.phone}>
@@ -87,7 +89,7 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
               {t.habits(habits.done, habits.due)}
             </span>
           )}
-          <span className={styles.metaText}>{imported.length ? t.importedNote(imported[0]!.name, latest ? timeAgo(latest) : null) : t.saved}</span>
+          <span className={styles.metaText}>{imported.length ? t.importedNote(imported[0]!.name, latest ? timeAgo(latest) : null) : savedLabel}</span>
         </div>
       )}
 

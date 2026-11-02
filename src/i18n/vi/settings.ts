@@ -7,6 +7,7 @@ export const settings: Messages['settings'] = {
   profile: 'Hồ sơ',
   tabs: {
     general: 'Chung',
+    sync: 'Tài khoản và đồng bộ',
     privacy: 'Quyền riêng tư & dữ liệu',
     notifications: 'Thông báo',
     modules: 'Mô-đun',

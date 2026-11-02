@@ -14,6 +14,7 @@ import { Menu, SlidingPill } from '../ui';
 import { cx } from '../ui/cx';
 import { ProfileAvatar } from './ProfileAvatar';
 import styles from './TopNav.module.css';
+import { SyncNotice } from '@/screens/settings/SyncSettings';
 import { useOnlineStatus } from './useOnlineStatus';
 
 /** The pill row of screens; the rest sit under More. */
@@ -83,6 +84,7 @@ export function TopNav({ onSearch }: { onSearch: () => void }) {
       </nav>
 
       <div className={styles.actions}>
+        <SyncNotice />
         {!online && (
           <span className={styles.offline} role="status">
             <Icon name="offline" size={16} />
