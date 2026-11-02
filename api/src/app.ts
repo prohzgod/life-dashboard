@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { DB, type Db } from './db/db';
 import { FILES, QUOTA_BYTES } from './config';
 import type { FileStore } from './files/file-store';
+import { FilesModule } from './files/files.module';
 import { HealthController } from './health.controller';
 import { SyncModule } from './sync/sync.module';
 
@@ -28,7 +29,7 @@ class CoreModule {
 @Module({ controllers: [HealthController] })
 class AppModule {
   static register(options: AppOptions): DynamicModule {
-    return { module: AppModule, imports: [CoreModule.register(options), AuthModule, SyncModule] };
+    return { module: AppModule, imports: [CoreModule.register(options), AuthModule, SyncModule, FilesModule] };
   }
 }
 
