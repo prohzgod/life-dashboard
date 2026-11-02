@@ -8,6 +8,7 @@ import { DB, type Db } from './db/db';
 import { FILES, QUOTA_BYTES } from './config';
 import type { FileStore } from './files/file-store';
 import { HealthController } from './health.controller';
+import { SyncModule } from './sync/sync.module';
 
 export type AppOptions = { db: Db; files: FileStore; quotaBytes: number };
 
@@ -27,7 +28,7 @@ class CoreModule {
 @Module({ controllers: [HealthController] })
 class AppModule {
   static register(options: AppOptions): DynamicModule {
-    return { module: AppModule, imports: [CoreModule.register(options), AuthModule] };
+    return { module: AppModule, imports: [CoreModule.register(options), AuthModule, SyncModule] };
   }
 }
 
