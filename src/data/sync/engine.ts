@@ -1,10 +1,12 @@
 import { MAX_BATCH_BYTES, MAX_ROW_BYTES, SYNC_TABLES, type SyncRow } from '@shared';
 import { batchByBytes, decideApply, rowBytes, toWireRow } from '@/domain/sync';
+import type { Attachment } from '../types';
 import { db, normalizeEvent, normalizeGoal, normalizeMetric, normalizeNode, normalizeTask } from '../db';
 import { resolveDuplicates } from './duplicates';
 import { markAsPull } from './dirtyHooks';
 import { countDirty, listDirty, markClean, type DirtyRow } from './dirty';
 import { SyncAuthError, realApi, type SyncApi } from './api';
+import { downloadPendingFiles, uploadFiles } from './files';
 import { getMeta, META, setMeta } from './meta';
 import { setSyncState } from './state';
 
@@ -31,7 +33,25 @@ function toLocal(row: SyncRow): DirtyRow {
 /** Writes one row from the server, inside a pull transaction. `force` is for rows the server already chose over this device's. */
 export async function writePulledRow(row: SyncRow, force: boolean): Promise<void> {
   const table = anyTable(row.table);
-  if (force || decideApply(await table.get(row.id)) === 'apply') await table.put(toLocal(row));
+  const local = await table.get(row.id);
+  if (!force && decideApply(local) === 'keep') return;
+  if (row.table !== 'attachments') {
+    await table.put(toLocal(row));
+    return;
+  }
+  // Attachments come without their bytes. One already here keeps its own; a new one waits for its
+  // files, because screens expect every attachment to have them.
+  const incoming = toLocal(row) as DirtyRow & { hasThumb?: boolean };
+  delete incoming.hasThumb;
+  if (local) {
+    const { blob, thumbBlob } = local as unknown as Attachment;
+    await table.put({ ...incoming, blob, thumbBlob } as DirtyRow);
+    await db.syncPending.delete(row.id);
+  } else if (row.deletedAt !== null) {
+    await db.syncPending.delete(row.id);
+  } else {
+    await db.syncPending.put({ ...incoming, hasThumb: row.payload.hasThumb } as never);
+  }
 }
 
 /** How many rows here still need sending. */
@@ -42,7 +62,7 @@ export async function countUnsynced(): Promise<number> {
 
 async function applyRows(rows: SyncRow[], force: boolean, cursor?: number): Promise<void> {
   const tables = [...new Set(rows.map((r) => r.table))].map(anyTable);
-  await db.transaction('rw', [...tables, db.meta], async () => {
+  await db.transaction('rw', [...tables, db.meta, db.syncPending], async () => {
     markAsPull();
     for (const row of rows) await writePulledRow(row, force);
     if (cursor !== undefined) await db.meta.put({ key: META.cursor, value: cursor });
@@ -53,7 +73,12 @@ async function push(api: SyncApi): Promise<{ pushed: number; skipped: number }> 
   let pushed = 0;
   let skipped = 0;
   for (const table of SYNC_TABLES) {
-    const dirty = await listDirty(table);
+    let dirty = await listDirty(table);
+    if (table === 'attachments' && dirty.length) {
+      const { ready, tooBig } = await uploadFiles(dirty as unknown as Attachment[], api);
+      dirty = ready as unknown as DirtyRow[];
+      skipped += tooBig;
+    }
     const rows = dirty.map((record) => toWireRow(table, record as DirtyRow & Record<string, unknown>));
     const fits = rows.filter((row) => rowBytes(row) <= MAX_ROW_BYTES);
     skipped += rows.length - fits.length;
@@ -101,6 +126,7 @@ async function run(api: SyncApi): Promise<SyncResult> {
     const { pushed, skipped } = await push(api);
     const pulled = await pull(api);
     if (pulled) await resolveDuplicates();
+    await downloadPendingFiles(api);
     await setMeta(META.lastAt, new Date().toISOString());
     setSyncState('synced');
     return { status: 'done', pushed, pulled, skipped };
