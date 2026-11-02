@@ -9,6 +9,7 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       '@design': fileURLToPath(new URL('./design', import.meta.url)),
+      '@shared': fileURLToPath(new URL('./shared/src/index.ts', import.meta.url)),
     },
   },
   plugins: [

@@ -12,7 +12,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "icons": "tsx scripts/generate-icons.ts"
+    "icons": "tsx scripts/generate-icons.ts",
+    "api:dev": "npm run dev -w api",
+    "api:test": "npm test -w api",
+    "api:typecheck": "npm run typecheck -w api"
   },
   "dependencies": {
     "@blocknote/ariakit": "^0.56.0",
@@ -62,5 +65,9 @@
     "vitest": "^5.0.5",
     "workbox-build": "^7.4.1",
     "workbox-window": "^7.4.1"
-  }
+  },
+  "workspaces": [
+    "shared",
+    "api"
+  ]
 }

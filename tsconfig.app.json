@@ -32,6 +32,9 @@
       ],
       "@design/*": [
         "./design/*"
+      ],
+      "@shared": [
+        "./shared/src/index.ts"
       ]
     }
   },
