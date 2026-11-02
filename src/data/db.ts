@@ -28,6 +28,7 @@ import type {
   Account,
   Workout,
 } from './types';
+import { installDirtyTracking } from './sync/dirtyHooks';
 
 /**
  * The local database. Only modules in src/data/ may import this; the UI goes through the repositories.
@@ -61,6 +62,8 @@ export class LifeDb extends Dexie {
   accounts!: Table<Account, string>;
   workouts!: Table<Workout, string>;
   meta!: Table<MetaEntry, string>;
+  /** Attachment rows from another device, waiting for their files. */
+  syncPending!: Table<Attachment & { hasThumb?: boolean }, string>;
 
   constructor(name = 'life-dashboard') {
     super(name);
@@ -182,10 +185,52 @@ export class LifeDb extends Dexie {
         }
         await tx.table('meta').delete('currentSpaceId');
       });
+
+    // Sync: a `dirty` flag on every row that still needs sending, and files waiting to move.
+    this.version(10)
+      .stores({
+        areas: 'id, sortKey, updatedAt, dirty',
+        areaRatings: 'id, areaId, date, updatedAt, dirty',
+        goals: 'id, areaId, parentGoalId, horizon, status, updatedAt, dirty',
+        keyResults: 'id, goalId, updatedAt, dirty',
+        milestones: 'id, goalId, dueDate, updatedAt, dirty',
+        tasks: 'id, areaId, goalId, keyResultId, parentTaskId, status, doOn, dueAt, updatedAt, dirty',
+        habits: 'id, areaId, goalId, updatedAt, dirty',
+        habitLogs: 'id, habitId, day, [habitId+day], updatedAt, dirty',
+        metrics: 'id, systemKey, updatedAt, dirty',
+        metricEntries: 'id, metricId, at, updatedAt, dirty',
+        dailyEntries: 'id, day, updatedAt, dirty',
+        nodes: 'id, parentId, kind, systemKey, updatedAt, dirty',
+        attachments: 'id, nodeId, updatedAt, dirty',
+        links: 'id, [fromType+fromId], [toType+toId], updatedAt, dirty',
+        tags: 'id, name, updatedAt, dirty',
+        taggings: 'id, tagId, [targetType+targetId], updatedAt, dirty',
+        homeWidgets: 'id, sortKey, updatedAt, dirty',
+        profile: 'id, updatedAt, dirty',
+        reviews: 'id, [period+periodStart], updatedAt, dirty',
+        calendars: 'id, updatedAt, dirty',
+        events: 'id, calendarId, start, updatedAt, dirty',
+        visionCards: 'id, sortKey, updatedAt, dirty',
+        budgets: 'id, sortKey, updatedAt, dirty',
+        transactions: 'id, day, categoryId, goalId, importKey, updatedAt, dirty',
+        accounts: 'id, sortKey, updatedAt, dirty',
+        workouts: 'id, day, goalId, updatedAt, dirty',
+        syncPending: 'id',
+      })
+      .upgrade(async (tx) => {
+        for (const name of dataTableNames) {
+          await tx
+            .table(name)
+            .toCollection()
+            .modify((row: { dirty?: number }) => {
+              row.dirty = 1;
+            });
+        }
+      });
+
+    installDirtyTracking(dataTableNames.map((name) => this.table(name)));
   }
 }
-
-export const db = new LifeDb();
 
 /** Fills in fields added after a task was first saved. Also used when importing older exports. */
 export function normalizeTask(task: Task): Task {
@@ -262,3 +307,5 @@ export const dataTableNames = [
 ] as const satisfies ReadonlyArray<keyof LifeDb>;
 
 export type DataTableName = (typeof dataTableNames)[number];
+
+export const db = new LifeDb();

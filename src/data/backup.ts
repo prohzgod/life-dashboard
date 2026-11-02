@@ -35,7 +35,7 @@ export async function exportAll(): Promise<ExportFile> {
     }
   });
   for (const name of dataTableNames) {
-    tables[name] = await Promise.all((tables[name] ?? []).map((row) => encodeValue(row)));
+    tables[name] = await Promise.all((tables[name] ?? []).map((row) => encodeValue(withoutSyncFlag(row as BaseRecord))));
   }
   return { format: EXPORT_FORMAT, version: EXPORT_VERSION, exportedAt: nowIso(), schemaVersion: db.verno, tables };
 }
@@ -141,7 +141,14 @@ function decodeValue(value: unknown): unknown {
 /** Version 1 exports stamp every row with a space; drop it. */
 function withoutSpace(row: BaseRecord): BaseRecord {
   delete (row as BaseRecord & { spaceId?: unknown }).spaceId;
-  return row;
+  return withoutSyncFlag(row);
+}
+
+/** Whether a row still needs syncing belongs to this device, not to the data. */
+function withoutSyncFlag(row: BaseRecord): BaseRecord {
+  const rest = { ...row } as BaseRecord & { dirty?: unknown };
+  delete rest.dirty;
+  return rest;
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {
