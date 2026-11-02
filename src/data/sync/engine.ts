@@ -3,7 +3,7 @@ import { batchByBytes, decideApply, rowBytes, toWireRow } from '@/domain/sync';
 import { db, normalizeEvent, normalizeGoal, normalizeMetric, normalizeNode, normalizeTask } from '../db';
 import { resolveDuplicates } from './duplicates';
 import { markAsPull } from './dirtyHooks';
-import { listDirty, markClean, type DirtyRow } from './dirty';
+import { countDirty, listDirty, markClean, type DirtyRow } from './dirty';
 import { SyncAuthError, realApi, type SyncApi } from './api';
 import { getMeta, META, setMeta } from './meta';
 import { setSyncState } from './state';
@@ -28,15 +28,23 @@ function toLocal(row: SyncRow): DirtyRow {
   return (normalize ? normalize(local as never) : local) as DirtyRow;
 }
 
-/** Writes rows from the server. `force` is for rows the server already chose over this device's. */
+/** Writes one row from the server, inside a pull transaction. `force` is for rows the server already chose over this device's. */
+export async function writePulledRow(row: SyncRow, force: boolean): Promise<void> {
+  const table = anyTable(row.table);
+  if (force || decideApply(await table.get(row.id)) === 'apply') await table.put(toLocal(row));
+}
+
+/** How many rows here still need sending. */
+export async function countUnsynced(): Promise<number> {
+  const counts = await Promise.all(SYNC_TABLES.map((table) => countDirty(table)));
+  return counts.reduce((a, b) => a + b, 0);
+}
+
 async function applyRows(rows: SyncRow[], force: boolean, cursor?: number): Promise<void> {
   const tables = [...new Set(rows.map((r) => r.table))].map(anyTable);
   await db.transaction('rw', [...tables, db.meta], async () => {
     markAsPull();
-    for (const row of rows) {
-      const table = anyTable(row.table);
-      if (force || decideApply(await table.get(row.id)) === 'apply') await table.put(toLocal(row));
-    }
+    for (const row of rows) await writePulledRow(row, force);
     if (cursor !== undefined) await db.meta.put({ key: META.cursor, value: cursor });
   });
 }

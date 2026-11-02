@@ -2,7 +2,10 @@ import { db } from '../db';
 
 /** Sync's bookkeeping. It belongs to this device, so it lives in `meta` and never syncs. */
 export const META = {
+  /** The account this device is syncing with now. */
   accountId: 'sync.accountId',
+  /** The account whose data is on this device, even while signed out. */
+  ownerId: 'sync.ownerId',
   email: 'sync.email',
   cursor: 'sync.cursor',
   tablesHash: 'sync.tablesHash',

@@ -89,10 +89,20 @@ export async function importReplacingAll(file: ExportFile): Promise<{ records: n
   decoded.metrics = (decoded.metrics as Metric[]).map(normalizeMetric);
 
   await db.transaction('rw', [...dataTableNames.map((name) => db[name]), db.meta], async () => {
+    // While syncing, a restore must win over newer rows on the server, and rows it doesn't hold must
+    // stay deleted rather than come back on the next pull.
+    const syncing = !!(await db.meta.get('sync.accountId'));
+    const now = nowIso();
     for (const name of dataTableNames) {
+      let rows = decoded[name] ?? [];
+      if (syncing) {
+        const restored = new Set(rows.map((row) => row.id));
+        const missing = (await db[name].toArray() as BaseRecord[]).filter((row) => !restored.has(row.id));
+        rows = [...rows.map((row) => ({ ...row, updatedAt: now })), ...missing.map((row) => ({ ...withoutSyncFlag(row), updatedAt: now, deletedAt: now }))];
+      }
       await db[name].clear();
       // The table types differ per name; rows were checked in parseExport.
-      await (db[name] as unknown as { bulkAdd(rows: BaseRecord[]): Promise<unknown> }).bulkAdd(decoded[name] ?? []);
+      await (db[name] as unknown as { bulkAdd(rows: BaseRecord[]): Promise<unknown> }).bulkAdd(rows);
     }
     await db.meta.delete('currentSpaceId');
     await db.meta.put({ key: 'importedAt', value: nowIso() });
