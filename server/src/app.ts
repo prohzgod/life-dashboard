@@ -5,13 +5,13 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AuthModule } from './auth/auth.module';
 import { DB, type Db } from './db/db';
-import { FILES, QUOTA_BYTES } from './config';
+import { DATA_QUOTA_BYTES, FILES, QUOTA_BYTES } from './config';
 import type { FileStore } from './files/file-store';
 import { FilesModule } from './files/files.module';
 import { HealthController } from './health.controller';
 import { SyncModule } from './sync/sync.module';
 
-export type AppOptions = { db: Db; files: FileStore; quotaBytes: number };
+export type AppOptions = { db: Db; files: FileStore; quotaBytes: number; dataQuotaBytes: number };
 
 @Global()
 @Module({})
@@ -21,6 +21,7 @@ class CoreModule {
       { provide: DB, useValue: options.db },
       { provide: FILES, useValue: options.files },
       { provide: QUOTA_BYTES, useValue: options.quotaBytes },
+      { provide: DATA_QUOTA_BYTES, useValue: options.dataQuotaBytes },
     ];
     return { module: CoreModule, providers, exports: providers };
   }

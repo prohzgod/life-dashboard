@@ -1,5 +1,5 @@
 {
-  "name": "@life-dashboard/api",
+  "name": "@life-dashboard/server",
   "version": "0.1.0",
   "private": true,
   "scripts": {

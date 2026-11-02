@@ -17,11 +17,13 @@ export function countDirty(table: DataTableName): Promise<number> {
 
 /** Clears the flag only if the row is still the version that was pushed. */
 export async function markClean(table: DataTableName, id: string, updatedAt: string): Promise<void> {
-  await tableOf(table)
-    .where('id')
-    .equals(id)
-    .filter((row) => row.updatedAt === updatedAt)
-    .modify({ dirty: 0 });
+  await applyingPull([table], () =>
+    tableOf(table)
+      .where('id')
+      .equals(id)
+      .filter((row) => row.updatedAt === updatedAt)
+      .modify({ dirty: 0 }),
+  );
 }
 
 /** Runs writes of rows from the server: they don't count as local changes. */

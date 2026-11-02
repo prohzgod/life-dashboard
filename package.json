@@ -13,9 +13,9 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "icons": "tsx scripts/generate-icons.ts",
-    "api:dev": "npm run dev -w api",
-    "api:test": "npm test -w api",
-    "api:typecheck": "npm run typecheck -w api"
+    "server:dev": "npm run dev -w server",
+    "server:test": "npm test -w server",
+    "server:typecheck": "npm run typecheck -w server"
   },
   "dependencies": {
     "@blocknote/ariakit": "^0.56.0",
@@ -68,6 +68,6 @@
   },
   "workspaces": [
     "shared",
-    "api"
+    "server"
   ]
 }

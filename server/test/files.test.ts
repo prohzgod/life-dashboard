@@ -44,20 +44,39 @@ it('refuses a file over MAX_FILE_BYTES', async () => {
   await big.close();
 });
 
-it("refuses an upload past the account's quota, and another account is unaffected", async () => {
-  const stored = { id: 'att1', updatedAt: new Date().toISOString(), deletedAt: null, size: 950 };
-  await agent.post('/api/sync/push').send({ rows: [{ table: 'attachments', id: 'att1', updatedAt: stored.updatedAt, deletedAt: null, payload: stored }] }).expect(201);
-  expect((await agent.post('/api/files/presign').send({ items: [item({ size: 100 })] })).status).toBe(413);
-  expect((await agent.post('/api/files/presign').send({ items: [item({ size: 40 })] })).status).toBe(201);
-  const other = await signedIn(t.app, 'b@example.com');
-  expect((await other.post('/api/files/presign').send({ items: [item({ size: 100 })] })).status).toBe(201);
+const presign = (a: typeof agent, ...items: PresignRequest['items']) => a.post('/api/files/presign').send({ items });
+
+it('counts what it has signed uploads for, whatever rows are pushed', async () => {
+  expect((await presign(agent, item({ attachmentId: 'a', size: 900 }))).status).toBe(201);
+  expect((await presign(agent, item({ attachmentId: 'b', size: 900 }))).status).toBe(413);
+  expect((await presign(agent, item({ attachmentId: 'c', size: 100 }))).status).toBe(201);
 });
 
-it('a deleted attachment stops counting against the quota', async () => {
+it('counts thumbnails too', async () => {
+  expect((await presign(agent, item({ size: 600 }), item({ kind: 'thumb', size: 600 }))).status).toBe(413);
+});
+
+it('signing the same file again counts it once', async () => {
+  expect((await presign(agent, item({ size: 600 }))).status).toBe(201);
+  expect((await presign(agent, item({ size: 700 }))).status).toBe(201);
+  expect((await presign(agent, item({ attachmentId: 'other', size: 400 }))).status).toBe(413);
+});
+
+it('a row claiming a negative size frees nothing', async () => {
   const when = new Date().toISOString();
-  const payload = { id: 'att1', updatedAt: when, deletedAt: when, size: 950 };
-  await agent.post('/api/sync/push').send({ rows: [{ table: 'attachments', id: 'att1', updatedAt: when, deletedAt: when, payload }] }).expect(201);
-  expect((await agent.post('/api/files/presign').send({ items: [item({ size: 100 })] })).status).toBe(201);
+  await agent.post('/api/sync/push').send({ rows: [{ table: 'attachments', id: 'x', updatedAt: when, deletedAt: null, payload: { size: -999999 } }] }).expect(201);
+  expect((await presign(agent, item({ size: 1001 }))).status).toBe(413);
+});
+
+it('another account has its own quota', async () => {
+  expect((await presign(agent, item({ size: 900 }))).status).toBe(201);
+  const other = await signedIn(t.app, 'b@example.com');
+  expect((await presign(other, item({ size: 900 }))).status).toBe(201);
+});
+
+it('refuses a device that means a different account from the session', async () => {
+  expect((await agent.post('/api/files/presign').set('x-sync-account', 'someone else').send({ items: [item()] })).status).toBe(409);
+  expect(files.calls).toEqual([]);
 });
 
 it("a get link can't reach another account's file", async () => {

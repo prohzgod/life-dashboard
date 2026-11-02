@@ -29,6 +29,7 @@ export const sync: Messages['sync'] = {
     failed: 'Không kết nối được máy chủ. Thay đổi của bạn vẫn an toàn trên thiết bị này.',
   },
   unsynced: (n) => `Còn ${n} thay đổi chưa đồng bộ.`,
+  stuck: (n) => `Có ${n} thay đổi không đồng bộ được, nhưng vẫn an toàn trên thiết bị này. Có thể dữ liệu quá lớn hoặc bộ nhớ tài khoản đã đầy.`,
   syncNow: 'Đồng bộ ngay',
   tryAgain: 'Thử lại',
   signOut: 'Đăng xuất',

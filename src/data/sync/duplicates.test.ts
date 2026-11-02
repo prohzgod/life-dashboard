@@ -2,6 +2,7 @@
 import { db } from '../db';
 import { nodesRepo } from '../repositories';
 import { freshDatabase } from '../testing';
+import { applyingPull } from './dirty';
 import { resolveDuplicates } from './duplicates';
 
 const t1 = '2026-11-02T10:00:00.000Z';
@@ -21,7 +22,7 @@ it('merges two entries for one day into the lowest ID', async () => {
 
 it('sends the merge like any other change', async () => {
   await db.dailyEntries.bulkAdd([entry('A', t1, 'x'), entry('B', t2, 'y')]);
-  await db.dailyEntries.toCollection().modify({ dirty: 0 } as never);
+  await applyingPull(['dailyEntries'], () => db.dailyEntries.toCollection().modify({ dirty: 0 } as never));
   await resolveDuplicates();
   const rows = (await db.dailyEntries.toArray()) as unknown as { dirty: number }[];
   expect(rows.every((r) => r.dirty === 1)).toBe(true);
@@ -68,3 +69,17 @@ it('a pull that brings a second set of seeded rows merges them', async () => {
   const liveOfKind = (await live(db.homeWidgets.toArray())).filter((w) => w.kind === copy.kind);
   expect(liveOfKind).toHaveLength(1);
 });
+
+it('merging nested folders leaves nothing under a deleted parent', async () => {
+  const folder = (id: string, systemKey: string, parentId: string | null) => ({ id, parentId, kind: 'folder', title: systemKey, contentJson: null, contentText: '', icon: null, isSystem: true, sortKey: 'a0', favoritedAt: null, areaId: null, goalId: null, systemKey, createdAt: t1, updatedAt: t1, deletedAt: null });
+  await db.nodes.bulkAdd([
+    folder('Y1', 'test:year', null), folder('Y2', 'test:year', null),
+    // The month that wins sits under the year that loses, so the first merge moves it.
+    folder('M1', 'test:month', 'Y2'), { ...folder('M2', 'test:month', 'Y1'), updatedAt: t2 },
+  ] as never);
+  await resolveDuplicates();
+  const month = await db.nodes.get('M1');
+  expect(month?.deletedAt).toBeNull();
+  expect(month?.parentId).toBe('Y1');
+});
+

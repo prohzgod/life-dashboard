@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import request from 'supertest';
 import type { INestApplication } from '@nestjs/common';
+import { SYNC_ACCOUNT_HEADER } from '@life-dashboard/shared';
 import { createPgliteDb, type Db } from '../src/db/db';
 import { createApp } from '../src/app';
 import type { FileStore } from '../src/files/file-store';
@@ -9,10 +10,10 @@ import { MemoryFileStore } from '../src/files/memory-file-store';
 export type TestApp = { app: INestApplication; db: Db; files: FileStore; close(): Promise<void> };
 
 /** The real API on an in-memory Postgres. */
-export async function createTestApp(options: { files?: FileStore; quotaBytes?: number } = {}): Promise<TestApp> {
+export async function createTestApp(options: { files?: FileStore; quotaBytes?: number; dataQuotaBytes?: number } = {}): Promise<TestApp> {
   const { db, close } = await createPgliteDb();
   const files = options.files ?? new MemoryFileStore();
-  const app = await createApp({ db, files, quotaBytes: options.quotaBytes ?? 1_000_000_000 });
+  const app = await createApp({ db, files, quotaBytes: options.quotaBytes ?? 1_000_000_000, dataQuotaBytes: options.dataQuotaBytes ?? 1_000_000_000 });
   await app.init();
   return { app, db, files, close: async () => { await app.close(); await close(); } };
 }
@@ -22,5 +23,6 @@ export async function signedIn(app: INestApplication, email = 'a@example.com') {
   const agent = request.agent(app.getHttpServer());
   const res = await agent.post('/api/auth/register').send({ email, password: 'correct horse battery', deviceName: 'test' });
   expect(res.status).toBe(201);
+  agent.set(SYNC_ACCOUNT_HEADER, res.body.id as string);
   return agent;
 }

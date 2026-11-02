@@ -91,7 +91,8 @@ export async function importReplacingAll(file: ExportFile): Promise<{ records: n
   await db.transaction('rw', [...dataTableNames.map((name) => db[name]), db.meta], async () => {
     // While syncing, a restore must win over newer rows on the server, and rows it doesn't hold must
     // stay deleted rather than come back on the next pull.
-    const syncing = !!(await db.meta.get('sync.accountId'));
+    // That includes being signed out with this account's data kept, since signing back in carries on from here.
+    const syncing = !!(await db.meta.get('sync.ownerId')) || !!(await db.meta.get('sync.accountId'));
     const now = nowIso();
     for (const name of dataTableNames) {
       let rows = decoded[name] ?? [];

@@ -1,7 +1,8 @@
 import { BadRequestException, Body, Controller, Get, Inject, PayloadTooLargeException, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { MAX_ROW_BYTES, SYNC_TABLES, type SyncRow } from '@life-dashboard/shared';
 import { z } from 'zod';
-import { SessionGuard, type AuthedRequest } from '../auth/session.guard';
+import { Throttle } from '@nestjs/throttler';
+import { AccountThrottlerGuard, SessionGuard, SyncAccountGuard, type AuthedRequest } from '../auth/session.guard';
 import { SyncService } from './sync.service';
 
 const pushBody = z.object({
@@ -14,10 +15,12 @@ const pushBody = z.object({
       payload: z.record(z.string(), z.unknown()),
     }),
   ),
+  clientNow: z.string().datetime().optional(),
 });
 
 @Controller('sync')
-@UseGuards(SessionGuard)
+@UseGuards(SessionGuard, SyncAccountGuard, AccountThrottlerGuard)
+@Throttle({ default: { limit: 300, ttl: 60_000 } })
 export class SyncController {
   constructor(@Inject(SyncService) private readonly sync: SyncService) {}
 
@@ -27,7 +30,7 @@ export class SyncController {
     if (!parsed.success) throw new BadRequestException('That sync request isn’t valid.');
     const rows = parsed.data.rows as SyncRow[];
     if (rows.some((row) => Buffer.byteLength(JSON.stringify(row)) > MAX_ROW_BYTES)) throw new PayloadTooLargeException();
-    return this.sync.push(req.account.id, rows);
+    return this.sync.push(req.account.id, rows, parsed.data.clientNow);
   }
 
   @Get('pull')

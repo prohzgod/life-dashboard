@@ -21,8 +21,8 @@ Read these before starting any task:
 - Styling: CSS Modules + the CSS variables in `design/tokens.css`. No Tailwind, no UI kit, no hard-coded hex colors in components.
 - Tests: Vitest + Testing Library for logic and components; Playwright for main flows.
 - Languages: Vietnamese (default) and English, with a small typed i18n layer in `src/i18n/` (no library). BlockNote uses its own `vi`/`en` dictionaries.
-- Package manager: npm, with workspaces: the app at the root, `api/` and `shared/`.
-- Backend (optional sync): NestJS on Render, Neon Postgres (Drizzle, hand-written SQL in `api/drizzle/`), Cloudflare R2. The contract lives in `shared/src/sync.ts`. Vercel rewrites `/api/*` to Render, so there's one origin. See `docs/DEPLOY.md`.
+- Package manager: npm, with workspaces: the app at the root, `server/` and `shared/`.
+- Backend (optional sync): NestJS on Render, Neon Postgres (Drizzle, hand-written SQL in `server/drizzle/`), Cloudflare R2. The contract lives in `shared/src/sync.ts`. Vercel rewrites `/api/*` to Render, so there's one origin. The folder must stay `server/`: Vercel turns anything in a root `api/` folder into functions. See `docs/DEPLOY.md`.
 - Sync: IndexedDB stays the copy screens read. `src/data/sync/` pushes rows marked `dirty` and pulls others' by a server sequence; last write wins per row. Server rows are JSONB in one `records` table, so a new app field needs no migration, but a new table must join `SYNC_TABLES` and `dataTableNames`.
 
 ## Rules
@@ -43,4 +43,4 @@ Read these before starting any task:
 
 - `npm run dev`, `npm run build`, `npm run preview`
 - `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:e2e`
-- `npm run api:dev`, `npm run api:test`, `npm run api:typecheck`
+- `npm run server:dev`, `npm run server:test`, `npm run server:typecheck`

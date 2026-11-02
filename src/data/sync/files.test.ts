@@ -3,6 +3,7 @@ import { MAX_FILE_BYTES, SYNC_TABLES, type PresignRequest, type SyncRow } from '
 import { db } from '../db';
 import { freshDatabase } from '../testing';
 import type { SyncApi } from './api';
+import { markClean } from './dirty';
 import { syncNow } from './engine';
 import { META, setMeta } from './meta';
 
@@ -131,7 +132,7 @@ it('a soft-deleted attachment syncs without any file transfer', async () => {
 it('an update to an attachment already here keeps its bytes', async () => {
   const { api, order } = setup();
   await db.attachments.add(attachment('a4'));
-  await db.attachments.update('a4', { dirty: 0 } as never);
+  await markClean('attachments', 'a4', (await db.attachments.get('a4'))!.updatedAt);
   api.pages.push([wire('a4', { nodeId: 'moved' })]);
   await syncNow(api);
   const row = (await db.attachments.get('a4')) as unknown as Att & { nodeId: string };

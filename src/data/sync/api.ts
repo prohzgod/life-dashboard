@@ -1,4 +1,5 @@
-import type { PresignRequest, PresignResponse, PullResponse, PushResponse, SyncRow } from '@shared';
+import { SYNC_ACCOUNT_HEADER, type PresignRequest, type PresignResponse, type PullResponse, type PushResponse, type SyncRow } from '@shared';
+import { getMeta, META } from './meta';
 
 /** A sleeping server on Render can take about a minute to wake. */
 export const REQUEST_TIMEOUT_MS = 90_000;
@@ -21,14 +22,15 @@ export type SyncApi = {
 
 export type UserAccount = { id: string; email: string };
 
-async function request<T>(path: string, init?: { method: string; body: unknown }): Promise<T> {
+async function request<T>(path: string, init?: { method: string; body: unknown }, accountId?: string): Promise<T> {
   const response = await fetch(`/api${path}`, {
     method: init?.method ?? 'GET',
-    headers: init ? { 'Content-Type': 'application/json' } : undefined,
+    headers: { ...(init ? { 'Content-Type': 'application/json' } : {}), ...(accountId ? { [SYNC_ACCOUNT_HEADER]: accountId } : {}) },
     body: init ? JSON.stringify(init.body) : undefined,
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
-  if (response.status === 401 && !path.startsWith('/auth/login')) throw new SyncAuthError();
+  // 409 outside /auth: the session now belongs to a different account from the one this device syncs with.
+  if ((response.status === 401 && !path.startsWith('/auth/login')) || (response.status === 409 && !path.startsWith('/auth/'))) throw new SyncAuthError();
   if (!response.ok) {
     const reason = (await response.json().catch(() => null)) as { message?: unknown } | null;
     throw new SyncRequestError(response.status, typeof reason?.message === 'string' ? reason.message : '');
@@ -36,11 +38,19 @@ async function request<T>(path: string, init?: { method: string; body: unknown }
   return (await response.json()) as T;
 }
 
-export const realApi: SyncApi = {
-  push: (rows) => request('/sync/push', { method: 'POST', body: { rows } }),
-  pull: (cursor) => request(`/sync/pull?cursor=${cursor}`),
-  presign: (items) => request('/files/presign', { method: 'POST', body: { items } }),
-};
+function apiWith(accountId: () => Promise<string | undefined>): SyncApi {
+  return {
+    push: async (rows) => request('/sync/push', { method: 'POST', body: { rows, clientNow: new Date().toISOString() } }, await accountId()),
+    pull: async (cursor) => request(`/sync/pull?cursor=${cursor}`, undefined, await accountId()),
+    presign: async (items) => request('/files/presign', { method: 'POST', body: { items } }, await accountId()),
+  };
+}
+
+/** The API, for the account this device is linked to. */
+export const realApi: SyncApi = apiWith(() => getMeta<string>(META.accountId));
+
+/** The API, for an account signing in that isn't linked yet. */
+export const apiFor = (accountId: string): SyncApi => apiWith(async () => accountId);
 
 export const accountApi = {
   register: (email: string, password: string, deviceName: string) => request<UserAccount>('/auth/register', { method: 'POST', body: { email, password, deviceName } }),

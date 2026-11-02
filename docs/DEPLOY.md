@@ -22,9 +22,9 @@ Requests go `browser → Vercel → (rewrite) → Render`, so the app and API sh
 
 1. New → Blueprint, and pick this repository. It reads `render.yaml`.
 2. Fill in the secrets: `DATABASE_URL`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`.
-3. Deploy. Migrations run on each start. `https://YOUR-SERVICE.onrender.com/api/health` should answer `{"status":"ok"}`.
+3. Deploy. Migrations run on each start. The server lives in `server/` rather than `api/` on purpose: Vercel would turn a root `api/` folder into functions. `https://YOUR-SERVICE.onrender.com/api/health` should answer `{"status":"ok"}`.
 
-A free instance sleeps when idle and takes about a minute to wake. The app keeps working and syncs once it's up.
+`render.yaml` names no plan, so choose one when you create the service. A free instance sleeps when idle and takes about a minute to wake; the app keeps working and syncs once it's up.
 
 ## 4. Vercel
 
@@ -39,12 +39,12 @@ The automated tests use an in-memory Postgres and file store, so these only show
 - [ ] Add a task on a laptop, then sign in on a phone and see it.
 - [ ] Add a photo on one device and see it on the other. If this fails, check the R2 CORS settings first.
 - [ ] Save a very long Library page. If the push fails with a size error, the rewrite has a lower body limit than `MAX_BATCH_BYTES` in `shared/src/sync.ts`.
-- [ ] From two networks, try 11 wrong passwords on one. The other should still be able to sign in. If both get locked out, `TRUST_PROXY_HOPS` is wrong: every person looks like one address.
+- [ ] From two networks, make 11 failed sign-ins with different emails on one. The other network should still be able to sign in. If both get locked out, `TRUST_PROXY_HOPS` is wrong: every person looks like one address.
 - [ ] Let the API sleep, then open the app and confirm it stays usable while it wakes.
 
 ## Limits to know about
 
 - There's no password reset by email or email verification yet. Anyone can register any address, and a forgotten password needs a manual fix in the database.
-- Each account can store 1 GB of files (`USER_FILE_QUOTA_BYTES`).
-- Deleted files stay in R2 for now; nothing purges them.
+- Each account can store 1 GB of files (`USER_FILE_QUOTA_BYTES`) and 500 MB of synced rows (`USER_DATA_QUOTA_BYTES`). Deleting a file doesn't free its space yet, because nothing purges it from R2.
+- The Render address is public, so the per-address limit can be dodged by calling it directly. Sign-ins are also limited per email, and sign-ups to 100 an hour across the whole service. That also means someone can briefly block sign-in for a known email, or fill the hour's sign-ups.
 - The server can read synced data. It's encrypted in transit and, by the providers' defaults, at rest, but not end to end.

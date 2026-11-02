@@ -50,4 +50,14 @@ describe('mergeDuplicates', () => {
     const b = mergeDuplicates([row('B', t2, { mood: 5 }), row('A', t1, { mood: 3 })]);
     expect(a).toEqual(b);
   });
+
+  it('keeps what only the older row knew', () => {
+    const { winner } = mergeDuplicates([row('A', t1, { mood: 4, sleepMin: 420, line: '' }), row('B', t2, { mood: null, sleepMin: null, line: 'From the laptop' })]);
+    expect(winner).toMatchObject({ id: 'A', mood: 4, sleepMin: 420, line: 'From the laptop' });
+  });
+
+  it('writes the winner when it is newest but an older row fills a gap', () => {
+    const { winner } = mergeDuplicates([row('A', t2, { mood: null, line: 'Newest' }), row('B', t1, { mood: 2, line: 'Older' })]);
+    expect(winner).toMatchObject({ id: 'A', mood: 2, line: 'Newest', updatedAt: after });
+  });
 });

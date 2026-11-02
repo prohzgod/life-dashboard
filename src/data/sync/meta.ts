@@ -10,6 +10,8 @@ export const META = {
   cursor: 'sync.cursor',
   tablesHash: 'sync.tablesHash',
   lastAt: 'sync.lastAt',
+  /** Changes the server wouldn't take, or that won't fit. */
+  stuck: 'sync.stuck',
 } as const;
 
 export async function getMeta<T = unknown>(key: string): Promise<T | undefined> {

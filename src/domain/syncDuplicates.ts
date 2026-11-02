@@ -1,6 +1,6 @@
 import type { SyncTable } from '@shared';
 
-type Row = { id: string; updatedAt: string; deletedAt: string | null; createdAt?: string };
+type Row = { id: string; updatedAt: string; deletedAt: string | null; createdAt?: string; [field: string]: unknown };
 type Fields = Record<string, unknown>;
 
 export type NaturalKey = {
@@ -47,14 +47,28 @@ export function justAfter(iso: string): string {
   return new Date(new Date(iso).getTime() + 1).toISOString();
 }
 
+const BOOKKEEPING = new Set(['id', 'createdAt', 'updatedAt', 'deletedAt', 'dirty']);
+const isEmpty = (value: unknown) => value === null || value === undefined || value === '';
+
 /**
- * What to write for a set of rows that are one thing. The newest content lives on under the winner's
- * id. Nothing here reads the clock, so devices merging the same rows produce the same result.
+ * What to write for a set of rows that are one thing. Where they disagree the newest wins, under the
+ * winner's id, and what only an older row knew is kept. (One device logs your mood, the other a line.)
+ * Nothing here reads the clock, so devices merging the same rows produce the same result.
  */
 export function mergeDuplicates<T extends Row>(rows: readonly T[]): { winner: T | null; losers: T[] } {
   const { winner, losers } = pickWinner(rows);
-  const newest = rows.reduce((a, b) => (new Date(b.updatedAt) > new Date(a.updatedAt) ? b : a));
+  const byAge = [...rows].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime() || (a.id < b.id ? -1 : 1));
+  const newest = byAge[0]!;
   const stamp = justAfter(newest.updatedAt);
-  const merged = newest.id === winner.id ? null : { ...newest, id: winner.id, createdAt: winner.createdAt, updatedAt: stamp, deletedAt: null };
-  return { winner: merged, losers: losers.map((loser) => ({ ...loser, updatedAt: stamp, deletedAt: stamp })) };
+  const merged: Record<string, unknown> = { ...newest };
+  for (const older of byAge.slice(1)) {
+    for (const [field, value] of Object.entries(older)) {
+      if (!BOOKKEEPING.has(field) && isEmpty(merged[field]) && !isEmpty(value)) merged[field] = value;
+    }
+  }
+  const unchanged = newest.id === winner.id && Object.keys(merged).every((field) => merged[field] === (winner as Record<string, unknown>)[field]);
+  return {
+    winner: unchanged ? null : ({ ...merged, id: winner.id, createdAt: winner.createdAt, updatedAt: stamp, deletedAt: null } as unknown as T),
+    losers: losers.map((loser) => ({ ...loser, updatedAt: stamp, deletedAt: stamp })),
+  };
 }

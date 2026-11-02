@@ -11,7 +11,7 @@ export function toWireRow(table: SyncTable, record: LocalRow): SyncRow {
     delete payload.blob;
     delete payload.thumbBlob;
   }
-  return { table, id: record.id, updatedAt: record.updatedAt, deletedAt: record.deletedAt, payload };
+  return { table, id: record.id, updatedAt: record.updatedAt, deletedAt: record.deletedAt ?? null, payload };
 }
 
 export function rowBytes(row: SyncRow): number {

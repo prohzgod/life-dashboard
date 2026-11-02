@@ -10,7 +10,7 @@ async function main() {
   const { db } = process.env.DB_DRIVER === 'pglite' ? await createPgliteDb() : createPostgresDb(process.env.DATABASE_URL!);
   const { R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET } = process.env;
   const files: FileStore | MemoryFileStore = process.env.FILES_DRIVER === 'memory' ? new MemoryFileStore() : new R2FileStore(R2_ACCOUNT_ID!, R2_ACCESS_KEY_ID!, R2_SECRET_ACCESS_KEY!, R2_BUCKET!);
-  const app = await createApp({ db, files, quotaBytes: Number(process.env.USER_FILE_QUOTA_BYTES ?? 1_000_000_000) });
+  const app = await createApp({ db, files, quotaBytes: Number(process.env.USER_FILE_QUOTA_BYTES ?? 1_000_000_000), dataQuotaBytes: Number(process.env.USER_DATA_QUOTA_BYTES ?? 500_000_000) });
   if (files instanceof MemoryFileStore) {
     // Stands in for R2 when testing locally: what the links from MemoryFileStore point at.
     app.use('/api/test-files', raw({ type: () => true, limit: '60mb' }), (req: Request, res: Response) => {

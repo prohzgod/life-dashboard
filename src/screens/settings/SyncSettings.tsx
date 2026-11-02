@@ -40,7 +40,7 @@ export function SyncSettings() {
   return (
     <div className={styles.grid}>
       <Card title={t.title}>
-        {signedIn ? <SignedIn state={state} email={info.email} lastAt={info.lastAt} unsynced={info.unsynced} onSignOut={() => setSigningOut(true)} /> : <p className={styles.lead}>{t.lead}</p>}
+        {signedIn ? <SignedIn state={state} email={info.email} lastAt={info.lastAt} unsynced={info.unsynced} stuck={info.stuck} onSignOut={() => setSigningOut(true)} /> : <p className={styles.lead}>{t.lead}</p>}
         {(!signedIn || state === 'needsSignIn') && info && <AccountForm defaultEmail={info.email ?? ''} onDone={link} />}
         <p className={styles.truth}>{t.truth}</p>
       </Card>
@@ -75,7 +75,7 @@ export function SyncSettings() {
   );
 }
 
-function SignedIn({ state, email, lastAt, unsynced, onSignOut }: { state: ReturnType<typeof useSyncStatus>['state']; email: string | null; lastAt: string | null; unsynced: number; onSignOut: () => void }) {
+function SignedIn({ state, email, lastAt, unsynced, stuck, onSignOut }: { state: ReturnType<typeof useSyncStatus>['state']; email: string | null; lastAt: string | null; unsynced: number; stuck: number; onSignOut: () => void }) {
   const t = useT().sync;
   const line =
     state === 'syncing'
@@ -98,9 +98,10 @@ function SignedIn({ state, email, lastAt, unsynced, onSignOut }: { state: Return
       <p className={styles.status} role="status">
         <span>{line}</span>
         {unsynced > 0 && <span className={styles.unsynced}>{t.unsynced(unsynced)}</span>}
+        {stuck > 0 && <span className={styles.unsynced}>{t.stuck(stuck)}</span>}
       </p>
       <div className={styles.actions}>
-        <Button onClick={() => void syncNow()}>{state === 'failed' ? t.tryAgain : t.syncNow}</Button>
+        {state !== 'needsSignIn' && <Button onClick={() => void syncNow()}>{state === 'failed' ? t.tryAgain : t.syncNow}</Button>}
         <Button variant="quiet" onClick={onSignOut}>
           {t.signOut}
         </Button>

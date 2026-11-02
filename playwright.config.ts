@@ -33,7 +33,7 @@ export default defineConfig({
     },
     {
       // The real API on an in-memory Postgres and file store, so sync can be tested without Neon or R2.
-      command: 'npm run build -w shared && npm run dev:test -w api',
+      command: 'npm run build -w shared && npm run dev:test -w server',
       env: { PORT: String(apiPort), NODE_ENV: 'test', DB_DRIVER: 'pglite', FILES_DRIVER: 'memory', USER_FILE_QUOTA_BYTES: '1000000000', AUTH_RATE_LIMIT: '1000' },
       port: apiPort,
       reuseExistingServer: !process.env.CI,

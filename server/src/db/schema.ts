@@ -33,3 +33,15 @@ export const records = pgTable(
   },
   (t) => [primaryKey({ columns: [t.userId, t.tableName, t.id] }), index('records_user_seq').on(t.userId, t.seq)],
 );
+
+/** What this account has been given links to upload. Client rows can't be trusted to count storage. */
+export const fileReservations = pgTable(
+  'file_reservations',
+  {
+    userId: text('user_id').notNull().references(() => users.id),
+    key: text('key').notNull(),
+    size: bigint('size', { mode: 'number' }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.key] })],
+);

@@ -5,10 +5,10 @@ import { db, normalizeEvent, normalizeGoal, normalizeMetric, normalizeNode, norm
 import { resolveDuplicates } from './duplicates';
 import { markAsPull } from './dirtyHooks';
 import { countDirty, listDirty, markClean, type DirtyRow } from './dirty';
-import { SyncAuthError, realApi, type SyncApi } from './api';
+import { SyncAuthError, SyncRequestError, realApi, type SyncApi } from './api';
 import { downloadPendingFiles, uploadFiles } from './files';
 import { getMeta, META, setMeta } from './meta';
-import { setSyncState } from './state';
+import { readSyncState, setSyncState } from './state';
 
 export type SyncResult = { status: 'done' | 'offline' | 'signedOut' | 'failed'; pushed: number; pulled: number; skipped: number };
 
@@ -69,6 +69,31 @@ async function applyRows(rows: SyncRow[], force: boolean, cursor?: number): Prom
   });
 }
 
+/** Sends rows. If the server refuses a batch, it narrows down to the row at fault so the rest still go. */
+async function pushBatch(table: SyncRow['table'], batch: SyncRow[], api: SyncApi): Promise<{ pushed: number; skipped: number }> {
+  let reply;
+  try {
+    reply = await api.push(batch);
+  } catch (error) {
+    const refused = error instanceof SyncRequestError && error.status !== 429;
+    if (!refused) throw error;
+    if (batch.length === 1) return { pushed: 0, skipped: 1 };
+    const middle = Math.ceil(batch.length / 2);
+    const first = await pushBatch(table, batch.slice(0, middle), api);
+    const second = await pushBatch(table, batch.slice(middle), api);
+    return { pushed: first.pushed + second.pushed, skipped: first.skipped + second.skipped };
+  }
+  const sent = new Map(batch.map((row) => [row.id, row]));
+  for (const id of reply.accepted) await markClean(table, id, sent.get(id)!.updatedAt);
+  // A winner settles the version that was sent. Anything typed since then is newer, and stays to go out next.
+  const unchanged = [];
+  for (const winner of reply.winners) {
+    if ((await anyTable(table).get(winner.id))?.updatedAt === sent.get(winner.id)?.updatedAt) unchanged.push(winner);
+  }
+  if (unchanged.length) await applyRows(unchanged, true);
+  return { pushed: reply.accepted.length, skipped: 0 };
+}
+
 async function push(api: SyncApi): Promise<{ pushed: number; skipped: number }> {
   let pushed = 0;
   let skipped = 0;
@@ -83,11 +108,9 @@ async function push(api: SyncApi): Promise<{ pushed: number; skipped: number }> 
     const fits = rows.filter((row) => rowBytes(row) <= MAX_ROW_BYTES);
     skipped += rows.length - fits.length;
     for (const batch of batchByBytes(fits, MAX_BATCH_BYTES)) {
-      const { accepted, winners } = await api.push(batch);
-      const sent = new Map(batch.map((row) => [row.id, row]));
-      for (const id of accepted) await markClean(table, id, sent.get(id)!.updatedAt);
-      if (winners.length) await applyRows(winners, true);
-      pushed += accepted.length;
+      const result = await pushBatch(table, batch, api);
+      pushed += result.pushed;
+      skipped += result.skipped;
     }
   }
   return { pushed, skipped };
@@ -107,6 +130,9 @@ async function pull(api: SyncApi): Promise<number> {
 
 async function run(api: SyncApi): Promise<SyncResult> {
   const empty = { pushed: 0, pulled: 0, skipped: 0 };
+  if (paused) return { status: 'done', ...empty };
+  // Nothing can work until you sign in again, and retrying would pull the sign-in form out from under you.
+  if (readSyncState() === 'needsSignIn') return { status: 'signedOut', ...empty };
   if (!(await getMeta(META.accountId))) {
     setSyncState('off');
     return { status: 'signedOut', ...empty };
@@ -128,6 +154,7 @@ async function run(api: SyncApi): Promise<SyncResult> {
     if (pulled) await resolveDuplicates();
     await downloadPendingFiles(api);
     await setMeta(META.lastAt, new Date().toISOString());
+    await setMeta(META.stuck, skipped);
     setSyncState('synced');
     return { status: 'done', pushed, pulled, skipped };
   } catch (error) {
@@ -141,6 +168,19 @@ async function run(api: SyncApi): Promise<SyncResult> {
 }
 
 let running: Promise<SyncResult> | null = null;
+let paused = 0;
+
+/** Runs a change of account on this device with no sync under way, in this tab or another. */
+export async function whileSyncPaused<T>(work: () => Promise<T>): Promise<T> {
+  paused++;
+  try {
+    await running;
+    const locks = typeof navigator !== 'undefined' ? navigator.locks : undefined;
+    return await (locks ? locks.request('life-dashboard-sync', work) : work());
+  } finally {
+    paused--;
+  }
+}
 
 /** Sends this device's changes and fetches the others'. Only one runs at a time, across tabs too. */
 export function syncNow(api: SyncApi = realApi): Promise<SyncResult> {

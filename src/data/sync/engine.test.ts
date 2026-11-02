@@ -5,8 +5,9 @@ import { tasksRepo } from '../repositories';
 import { freshDatabase } from '../testing';
 import type { NewRecord } from '../repository';
 import type { Task } from '../types';
-import { SyncAuthError, type SyncApi } from './api';
-import { syncNow } from './engine';
+import { SyncAuthError, SyncRequestError, type SyncApi } from './api';
+import { syncNow, whileSyncPaused } from './engine';
+import { readSyncState } from './state';
 import { META, setMeta, getMeta } from './meta';
 import { markClean } from './dirty';
 
@@ -191,3 +192,99 @@ it('turns a 401 into SyncAuthError', async () => {
   await expect(realApi.pull(0)).rejects.toBeInstanceOf(SyncAuthError);
   vi.unstubAllGlobals();
 });
+
+describe('edits made while a push is under way', () => {
+  it('a winner does not replace an edit made after the row was sent', async () => {
+    const task = await newTask('v1');
+    const api = fakeApi();
+    api.push = async (rows) => {
+      if (!rows.some((r) => r.id === task.id)) return { accepted: rows.map((r) => r.id), winners: [] };
+      await tasksRepo.update(task.id, { title: 'v2, typed while waiting' });
+      return { accepted: [], winners: [wire(task.id, 'server copy of v1')] };
+    };
+    await syncNow(api);
+    expect((await db.tasks.get(task.id))?.title).toBe('v2, typed while waiting');
+    expect(await dirtyOf(task.id)).toBe(1);
+  });
+});
+
+describe('a row the server refuses', () => {
+  it('does not stop the others, or the pull, and is reported', async () => {
+    const bad = await newTask('Bad');
+    const good = await newTask('Good');
+    const api = fakeApi([{ rows: [wire('from-server', 'Hello')], cursor: 1, hasMore: false }]);
+    const push = api.push;
+    api.push = async (rows) => {
+      if (rows.some((r) => r.id === bad.id)) throw new SyncRequestError(500, '');
+      return push(rows);
+    };
+    const result = await syncNow(api);
+    expect(result.status).toBe('done');
+    expect(result.skipped).toBeGreaterThanOrEqual(1);
+    expect(await dirtyOf(bad.id)).toBe(1);
+    expect(await dirtyOf(good.id)).toBe(0);
+    expect(await db.tasks.get('from-server')).toBeDefined();
+    expect(await getMeta(META.stuck)).toBeGreaterThanOrEqual(1);
+  });
+
+  it('a row missing deletedAt still goes out', async () => {
+    const api = fakeApi();
+    await db.tasks.add({ id: 'damaged', title: 'From an old backup', updatedAt: new Date().toISOString(), createdAt: 'x' } as never);
+    await syncNow(api);
+    expect(api.pushed.find((r) => r.id === 'damaged')?.deletedAt).toBeNull();
+  });
+});
+
+describe('when the session has ended', () => {
+  it('stays waiting for sign-in instead of trying again, so the form stays put', async () => {
+    await newTask();
+    const api = fakeApi();
+    let tries = 0;
+    api.push = async () => {
+      tries++;
+      throw new SyncAuthError();
+    };
+    await syncNow(api);
+    expect(readSyncState()).toBe('needsSignIn');
+    const firstTries = tries;
+    await syncNow(api);
+    expect(tries).toBe(firstTries);
+    expect(readSyncState()).toBe('needsSignIn');
+  });
+});
+
+describe('sending the right account', () => {
+  it('names the linked account on every sync request', async () => {
+    const { realApi } = await import('./api');
+    const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) => new Response(JSON.stringify({ rows: [], cursor: 0, hasMore: false }), { status: 200 }));
+    vi.stubGlobal('fetch', fetchMock);
+    await realApi.pull(0);
+    expect((fetchMock.mock.calls[0]![1]!.headers as Record<string, string>)['x-sync-account']).toBe('me');
+    vi.unstubAllGlobals();
+  });
+
+  it('treats a session for another account as needing sign-in, and sends nothing more', async () => {
+    const { realApi } = await import('./api');
+    await newTask();
+    const fetchMock = vi.fn(async () => new Response('{}', { status: 409 }));
+    vi.stubGlobal('fetch', fetchMock);
+    expect((await syncNow(realApi)).status).toBe('signedOut');
+    expect(readSyncState()).toBe('needsSignIn');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    vi.unstubAllGlobals();
+  });
+
+  it('does not sync while a device is being switched', async () => {
+    const api = fakeApi();
+    await newTask();
+    let during: number | undefined;
+    await whileSyncPaused(async () => {
+      await syncNow(api);
+      during = api.pushed.length;
+    });
+    expect(during).toBe(0);
+    await syncNow(api);
+    expect(api.pushed.length).toBeGreaterThan(0);
+  });
+});
+

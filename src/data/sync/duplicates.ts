@@ -13,16 +13,18 @@ export async function resolveDuplicates(): Promise<number> {
     for (const name of dataTableNames) {
       const natural = NATURAL_KEYS[name];
       if (!natural) continue;
-      const groups = new Map<string, Row[]>();
+      const groups = new Map<string, string[]>();
       for (const row of await tableOf(name).toArray()) {
         if (row.deletedAt !== null) continue;
         const key = natural.key(row);
         if (key === null) continue;
-        groups.set(key, [...(groups.get(key) ?? []), row]);
+        groups.set(key, [...(groups.get(key) ?? []), row.id]);
       }
-      for (const rows of groups.values()) {
-        if (rows.length < 2) continue;
+      for (const ids of groups.values()) {
+        if (ids.length < 2) continue;
         merged++;
+        // Read again: merging an earlier group may have moved these rows to a new parent.
+        const rows = (await tableOf(name).bulkGet(ids)) as Row[];
         const { winner: { id: winnerId } } = pickWinner(rows);
         const { winner, losers } = mergeDuplicates(rows);
         if (winner) await tableOf(name).put(winner);

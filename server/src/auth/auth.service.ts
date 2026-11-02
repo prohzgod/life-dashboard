@@ -1,11 +1,12 @@
-import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { eq, sql } from 'drizzle-orm';
+import { count, eq, gt, sql } from 'drizzle-orm';
 import { hash, verify } from '@node-rs/argon2';
 import { DB, type Db } from '../db/db';
 import { sessions, users } from '../db/schema';
 
 export const SESSION_DAYS = 90;
+const MAX_SIGNUPS_PER_HOUR = 100;
 const DAY_MS = 86_400_000;
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
 // Checked when an email is unknown, so a wrong email takes as long as a wrong password.
@@ -18,6 +19,9 @@ export class AuthService {
   constructor(@Inject(DB) private readonly db: Db) {}
 
   async register(email: string, password: string, deviceName: string): Promise<{ account: Account; token: string }> {
+    // The address limit can be dodged by calling the API directly, so sign-ups have a limit of their own.
+    const [recent] = await this.db.select({ n: count() }).from(users).where(gt(users.createdAt, sql`now() - interval '1 hour'`));
+    if ((recent?.n ?? 0) >= MAX_SIGNUPS_PER_HOUR) throw new HttpException('A lot of accounts were made just now. Please try again later.', HttpStatus.TOO_MANY_REQUESTS);
     const id = randomUUID();
     const passwordHash = await hash(password);
     const [row] = await this.db.insert(users).values({ id, email, passwordHash }).onConflictDoNothing().returning({ id: users.id });

@@ -110,3 +110,41 @@ it('stores the same row in two tables separately', async () => {
   const res = await t.db.execute(sql`select count(*)::int as n from records`);
   expect(res.rows[0]!.n).toBe(2);
 });
+
+it("refuses a device that means a different account from the session", async () => {
+  await agent.post('/api/sync/push').set('x-sync-account', 'someone else').send({ rows: [row('1', at())] }).expect(409);
+  await agent.get('/api/sync/pull?cursor=0').set('x-sync-account', 'someone else').expect(409);
+  expect((await pull(agent)).rows).toEqual([]);
+});
+
+it('corrects for a clock that runs behind, so an edit made now beats an hour-old one', async () => {
+  await push(agent, row('1', new Date(Date.now() - 3_600_000).toISOString(), 'from a good clock'));
+  const behind = new Date(Date.now() - 2 * 3_600_000).toISOString();
+  const res = (await agent.post('/api/sync/push').send({ rows: [row('1', behind, 'edited just now')], clientNow: behind }).expect(201)).body as PushResponse;
+  expect(res.winners[0]!.payload.title).toBe('edited just now');
+  expect(Math.abs(new Date(res.winners[0]!.updatedAt).getTime() - Date.now())).toBeLessThan(10_000);
+});
+
+it('leaves times alone when the clock is about right', async () => {
+  const when = at();
+  const res = (await agent.post('/api/sync/push').send({ rows: [row('1', when)], clientNow: new Date(Date.now() + 2000).toISOString() }).expect(201)).body as PushResponse;
+  expect(res.accepted).toEqual(['1']);
+  expect((await pull(agent)).rows[0]!.updatedAt).toBe(when);
+});
+
+it('stores text holding a NUL character instead of failing the whole batch', async () => {
+  const res = await push(agent, row('1', at(), 'a\u0000b'), row('2', at(), 'fine'));
+  expect(res.accepted).toEqual(['1', '2']);
+  const { rows } = await pull(agent);
+  expect(rows.find((r) => r.id === '1')!.payload.title).toBe('ab');
+});
+
+it("refuses data past the account's quota, and another account is unaffected", async () => {
+  const small = await createTestApp({ dataQuotaBytes: 2000 });
+  const a = await signedIn(small.app);
+  await a.post('/api/sync/push').send({ rows: [row('1', at(), 'x'.repeat(1500))] }).expect(201);
+  await a.post('/api/sync/push').send({ rows: [row('2', at(), 'y'.repeat(1500))] }).expect(413);
+  const b = await signedIn(small.app, 'b@example.com');
+  await b.post('/api/sync/push').send({ rows: [row('2', at(), 'y'.repeat(1500))] }).expect(201);
+  await small.close();
+});

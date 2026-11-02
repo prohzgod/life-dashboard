@@ -27,6 +27,7 @@ export const sync = {
     failed: 'Couldn’t reach the server. Your changes are safe on this device.',
   },
   unsynced: (n: number) => (n === 1 ? '1 change still to sync.' : `${n} changes still to sync.`),
+  stuck: (n: number) => (n === 1 ? '1 change couldn’t be synced. It’s safe on this device. It may be too large, or your account’s storage may be full.' : `${n} changes couldn’t be synced. They’re safe on this device. They may be too large, or your account’s storage may be full.`),
   syncNow: 'Sync now',
   tryAgain: 'Try again',
   signOut: 'Sign out',

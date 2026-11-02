@@ -3,13 +3,15 @@ import { liveQuery } from 'dexie';
 import { SYNC_TABLES, type PullResponse, type SyncRow } from '@shared';
 import { db } from '../db';
 import { exportAll, importReplacingAll } from '../backup';
-import { areasRepo, tasksRepo } from '../repositories';
+import { areasRepo, goalsRepo, tasksRepo } from '../repositories';
 import { freshDatabase } from '../testing';
 import type { NewRecord } from '../repository';
 import type { Task } from '../types';
 import type { SyncApi } from './api';
 import { hasOwnData, linkDevice, signOutDevice } from './link';
+import { markClean } from './dirty';
 import { getMeta, META, setMeta } from './meta';
+import { readSyncState, setSyncState } from './state';
 
 const me = { id: 'me', email: 'me@example.com' };
 const newTask = (title = 'Mine') =>
@@ -38,9 +40,6 @@ function fakeApi(pages: PullResponse[] = []): SyncApi & { pushed: SyncRow[] } {
 }
 const account = (id: string) => [{ rows: [wire('areas', `${id}-area`, { name: 'Theirs', color: 'health', icon: null, sortKey: 'a0' })], cursor: 3, hasMore: false }];
 
-/** Pretends this device was set up a while ago, so what it does next is your own. */
-const ageSeeds = () => setMeta('seededAt', '2020-01-01T00:00:00.000Z');
-
 beforeEach(freshDatabase);
 
 describe('hasOwnData', () => {
@@ -48,10 +47,22 @@ describe('hasOwnData', () => {
     expect(await hasOwnData()).toBe(false);
   });
 
-  it('is true once you have added something', async () => {
-    await ageSeeds();
-    await db.transaction('rw', db.meta, () => db.meta.put({ key: 'seededAt', value: new Date(Date.now() - 3_600_000).toISOString() }));
+  it('is true as soon as you add something, even right after install', async () => {
     await newTask();
+    expect(await hasOwnData()).toBe(true);
+  });
+
+  it('is true once you have edited something seeded', async () => {
+    const area = (await areasRepo.list())[0]!;
+    await new Promise((resolve) => setTimeout(resolve, 2));
+    await areasRepo.update(area.id, { name: 'Mine now' });
+    expect(await hasOwnData()).toBe(true);
+  });
+
+  it('works out seeds by time on a device set up before the list existed', async () => {
+    await db.meta.delete('seedRows');
+    expect(await hasOwnData()).toBe(false);
+    await setMeta('seededAt', '2020-01-01T00:00:00.000Z');
     expect(await hasOwnData()).toBe(true);
   });
 });
@@ -110,11 +121,40 @@ describe('linkDevice', () => {
 
   it('combine keeps both and marks local rows to send', async () => {
     const task = await newTask();
-    await db.tasks.update(task.id, { dirty: 0 } as never);
+    await markClean('tasks', task.id, task.updatedAt);
     expect(await linkDevice(me, 'combine', fakeApi(account('me')))).toBe('linked');
     expect(await db.tasks.get(task.id)).toBeDefined();
     expect(((await db.tasks.get(task.id)) as unknown as { dirty: number }).dirty).toBe(1);
     expect(await getMeta(META.accountId)).toBe('me');
+  });
+
+  it('combine drops starter rows you never touched, so they do not appear twice', async () => {
+    const seededGoals = await goalsRepo.list();
+    expect(seededGoals.length).toBeGreaterThan(0);
+    const task = await newTask();
+    await linkDevice(me, 'combine', fakeApi());
+    expect(await goalsRepo.list()).toEqual([]);
+    expect(await db.tasks.get(task.id)).toBeDefined();
+  });
+
+  it('combine keeps a starter row something of yours points at', async () => {
+    const area = (await areasRepo.list())[0]!;
+    const task = await newTask();
+    await tasksRepo.update(task.id, { areaId: area.id });
+    await linkDevice(me, 'combine', fakeApi());
+    expect(await areasRepo.get(area.id)).toBeDefined();
+  });
+
+  it('combine keeps seeded rows that merge by name, like the journal folder', async () => {
+    await linkDevice(me, 'combine', fakeApi());
+    expect((await db.nodes.toArray()).some((n) => n.systemKey === 'journal')).toBe(true);
+  });
+
+  it('a signed-in-again account clears the wait for sign-in', async () => {
+    await setMeta(META.ownerId, 'me');
+    setSyncState('needsSignIn');
+    await linkDevice(me, undefined, fakeApi());
+    expect(readSyncState()).not.toBe('needsSignIn');
   });
 
   it("another account's data is never uploaded", async () => {
@@ -210,6 +250,19 @@ describe('restoring a backup', () => {
     expect(row?.deletedAt).not.toBeNull();
     expect(((row as unknown) as { dirty: number }).dirty).toBe(1);
     expect((await tasksRepo.list()).map((t) => t.id)).not.toContain(later.id);
+  });
+
+  it('still wins when signed out with kept data, since signing back in resumes', async () => {
+    const task = await newTask();
+    const file = await exportAll();
+    const later = await newTask('Added after the backup');
+    await setMeta(META.ownerId, 'me');
+    const before = Date.now();
+    await importReplacingAll(file);
+    expect(new Date((await db.tasks.get(task.id))!.updatedAt).getTime()).toBeGreaterThanOrEqual(before);
+    const tombstone = await db.tasks.get(later.id);
+    expect(tombstone).toBeDefined();
+    expect(tombstone!.deletedAt).not.toBeNull();
   });
 
   it('import when not linked keeps original timestamps and removes other rows', async () => {

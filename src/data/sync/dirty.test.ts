@@ -48,6 +48,15 @@ it('a pulled row stays clean, new or replacing a clean one', async () => {
   expect((await db.tasks.get(task.id))?.title).toBe('From another device');
 });
 
+it('a stale write of a clean copy cannot clear the flag', async () => {
+  const task = await newTask();
+  await markClean('tasks', task.id, task.updatedAt);
+  const stale = await db.tasks.get(task.id);
+  await tasksRepo.update(task.id, { title: 'First edit' });
+  await db.tasks.put({ ...stale!, title: 'Second edit' });
+  expect(await dirtyOf(task.id)).toBe(1);
+});
+
 it('markClean leaves a row edited since the push dirty', async () => {
   const task = await newTask();
   await new Promise((resolve) => setTimeout(resolve, 2));

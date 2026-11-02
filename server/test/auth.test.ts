@@ -88,8 +88,22 @@ it('limits login attempts', async () => {
 });
 
 it('limits each person, not everyone behind the proxies', async () => {
-  const send = (client: string) => http().post('/api/auth/login').set('X-Forwarded-For', `${client}, 10.0.0.9`).send({ email: 'a@example.com', password: 'wrong password here', deviceName });
+  let attempt = 0;
+  const send = (client: string) => http().post('/api/auth/login').set('X-Forwarded-For', `${client}, 10.0.0.9`).send({ email: `a${attempt++}@example.com`, password: 'wrong password here', deviceName });
   for (let i = 0; i < 10; i++) expect((await send('203.0.113.1')).status).toBe(401);
   expect((await send('203.0.113.1')).status).toBe(429);
   expect((await send('203.0.113.2')).status).toBe(401);
 });
+
+it('limits guesses at one account, however many addresses they come from', async () => {
+  const send = (i: number) => http().post('/api/auth/login').set('X-Forwarded-For', `203.0.113.${i}, 10.0.0.9`).send({ email: 'victim@example.com', password: 'wrong password here', deviceName });
+  for (let i = 0; i < 10; i++) expect((await send(i)).status).toBe(401);
+  expect((await send(99)).status).toBe(429);
+});
+
+it('caps how many accounts can be made in an hour, whatever address they claim', async () => {
+  await t.db.execute(sql`insert into users (id, email, password_hash) select 'u' || n, 'u' || n || '@example.com', 'x' from generate_series(1, 100) n`);
+  const res = await http().post('/api/auth/register').set('X-Forwarded-For', '203.0.113.50, 10.0.0.9').send({ email: 'new@example.com', password, deviceName });
+  expect(res.status).toBe(429);
+});
+
