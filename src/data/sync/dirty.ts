@@ -6,8 +6,9 @@ export type DirtyRow = BaseRecord & { dirty?: 0 | 1 };
 
 const tableOf = (name: DataTableName) => db[name] as unknown as import('dexie').Table<DirtyRow, string>;
 
-export function listDirty(table: DataTableName, limit: number): Promise<DirtyRow[]> {
-  return tableOf(table).where('dirty').equals(1).limit(limit).toArray();
+export function listDirty(table: DataTableName, limit?: number): Promise<DirtyRow[]> {
+  const rows = tableOf(table).where('dirty').equals(1);
+  return (limit === undefined ? rows : rows.limit(limit)).toArray();
 }
 
 export function countDirty(table: DataTableName): Promise<number> {
