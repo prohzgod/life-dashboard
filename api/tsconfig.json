@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2022", "module": "CommonJS", "moduleResolution": "node10", "ignoreDeprecations": "6.0",
+    "target": "ES2022", "module": "CommonJS", "moduleResolution": "node10",
     "experimentalDecorators": true, "strict": true, "noUncheckedIndexedAccess": true, "skipLibCheck": true,
     "esModuleInterop": true, "types": ["node", "vitest/globals"]
   },
-  "include": ["src", "test", "vitest.config.ts"]
+  "include": ["src", "test"]
 }

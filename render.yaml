@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: life-dashboard-api
+    runtime: node
+    buildCommand: npm ci --workspace=shared --workspace=api --include=dev && npm run build -w shared && npm run build -w api
+    startCommand: node api/dist/db/migrate.js && node api/dist/main.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        sync: false
+      - key: USER_FILE_QUOTA_BYTES
+        value: "1000000000"
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET
+        sync: false
