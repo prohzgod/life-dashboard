@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { AuthModule } from './auth/auth.module';
 import { DB, type Db } from './db/db';
 import { FILES, QUOTA_BYTES } from './config';
 import type { FileStore } from './files/file-store';
@@ -26,7 +27,7 @@ class CoreModule {
 @Module({ controllers: [HealthController] })
 class AppModule {
   static register(options: AppOptions): DynamicModule {
-    return { module: AppModule, imports: [CoreModule.register(options)] };
+    return { module: AppModule, imports: [CoreModule.register(options), AuthModule] };
   }
 }
 
