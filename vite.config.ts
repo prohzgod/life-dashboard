@@ -4,7 +4,12 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// Locally the API runs beside the app; Vercel's rewrite does this job in production.
+const apiProxy = { '/api': process.env.API_PROXY ?? 'http://localhost:3000' };
+
 export default defineConfig({
+  server: { proxy: apiProxy },
+  preview: { proxy: apiProxy },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -35,6 +40,8 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,jpg,woff2}'],
         navigateFallback: '/index.html',
+        // The API answers for itself; the app shell must never stand in for it.
+        navigateFallbackDenylist: [/^\/api\//],
         // Opens the app at a reminder's page when you click its notification.
         importScripts: ['notification-click.js'],
         runtimeCaching: [

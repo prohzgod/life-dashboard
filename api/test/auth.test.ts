@@ -86,3 +86,10 @@ it('limits login attempts', async () => {
   for (let i = 0; i < 10; i++) expect((await send()).status).toBe(401);
   expect((await send()).status).toBe(429);
 });
+
+it('limits each person, not everyone behind the proxies', async () => {
+  const send = (client: string) => http().post('/api/auth/login').set('X-Forwarded-For', `${client}, 10.0.0.9`).send({ email: 'a@example.com', password: 'wrong password here', deviceName });
+  for (let i = 0; i < 10; i++) expect((await send('203.0.113.1')).status).toBe(401);
+  expect((await send('203.0.113.1')).status).toBe(429);
+  expect((await send('203.0.113.2')).status).toBe(401);
+});

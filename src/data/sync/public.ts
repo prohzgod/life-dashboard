@@ -1,11 +1,11 @@
-import { accountApi, SyncAuthError, SyncRequestError, type Account } from './api';
+import { accountApi, SyncAuthError, SyncRequestError, type UserAccount } from './api';
 import { countUnsynced, syncNow } from './engine';
 import { hasOwnData, linkDevice, signOutDevice, type LinkChoice } from './link';
 import { getMeta, META } from './meta';
 import { readSyncState, setSyncState, subscribeSyncState, type SyncState } from './state';
 
 export { countUnsynced, linkDevice, readSyncState, setSyncState, signOutDevice, subscribeSyncState, syncNow, hasOwnData, SyncAuthError, SyncRequestError };
-export type { Account, LinkChoice, SyncState };
+export type { UserAccount, LinkChoice, SyncState };
 export { accountApi };
 
 export type SyncInfo = { accountId: string | null; email: string | null; lastAt: string | null; unsynced: number };

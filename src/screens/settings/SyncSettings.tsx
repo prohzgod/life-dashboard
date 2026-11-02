@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useId, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { accountApi, linkDevice, signOutDevice, syncNow, SyncRequestError, type LinkChoice, type UserAccount } from '@/data';
 import { Icon } from '@/components/icons/Icon';
@@ -27,6 +27,11 @@ export function SyncSettings() {
     setPending(result === 'linked' ? null : { account, ask: result });
   }
 
+  // A dialog also reports closing after you've answered it; only dismissing it while it still waits is a no.
+  const dismiss = () => {
+    if (pending) void cancelLink();
+  };
+
   async function cancelLink() {
     setPending(null);
     await accountApi.signOut().catch(() => {});
@@ -40,7 +45,7 @@ export function SyncSettings() {
         <p className={styles.truth}>{t.truth}</p>
       </Card>
 
-      <Dialog open={pending?.ask === 'ask'} onClose={() => void cancelLink()} title={t.bothTitle}>
+      <Dialog open={pending?.ask === 'ask'} onClose={dismiss} title={t.bothTitle}>
         <p className={styles.dialogLead}>{t.bothLead}</p>
         <div className={styles.actions}>
           <Button variant="primary" onClick={() => void link(pending!.account, 'combine')}>
@@ -53,7 +58,7 @@ export function SyncSettings() {
         </div>
       </Dialog>
 
-      <Dialog open={pending?.ask === 'confirmReplace'} onClose={() => void cancelLink()} title={t.otherTitle}>
+      <Dialog open={pending?.ask === 'confirmReplace'} onClose={dismiss} title={t.otherTitle}>
         <p className={styles.dialogLead}>{t.otherLead}</p>
         <div className={styles.actions}>
           <Button variant="primary" onClick={() => void link(pending!.account, 'replaceOther')}>
@@ -111,6 +116,8 @@ function AccountForm({ defaultEmail, onDone }: { defaultEmail: string; onDone: (
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const passwordId = useId();
+  const hintId = useId();
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -131,6 +138,7 @@ function AccountForm({ defaultEmail, onDone }: { defaultEmail: string; onDone: (
   return (
     <form className={styles.form} onSubmit={(event) => void submit(event)}>
       <Segmented
+        className={styles.mode}
         label={t.mode}
         value={mode}
         onChange={setMode}
@@ -143,11 +151,15 @@ function AccountForm({ defaultEmail, onDone }: { defaultEmail: string; onDone: (
         {t.email}
         <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>
-      <label className={styles.field}>
-        {t.password}
-        <input type="password" required autoComplete={mode === 'signIn' ? 'current-password' : 'new-password'} value={password} onChange={(e) => setPassword(e.target.value)} />
-        {mode === 'register' && <span className={styles.hint}>{t.passwordHint}</span>}
-      </label>
+      <div className={styles.field}>
+        <label htmlFor={passwordId}>{t.password}</label>
+        <input id={passwordId} type="password" required aria-describedby={mode === 'register' ? hintId : undefined} autoComplete={mode === 'signIn' ? 'current-password' : 'new-password'} value={password} onChange={(e) => setPassword(e.target.value)} />
+        {mode === 'register' && (
+          <span id={hintId} className={styles.hint}>
+            {t.passwordHint}
+          </span>
+        )}
+      </div>
       {error && (
         <p className={styles.error} role="alert">
           {error}

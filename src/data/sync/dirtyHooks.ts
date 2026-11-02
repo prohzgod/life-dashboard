@@ -22,6 +22,6 @@ export function installDirtyTracking(tables: ReadonlyArray<Table<Marked, string>
 }
 
 /** Marks the running transaction as writing rows from the server, which must stay clean. */
-export function markAsPull() {
-  (Dexie.currentTransaction as unknown as SyncTransaction).syncApply = true;
+export function markAsPull(on = true) {
+  (Dexie.currentTransaction as unknown as SyncTransaction).syncApply = on;
 }

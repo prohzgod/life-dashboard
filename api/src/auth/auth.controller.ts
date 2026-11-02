@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, HttpCode, Inject, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 import { AuthService } from './auth.service';
@@ -23,7 +23,6 @@ export class AuthController {
 
   @Post('register')
   @UseGuards(ThrottlerGuard)
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   async register(@Body() body: unknown, @Res({ passthrough: true }) res: Response) {
     const { email, password, deviceName } = parse(body);
     const { account, token } = await this.auth.register(email, password, deviceName);
@@ -34,7 +33,6 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @UseGuards(ThrottlerGuard)
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   async login(@Body() body: unknown, @Res({ passthrough: true }) res: Response) {
     const { email, password, deviceName } = parse(body);
     const { account, token } = await this.auth.login(email, password, deviceName);

@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 // E2E_PORT runs the suite beside a preview server that's already on 4173.
 const port = Number(process.env.E2E_PORT ?? 4173);
+const apiPort = Number(process.env.E2E_API_PORT ?? 4180);
 
 export default defineConfig({
   testDir: './e2e',
@@ -22,10 +23,21 @@ export default defineConfig({
     { name: 'phone', testMatch: /mobile\.spec\.ts$/, use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true } },
   ],
   // The service worker only exists in a production build, so e2e runs against `vite preview`.
-  webServer: {
-    command: `npm run build && npm run preview -- --port ${port} --strictPort`,
-    port,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
-  },
+  webServer: [
+    {
+      command: `npm run build && npm run preview -- --port ${port} --strictPort`,
+      env: { API_PROXY: `http://localhost:${apiPort}` },
+      port,
+      reuseExistingServer: !process.env.CI,
+      timeout: 180_000,
+    },
+    {
+      // The real API on an in-memory Postgres and file store, so sync can be tested without Neon or R2.
+      command: 'npm run build -w shared && npm run dev:test -w api',
+      env: { PORT: String(apiPort), NODE_ENV: 'test', DB_DRIVER: 'pglite', FILES_DRIVER: 'memory', USER_FILE_QUOTA_BYTES: '1000000000', AUTH_RATE_LIMIT: '1000' },
+      port: apiPort,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 });

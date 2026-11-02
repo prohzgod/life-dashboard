@@ -1,4 +1,5 @@
 // @vitest-environment node
+import { liveQuery } from 'dexie';
 import { SYNC_TABLES, type PullResponse, type SyncRow } from '@shared';
 import { db } from '../db';
 import { exportAll, importReplacingAll } from '../backup';
@@ -63,6 +64,20 @@ describe('linkDevice', () => {
     expect((await areasRepo.list()).map((a) => a.id)).toEqual(['me-area']);
     expect(await getMeta(META.accountId)).toBe('me');
     expect(await getMeta(META.cursor)).toBe(3);
+  });
+
+  it('swaps in one step: rows from the account stay clean, anything first start adds goes up, and the profile never goes missing', async () => {
+    const seen: number[] = [];
+    const watching = liveQuery(() => db.profile.count()).subscribe((count) => seen.push(count));
+    const api = fakeApi(account('me'));
+    await linkDevice(me, 'useAccount', api);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    watching.unsubscribe();
+    expect(seen.length).toBeGreaterThan(0);
+    expect(seen).not.toContain(0);
+    expect(((await db.areas.get('me-area')) as unknown as { dirty: number }).dirty).toBe(0);
+    await vi.waitFor(() => expect(api.pushed.map((row) => row.table)).toContain('profile'));
+    expect(api.pushed.map((row) => row.id)).not.toContain('me-area');
   });
 
   it('uploads this device when the account is empty', async () => {

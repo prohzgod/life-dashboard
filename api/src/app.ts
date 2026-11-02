@@ -39,7 +39,7 @@ export async function createApp(options: AppOptions): Promise<NestExpressApplica
   app.use(helmet());
   app.use(cookieParser());
   app.useBodyParser('json', { limit: '5mb' });
-  // Requests arrive through Vercel's rewrite, one hop away.
-  app.set('trust proxy', 1);
+  // Requests pass through Vercel's rewrite, then Render's load balancer. Rate limits need the person's own address.
+  app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS ?? 2));
   return app;
 }

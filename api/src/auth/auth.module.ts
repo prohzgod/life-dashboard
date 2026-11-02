@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { SessionGuard } from './session.guard';
 
 @Module({
-  imports: [ThrottlerModule.forRoot([{ limit: 10, ttl: 60_000 }])],
+  imports: [ThrottlerModule.forRoot([{ limit: Number(process.env.AUTH_RATE_LIMIT ?? 10), ttl: 60_000 }])],
   controllers: [AuthController],
   providers: [AuthService, SessionGuard],
   exports: [AuthService, SessionGuard],

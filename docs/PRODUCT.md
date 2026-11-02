@@ -95,3 +95,7 @@ All tables: `id` (ULID), `createdAt`, `updatedAt`, `deletedAt`. The app holds on
 5. **Modules:** Finance, Health (phone companion app), Assistant (on-device first).
 
 Success test after phase 2: used daily for 30 days and 4 weekly reviews completed.
+
+## Accounts and sync
+
+Optional. An account keeps one person's data on all their devices; each account is private to its owner. Rows sync by last write wins, and rows that mean one thing (a day's entry, a journal folder) merge. The server can read synced data: it's encrypted in transit, not end to end. A device holds one account's data at a time, and another account signing in replaces it after a warning. Deployment is in `docs/DEPLOY.md`.

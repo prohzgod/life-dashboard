@@ -23,6 +23,10 @@
   gap: var(--space-4);
 }
 
+.mode {
+  align-self: flex-start;
+}
+
 .field {
   display: flex;
   flex-direction: column;

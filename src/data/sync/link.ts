@@ -4,7 +4,7 @@ import { linkAction } from '@/domain/syncLink';
 import { clearBackgroundPhoto } from '../appearance';
 import { dataTableNames, db, type DataTableName } from '../db';
 import { initData, resetInitForTests } from '../init';
-import { accountApi, realApi, type Account, type SyncApi } from './api';
+import { accountApi, realApi, type UserAccount, type SyncApi } from './api';
 import { markAsPull } from './dirtyHooks';
 import { countUnsynced, syncNow, writePulledRow } from './engine';
 import { getMeta, META } from './meta';
@@ -40,12 +40,14 @@ const allTables = () => [...dataTableNames.map(tableOf), db.syncPending, db.meta
 
 /** Runs first start again: fresh seeds if this device was emptied, and anything an account's data lacks. */
 async function reinitialize() {
+  // Inside the swap's transaction, so screens reading live never catch the device with nothing on it.
+  markAsPull(false);
   resetInitForTests();
   await initData();
 }
 
 /** Swaps what's on this device for an account's rows, in one step, once they have all arrived. */
-async function replaceWith(account: Account, rows: SyncRow[], cursor: number): Promise<void> {
+async function replaceWith(account: UserAccount, rows: SyncRow[], cursor: number): Promise<void> {
   await db.transaction('rw', allTables(), async () => {
     markAsPull();
     for (const name of dataTableNames) await tableOf(name).clear();
@@ -61,12 +63,12 @@ async function replaceWith(account: Account, rows: SyncRow[], cursor: number): P
     // Keep "seeded" if the account has rows, so first start doesn't add samples beside them.
     if (!rows.length) await db.meta.delete('seededAt');
     await db.meta.delete('importedAt');
+    await reinitialize();
   });
-  await reinitialize();
 }
 
 /** Adopts this device's rows into the account: they all go up on the next sync. */
-async function adopt(account: Account): Promise<void> {
+async function adopt(account: UserAccount): Promise<void> {
   await db.transaction('rw', allTables(), async () => {
     for (const name of dataTableNames) await tableOf(name).toCollection().modify({ dirty: 1 });
     await db.meta.bulkPut([
@@ -84,7 +86,7 @@ export type LinkChoice = 'useAccount' | 'combine' | 'replaceOther';
  * Connects this device to an account after signing in. Returns what still needs asking: 'ask' when
  * both have data, 'confirmReplace' when the data here belongs to another account.
  */
-export async function linkDevice(account: Account, choice?: LinkChoice, api: SyncApi = realApi): Promise<'linked' | 'ask' | 'confirmReplace'> {
+export async function linkDevice(account: UserAccount, choice?: LinkChoice, api: SyncApi = realApi): Promise<'linked' | 'ask' | 'confirmReplace'> {
   if (choice === 'combine') {
     await adopt(account);
   } else if (choice === 'useAccount' || choice === 'replaceOther') {
@@ -130,9 +132,9 @@ export async function signOutDevice(options: { removeData: boolean; force?: bool
       for (const name of dataTableNames) await tableOf(name).clear();
       await db.syncPending.clear();
       await db.meta.bulkDelete([...Object.values(META), 'seededAt', 'importedAt']);
+      await clearBackgroundPhoto();
+      await reinitialize();
     });
-    await clearBackgroundPhoto();
-    await reinitialize();
   } else {
     await db.meta.bulkDelete([META.accountId, META.email]);
   }

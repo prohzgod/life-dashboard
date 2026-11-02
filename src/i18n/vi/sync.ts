@@ -1,4 +1,4 @@
-import type { Messages } from '../en';
+import type { Messages } from '../locale';
 
 /** Tài khoản và đồng bộ giữa các thiết bị. */
 export const sync: Messages['sync'] = {

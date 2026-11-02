@@ -19,7 +19,7 @@ export type SyncApi = {
   presign(items: PresignRequest['items']): Promise<PresignResponse>;
 };
 
-export type Account = { id: string; email: string };
+export type UserAccount = { id: string; email: string };
 
 async function request<T>(path: string, init?: { method: string; body: unknown }): Promise<T> {
   const response = await fetch(`/api${path}`, {
@@ -43,8 +43,8 @@ export const realApi: SyncApi = {
 };
 
 export const accountApi = {
-  register: (email: string, password: string, deviceName: string) => request<Account>('/auth/register', { method: 'POST', body: { email, password, deviceName } }),
-  signIn: (email: string, password: string, deviceName: string) => request<Account>('/auth/login', { method: 'POST', body: { email, password, deviceName } }),
+  register: (email: string, password: string, deviceName: string) => request<UserAccount>('/auth/register', { method: 'POST', body: { email, password, deviceName } }),
+  signIn: (email: string, password: string, deviceName: string) => request<UserAccount>('/auth/login', { method: 'POST', body: { email, password, deviceName } }),
   signOut: () => request<object>('/auth/logout', { method: 'POST', body: {} }),
-  me: () => request<Account>('/auth/me'),
+  me: () => request<UserAccount>('/auth/me'),
 };

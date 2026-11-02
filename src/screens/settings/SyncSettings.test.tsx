@@ -102,6 +102,23 @@ describe('Settings › Account and sync', () => {
     expect(await getMeta(META.ownerId)).toBe('me');
   });
 
+  it('confirming stays signed in, even as the dialog closes', async () => {
+    await setMeta(META.ownerId, 'someone else');
+    const calls = serve();
+    const user = userEvent.setup();
+    render(<SyncSettings />);
+    await signIn(user);
+    const dialog = (await screen.findByRole('dialog')) as HTMLDialogElement;
+    await user.click(within(dialog).getByRole('button', { name: 'Replace it' }));
+    await waitFor(async () => expect(await getMeta(META.ownerId)).toBe('me'));
+    // The browser tells the dialog it closed; that isn't the same as you cancelling.
+    act(() => {
+      dialog.dispatchEvent(new Event('close'));
+    });
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    expect(calls.some((c) => c.includes('/auth/logout'))).toBe(false);
+  });
+
   it('cancelling the warning signs out and leaves everything alone', async () => {
     await setMeta(META.ownerId, 'someone else');
     const task = await addOwnTask();
