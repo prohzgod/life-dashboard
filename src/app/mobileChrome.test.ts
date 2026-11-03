@@ -6,13 +6,24 @@ describe('mobileChrome', () => {
     expect(mobileChrome('/today').tab).toBe('today');
     expect(mobileChrome('/inbox').tab).toBe('tasks');
     expect(mobileChrome('/tasks', '?view=upcoming').tab).toBe('tasks');
-    expect(mobileChrome('/library').tab).toBe('library');
+    expect(mobileChrome('/menu')).toEqual({ tab: 'menu', back: null, hideTabBar: false });
   });
 
-  it('pushes other screens from Home with a back link', () => {
-    expect(mobileChrome('/goals')).toEqual({ tab: 'home', back: { label: 'Home', to: '/' }, hideTabBar: false });
+  it('files the screens without a tab of their own under Menu', () => {
+    for (const path of ['/library', '/library/trash', '/calendar', '/reviews', '/vision', '/finance', '/health', '/assistant']) {
+      expect(mobileChrome(path).tab).toBe('menu');
+    }
+  });
+
+  it('keeps Profile and Settings under Home, where the avatar opens them', () => {
+    expect(mobileChrome('/profile').tab).toBe('home');
+    expect(mobileChrome('/settings/privacy').tab).toBe('home');
+  });
+
+  it('pushes other screens from Menu with a back link', () => {
+    expect(mobileChrome('/goals')).toEqual({ tab: 'menu', back: { label: 'Menu', to: '/menu' }, hideTabBar: false });
     expect(mobileChrome('/goals/abc').back).toEqual({ label: 'Goals', to: '/goals' });
-    expect(mobileChrome('/progress').back?.label).toBe('Home');
+    expect(mobileChrome('/progress').back?.label).toBe('Menu');
     expect(mobileChrome('/settings/privacy').back).toBeNull(); // draws its own "‹ Profile" header
   });
 

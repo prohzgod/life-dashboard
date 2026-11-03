@@ -20,7 +20,7 @@ type Open = { kind: 'card'; card?: VisionCardView } | { kind: 'pin' } | { kind: 
 
 /** /vision: the year's board of words and pictures, by area, with goals pinned to them. */
 export function VisionPage() {
-  const t = useT().vision;
+  const { vision: t, shell } = useT();
   const today = useToday();
   const phone = useIsMobile();
   const [params, setParams] = useSearchParams();
@@ -122,9 +122,9 @@ export function VisionPage() {
     return (
       <div className={styles.phone}>
         <header className={styles.phoneHeader}>
-          <Link to="/" className={styles.phoneBack} aria-label={t.backHome}>
+          <Link to="/menu" className={styles.phoneBack} aria-label={shell.backTo(shell.menu)}>
             <Icon name="chevronLeft" size={18} />
-            {t.home}
+            {shell.menu}
           </Link>
           <h1 className={styles.phoneTitle}>{t.title}</h1>
           <button type="button" className={styles.roundButton} aria-label={t.addToBoard} onClick={() => setSheet(true)}>

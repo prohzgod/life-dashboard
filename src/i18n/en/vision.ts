@@ -4,8 +4,6 @@ export const vision = {
   added: (n: number) => (n === 1 ? 'Added a picture to your board.' : `Added ${n} pictures to your board.`),
   addFailed: 'That picture couldn’t be added.',
   choose: 'Choose pictures for the board',
-  backHome: 'Back to Home',
-  home: 'Home',
   title: 'Vision board',
   addToBoard: 'Add to board',
   addPictures: 'Add pictures',

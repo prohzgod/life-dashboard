@@ -57,7 +57,7 @@ Row 1:   [Kế hoạch hôm nay 5 1 420px] [column: Lịch trình + Trọng tâm
 Row 2:   [Thói quen 7 1 480px] [Tiến độ tuần 3 1 280px] [Bảng tầm nhìn 3 1 280px]
 ```
 
-Navigation items (labels unchanged): Hôm nay · Hộp thư (badge) · Công việc · Lịch · Mục tiêu · Tiến độ · Thư viện · **Thêm ▾** (Nhìn lại, Bảng tầm nhìn, Tài chính, Sức khỏe, Trợ lý). Actions: search (⌘K), sun/moon toggle, notifications, avatar → Profile (Settings lives there). Phone tab bar: Trang chủ · **Hôm nay** · + (Ghi nhanh) · Công việc · Thư viện.
+Navigation items (labels unchanged): Hôm nay · Hộp thư (badge) · Công việc · Lịch · Mục tiêu · Tiến độ · Thư viện · **≡** (Nhìn lại, Bảng tầm nhìn, Tài chính, Sức khỏe, Trợ lý; pinned outside the scrolling row, and on one of those screens it shows that screen's name with ▾ and the strong fill). Actions: search (⌘K), sun/moon toggle, notifications, avatar → Profile (Settings lives there). Phone tab bar: Trang chủ · **Hôm nay** · + (Ghi nhanh) · Việc · **Menu** (`/menu`: a grid of links to every screen without a tab, Thư viện included).
 
 ## Components to build (shared primitives)
 

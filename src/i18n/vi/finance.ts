@@ -6,8 +6,6 @@ export const finance: Messages['finance'] = {
   unnamed: 'Giao dịch không tên',
   hideAmounts: 'Ẩn số tiền',
   showAmounts: 'Hiện số tiền',
-  backHome: 'Quay lại Trang chủ',
-  home: 'Trang chủ',
   title: 'Tài chính',
   spentThisMonth: 'Chi tiêu tháng này',
   spentIn: (month) => `Chi tiêu ${month.toLowerCase()}`,

@@ -17,7 +17,7 @@ import styles from './TopNav.module.css';
 import { SyncNotice } from '@/screens/settings/SyncSettings';
 import { useOnlineStatus } from './useOnlineStatus';
 
-/** The pill row of screens; the rest sit under More. */
+/** The pill row of screens; the rest sit under the menu button. */
 const MAIN: Screen[] = [screens.today, screens.inbox, screens.tasks, screens.calendar, screens.goals, screens.progress, screens.library];
 const MORE: Screen[] = [screens.review, screens.vision, screens.finance, screens.health, screens.assistant];
 
@@ -34,7 +34,7 @@ export function TopNav({ onSearch }: { onSearch: () => void }) {
   const counts = useLiveQuery(async () => countViews(withCompletedOn(await tasksRepo.list()), today), [today]);
   const [, setMode] = useThemePreference();
   const theme = useResolvedTheme();
-  const moreOn = MORE.some((s) => isOn(s, pathname));
+  const moreOn = MORE.find((s) => isOn(s, pathname));
   const online = useOnlineStatus();
 
   return (
@@ -49,38 +49,44 @@ export function TopNav({ onSearch }: { onSearch: () => void }) {
       </Link>
 
       <nav aria-label={t.shell.mainNav} className={styles.navWrap}>
-        <ul className={styles.nav}>
-          <SlidingPill as="li" selector={`.${styles.active}`} className={styles.pill} />
-          {MAIN.map((screen) => {
-            const on = isOn(screen, pathname);
-            const count = screen.key === 'inbox' ? counts?.inbox : undefined;
-            return (
-              <li key={screen.key}>
-                <Link to={screen.path} className={cx(styles.item, on && styles.active)} aria-current={on ? 'page' : undefined}>
-                  {screen.key === 'library' ? t.shell.tabLibrary : screen.navLabel}
-                  {!!count && (
-                    <span className={styles.badge} aria-label={t.shell.openCount(count)}>
-                      {count}
-                    </span>
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-          <li>
-            <Menu
-              label={t.shell.moreScreens}
-              triggerClassName={cx(styles.item, styles.more, moreOn && styles.active)}
-              trigger={
+        <div className={styles.nav}>
+          <ul className={styles.scroller}>
+            <SlidingPill as="li" selector={`.${styles.active}`} className={styles.pill} />
+            {MAIN.map((screen) => {
+              const on = isOn(screen, pathname);
+              const count = screen.key === 'inbox' ? counts?.inbox : undefined;
+              return (
+                <li key={screen.key}>
+                  <Link to={screen.path} className={cx(styles.item, on && styles.active)} aria-current={on ? 'page' : undefined}>
+                    {screen.key === 'library' ? t.shell.tabLibrary : screen.navLabel}
+                    {!!count && (
+                      <span className={styles.badge} aria-label={t.shell.openCount(count)}>
+                        {count}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          {/* Outside the scroller, so it stays in reach when the row doesn't fit. */}
+          <Menu
+            label={moreOn ? t.shell.currentMoreScreen(moreOn.navLabel) : t.shell.moreScreens}
+            className={styles.moreSlot}
+            triggerClassName={cx(styles.item, moreOn ? styles.moreOn : styles.moreIdle)}
+            trigger={
+              moreOn ? (
                 <>
-                  {t.shell.more}
+                  {moreOn.navLabel}
                   <Icon name="chevronDown" size={16} />
                 </>
-              }
-              items={MORE.map((screen) => ({ label: screen.navLabel, onSelect: () => navigate(screen.path) }))}
-            />
-          </li>
-        </ul>
+              ) : (
+                <Icon name="menu" size={20} className={styles.moreIcon} />
+              )
+            }
+            items={MORE.map((screen) => ({ label: screen.navLabel, icon: screen.icon, current: screen === moreOn, onSelect: () => navigate(screen.path) }))}
+          />
+        </div>
       </nav>
 
       <div className={styles.actions}>

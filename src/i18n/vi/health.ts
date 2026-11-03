@@ -10,8 +10,6 @@ export const health: Messages['health'] = {
   rides: (n) => `${n} lần đạp xe`,
   logged: (n) => `đã ghi ${n}`,
   noneYet: 'Chưa có',
-  backHome: 'Quay lại Trang chủ',
-  home: 'Trang chủ',
   title: 'Sức khỏe',
   logReading: 'Ghi một chỉ số',
   manual: 'Nhập tay',

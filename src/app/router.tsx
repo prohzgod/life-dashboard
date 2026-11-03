@@ -14,6 +14,7 @@ import { TasksPage } from '@/screens/tasks/TasksPage';
 import { TodayPage } from '@/screens/today/TodayPage';
 import { HomeRoute } from '@/screens/home/HomeRoute';
 import { EditHomePage } from '@/screens/home/EditHomePage';
+import { MenuPage } from '@/screens/menu/MenuPage';
 import { ProfilePage } from '@/screens/profile/ProfilePage';
 import { EditProfilePage } from '@/screens/profile/EditProfilePage';
 import { TaskRedirect } from '@/screens/tasks/TaskRedirect';
@@ -28,6 +29,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <HomeRoute /> },
       { path: 'today', element: <TodayPage /> },
+      { path: 'menu', element: <MenuPage /> },
       { path: 'home/edit', element: <EditHomePage /> },
       { path: 'profile', element: <ProfilePage /> },
       { path: 'profile/edit', element: <EditProfilePage /> },

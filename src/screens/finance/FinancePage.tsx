@@ -19,7 +19,7 @@ type Open = { kind: 'tx'; transaction?: Transaction } | { kind: 'import' } | { k
 
 /** /finance: the month's spending against budget, income, savings, net worth (hidden), goals and transactions. */
 export function FinancePage() {
-  const t = useT().finance;
+  const { finance: t, shell } = useT();
   const SOURCE = t.sources;
   const today = useToday();
   const phone = useIsMobile();
@@ -87,9 +87,9 @@ export function FinancePage() {
     return (
       <div className={styles.phone}>
         <header className={styles.phoneHeader}>
-          <Link to="/" className={styles.phoneBack} aria-label={t.backHome}>
+          <Link to="/menu" className={styles.phoneBack} aria-label={shell.backTo(shell.menu)}>
             <Icon name="chevronLeft" size={18} />
-            {t.home}
+            {shell.menu}
           </Link>
           <h1 className={styles.phoneTitle}>{t.title}</h1>
           {eye}

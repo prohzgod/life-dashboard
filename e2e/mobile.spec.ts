@@ -10,8 +10,8 @@ test('phones get the tab bar and open on the bento Home', async ({ page }) => {
   await expect(home.getByRole('link', { name: /Weekly review/ })).toBeVisible();
   await home.getByRole('link', { name: /Goals/ }).click();
   await expect(page).toHaveURL(/\/goals$/);
-  await page.getByRole('link', { name: 'Back to Home' }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await page.getByRole('link', { name: 'Back to Menu' }).click();
+  await expect(page).toHaveURL(/\/menu$/);
 });
 
 test('Edit Home: drag to reorder, hide, and add back', async ({ page }) => {
@@ -39,6 +39,20 @@ test('Edit Home: drag to reorder, hide, and add back', async ({ page }) => {
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Done' }).click();
   await expect(page.getByRole('list', { name: 'Home widgets' }).getByRole('link').first()).toContainText('Vision');
+});
+
+test('the Menu tab opens every screen without a tab, and they come back to it', async ({ page }) => {
+  await page.goto('/');
+  await tabs(page).getByRole('link', { name: 'Menu' }).click();
+  await expect(page).toHaveURL(/\/menu$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Menu' })).toBeVisible();
+  await page.getByRole('list', { name: 'All screens' }).getByRole('link', { name: 'Finance' }).click();
+  await expect(page).toHaveURL(/\/finance$/);
+  await expect(tabs(page).getByRole('link', { name: 'Menu' })).toHaveAttribute('aria-current', 'page');
+  await page.getByRole('link', { name: 'Back to Menu' }).click();
+  await page.getByRole('list', { name: 'All screens' }).getByRole('link', { name: 'Library' }).click();
+  await expect(page).toHaveURL(/\/library$/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
 test('pin a Library page to Home from its options sheet', async ({ page }) => {
@@ -172,15 +186,15 @@ test('Calendar on a phone: the day view, the week strip and a new event', async 
 test('Vision board on a phone: two columns, the + sheet and words', async ({ page }) => {
   await page.goto('/vision');
   await expect(page.getByRole('heading', { level: 1, name: 'Vision board' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Back to Home' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to Menu' })).toBeVisible();
   await page.getByRole('button', { name: 'Add to board' }).click();
   await page.getByRole('dialog', { name: 'Add to board' }).getByRole('button', { name: 'Add words' }).click();
   const words = page.getByRole('dialog', { name: 'Add words' });
   await words.getByLabel('Words').fill('Sunday dinners, phones away.');
   await words.getByRole('button', { name: 'Add to board' }).click();
   await expect(page.getByRole('article', { name: 'Sunday dinners, phones away.' })).toBeVisible();
-  await page.getByRole('link', { name: 'Back to Home' }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await page.getByRole('link', { name: 'Back to Menu' }).click();
+  await expect(page).toHaveURL(/\/menu$/);
 });
 
 test('Privacy on a phone: the grouped list, and Lock app now from Profile', async ({ page }) => {
@@ -208,7 +222,7 @@ test('Privacy on a phone: the grouped list, and Lock app now from Profile', asyn
 test('Finance on a phone: the month, hide amounts, and an expense', async ({ page }) => {
   await page.goto('/finance');
   await expect(page.getByRole('heading', { level: 1, name: 'Finance' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Back to Home' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to Menu' })).toBeVisible();
   await page.getByRole('button', { name: 'Add expense' }).click();
   const dialog = page.getByRole('dialog', { name: 'Add expense' });
   await dialog.getByLabel(/^Amount/).fill('12.50');
@@ -243,7 +257,7 @@ test('Health on a phone: the sleep card, tiles and quick log', async ({ page }) 
 test('Reviews on a phone: the hub with a back link, and a monthly review full-screen', async ({ page }) => {
   await page.goto('/reviews');
   await expect(page.getByRole('heading', { level: 1, name: 'Reviews' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Back to Home' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to Menu' })).toBeVisible();
   await page.getByRole('list', { name: 'Your reviews' }).getByRole('link', { name: /^Start monthly review/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Look back' })).toBeVisible();
   await expect(tabs(page)).toHaveCount(0);

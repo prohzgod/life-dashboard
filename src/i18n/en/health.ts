@@ -10,8 +10,6 @@ export const health = {
   rides: (n: number) => `${n} rides`,
   logged: (n: number) => `${n} logged`,
   noneYet: 'None yet',
-  backHome: 'Back to Home',
-  home: 'Home',
   title: 'Health',
   logReading: 'Log a reading',
   manual: 'Manual entries',

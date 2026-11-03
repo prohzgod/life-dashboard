@@ -67,6 +67,27 @@ describe('app shell', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Vision board' })).toBeInTheDocument();
   });
 
+  it('names the screen you are on in place of the menu icon, and marks it in the menu', async () => {
+    renderAt('/finance');
+    const nav = screen.getByRole('navigation', { name: 'Main navigation' });
+    const button = within(nav).getByRole('button', { name: 'Finance, more screens' });
+    expect(button).toHaveTextContent('Finance');
+    await userEvent.click(button);
+    expect(screen.getByRole('menuitem', { name: 'Finance' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('menuitem', { name: 'Health' })).not.toHaveAttribute('aria-current');
+  });
+
+  it('shows the menu button as an icon with a name on the other screens', () => {
+    renderAt('/goals');
+    const nav = screen.getByRole('navigation', { name: 'Main navigation' });
+    expect(within(nav).getByRole('button', { name: 'More screens' })).toHaveTextContent('');
+  });
+
+  it('sends the phone-only Menu screen home on larger windows', () => {
+    const router = renderAt('/menu');
+    expect(router.state.location.pathname).toBe('/');
+  });
+
   it('shows a kind not-found page', () => {
     renderAt('/nowhere');
     expect(screen.getByRole('heading', { level: 1, name: 'Page not found' })).toBeInTheDocument();

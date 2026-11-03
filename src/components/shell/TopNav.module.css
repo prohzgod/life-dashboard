@@ -52,32 +52,47 @@
 }
 
 .nav {
-  position: relative;
   display: flex;
-  gap: 2px;
+  min-width: 0;
   max-width: 100%;
-  margin: 0;
-  padding: var(--space-1h);
-  overflow-x: auto;
-  list-style: none;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   background: var(--glass);
   -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
   backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+}
+
+.scroller {
+  position: relative;
+  display: flex;
+  flex: 0 1 auto;
+  gap: 2px;
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-1h);
+  overflow-x: auto;
+  list-style: none;
   scrollbar-width: none;
 }
 
-.nav::-webkit-scrollbar {
+.scroller::-webkit-scrollbar {
   display: none;
 }
 
-.nav > li {
+/* Where the row can't fit, it fades out beside the menu button instead of being cut through a word. */
+@media (max-width: 1199px) {
+  .scroller {
+    -webkit-mask-image: linear-gradient(to left, transparent, var(--ink) var(--space-5));
+    mask-image: linear-gradient(to left, transparent, var(--ink) var(--space-5));
+  }
+}
+
+.scroller > li {
   flex: none;
 }
 
 /* The strong fill behind the screen you're on; it slides to the next one you open. */
-.nav > .pill {
+.scroller > .pill {
   position: absolute;
   top: 0;
   left: 0;
@@ -117,8 +132,33 @@
   color: var(--on-inverse);
 }
 
-.more {
+.moreSlot {
+  flex: none;
+  padding: var(--space-1h) var(--space-1h) var(--space-1h) 0;
+}
+
+.moreIdle {
+  justify-content: center;
+  width: var(--nav-item-h);
+  padding: 0;
+}
+
+.moreIdle:hover,
+.moreIdle[aria-expanded='true'] {
+  background: var(--glass-2);
+}
+
+/* Menu turns a chevron over while it's open; three lines have nothing to turn. */
+.moreIdle[aria-expanded] > .moreIcon {
+  rotate: none;
+}
+
+/* You're on one of the screens in the menu: the button names it and takes the strong fill. */
+.moreOn,
+.moreOn:hover {
   padding: 0 var(--space-3h) 0 var(--space-4);
+  background: var(--inverse);
+  color: var(--on-inverse);
 }
 
 .badge {

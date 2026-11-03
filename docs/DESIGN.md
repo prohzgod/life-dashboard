@@ -51,7 +51,7 @@ The older token names (`--surface`, `--primary`, `--sunken`, `--career-soft` …
 ## Layout
 
 - Desktop: a **floating sidebar**, a 248px rounded panel inset `--float-inset` (12px) from the window, with the **wordmark** (a red square exactly two lines tall beside "Life / Dashboard"), content padding 32px, panels 20px inside. Library, Tasks and Calendar are fixed-height pages whose side panes float the same way (inset 12px, `--radius-xl`) and scroll on their own.
-- Phones (below 768px): 18px gutters, the **floating tab bar**, a pill inset 12px from the sides and the bottom (Home, Today, +, Tasks, Library; `--tabbar-height` reserves its room), the bento Home, pushed screens with "‹ Back to …" headers, 44px touch targets.
+- Phones (below 768px): 18px gutters, the **floating tab bar**, a pill inset 12px from the sides and the bottom (Home, Today, +, Tasks, Menu; `--tabbar-height` reserves its room), the bento Home, pushed screens with "‹ Back to …" headers, 44px touch targets.
 - Heads hang flush left from the column; nothing is centred except empty-state copy inside its own panel.
 
 ## Copy

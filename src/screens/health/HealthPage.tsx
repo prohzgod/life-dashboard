@@ -30,7 +30,7 @@ function changeLine(change: { change: number | null; since: Date | null } | null
 
 /** /health: sleep, steps, heart rate, weight, workouts and your own metrics, all logged on this device. */
 export function HealthPage() {
-  const { format, health: t, seed } = useT();
+  const { format, health: t, seed, shell } = useT();
   const today = useToday();
   const phone = useIsMobile();
   const data = useLiveQuery(() => loadHealth(today), [today]);
@@ -66,9 +66,9 @@ export function HealthPage() {
     return (
       <div className={styles.phone}>
         <header className={styles.phoneHeader}>
-          <Link to="/" className={styles.phoneBack} aria-label={t.backHome}>
+          <Link to="/menu" className={styles.phoneBack} aria-label={shell.backTo(shell.menu)}>
             <Icon name="chevronLeft" size={18} />
-            {t.home}
+            {shell.menu}
           </Link>
           <h1 className={styles.phoneTitle}>{t.title}</h1>
           <button type="button" className={styles.roundButton} aria-label={t.logReading} onClick={() => setOpen({ kind: 'log', what: 'sleep' })}>

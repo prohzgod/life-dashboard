@@ -5,8 +5,6 @@ export const finance = {
   unnamed: 'Unnamed transaction',
   hideAmounts: 'Hide amounts',
   showAmounts: 'Show amounts',
-  backHome: 'Back to Home',
-  home: 'Home',
   title: 'Finance',
   spentThisMonth: 'Spent this month',
   spentIn: (month: string) => `Spent in ${month}`,

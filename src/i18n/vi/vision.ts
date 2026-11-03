@@ -5,8 +5,6 @@ export const vision: Messages['vision'] = {
   added: (n) => (n === 1 ? 'Đã thêm một ảnh vào bảng.' : `Đã thêm ${n} ảnh vào bảng.`),
   addFailed: 'Không thêm được ảnh đó.',
   choose: 'Chọn ảnh cho bảng',
-  backHome: 'Quay lại Trang chủ',
-  home: 'Trang chủ',
   title: 'Bảng tầm nhìn',
   addToBoard: 'Thêm vào bảng',
   addPictures: 'Thêm ảnh',

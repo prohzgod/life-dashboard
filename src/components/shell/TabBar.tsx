@@ -10,10 +10,10 @@ const TABS: Array<{ tab: Tab; label: (t: Messages['shell']) => string; to: strin
   { tab: 'home', label: (t) => t.home, to: '/', icon: 'home' },
   { tab: 'today', label: (t) => t.tabToday, to: '/today', icon: 'today' },
   { tab: 'tasks', label: (t) => t.tabTasks, to: '/inbox', icon: 'tasks' },
-  { tab: 'library', label: (t) => t.tabLibrary, to: '/library', icon: 'library' },
+  { tab: 'menu', label: (t) => t.menu, to: '/menu', icon: 'menu' },
 ];
 
-/** Phones: Home, Today, +, Tasks, Library, with capture in the middle. */
+/** Phones: Home, Today, +, Tasks, Menu, with capture in the middle. */
 export function TabBar({ active, onCapture }: { active: Tab; onCapture: () => void }) {
   const { shell } = useT();
   const link = (t: (typeof TABS)[number]) => (

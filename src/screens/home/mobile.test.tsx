@@ -20,6 +20,20 @@ function renderAt(path: string) {
 }
 
 describe('phone shell', () => {
+  it('lists every screen without a tab on the Menu screen', async () => {
+    const router = renderAt('/menu');
+    const tabs = await screen.findByRole('navigation', { name: 'Tabs' });
+    expect(within(tabs).getByRole('link', { name: 'Menu' })).toHaveAttribute('aria-current', 'page');
+    expect(within(tabs).queryByRole('link', { name: 'Library' })).not.toBeInTheDocument();
+    const list = screen.getByRole('list', { name: 'All screens' });
+    const hrefs = within(list)
+      .getAllByRole('link')
+      .map((link) => link.getAttribute('href'));
+    expect(hrefs).toEqual(['/calendar', '/goals', '/progress', '/reviews', '/library', '/vision', '/finance', '/health', '/assistant', '/profile']);
+    await userEvent.click(within(list).getByRole('link', { name: 'Library' }));
+    expect(router.state.location.pathname).toBe('/library');
+  });
+
   it('shows the tab bar instead of the sidebar, and opens on Home', async () => {
     const router = renderAt('/');
     const tabs = await screen.findByRole('navigation', { name: 'Tabs' });
@@ -33,7 +47,7 @@ describe('phone shell', () => {
 
   it('pushes other screens with a ‹ Home back link', async () => {
     renderAt('/goals');
-    expect(await screen.findByRole('link', { name: 'Back to Home' })).toHaveAttribute('href', '/');
+    expect(await screen.findByRole('link', { name: 'Back to Menu' })).toHaveAttribute('href', '/menu');
   });
 
   it('captures a task, a note and a journal line from the + sheet', async () => {

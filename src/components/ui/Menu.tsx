@@ -1,10 +1,11 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { usePresence } from '@/lib/motion';
+import { Icon, type IconName } from '../icons/Icon';
 import styles from './Menu.module.css';
 import { cx } from './cx';
 
-export type MenuItem = { label: string; onSelect: () => void; danger?: boolean; disabled?: boolean };
+export type MenuItem = { label: string; onSelect: () => void; danger?: boolean; disabled?: boolean; icon?: IconName; current?: boolean };
 
 type MenuProps = {
   /** Accessible name of the button that opens the menu. */
@@ -12,7 +13,7 @@ type MenuProps = {
   trigger: ReactNode;
   items: MenuItem[];
   className?: string;
-  /** Replaces the round icon trigger's look, e.g. the "More" item in the top nav. */
+  /** Replaces the round icon trigger's look, e.g. the menu button in the top nav. */
   triggerClassName?: string;
 };
 
@@ -106,12 +107,14 @@ export function Menu({ label, trigger, items, className, triggerClassName }: Men
                 type="button"
                 role="menuitem"
                 disabled={item.disabled}
-                className={cx(styles.item, item.danger && styles.danger)}
+                aria-current={item.current ? 'page' : undefined}
+                className={cx(styles.item, item.danger && styles.danger, item.current && styles.current)}
                 onClick={() => {
                   setOpen(false);
                   item.onSelect();
                 }}
               >
+                {item.icon && <Icon name={item.icon} size={18} />}
                 {item.label}
               </button>
             ))}

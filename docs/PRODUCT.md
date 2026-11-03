@@ -31,12 +31,12 @@ Desktop: a 248px midnight sidebar.
 - Footer: sync status ("Saved on this device · Synced with 2 devices"), Settings.
 - Everywhere: Quick capture ⌘N, command palette / search ⌘K.
 
-Mobile (below 768px): tab bar **Home · Today · ＋ capture · Tasks · Library**. The app opens on Home.
+Mobile (below 768px): tab bar **Home · Today · ＋ capture · Tasks · Menu**. The app opens on Home.
 - **Home** is a customizable bento grid of live widgets: Today (always on), Goals, Calendar, Weekly review, Progress, Sleep, Finance, Vision, Ask AI, Steps, plus any **pinned** Library page, goal or habit. Widgets come in S / M / L sizes, can be reordered, resized and hidden in **Edit Home**; hidden widgets keep their data and are re-added from the "Add to Home" sheet (Widgets · From Library · Goals & habits). Turning a module off removes its widgets.
 - **Pin to Home**: the "…" menu on a Library page (and on goals/habits) has a Pin to Home switch.
 - **Profile**: the avatar in the top-right of every tab root opens Profile, which holds Settings (Privacy & data, Appearance, Home & modules, Notifications, Backup & export) and "Lock app now".
 - Profile fields: photo or initial, display name, quote/motto, gender, birthday (age derived), pronouns, what you do, home city, email, phone, plus custom fields. Every field has its own Shown / Blurred setting; blurred values render with a blur until tapped, "Blur all" blurs every field, and blurred fields are never read by the Assistant.
-- Screens not in the tab bar are pushed from Home tiles with a "‹ Home" back button. Weekly review and the Library editor are full-screen (no tab bar).
+- Screens not in the tab bar are listed on the Menu screen (`/menu`), and Home tiles can open them too; they have a "‹ Menu" back button. Weekly review and the Library editor are full-screen (no tab bar).
 
 ## Screens
 
