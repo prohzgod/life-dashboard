@@ -41,6 +41,15 @@ export async function saveProfile(fields: Partial<ProfileFields>): Promise<Profi
   return profileRepo.update(profile.id, fields);
 }
 
+/** Pins a Menu tile to the top, or takes it back down. */
+export async function togglePinnedScreen(path: string): Promise<void> {
+  await db.transaction('rw', db.profile, async () => {
+    const profile = await getProfile();
+    const pinned = profile.pinnedScreens ?? [];
+    await profileRepo.update(profile.id, { pinnedScreens: pinned.includes(path) ? pinned.filter((p) => p !== path) : [...pinned, path] });
+  });
+}
+
 /** Blurs every field, or shows them all again. */
 export async function setAllVisibility(blurred: boolean): Promise<void> {
   const profile = await getProfile();

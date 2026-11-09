@@ -25,13 +25,28 @@ describe('phone shell', () => {
     const tabs = await screen.findByRole('navigation', { name: 'Tabs' });
     expect(within(tabs).getByRole('link', { name: 'Menu' })).toHaveAttribute('aria-current', 'page');
     expect(within(tabs).queryByRole('link', { name: 'Library' })).not.toBeInTheDocument();
-    const list = screen.getByRole('list', { name: 'All screens' });
+    const list = await screen.findByRole('list', { name: 'All screens' });
     const hrefs = within(list)
       .getAllByRole('link')
       .map((link) => link.getAttribute('href'));
     expect(hrefs).toEqual(['/calendar', '/goals', '/progress', '/reviews', '/library', '/vision', '/finance', '/health', '/assistant', '/profile']);
     await userEvent.click(within(list).getByRole('link', { name: 'Library' }));
     expect(router.state.location.pathname).toBe('/library');
+  });
+
+  it('moves a pinned tile to the top of Menu, and back when unpinned', async () => {
+    const router = renderAt('/menu');
+    await userEvent.click(await screen.findByRole('button', { name: 'Pin Finance' }));
+
+    const pinned = await screen.findByRole('list', { name: 'Pinned' });
+    expect(within(pinned).getByRole('link', { name: 'Finance' })).toHaveAttribute('href', '/finance');
+    expect(within(screen.getByRole('list', { name: 'Other screens' })).queryByRole('link', { name: 'Finance' })).not.toBeInTheDocument();
+    expect(router.state.location.pathname).toBe('/menu');
+
+    await userEvent.click(within(pinned).getByRole('button', { name: 'Unpin Finance' }));
+    const all = await screen.findByRole('list', { name: 'All screens' });
+    expect(within(all).getByRole('link', { name: 'Finance' })).toBeInTheDocument();
+    expect(screen.queryByRole('list', { name: 'Pinned' })).not.toBeInTheDocument();
   });
 
   it('shows the tab bar instead of the sidebar, and opens on Home', async () => {

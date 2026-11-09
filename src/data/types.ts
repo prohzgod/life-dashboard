@@ -261,6 +261,8 @@ export interface Profile extends BaseRecord {
   customFields: Array<{ id: string; label: string; value: string }>;
   /** Keyed by a ProfileField or a custom field id. */
   visibility: Record<string, 'shown' | 'blurred'>;
+  /** Menu tiles pinned to the top on phones, by path, oldest pin first. Missing on older rows. */
+  pinnedScreens?: string[];
 }
 
 export interface Review extends BaseRecord {

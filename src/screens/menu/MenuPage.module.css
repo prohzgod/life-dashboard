@@ -14,7 +14,59 @@
 }
 
 .grid > li {
+  position: relative;
   display: flex;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2h);
+}
+
+.sectionTitle {
+  color: var(--ink);
+  font-size: var(--text-label-size);
+  font-weight: 600;
+  line-height: var(--text-label-line);
+}
+
+/* A sibling of the tile's link, so pinning never opens the screen. */
+.pin {
+  position: absolute;
+  top: var(--space-1h);
+  right: var(--space-1h);
+  display: grid;
+  place-items: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-2);
+  transition: var(--tap);
+}
+
+.pin svg {
+  position: relative;
+}
+
+.pin:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.pinOn {
+  color: var(--on-accent);
+}
+
+.pinOn::before {
+  content: '';
+  position: absolute;
+  inset: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
 }
 
 .tile {
