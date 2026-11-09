@@ -14,6 +14,31 @@ test('phones get the tab bar and open on the bento Home', async ({ page }) => {
   await expect(page).toHaveURL(/\/menu$/);
 });
 
+test('long forms stay on a small phone, with every field usable', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto('/goals');
+  await page.getByRole('button', { name: 'New goal' }).click();
+  const goal = page.getByRole('dialog', { name: 'New goal' });
+  const box = (await goal.boundingBox())!;
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y + box.height).toBeLessThanOrEqual(640);
+  await page.keyboard.press('Escape');
+
+  await page.goto('/finance');
+  await page.getByRole('button', { name: 'Add expense' }).click();
+  const expense = page.getByRole('dialog', { name: 'Add expense' });
+  const date = (await expense.getByLabel('Date').boundingBox())!;
+  const dialog = (await expense.boundingBox())!;
+  expect(date.x + date.width).toBeLessThanOrEqual(dialog.x + dialog.width);
+  // offsetHeight, because the dialog is still scaling in.
+  expect(await expense.getByRole('radio', { name: 'Expense' }).evaluate((el: HTMLElement) => el.offsetHeight)).toBeGreaterThanOrEqual(44);
+  await page.keyboard.press('Escape');
+
+  await page.getByRole('button', { name: 'Add account' }).click();
+  const account = page.getByRole('dialog').getByLabel('Account');
+  expect((await account.boundingBox())!.width).toBeGreaterThan(200);
+});
+
 test('Edit Home: drag to reorder, hide, and add back', async ({ page }) => {
   await page.goto('/home/edit');
   const grid = page.getByRole('list', { name: 'Widgets on Home' });
@@ -283,6 +308,8 @@ test('press and hold a page in the Library tree, then drag it into a folder', as
   await title.press('Enter');
   await page.getByRole('link', { name: 'Back to Library' }).click();
   await expect(page.getByText('Trip notes', { exact: true })).toBeVisible();
+  // The screen is still crossfading in, and the touches below go by position.
+  await page.waitForTimeout(500);
 
   // Real touch events: the tree's drag starts only after a press and hold.
   const cdp = await context.newCDPSession(page);
@@ -293,7 +320,12 @@ test('press and hold a page in the Library tree, then drag it into a folder', as
   const [sx, sy, dy] = [from.x + 20, from.y + from.height / 2, to.y + to.height / 2];
   await touch('touchStart', sx, sy);
   await page.waitForTimeout(500);
-  for (let i = 1; i <= 12; i++) await touch('touchMove', sx, sy + ((dy - sy) * i) / 12);
+  // A frame apart, like a real finger: the tree applies one hover per frame.
+  for (let i = 1; i <= 12; i++) {
+    await touch('touchMove', sx, sy + ((dy - sy) * i) / 12);
+    await page.waitForTimeout(16);
+  }
+  await page.waitForTimeout(100);
   await touch('touchEnd');
 
   await expect(page.getByRole('button', { name: 'Collapse Projects' })).toBeAttached();
