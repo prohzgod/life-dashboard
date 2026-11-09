@@ -1,68 +1,53 @@
-/* Today, Glass v2: hero, rhythm, then rows of flex-wrap cards (design/v2/README.md, "Today page structure"). */
+/* Today, Glass v2: one slim bar, then the cards (design/v2/README.md, "Today page structure"). */
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-7);
+  gap: var(--space-4);
 }
 
-/* ---- Hero ---- */
-.hero {
+/* ---- The bar: date, greeting, the four rings and the two actions on one line ---- */
+.bar {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-6) var(--space-12);
-  margin-top: var(--space-3);
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--control-h);
+  padding: var(--space-1h) var(--space-1h) var(--space-1h) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  box-shadow: var(--shadow-card);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
+  backdrop-filter: blur(var(--blur)) saturate(var(--saturate));
 }
 
-.greeting {
-  flex: 1 1 560px;
+.barGreeting {
+  flex: 1 1 auto;
   min-width: 0;
 }
 
-.date {
-  margin-bottom: var(--space-3);
-  color: var(--ink-2);
-  font-size: var(--text-body-size);
-  font-weight: 500;
+.barDate,
+.barHello {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.display {
-  font-size: var(--text-display-size);
-  font-weight: var(--text-display-weight);
-  line-height: var(--text-display-line);
-  letter-spacing: var(--text-display-tracking);
+.barDate {
+  color: var(--ink-2);
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+}
+
+.barHello {
+  font-size: var(--text-body-size);
+  font-weight: 600;
+  line-height: var(--text-label-line);
 }
 
 .displayQuiet {
   color: var(--ink-3);
-}
-
-.numbers {
-  display: flex;
-  flex: none;
-  gap: 36px;
-  margin: 0;
-}
-
-.numbers > div {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: var(--space-2);
-}
-
-.numbers dt {
-  color: var(--ink-2);
-  font-size: var(--text-label-size);
-}
-
-.numbers dd {
-  margin: 0;
-  font-size: var(--text-numeral-xl-size);
-  font-weight: var(--text-numeral-xl-weight);
-  line-height: var(--text-numeral-xl-line);
-  letter-spacing: var(--text-numeral-xl-tracking);
-  font-variant-numeric: tabular-nums;
 }
 
 .unit {
@@ -70,53 +55,97 @@
   letter-spacing: 0;
 }
 
-/* ---- Rhythm ---- */
-.rhythmRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--space-4) var(--space-6);
-  margin-top: calc(-1 * var(--space-1));
-}
-
 .rhythm {
   display: flex;
-  flex: 1 1 520px;
-  gap: var(--space-2h);
-  min-width: 0;
+  flex: none;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.r2 { flex: 2 1 0; }
-.r3 { flex: 3 1 0; }
-.r4 { flex: 4 1 0; }
+.rhythmItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1h);
+  min-height: var(--touch-min);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  cursor: default;
+}
 
-.heroActions {
+.rhythmValue {
+  color: var(--ink);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The words behind a ring, on hover or keyboard focus. */
+.rhythmTip {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 50%;
+  padding: var(--space-1h) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--inverse);
+  color: var(--on-inverse);
+  font-size: var(--text-caption-size);
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.rhythmItem:hover .rhythmTip,
+.rhythmItem:focus-visible .rhythmTip {
+  opacity: 1;
+}
+
+.barActions {
   display: flex;
   flex: none;
-  flex-wrap: wrap;
-  gap: var(--space-2h);
+  align-items: center;
+  gap: var(--space-1h);
+}
+
+.planIcon {
+  display: grid;
+  place-items: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--glass-2);
+  color: var(--ink);
+  transition: var(--tap);
 }
 
 .capture {
   transition: var(--tap);
   display: flex;
   align-items: center;
-  gap: var(--space-2h);
-  height: var(--control-h);
-  padding: 0 var(--space-2h) 0 var(--space-5);
+  gap: var(--space-2);
+  height: var(--touch-min);
+  padding: 0 var(--space-1h) 0 var(--space-4);
   border: 0;
   border-radius: var(--radius-pill);
   background: var(--inverse);
   color: var(--on-inverse);
-  font-size: var(--text-body-size);
+  font-size: var(--text-label-size);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .captureKey {
   display: grid;
   place-items: center;
-  height: 36px;
-  padding: 0 var(--space-3);
+  height: 32px;
+  padding: 0 var(--space-2h);
   border-radius: var(--radius-pill);
   background: var(--accent);
   color: var(--on-accent);
@@ -124,17 +153,26 @@
   font-weight: 600;
 }
 
+/* Narrow windows keep the rings and let the words live in the tooltip. */
+@media (max-width: 1099px) {
+  .rhythmValue {
+    display: none;
+  }
+}
+
 /* ---- Card board ----
-   Columns of stacked cards. When the window is tall enough the whole screen fits it like a
-   dashboard: the board takes the height left under the hero and each card scrolls on its own. */
+   Cards are as tall as what's in them, so a long list never scrolls inside its card: only the
+   page scrolls. What you tick comes first; the cards you only read sit in the row below. */
 .board {
   display: grid;
+  --check: var(--touch-min);
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--card-gap);
 }
 
 .board > *,
-.stack > * {
+.stack > *,
+.lower > * {
   min-width: 0;
 }
 
@@ -142,111 +180,42 @@
   display: flex;
   flex-direction: column;
   gap: var(--card-gap);
+}
+
+.lower {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--card-gap);
+}
+
+.lower .weekBars {
+  height: 88px;
+}
+
+.lower .vision {
   min-height: 0;
 }
 
-/* Tablets: two columns, two rows. */
-@media (min-width: 768px) and (min-height: 860px) {
-  .page {
-    height: var(--workspace-h);
-    gap: var(--space-5);
-  }
-
-  .board {
-    flex: 1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-    min-height: 0;
-  }
+/* Beside a long list these stay their own size instead of stretching into empty space. */
+.board > .stack {
+  align-self: start;
 }
 
-/* Laptops and desktops: four columns, one row. */
-@media (min-width: 1100px) and (min-height: 700px) {
-  .page {
-    height: var(--workspace-h);
-    gap: var(--space-5);
-  }
-
-  .board {
-    flex: 1;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 4fr) minmax(290px, 3.4fr);
-    grid-template-rows: minmax(0, 1fr);
-    min-height: 0;
-  }
+.board .checkIn {
+  max-height: 680px;
+  gap: var(--space-4);
+  --energy-bar-base: 12px;
+  --energy-bar-step: 5px;
 }
 
-@media (min-width: 768px) and (min-height: 860px), (min-width: 1100px) and (min-height: 700px) {
-  .hero {
-    flex-wrap: nowrap;
-    align-items: center;
-    margin-top: 0;
-  }
+.board .note {
+  min-height: 112px;
+}
 
-  .greeting {
-    flex: 1 1 auto;
-  }
-
-  .date {
-    margin-bottom: var(--space-1h);
-  }
-
-  .display {
-    font-size: var(--text-display-compact-size);
-  }
-
-  .numbers {
-    gap: var(--space-6);
-  }
-
-  .numbers > div {
-    gap: var(--space-1);
-  }
-
-  .numbers dd {
-    font-size: var(--text-numeral-l-size);
-    line-height: var(--text-numeral-l-line);
-    letter-spacing: var(--text-numeral-l-tracking);
-  }
-
-  .numbers .unit {
-    font-size: var(--text-numeral-s-size);
-  }
-
-  .rhythmRow {
-    margin-top: 0;
-  }
-
-  .stack {
-    height: 100%;
-  }
-
-  /* Each card takes its share of the column and scrolls inside when its content is longer. */
-  .stack > *,
-  .checkInCol {
-    flex: 1 1 0;
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-  }
-
-  /* The card scrolls; its own parts keep their height. */
-  .stack > * > *,
-  .checkInCol > * {
-    flex-shrink: 0;
-  }
-
-  .stack > .grow2 { flex-grow: 2; }
-  .stack > .grow3 { flex-grow: 3; }
-  /* Week keeps its natural height when there is room; Habits never drops below half the column. */
-  .stack > .natural { flex: 0 1 auto; }
-  .stack > .half { min-height: 50%; }
-
-  .board .weekBars {
-    height: 88px;
-  }
-
-  .stack > .vision {
-    min-height: 0;
+/* Laptops and desktops: four columns, the two lists widest. */
+@media (min-width: 1100px) {
+  .board {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 3fr) minmax(290px, 3fr);
   }
 }
 
@@ -882,6 +851,107 @@
   flex: 0 0 188px;
   border-radius: var(--radius-tile-lg);
   scroll-snap-align: start;
+}
+
+/* Laptops: one line per habit, so a long list stays short. */
+.habitRows {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: var(--space-2);
+}
+
+.habitRows .habitTile {
+  display: grid;
+  flex: none;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-1) var(--space-2h);
+  padding: var(--space-1h) var(--space-1h) var(--space-1h) var(--space-3h);
+  border-radius: var(--radius-row);
+}
+
+/* Its text, days and check share the row's columns. */
+.habitRows .habitTop {
+  display: contents;
+}
+
+.habitRows .habitText {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.habitRows .habitName {
+  font-size: var(--text-body-size);
+  line-height: var(--text-label-line);
+  overflow-wrap: anywhere;
+}
+
+.habitRows .habitMeta {
+  margin-top: 0;
+}
+
+.habitRows .habitCount,
+.habitRows .habitDots {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.habitRows .habitCount {
+  gap: var(--space-1h);
+}
+
+.habitRows .numeralM {
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line);
+  letter-spacing: 0;
+}
+
+.habitRows .numeralM small {
+  font-size: var(--text-caption-size);
+}
+
+.habitRows .habitTop > :last-child {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.habitRows .habitRisk {
+  grid-column: 1 / -1;
+}
+
+/* In a narrow card the name gets the whole line, with the days and the count of them under it. */
+@container (max-width: 320px) {
+  .habitRows .habitTile:not(.habitCounted) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--space-1) var(--space-2);
+  }
+
+  .habitRows .habitTile:not(.habitCounted) .habitText {
+    display: contents;
+  }
+
+  .habitRows .habitTile:not(.habitCounted) .habitName {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+
+  .habitRows .habitTile:not(.habitCounted) .habitDots {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+  }
+
+  .habitRows .habitTile:not(.habitCounted) .habitMeta {
+    grid-column: 2;
+    grid-row: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .habitRows .habitTile:not(.habitCounted) .habitTop > :last-child {
+    grid-row: 1 / 3;
+  }
 }
 
 /* ---- This week ---- */

@@ -6,9 +6,10 @@ import { Icon } from '@/components/icons/Icon';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
 import { useShellActions } from '@/components/shell/shellActions';
 import { useOnlineStatus } from '@/components/shell/useOnlineStatus';
-import { AnimatedNumber, ButtonLink, HatchBar, IconButton, ProgressCapsule } from '@/components/ui';
+import { AnimatedNumber, HatchBar, IconButton } from '@/components/ui';
+import { Ring } from '@/components/ui/Ring';
 import { formatDayLong, formatWeekdayDate, numberWord } from '@/lib/format';
-import { messages, useT, type Messages } from '@/i18n';
+import { useT, type Messages } from '@/i18n';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { withCompletedOn } from '@/lib/taskView';
 import { useToday } from '@/lib/useToday';
@@ -57,85 +58,79 @@ function DesktopToday() {
   const today = useToday();
   const counts = useTodayCounts(today);
   const { openCapture } = useShellActions();
-  const r = rhythmOf(today);
-  const yearPct = Math.round((r.yearDay / r.yearDays) * 100);
 
   return (
     <div className={styles.page}>
-      <section className={styles.hero} aria-label={t.yearSoFar}>
-        <div className={styles.greeting}>
-          <p className={styles.date}>{formatDayLong(today)}</p>
-          <h1 className={styles.display}>
+      <header className={styles.bar}>
+        <div className={styles.barGreeting}>
+          <p className={styles.barDate}>{formatWeekdayDate(today)}</p>
+          <h1 className={styles.barHello}>
             {greeting(t, new Date().getHours())}
-            <span className={styles.displayQuiet}> {headline(t, counts?.open)}</span>
+            <span className="visually-hidden"> {headline(t, counts?.open)}</span>
           </h1>
         </div>
-        <dl className={styles.numbers}>
-          <div>
-            <dt>{t.hero.yearGone(year(today))}</dt>
-            <dd>
-              {yearPct}
-              <span className={styles.unit}>%</span>
-            </dd>
-          </div>
-          <div>
-            <dt>{t.hero.day}</dt>
-            <dd>{r.yearDay}</dd>
-          </div>
-          <div>
-            <dt>{t.hero.week}</dt>
-            <dd>{isoWeek(today)}</dd>
-          </div>
-        </dl>
-      </section>
-
-      <section className={styles.rhythmRow} aria-label={t.rhythm.label}>
         <Rhythm today={today} done={counts?.done ?? 0} total={counts?.total ?? 0} />
-        <div className={styles.heroActions}>
-          <ButtonLink to="/tasks?view=anytime" size="lg" icon={<Icon name="calendar" size={19} />}>
-            {t.planMyDay}
-          </ButtonLink>
+        <div className={styles.barActions}>
+          <Link to="/tasks?view=anytime" className={styles.planIcon} aria-label={t.planMyDay} title={t.planMyDay}>
+            <Icon name="calendar" size={19} />
+          </Link>
           <button type="button" className={styles.capture} onClick={openCapture}>
-            <Icon name="plus" size={19} strokeWidth={2} />
+            <Icon name="plus" size={17} strokeWidth={2} />
             {shell.quickCapture}
             <kbd className={styles.captureKey} aria-label={shell.commandN}>
               ⌘N
             </kbd>
           </button>
         </div>
-      </section>
+      </header>
 
       <div className={styles.board}>
-        <div className={styles.stack}>
-          <PlanCard today={today} className={styles.grow3} />
-          <VisionTile today={today} className={styles.grow2} />
-        </div>
+        <PlanCard today={today} />
+        <HabitsCard today={today} />
         <div className={styles.stack}>
           <AgendaCard today={today} />
           <FocusCard today={today} />
-          <OnThisDayCard today={today} />
         </div>
-        <div className={styles.stack}>
-          <HabitsCard today={today} className={styles.half} />
-          <WeekCard today={today} className={styles.natural} />
-        </div>
-        <CheckInCard today={today} className={styles.checkInCol} />
+        <CheckInCard today={today} />
+      </div>
+
+      <div className={styles.lower}>
+        <WeekCard today={today} />
+        <VisionTile today={today} />
+        <OnThisDayCard today={today} />
       </div>
     </div>
   );
 }
 
+/** Today, week, month and year as small rings; the full words show on hover or keyboard focus. */
 function Rhythm({ today, done, total }: { today: Day; done: number; total: number }) {
-  const t = useT().today.rhythm;
-  const { format } = messages();
+  const { today: copy, format } = useT();
+  const t = copy.rhythm;
   const r = rhythmOf(today);
+  const week = isoWeek(today);
+  const month = Number(today.slice(5, 7)) - 1;
+  const yearPercent = (r.yearDay / r.yearDays) * 100;
+  const items = [
+    { key: 'today', value: `${done}/${total}`, title: t.today, detail: t.tasks(done, total), percent: total ? (done / total) * 100 : 0, color: 'var(--accent)' },
+    { key: 'week', value: t.weekShort(week), title: t.week(week), detail: t.weekDay(r.weekDay), percent: (r.weekDay / 7) * 100, color: 'var(--inverse)' },
+    { key: 'month', value: format.monthsShort[month]!, title: format.monthsLong[month]!, detail: `${r.monthDay}/${r.monthDays}`, percent: (r.monthDay / r.monthDays) * 100, color: 'var(--ink-2)' },
+    { key: 'year', value: `${Math.round(yearPercent)}%`, title: String(year(today)), detail: t.daysLeft(r.yearDays - r.yearDay), percent: yearPercent, color: 'var(--ink-3)' },
+  ];
   return (
-    <div className={styles.rhythm}>
-      <ProgressCapsule className={styles.r2} label={t.today} meta={t.tasks(done, total)} percent={total ? (done / total) * 100 : 0} tone="accent" />
-      <ProgressCapsule className={styles.r3} label={t.week(isoWeek(today))} meta={t.weekDay(r.weekDay)} percent={(r.weekDay / 7) * 100} tone="inverse" />
-      <ProgressCapsule className={styles.r3} label={format.monthsLong[Number(today.slice(5, 7)) - 1]!} meta={`${r.monthDay}/${r.monthDays}`} percent={(r.monthDay / r.monthDays) * 100} tone="glass" />
-      <ProgressCapsule className={styles.r4} label={String(year(today))} meta={t.daysLeft(r.yearDays - r.yearDay)} percent={(r.yearDay / r.yearDays) * 100} tone="outline" />
-    </div>
+    <ul className={styles.rhythm} aria-label={t.label}>
+      {items.map((item) => (
+        <li key={item.key} className={styles.rhythmItem} tabIndex={0} aria-label={`${item.title}, ${item.detail}`}>
+          <Ring percent={item.percent} size={28} stroke={4} color={item.color} />
+          <span className={styles.rhythmValue} aria-hidden="true">
+            {item.value}
+          </span>
+          <span className={styles.rhythmTip} aria-hidden="true">
+            {item.title}, {item.detail}
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }
 

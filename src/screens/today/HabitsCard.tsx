@@ -48,12 +48,12 @@ export function HabitsCard({ today, compact = false, className }: { today: Day; 
       }
     >
       {habits && habits.length === 0 && <p className={styles.quietEmpty}>{t.empty}</p>}
-      <ul className={styles.habitTiles}>
+      <ul className={cx(styles.habitTiles, !compact && styles.habitRows)}>
         {habits?.map(({ habit, summary }) => {
           const counted = habit.kind === 'count' || habit.kind === 'duration';
           const label = habitCheckLabel(habit, summary, counted);
           return (
-            <li key={habit.id} className={styles.habitTile}>
+            <li key={habit.id} className={cx(styles.habitTile, counted && styles.habitCounted)}>
               <div className={styles.habitTop}>
                 <div className={styles.habitText}>
                   <h3 className={styles.habitName}>{habit.title}</h3>
@@ -67,7 +67,7 @@ export function HabitsCard({ today, compact = false, className }: { today: Day; 
               </div>
               {counted ? (
                 <div className={styles.habitCount}>
-                  <Ring percent={summary.todayDone ? 100 : (summary.todayValue / habit.target) * 100} size={56} stroke={8} color="var(--accent)" label={t.ofTarget(summary.todayValue, habit.target)} />
+                  <Ring percent={summary.todayDone ? 100 : (summary.todayValue / habit.target) * 100} size={compact ? 56 : 32} stroke={compact ? 8 : 5} color="var(--accent)" label={t.ofTarget(summary.todayValue, habit.target)} />
                   <span className={styles.numeralM}>
                     <AnimatedNumber value={summary.todayValue} />
                     <small> / {habit.target}</small>
@@ -75,6 +75,8 @@ export function HabitsCard({ today, compact = false, className }: { today: Day; 
                 </div>
               ) : (
                 <WeekDots
+                  plain={!compact}
+                  className={styles.habitDots}
                   days={summary.last7.map((d) => ({ key: d.day, letter: format.weekdaysShort[dayToDate(d.day).getDay()]!, state: dotState(d.state, d.day === today) }))}
                   label={t.last7(summary.last7.map((d) => `${formatDayShort(d.day)} ${t.states[d.state]}`).join(', '))}
                 />

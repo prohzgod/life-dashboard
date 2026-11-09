@@ -9,14 +9,13 @@ export const today: Messages['today'] = {
   planMyDay: 'Lên kế hoạch ngày',
   hero: {
     yearGone: (y) => `năm ${y} đã qua`,
-    day: 'ngày thứ',
-    week: 'tuần thứ',
   },
   rhythm: {
     label: 'Ngày, tuần, tháng và năm của bạn',
     today: 'Hôm nay',
     tasks: (done, total) => `${done}/${total} việc`,
     week: (w) => `Tuần ${w}`,
+    weekShort: (w) => `T${w}`,
     weekDay: (d) => `ngày ${d}/7`,
     daysLeft: (n) => `còn ${n} ngày`,
   },

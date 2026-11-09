@@ -8,14 +8,13 @@ export const today = {
   planMyDay: 'Plan my day',
   hero: {
     yearGone: (y: number) => `of ${y} gone`,
-    day: 'day of the year',
-    week: 'week of the year',
   },
   rhythm: {
     label: 'Your day, week, month and year',
     today: 'Today',
     tasks: (done: number, total: number) => `${done}/${total} tasks`,
     week: (w: number) => `Week ${w}`,
+    weekShort: (w: number) => `W${w}`,
     weekDay: (d: number) => `day ${d}/7`,
     daysLeft: (n: number): string => (n === 1 ? '1 day left' : `${n} days left`),
   },

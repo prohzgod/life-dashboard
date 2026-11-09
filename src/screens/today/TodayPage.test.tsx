@@ -17,6 +17,14 @@ function renderToday() {
 beforeEach(freshDatabase);
 
 describe('Today', () => {
+  it('keeps the day, week, month and year in words for screen readers and links to planning', async () => {
+    renderToday();
+    const rhythm = await screen.findByRole('list', { name: 'Your day, week, month and year' });
+    expect(within(rhythm).getAllByRole('listitem')).toHaveLength(4);
+    expect(within(rhythm).getByRole('listitem', { name: /^Week \d+, day \d\/7$/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Plan my day' })).toHaveAttribute('href', '/tasks?view=anytime');
+  });
+
   it('adds a task with a live preview of what it understood', async () => {
     renderToday();
     const input = await screen.findByRole('textbox', { name: 'Add a task' });

@@ -40,7 +40,7 @@ export function EnergyMeter({ label, options, value, onChange, className }: Scal
           const on = value === i + 1;
           return (
             <button key={option} type="button" aria-pressed={on} className={cx(styles.choice, on && styles.on)} onClick={() => onChange(on ? null : i + 1)}>
-              <span className={cx(styles.bar, value !== null && i < value && styles.filled)} style={{ height: 20 + i * 10, transitionDelay: `${i * 30}ms` }} />
+              <span className={cx(styles.bar, value !== null && i < value && styles.filled)} style={{ '--level': i, transitionDelay: `${i * 30}ms` } as React.CSSProperties} />
               {option}
             </button>
           );

@@ -51,11 +51,12 @@ Today page structure (desktop/tablet) — flex‑wrap rows, `gap: var(--card-gap
 
 ```
 Header:  [logo pill flex:0 1 auto] [nav pill flex:1 1 0] [actions flex:none]
-Hero:    [date + greeting flex:1 1 560px] [83% · 303 · 44]
-Rhythm:  [4 capsules flex:1 1 520px, weights 2/3/3/4] [Lên kế hoạch ngày] [Ghi nhanh ⌘N]
-Row 1:   [Kế hoạch hôm nay 5 1 420px] [column: Lịch trình + Trọng tâm tuần 4 1 340px] [Ghi nhận hằng ngày 3 1 300px, panel]
-Row 2:   [Thói quen 7 1 480px] [Tiến độ tuần 3 1 280px] [Bảng tầm nhìn 3 1 280px]
+Bar:     one glass pill, 56px: [date + greeting] [4 rings: today, week, month, year; words on hover or focus] [plan icon] [Ghi nhanh ⌘N]
+Row 1:   [Kế hoạch hôm nay 4fr] [Thói quen 4fr, one line per habit] [column: Lịch trình + Trọng tâm tuần 3fr] [Ghi nhận hằng ngày 3fr, panel]
+Row 2:   [Tiến độ tuần] [Bảng tầm nhìn] [Ngày này năm xưa, when there is one]
 ```
+
+Cards are as tall as their content, and only the page scrolls: a long list never scrolls inside its card. This replaces the hero and capsule rows in the older Today screenshots and mockups.
 
 Navigation items (labels unchanged): Hôm nay · Hộp thư (badge) · Công việc · Lịch · Mục tiêu · Tiến độ · Thư viện · **≡** (Nhìn lại, Bảng tầm nhìn, Tài chính, Sức khỏe, Trợ lý; pinned outside the scrolling row, and on one of those screens it shows that screen's name with ▾ and the strong fill). Actions: search (⌘K), sun/moon toggle, notifications, avatar → Profile (Settings lives there). Phone tab bar: Trang chủ · **Hôm nay** · + (Ghi nhanh) · Việc · **Menu** (`/menu`: a grid of links to every screen without a tab, Thư viện included).
 

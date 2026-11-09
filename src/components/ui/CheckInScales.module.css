@@ -19,9 +19,14 @@
   gap: var(--space-1);
 }
 
+/* Stretched so every choice stays a full touch target however short its bar is. */
 .energies {
-  align-items: flex-end;
+  align-items: stretch;
   gap: var(--space-1h);
+}
+
+.energies .choice {
+  justify-content: flex-end;
 }
 
 .choice {
@@ -103,6 +108,7 @@
 .bar {
   display: block;
   width: 100%;
+  height: calc(var(--energy-bar-base, 20px) + var(--level) * var(--energy-bar-step, 10px));
   border-radius: var(--radius-sm);
   background: var(--panel-well);
   transform-origin: bottom;
