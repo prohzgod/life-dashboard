@@ -31,14 +31,8 @@ export function formatMoney(cents: number, currency: string, { signed = false, w
 /** What hidden amounts show instead. */
 export const HIDDEN_MONEY = '••••••';
 
-/** The currency this device most likely uses, from its locale; dollars when unsure. */
-export function defaultCurrency(): string {
-  const region = (typeof navigator !== 'undefined' ? navigator.language : 'en-US').split('-')[1]?.toUpperCase();
-  const byRegion: Record<string, string> = { US: 'USD', GB: 'GBP', AU: 'AUD', NZ: 'NZD', CA: 'CAD', VN: 'VND', JP: 'JPY', IN: 'INR', SG: 'SGD', CH: 'CHF' };
-  const euro = ['DE', 'FR', 'ES', 'IT', 'NL', 'BE', 'AT', 'IE', 'PT', 'FI', 'GR'];
-  if (region && euro.includes(region)) return 'EUR';
-  return (region && byRegion[region]) || 'USD';
-}
+/** What Finance uses until you choose another currency. */
+export const DEFAULT_CURRENCY = 'VND';
 
 /** The symbol a currency uses ("$", "€"), to recognise money goals by their unit. */
 export function currencySymbol(currency: string, locale = intlLocale()): string {

@@ -17,7 +17,9 @@ import {
   setFinanceSettings,
   suggestCategory,
   updateTransaction,
+  getFinanceSettings,
 } from './finance';
+import { db } from './db';
 import { createGoal } from './goalActions';
 import { areasRepo, goalsRepo, tasksRepo, transactionsRepo } from './repositories';
 import { freshDatabase } from './testing';
@@ -29,6 +31,11 @@ beforeEach(async () => {
 
 const today = '2026-09-29';
 const id = async (name: string) => (await listBudgets()).find((b) => b.name === name)!.id;
+
+it('uses dong until you choose another currency', async () => {
+  await db.meta.delete('finance.settings');
+  expect((await getFinanceSettings()).currency).toBe('VND');
+});
 
 describe('budgets', () => {
   it('start with the usual categories, once', async () => {

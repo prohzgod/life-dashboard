@@ -48,8 +48,11 @@ function ErrorLine({ text }: { text: string }) {
 
 const problem = (error: unknown) => (error instanceof FinanceError || error instanceof CsvError ? error.message : messages().finance.dialog.saveFailed);
 
-/** Cents → what the amount field shows: "38.40". */
-const editable = (cents: number) => (Math.abs(cents) / 100).toFixed(2);
+/** Cents → what the amount field shows: "50000", or "38.40" when there's a fraction. */
+function editable(cents: number): string {
+  const value = Math.abs(cents) / 100;
+  return Number.isInteger(value) ? String(value) : value.toFixed(2);
+}
 
 // ---- Add or edit a transaction ----
 
@@ -130,7 +133,7 @@ function TransactionForm({ onClose, transaction, budgets, goals, today, currency
       />
       <div className={styles.fieldRow}>
         <Field label={t.amount(currency)}>
-          {(id) => <input id={id} data-autofocus inputMode="decimal" autoComplete="off" value={form.amount} onChange={(e) => set('amount', e.target.value)} placeholder="38.40" />}
+          {(id) => <input id={id} data-autofocus inputMode="decimal" autoComplete="off" value={form.amount} onChange={(e) => set('amount', e.target.value)} placeholder="50.000" />}
         </Field>
         <Field label={t.date}>{(id) => <input id={id} type="date" value={form.day} onChange={(e) => set('day', e.target.value)} />}</Field>
       </div>
@@ -472,7 +475,7 @@ function AccountsForm({ accounts, currency, onClose }: { accounts: Account[]; cu
             </select>
           )}
         </Field>
-        <Field label={t.balance}>{(id) => <input id={id} inputMode="decimal" value={draft.balance} onChange={(e) => setDraft({ ...draft, balance: e.target.value })} placeholder="2,500" />}</Field>
+        <Field label={t.balance}>{(id) => <input id={id} inputMode="decimal" value={draft.balance} onChange={(e) => setDraft({ ...draft, balance: e.target.value })} placeholder="2.500.000" />}</Field>
         <Button type="submit">{t.addAccount}</Button>
       </form>
       <ErrorLine text={error} />

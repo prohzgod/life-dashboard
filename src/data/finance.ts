@@ -4,7 +4,7 @@ import { importKey, type StatementRow } from '@/domain/csv';
 import type { Day } from '@/domain/days';
 import { addMonthsTo, guessCategory, monthDays, monthOf, spendingTrend, summarizeMonth, type MonthSummary, type Month, type TrendMonth } from '@/domain/finance';
 import { sortKeyAt } from '@/domain/library';
-import { currencySymbol, defaultCurrency, formatMoney } from '@/lib/money';
+import { currencySymbol, DEFAULT_CURRENCY, formatMoney } from '@/lib/money';
 import { db } from './db';
 import { loadGoalBoard, logGoalValue, type GoalView } from './goalActions';
 import { saveUpload, type UploadInput } from './library';
@@ -50,7 +50,7 @@ const SETTINGS_KEY = 'finance.settings';
 
 export async function getFinanceSettings(): Promise<FinanceSettings> {
   const stored = (await db.meta.get(SETTINGS_KEY))?.value as Partial<FinanceSettings> | undefined;
-  return { currency: stored?.currency ?? defaultCurrency(), savingsTarget: stored?.savingsTarget ?? 0.25 };
+  return { currency: stored?.currency ?? DEFAULT_CURRENCY, savingsTarget: stored?.savingsTarget ?? 0.25 };
 }
 
 export async function setFinanceSettings(patch: Partial<FinanceSettings>): Promise<void> {
