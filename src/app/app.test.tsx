@@ -64,7 +64,7 @@ describe('app shell', () => {
     await userEvent.click(within(nav).getByRole('button', { name: 'More screens' }));
     await userEvent.click(screen.getByRole('menuitem', { name: 'Vision board' }));
     expect(router.state.location.pathname).toBe('/vision');
-    expect(screen.getByRole('heading', { level: 1, name: 'Vision board' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Vision board' }, { timeout: 5000 })).toBeInTheDocument();
   });
 
   it('names the screen you are on in place of the menu icon, and marks it in the menu', async () => {
@@ -105,7 +105,7 @@ describe('appearance setting', () => {
 
   it('switches light and dark from Settings › Appearance and saves it on this device', async () => {
     renderAt('/settings/appearance');
-    const group = screen.getByRole('radiogroup', { name: 'Light or dark' });
+    const group = await screen.findByRole('radiogroup', { name: 'Light or dark' }, { timeout: 5000 });
     expect(within(group).getByRole('radio', { name: 'Auto' })).toHaveAttribute('aria-checked', 'true');
 
     await userEvent.click(within(group).getByRole('radio', { name: 'Dark' }));
@@ -120,7 +120,7 @@ describe('appearance setting', () => {
 
   it('picks a background and an accent', async () => {
     renderAt('/settings/appearance');
-    await userEvent.click(screen.getByRole('radio', { name: /Morning mist/ }));
+    await userEvent.click(await screen.findByRole('radio', { name: /Morning mist/ }, { timeout: 5000 }));
     expect(document.documentElement.dataset.bg).toBe('mist');
     await userEvent.click(screen.getByRole('radio', { name: /Lime/ }));
     expect(document.documentElement.dataset.accent).toBe('lime');

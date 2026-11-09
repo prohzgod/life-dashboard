@@ -15,7 +15,8 @@ import styles from './Today.module.css';
 export function AgendaCard({ today, compact = false, className }: { today: Day; compact?: boolean; className?: string }) {
   const t = useT().today.agenda;
   const agenda = useAgenda(today);
-  if (!agenda) return null;
+  // Holds the card's place while it loads, so the card below doesn't jump.
+  if (!agenda) return compact ? null : <Card title={t.title} className={cx(styles.agendaLoading, className)} />;
   const upcoming = agenda.entries.filter((e) => !e.done);
   const next = upcoming.find((e) => !e.allDay && !e.now);
   const shown = compact ? upcoming.filter((e) => e.now || e === next) : agenda.entries.slice(0, 5);
