@@ -29,7 +29,7 @@ export function FolderView({ node, all }: { node: LibraryNode; all: LibraryNode[
   }
 
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       {isMobile ? (
         <MobileTopBar parent={trail.at(-1)}>
         {!node.isSystem && (
@@ -124,6 +124,6 @@ export function FolderView({ node, all }: { node: LibraryNode; all: LibraryNode[
           <p className={styles.railEmpty}>{journalFolder ? t.daysAppear : t.folderEmpty}</p>
         )}
       </article>
-    </main>
+    </div>
   );
 }

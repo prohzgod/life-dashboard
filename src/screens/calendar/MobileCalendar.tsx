@@ -66,11 +66,11 @@ export function MobileCalendar({ view, anchor, today, range, layers, areas, go, 
                 className={cx(styles.stripDay, day === anchor && styles.stripDaySelected)}
                 aria-pressed={day === anchor}
                 aria-current={day === today ? 'date' : undefined}
-                aria-label={t.dayCount(formatDayShort(day), count ? timed.length + allDay.length : 0)}
                 onClick={() => go('day', day)}
               >
                 <span className={styles.stripInitial}>{t.initials[new Date(`${day}T12:00:00`).getDay()]}</span>
                 <span className={styles.stripNumber}>{dayOfMonth(day)}</span>
+                <span className="visually-hidden">{`, ${t.dayCount(formatDayShort(day), count ? timed.length + allDay.length : 0)}`}</span>
                 <span className={styles.stripDots} aria-hidden="true">
                   {Array.from({ length: count }, (_, i) => (
                     <span key={i} className={styles.stripDot} />

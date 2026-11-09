@@ -198,7 +198,7 @@ function VisibilityToggle({ visibility, label, onToggle }: { visibility: Visibil
   const { profile } = useT();
   const blurred = visibility === 'blurred';
   return (
-    <button type="button" className={cx(styles.vis, blurred && styles.visBlurred)} aria-pressed={blurred} aria-label={profile.blur(label)} onClick={onToggle}>
+    <button type="button" className={cx(styles.vis, blurred && styles.visBlurred)} aria-pressed={blurred} aria-label={`${blurred ? profile.editPage.blurred : profile.editPage.shown}, ${profile.blur(label)}`} onClick={onToggle}>
       <Icon name={blurred ? 'eyeOff' : 'eye'} size={15} />
       {blurred ? profile.editPage.blurred : profile.editPage.shown}
     </button>

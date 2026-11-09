@@ -29,7 +29,9 @@ export function YearInPixels({ year, entries, today }: { year: number; entries: 
               const label = `${formatDayShort(cell.day)}: ${cell.mood ? MOODS[cell.mood - 1] : cell.day > today ? t.toCome : t.noCheckIn}`;
               const className = `${styles.pixel} ${cell.mood ? styles[`mood${cell.mood}`] : cell.day > today ? styles.future : ''}`;
               return cell.mood ? (
-                <Link key={d} role="gridcell" to={`/library/day/${cell.day}`} className={className} aria-label={label} title={label} />
+                <span key={d} role="gridcell" style={{ display: 'contents' }}>
+                  <Link to={`/library/day/${cell.day}`} className={className} aria-label={label} title={label} />
+                </span>
               ) : (
                 <span key={d} role="gridcell" className={className} aria-label={label} title={label} />
               );

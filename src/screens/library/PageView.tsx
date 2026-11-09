@@ -50,7 +50,7 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
 
   return (
     <>
-      <main className={styles.main}>
+      <div className={styles.main}>
         {isMobile ? (
           <MobileTopBar parent={trail.at(-1)}>
             <button type="button" className={styles.optionsButton} aria-label={t.options} onClick={() => setSheet(true)}>
@@ -102,7 +102,7 @@ export function PageView({ node, all }: { node: LibraryNode; all: LibraryNode[] 
           {day && <JournalCheckIn day={day} />}
           <PageEditor key={node.id} node={node} onSave={(doc) => void savePageContent(node.id, doc)} onSaving={setSaving} />
         </article>
-      </main>
+      </div>
       {!isMobile && <PageRail node={node} />}
       <PageOptionsSheet
         open={sheet}

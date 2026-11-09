@@ -10,7 +10,7 @@ export function PhotosView() {
   const t = useT().library.photos;
   const photos = useLiveQuery(listPhotos);
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <article className={cx(styles.article, styles.wide)}>
         <h1 className={styles.pageTitle}>{t.title}</h1>
         <p className={styles.lead}>{photos ? t.count(photos.length) : ''}</p>
@@ -19,7 +19,7 @@ export function PhotosView() {
           {photos?.map((p) => <Photo key={p.id} photo={p} />)}
         </ul>
       </article>
-    </main>
+    </div>
   );
 }
 

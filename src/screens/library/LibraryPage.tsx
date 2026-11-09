@@ -58,12 +58,12 @@ function JournalRedirect({ day }: { day?: string }) {
   }, [target]);
   if (pageId) return <Navigate to={`/library/${pageId}`} replace />;
   if (failed) return <Missing />;
-  return <main className={styles.main} aria-busy="true" />;
+  return <div className={styles.main} aria-busy="true" />;
 }
 
 function NodeView({ id }: { id: string }) {
   const data = useLiveQuery(async () => ({ node: (await getNode(id)) ?? null, all: await listLibraryNodes() }), [id]);
-  if (!data) return <main className={styles.main} aria-busy="true" />;
+  if (!data) return <div className={styles.main} aria-busy="true" />;
   if (!data.node) return <Missing />;
   return data.node.kind === 'folder' ? <FolderView node={data.node} all={data.all} /> : <PageView node={data.node} all={data.all} />;
 }
@@ -71,10 +71,10 @@ function NodeView({ id }: { id: string }) {
 function Missing() {
   const t = useT().library;
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <div className={styles.missing}>
         <EmptyState icon="library" heading={t.missingHeading} body={t.missingBody} />
       </div>
-    </main>
+    </div>
   );
 }

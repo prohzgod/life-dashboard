@@ -10,7 +10,7 @@ export function TrashView() {
   const t = useT().library.trash;
   const trashed = useLiveQuery(listTrash);
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <article className={styles.article}>
         <h1 className={styles.pageTitle}>{t.title}</h1>
         <p className={styles.lead}>{t.lead}</p>
@@ -28,6 +28,6 @@ export function TrashView() {
           ))}
         </ul>
       </article>
-    </main>
+    </div>
   );
 }
