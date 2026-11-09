@@ -23,9 +23,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
+        id: '/',
+        lang: 'vi',
         name: 'Life Dashboard',
         short_name: 'Life',
-        description: 'Goals, tasks, habits, check-ins, reviews and a Library of notes. Works offline.',
+        description: 'Mục tiêu, công việc, thói quen, ghi nhận mỗi ngày, nhìn lại và thư viện ghi chú. Dùng được khi không có mạng.',
         start_url: '/',
         scope: '/',
         display: 'standalone',
