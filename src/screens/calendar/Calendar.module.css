@@ -1251,3 +1251,14 @@
   border: 0;
   border-radius: var(--radius-md);
 }
+
+/* Phones: side-by-side fields wrap instead of squeezing dates and times until they're cut off. */
+@media (max-width: 767px) {
+  .fieldRow {
+    flex-wrap: wrap;
+  }
+
+  .fieldRow > * {
+    flex: 1 1 130px;
+  }
+}

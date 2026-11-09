@@ -49,3 +49,19 @@
 .selected:hover {
   color: var(--on-inverse);
 }
+
+/* Phones: options share the width, and a label only wraps when it truly can't fit. */
+@media (max-width: 767px) {
+  .track {
+    display: flex;
+    max-width: 100%;
+  }
+
+  .option {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: var(--touch-min);
+    min-width: 0;
+    padding: 0 var(--space-1h);
+  }
+}

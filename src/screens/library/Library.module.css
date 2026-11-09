@@ -892,3 +892,30 @@ a.folderItem:hover {
     width: 240px;
   }
 }
+
+/* Phones: a 44px tap area, without changing how it looks. */
+@media (max-width: 767px) {
+  .chevron {
+    position: relative;
+  }
+
+  .chevron::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--touch-min));
+    height: max(100%, var(--touch-min));
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .special {
+    min-height: var(--touch-min);
+  }
+
+  .filter {
+    height: var(--touch-min);
+  }
+}

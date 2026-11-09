@@ -50,3 +50,20 @@
   color: var(--ink-3);
   cursor: not-allowed;
 }
+
+/* Phones: a 44px tap area, without changing how it looks. */
+@media (max-width: 767px) {
+  .switch {
+    position: relative;
+  }
+
+  .switch::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--touch-min));
+    height: max(100%, var(--touch-min));
+    transform: translate(-50%, -50%);
+  }
+}

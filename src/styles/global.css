@@ -178,6 +178,28 @@ textarea {
   color: inherit;
 }
 
+/* Android and iOS give date and time inputs a wide minimum of their own; keep them inside their field. */
+input,
+select,
+textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  /* Under 16px, iOS zooms the whole page when a field gets focus. !important because forms size their own fields. */
+  input:not([type='checkbox'], [type='radio'], [type='range'], [type='file']),
+  select,
+  textarea {
+    font-size: var(--text-body-l-size) !important;
+  }
+
+  input:not([type='checkbox'], [type='radio'], [type='range']),
+  select {
+    min-height: var(--touch-min);
+  }
+}
+
 button {
   cursor: pointer;
 }

@@ -729,3 +729,27 @@
   color: var(--ink);
   font: inherit;
 }
+
+/* Phones: a 44px tap area, without changing how it looks. */
+@media (max-width: 767px) {
+  .headerLink {
+    position: relative;
+  }
+
+  .headerLink::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--touch-min));
+    height: max(100%, var(--touch-min));
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .dash::after {
+    height: var(--touch-min);
+    margin-top: -20px;
+  }
+}

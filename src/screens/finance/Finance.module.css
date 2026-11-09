@@ -730,3 +730,59 @@
 .table th.right {
   text-align: right;
 }
+
+/* Phones: side-by-side fields wrap instead of squeezing dates and times until they're cut off. */
+@media (max-width: 767px) {
+  .fieldRow {
+    flex-wrap: wrap;
+  }
+
+  .fieldRow > * {
+    flex: 1 1 130px;
+  }
+}
+
+/* Phones: a budget's limit gets its own line, and a new account's fields stop squeezing each other. */
+@media (max-width: 767px) {
+  .budgetRows {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .budgetRows li {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .budgetRows li > :nth-child(2) {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
+  .addAccount {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .addAccount > :first-child,
+  .addAccount > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Phones: a 44px tap area, without changing how it looks. */
+@media (max-width: 767px) {
+  .textButton {
+    position: relative;
+  }
+
+  .textButton::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--touch-min));
+    height: max(100%, var(--touch-min));
+    transform: translate(-50%, -50%);
+  }
+}

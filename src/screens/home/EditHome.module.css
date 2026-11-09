@@ -352,3 +352,37 @@
   color: var(--ink-3);
   font-size: var(--text-body-s-size);
 }
+
+/* Phones: a 44px tap area, without changing how it looks. */
+@media (max-width: 767px) {
+  .handle {
+    position: relative;
+  }
+
+  .handle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--touch-min));
+    height: max(100%, var(--touch-min));
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Phones: a 44px tap area, without changing how it looks. */
+@media (max-width: 767px) {
+  .size {
+    position: relative;
+  }
+
+  .size::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: max(100%, var(--touch-min));
+    transform: translate(-50%, -50%);
+  }
+}
