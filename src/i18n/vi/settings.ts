@@ -10,11 +10,8 @@ export const settings: Messages['settings'] = {
     sync: 'Tài khoản và đồng bộ',
     privacy: 'Quyền riêng tư & dữ liệu',
     notifications: 'Thông báo',
-    modules: 'Mô-đun',
     appearance: 'Giao diện',
   },
-  placeholderHeading: 'Sẽ có cùng dữ liệu của bạn',
-  modulesEmpty: 'Bật hoặc tắt Lịch, Tài chính, Sức khỏe, Trợ lý và Bảng tầm nhìn. Không có gì bị xóa.',
   general: {
     language: 'Ngôn ngữ',
     languageHint: 'Chỉ lưu trên thiết bị này. Ngày tháng và con số cũng theo ngôn ngữ này.',

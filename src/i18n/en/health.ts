@@ -33,7 +33,6 @@ export const health = {
   addMetric: 'Add metric',
   addMetricPlus: '+ Add metric',
   quickEmpty: 'Track anything with a tap: water, coffee, how your knee feels.',
-  module: 'Optional module',
   privacy: 'Stays on this device. The Assistant can’t read it unless you allow it.',
   manualLog: 'Manual entries, log a reading',
   connect: 'Connect a source',

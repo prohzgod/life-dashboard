@@ -33,7 +33,6 @@ export const health: Messages['health'] = {
   addMetric: 'Thêm chỉ số',
   addMetricPlus: '+ Thêm chỉ số',
   quickEmpty: 'Theo dõi bất cứ thứ gì chỉ với một lần chạm: nước, cà phê, đầu gối thấy thế nào.',
-  module: 'Mô-đun tùy chọn',
   privacy: 'Nằm trên thiết bị này. Trợ lý không đọc được trừ khi bạn cho phép.',
   manualLog: 'Nhập tay, ghi một chỉ số',
   connect: 'Kết nối nguồn',

@@ -21,7 +21,6 @@ export const finance: Messages['finance'] = {
   recent: 'Gần đây',
   addExpense: 'Thêm khoản chi',
   recentEmpty: 'Tháng này chưa có gì. Thêm một khoản chi, hoặc nhập CSV trên máy tính.',
-  module: 'Mô-đun tùy chọn',
   privacy: 'Chỉ trên thiết bị này. Không bao giờ đăng nhập ngân hàng.',
   month: 'Tháng',
   importCsv: 'Nhập CSV',

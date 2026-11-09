@@ -32,7 +32,6 @@ export type Screen = {
   empty: { heading: string; body: string };
 };
 
-export type NavGroup = { label: string; hint?: string; screens: Screen[] };
 
 /** Labels are read when used, so they follow the language you picked. */
 const screen = (key: ScreenKey, path: string, icon: IconName, hasBadge: boolean, extra: Pick<Screen, 'activeFor' | 'countKey'> = {}): Screen => ({
@@ -70,13 +69,3 @@ export const screens = {
   health: screen('health', '/health', 'health', false),
   assistant: screen('assistant', '/assistant', 'assistant', false),
 } satisfies Record<ScreenKey, Screen>;
-
-export function navGroups(): NavGroup[] {
-  const g = messages().screens.groups;
-  return [
-    { label: g.plan, screens: [screens.today, screens.inbox, screens.tasks, screens.calendar] },
-    { label: g.grow, screens: [screens.goals, screens.progress, screens.review] },
-    { label: g.remember, screens: [screens.library, screens.vision] },
-    { label: g.modules, hint: g.optional, screens: [screens.finance, screens.health, screens.assistant] },
-  ];
-}

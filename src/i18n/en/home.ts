@@ -49,7 +49,7 @@ export const home = {
     yourWord: 'Your word',
     steps: 'Steps',
     avg: (n: string) => `avg ${n}`,
-    assistant: 'Comes with the Assistant module.',
+    assistant: 'Ask about your own data.',
     pinned: 'Pinned',
     deleted: 'This was deleted. Remove it in Edit home.',
     count: (done: number, total: number) => `${done} of ${total}`,

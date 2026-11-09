@@ -36,7 +36,7 @@ export const profile: Messages['profile'] = {
     language: 'Ngôn ngữ',
     appearance: 'Giao diện',
     themes: { light: 'Sáng', dark: 'Tối', system: 'Tự động' },
-    home: 'Trang chủ & mô-đun',
+    home: 'Trang chủ',
     widgets: (n) => `${n} tiện ích`,
     notifications: 'Thông báo',
     on: 'Bật',

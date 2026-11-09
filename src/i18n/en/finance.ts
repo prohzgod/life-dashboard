@@ -20,7 +20,6 @@ export const finance = {
   recent: 'Recent',
   addExpense: 'Add expense',
   recentEmpty: 'Nothing this month yet. Add an expense, or import a CSV on a computer.',
-  module: 'Optional module',
   privacy: 'Only on this device. No bank logins, ever.',
   month: 'Month',
   importCsv: 'Import CSV',

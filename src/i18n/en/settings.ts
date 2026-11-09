@@ -9,11 +9,8 @@ export const settings = {
     sync: 'Account and sync',
     privacy: 'Privacy & data',
     notifications: 'Notifications',
-    modules: 'Modules',
     appearance: 'Appearance',
   },
-  placeholderHeading: 'Arrives with your data',
-  modulesEmpty: 'Turn Calendar, Finance, Health, Assistant and Vision board on or off. Nothing is deleted.',
   general: {
     language: 'Language',
     languageHint: 'Saved on this device only. Dates and numbers follow it too.',

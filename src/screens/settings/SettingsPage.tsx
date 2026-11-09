@@ -2,7 +2,6 @@ import { Link, Navigate, NavLink, useParams } from 'react-router-dom';
 import { Icon } from '@/components/icons/Icon';
 import { SlidingPill } from '@/components/ui';
 import { useIsMobile } from '@/lib/useMediaQuery';
-import { EmptyState } from '@/components/shell/EmptyState';
 import { PageHeader } from '@/components/shell/PageHeader';
 import { SYNC_ENABLED } from '@/data';
 import { useT } from '@/i18n';
@@ -13,7 +12,7 @@ import { PrivacySettings } from './PrivacySettings';
 import { SyncSettings } from './SyncSettings';
 import styles from './SettingsPage.module.css';
 
-const allTabs = ['general', 'sync', 'privacy', 'notifications', 'modules', 'appearance'] as const;
+const allTabs = ['general', 'sync', 'privacy', 'notifications', 'appearance'] as const;
 
 type TabSlug = (typeof allTabs)[number];
 
@@ -59,11 +58,9 @@ export function SettingsPage() {
 }
 
 function TabContent({ slug }: { slug: TabSlug }) {
-  const t = useT().settings;
   if (slug === 'general') return <GeneralSettings />;
   if (slug === 'sync') return <SyncSettings />;
   if (slug === 'appearance') return <AppearanceSettings />;
   if (slug === 'privacy') return <PrivacySettings />;
-  if (slug === 'notifications') return <NotificationSettings />;
-  return <EmptyState icon="settings" heading={t.placeholderHeading} body={t.modulesEmpty} />;
+  return <NotificationSettings />;
 }

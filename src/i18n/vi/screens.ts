@@ -13,5 +13,4 @@ export const screens: Messages['screens'] = {
   finance: { navLabel: 'Tài chính', title: 'Tài chính', emptyHeading: 'Tiền bạc, được giữ riêng tư', emptyBody: 'Ngân sách, mục tiêu tiết kiệm và chi tiêu. Số tiền được ẩn cho đến khi bạn chọn hiện.' },
   health: { navLabel: 'Sức khỏe', title: 'Sức khỏe', emptyHeading: 'Giấc ngủ, bước chân và cảm nhận', emptyBody: 'Tự ghi những gì bạn muốn, hoặc kết nối điện thoại sau. Chỉ bạn mới xem được.' },
   assistant: { navLabel: 'Trợ lý', title: 'Trợ lý', emptyHeading: 'Hỏi về dữ liệu của chính bạn', emptyBody: 'Mặc định chạy trên thiết bị này. Nó chỉ đọc những lĩnh vực bạn cho phép và không thay đổi gì cho đến khi bạn chạm.' },
-  groups: { plan: 'Lên kế hoạch', grow: 'Phát triển', remember: 'Ghi nhớ', modules: 'Mô-đun', optional: 'tùy chọn' },
 };

@@ -12,5 +12,4 @@ export const screens = {
   finance: { navLabel: 'Finance', title: 'Finance', emptyHeading: 'Money, kept private', emptyBody: 'Budgets, savings goals and spending. Amounts stay hidden until you choose to show them.' },
   health: { navLabel: 'Health', title: 'Health', emptyHeading: 'Sleep, steps and how you feel', emptyBody: 'Log what you like by hand, or connect a phone later. Only you can see it.' },
   assistant: { navLabel: 'Assistant', title: 'Assistant', emptyHeading: 'Ask about your own data', emptyBody: 'Runs on this device by default. It only reads the areas you allow and changes nothing until you tap.' },
-  groups: { plan: 'Plan', grow: 'Grow', remember: 'Remember', modules: 'Modules', optional: 'optional' },
 };

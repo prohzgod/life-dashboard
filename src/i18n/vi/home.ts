@@ -50,7 +50,7 @@ export const home: Messages['home'] = {
     yourWord: 'Từ khóa',
     steps: 'Bước chân',
     avg: (n) => `trung bình ${n}`,
-    assistant: 'Có cùng mô-đun Trợ lý.',
+    assistant: 'Hỏi về dữ liệu của bạn.',
     pinned: 'Đã ghim',
     deleted: 'Mục này đã bị xóa. Gỡ nó trong Sửa trang chủ.',
     count: (done, total) => `${done}/${total}`,

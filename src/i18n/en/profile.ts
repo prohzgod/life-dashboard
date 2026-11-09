@@ -36,7 +36,7 @@ export const profile = {
     language: 'Language',
     appearance: 'Appearance',
     themes: { light: 'Light', dark: 'Dark', system: 'Auto' },
-    home: 'Home & modules',
+    home: 'Home',
     widgets: (n: number) => `${n} widgets`,
     notifications: 'Notifications',
     on: 'On',

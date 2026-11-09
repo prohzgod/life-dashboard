@@ -132,7 +132,6 @@ export function HealthPage() {
         <div className={styles.heading}>
           <div className={styles.titleRow}>
             <h1 className={styles.title}>{t.title}</h1>
-            <span className={styles.moduleChip}>{t.module}</span>
           </div>
           <span className={styles.privacyNote}>
             <Icon name="lock" size={13} />
