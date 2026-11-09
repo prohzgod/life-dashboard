@@ -7,6 +7,7 @@ import { readSyncState, setSyncState, subscribeSyncState, type SyncState } from 
 export { countUnsynced, linkDevice, readSyncState, setSyncState, signOutDevice, subscribeSyncState, syncNow, hasOwnData, SyncAuthError, SyncRequestError };
 export type { UserAccount, LinkChoice, SyncState };
 export { accountApi };
+export { SYNC_ENABLED } from './enabled';
 
 export type SyncInfo = { accountId: string | null; email: string | null; lastAt: string | null; unsynced: number; stuck: number };
 

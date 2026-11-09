@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useRef } from 'react';
+import { SYNC_ENABLED } from './enabled';
 import { countUnsynced, syncNow } from './engine';
 
 const AFTER_WRITE_MS = 2_000;
@@ -12,6 +13,7 @@ export function useAutoSync() {
   const retryAt = useRef(0);
 
   useEffect(() => {
+    if (!SYNC_ENABLED) return;
     const sync = async () => {
       const { status } = await syncNow();
       retryAt.current = status === 'failed' ? Date.now() + AFTER_FAILURE_MS : 0;
@@ -35,7 +37,7 @@ export function useAutoSync() {
   }, []);
 
   useEffect(() => {
-    if (!unsynced || Date.now() < retryAt.current) return;
+    if (!SYNC_ENABLED || !unsynced || Date.now() < retryAt.current) return;
     const timer = window.setTimeout(() => void syncNow(), AFTER_WRITE_MS);
     return () => window.clearTimeout(timer);
   }, [unsynced]);

@@ -1,6 +1,6 @@
 import { useId, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { accountApi, linkDevice, signOutDevice, syncNow, SyncRequestError, type LinkChoice, type UserAccount } from '@/data';
+import { accountApi, linkDevice, signOutDevice, SYNC_ENABLED, syncNow, SyncRequestError, type LinkChoice, type UserAccount } from '@/data';
 import { Icon } from '@/components/icons/Icon';
 import { Button, Card, Segmented } from '@/components/ui';
 import { Dialog } from '@/components/ui/Dialog';
@@ -216,7 +216,7 @@ function SignOutDialog({ open, onClose }: { open: boolean; onClose: () => void }
 export function SyncNotice() {
   const t = useT().sync;
   const { state } = useSyncStatus();
-  if (state !== 'needsSignIn') return null;
+  if (!SYNC_ENABLED || state !== 'needsSignIn') return null;
   return (
     <Link to="/settings/sync" className={styles.notice}>
       <Icon name="offline" size={16} />

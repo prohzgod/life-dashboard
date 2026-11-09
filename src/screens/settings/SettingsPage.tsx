@@ -4,6 +4,7 @@ import { SlidingPill } from '@/components/ui';
 import { useIsMobile } from '@/lib/useMediaQuery';
 import { EmptyState } from '@/components/shell/EmptyState';
 import { PageHeader } from '@/components/shell/PageHeader';
+import { SYNC_ENABLED } from '@/data';
 import { useT } from '@/i18n';
 import { AppearanceSettings } from './AppearanceSettings';
 import { GeneralSettings } from './GeneralSettings';
@@ -12,9 +13,11 @@ import { PrivacySettings } from './PrivacySettings';
 import { SyncSettings } from './SyncSettings';
 import styles from './SettingsPage.module.css';
 
-const settingsTabs = ['general', 'sync', 'privacy', 'notifications', 'modules', 'appearance'] as const;
+const allTabs = ['general', 'sync', 'privacy', 'notifications', 'modules', 'appearance'] as const;
 
-type TabSlug = (typeof settingsTabs)[number];
+type TabSlug = (typeof allTabs)[number];
+
+const settingsTabs = allTabs.filter((s) => s !== 'sync' || SYNC_ENABLED);
 
 export function SettingsPage() {
   const t = useT().settings;

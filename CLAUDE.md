@@ -22,6 +22,7 @@ Read these before starting any task:
 - Tests: Vitest + Testing Library for logic and components; Playwright for main flows.
 - Languages: Vietnamese (default) and English, with a small typed i18n layer in `src/i18n/` (no library). BlockNote uses its own `vi`/`en` dictionaries.
 - Package manager: npm, with workspaces: the app at the root, `server/` and `shared/`.
+- **Sync is switched off for now** (`VITE_SYNC_ENABLED`, off by default). The app is local-only and moves between devices by backup file; `server/` and `shared/` are kept but unused. See `docs/DECISIONS.md` before building on anything below.
 - Backend (optional sync): NestJS on Render, Neon Postgres (Drizzle, hand-written SQL in `server/drizzle/`), Cloudflare R2. The contract lives in `shared/src/sync.ts`. Vercel rewrites `/api/*` to Render, so there's one origin. The folder must stay `server/`: Vercel turns anything in a root `api/` folder into functions. See `docs/DEPLOY.md`.
 - Sync: IndexedDB stays the copy screens read. `src/data/sync/` pushes rows marked `dirty` and pulls others' by a server sequence; last write wins per row. Server rows are JSONB in one `records` table, so a new app field needs no migration, but a new table must join `SYNC_TABLES` and `dataTableNames`.
 

@@ -9,6 +9,8 @@ import { setLocale } from '@/i18n/locale';
 import { useSavedLabel } from '@/lib/useSyncStatus';
 import { SyncSettings } from './SyncSettings';
 
+vi.mock('@/data/sync/enabled', () => ({ SYNC_ENABLED: true }));
+
 const me = { id: 'me', email: 'me@example.com' };
 const remoteRow = { table: 'areas', id: 'remote', updatedAt: '2026-10-01T00:00:00.000Z', deletedAt: null, payload: { id: 'remote', name: 'Remote', updatedAt: '2026-10-01T00:00:00.000Z', deletedAt: null } };
 

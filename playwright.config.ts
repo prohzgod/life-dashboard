@@ -26,7 +26,8 @@ export default defineConfig({
   webServer: [
     {
       command: `npm run build && npm run preview -- --port ${port} --strictPort`,
-      env: { API_PROXY: `http://localhost:${apiPort}` },
+      // Sync is off in the product, but stays built on and tested so it can come back (docs/DECISIONS.md).
+      env: { API_PROXY: `http://localhost:${apiPort}`, VITE_SYNC_ENABLED: 'true' },
       port,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,

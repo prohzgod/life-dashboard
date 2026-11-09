@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useSyncExternalStore } from 'react';
-import { loadSyncInfo, readSyncState, subscribeSyncState } from '@/data';
+import { loadSyncInfo, readSyncState, subscribeSyncState, SYNC_ENABLED } from '@/data';
 import { useT } from '@/i18n';
 
 /** Whether this device syncs, how it's going, and which account. */
@@ -10,7 +10,7 @@ export function useSyncStatus() {
   return { state, info };
 }
 
-const useIsSyncing = () => !!useLiveQuery(loadSyncInfo)?.accountId;
+const useIsSyncing = () => !!useLiveQuery(loadSyncInfo)?.accountId && SYNC_ENABLED;
 
 /** "Saved on this device" only while that's the whole truth. */
 export function useSavedLabel(): string {

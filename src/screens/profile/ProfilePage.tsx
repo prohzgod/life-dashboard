@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ageOn, visibilityOf } from '@/domain/profile';
-import { getPrivacyState, getProfile, getReminderPrefs, listHomeWidgets, setAllVisibility, setFieldVisibility } from '@/data';
+import { getPrivacyState, getProfile, getReminderPrefs, listHomeWidgets, setAllVisibility, setFieldVisibility, SYNC_ENABLED } from '@/data';
 import { lockNow } from '@/components/shell/lock';
 import { Icon, type IconName } from '@/components/icons/Icon';
 import { ProfileAvatar } from '@/components/shell/ProfileAvatar';
@@ -116,7 +116,7 @@ export function ProfilePage() {
 
       <nav className={styles.card} aria-label={t.settings}>
         <ul className={styles.settings}>
-          <SettingRow icon="globe" label={sync.title} detail={syncInfo?.email ?? sync.profileOff} to="/settings/sync" />
+          {SYNC_ENABLED && <SettingRow icon="globe" label={sync.title} detail={syncInfo?.email ?? sync.profileOff} to="/settings/sync" />}
           <SettingRow icon="lock" label={t.rows.privacy} detail={t.rows.onPhone} to="/settings/privacy" />
           <SettingRow icon="globe" label={t.rows.language} detail={settings.general.names[locale]} to="/settings/general" />
           <SettingRow icon="palette" label={t.rows.appearance} detail={t.rows.themes[theme]} to="/settings/appearance" />
